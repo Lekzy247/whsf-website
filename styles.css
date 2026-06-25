@@ -143,13 +143,6 @@ h3 { line-height: 1.2; }
 .mission-vision-grid span, .programme-list span { color: var(--red); font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .mission-vision-grid h3 { margin: 14px 0 10px; font-family: "Playfair Display", Georgia, serif; font-size: 1.4rem; }
 .mission-vision-grid p { margin: 0; color: var(--muted); font-size: .9rem; }
-.team-block { margin-top: 100px; }
-.team-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
-.team-grid article { padding: 22px 18px; border-top: 3px solid var(--green-800); background: #fff; box-shadow: 0 12px 35px rgba(8,55,43,.08); }
-.team-grid strong, .team-grid span { display: block; }
-.team-grid strong { line-height: 1.3; }
-.team-grid span { margin-top: 9px; color: var(--muted); font-size: .7rem; font-weight: 700; text-transform: uppercase; }
-
 .pillar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .pillar-card { position: relative; min-height: 360px; padding: 30px 26px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; transition: transform .25s ease, box-shadow .25s ease; }
 .pillar-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
@@ -303,7 +296,6 @@ h3 { line-height: 1.2; }
   .hero-visual { width: min(560px, 100%); margin: 0 auto; }
   .pillar-grid { grid-template-columns: 1fr 1fr; }
   .visual-programme-list { grid-template-columns: 1fr 1fr; }
-  .team-grid { grid-template-columns: repeat(3,1fr); }
   .gallery-grid { grid-template-columns: repeat(3,1fr); }
   .partner-logo-grid { grid-template-columns: repeat(3, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -356,7 +348,7 @@ h3 { line-height: 1.2; }
   .hero-copy h1 { overflow-wrap: anywhere; }
   .hero-orb-one { right: 0; width: 140px; height: 140px; }
   .hero-actions .button { width: 100%; }
-  .pillar-grid, .impact-steps, .footer-grid, .programme-list, .visual-programme-list, .team-grid, .gallery-grid, .partner-logo-grid { grid-template-columns: 1fr; }
+  .pillar-grid, .impact-steps, .footer-grid, .programme-list, .visual-programme-list, .gallery-grid, .partner-logo-grid { grid-template-columns: 1fr; }
   .footer-award { max-width: 190px; }
   .visual-programme-list img { height: 230px; }
   .project-feature-image { min-height: 330px; }
