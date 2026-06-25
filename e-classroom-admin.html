@@ -185,6 +185,7 @@
               <input name="certificate_number" type="text" placeholder="Certificate number e.g. WHSF-2026-001" required />
               <input name="certificate_url" type="url" placeholder="Certificate file URL optional" />
               <button class="button" type="submit">Issue certificate</button>
+              <small class="admin-form-status" id="certificate-form-status" role="status"></small>
             </form>
             <div class="admin-table-wrap"><table><thead><tr><th>Certificate</th><th>Student</th><th>Course</th><th>Issued</th></tr></thead><tbody id="certificates-table"></tbody></table></div>
           </section>
@@ -390,16 +391,46 @@
 
       document.querySelector('#certificate-form')?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const { error } = await whsfSupabase.from('eclassroom_certificates').insert({
-          student_id: formData.get('student_id'),
-          course_id: formData.get('course_id'),
-          certificate_number: String(formData.get('certificate_number') || '').trim(),
-          certificate_url: String(formData.get('certificate_url') || '').trim() || null
-        });
-        if (error) { setStatus(error.message); return; }
-        event.currentTarget.reset();
-        setStatus('Certificate issued.');
+        const form = event.currentTarget;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const formStatus = document.querySelector('#certificate-form-status');
+        const showCertificateStatus = (message) => {
+          if (formStatus) formStatus.textContent = message;
+          setStatus(message);
+        };
+        const formData = new FormData(form);
+        const studentId = String(formData.get('student_id') || '').trim();
+        const courseId = String(formData.get('course_id') || '').trim();
+        const certificateNumber = String(formData.get('certificate_number') || '').trim();
+        const certificateUrl = String(formData.get('certificate_url') || '').trim();
+
+        if (!studentId || !courseId || !certificateNumber) {
+          showCertificateStatus('Select a student, select a course, and enter a certificate number.');
+          return;
+        }
+
+        submitButton.disabled = true;
+        showCertificateStatus('Issuing certificate…');
+
+        const { error } = await whsfSupabase
+          .from('eclassroom_certificates')
+          .upsert({
+            student_id: studentId,
+            course_id: courseId,
+            certificate_number: certificateNumber,
+            certificate_url: certificateUrl || null,
+            issued_at: new Date().toISOString()
+          }, { onConflict: 'student_id,course_id' });
+
+        submitButton.disabled = false;
+
+        if (error) {
+          showCertificateStatus(error.message);
+          return;
+        }
+
+        form.reset();
+        showCertificateStatus('Certificate issued successfully.');
         loadCertificates();
       });
 
