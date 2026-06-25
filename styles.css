@@ -171,7 +171,8 @@ h3 { line-height: 1.2; }
 .visual-programme-list p { line-height: 1.65; }
 
 .community-impact-section { background: linear-gradient(135deg, #f8fff9, #fff7ef); }
-.community-impact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 60px; align-items: center; }
+.community-impact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 28px; align-items: center; }
+.community-impact-copy { grid-row: span 3; padding-right: 32px; }
 .community-impact-copy .lead { color: var(--ink); font-size: 1.2rem; font-weight: 650; }
 .community-impact-copy p:not(.eyebrow) { color: var(--muted); }
 .impact-stat-card { margin-top: 28px; padding: 26px; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; border-left: 6px solid var(--red); border-radius: 18px; background: #fff; box-shadow: 0 18px 42px rgba(8,55,43,.08); }
@@ -349,6 +350,7 @@ h3 { line-height: 1.2; }
   .primary-nav .button { margin-top: 12px; }
   .hero-grid { min-height: auto; padding: 75px 0; }
   .split-layout, .innovation-grid, .impact-header, .contact-grid, .project-feature-grid, .event-layout, .volunteer-record, .community-impact-grid { grid-template-columns: 1fr; gap: 38px; }
+  .community-impact-copy { grid-row: auto; padding-right: 0; }
   .award-card { grid-template-columns: 1fr; }
   .partner-logo-grid { grid-template-columns: 1fr 1fr; }
   .project-feature-image { min-height: 440px; }
