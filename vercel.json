@@ -1,6 +1,12 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/e-classroom",
+      "destination": "/e-classroom.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
