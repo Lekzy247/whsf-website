@@ -267,7 +267,7 @@ h3 { line-height: 1.2; }
 .site-footer { padding: 70px 0 24px; color: #c8d9d2; background: #052e25; }
 .site-footer .footer-links a, .site-footer .social-links a { color: #b9cec6; }
 .site-footer .footer-links a:hover, .site-footer .social-links a:hover { color: #fff; }
-.footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; padding-bottom: 50px; }
+.footer-grid { display: grid; grid-template-columns: 1fr 1fr .72fr; gap: 54px; padding-bottom: 50px; align-items: start; }
 .footer-brand { display: flex; gap: 18px; align-items: center; }
 .footer-brand strong { color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 1.25rem; line-height: 1.25; }
 .footer-brand p { margin: 8px 0 0; font-size: .78rem; }
@@ -276,6 +276,9 @@ h3 { line-height: 1.2; }
 .footer-links strong { margin-bottom: 8px; color: #fff; }
 .footer-links a { width: fit-content; color: #b9cec6; font-size: .88rem; text-decoration: none; }
 .footer-links a:hover { color: #fff; }
+.footer-award { justify-self: end; max-width: 210px; padding: 14px; border: 1px solid rgba(229,185,87,.32); border-radius: 18px; background: rgba(255,255,255,.06); text-align: center; }
+.footer-award img { width: 100%; max-width: 150px; margin: 0 auto 10px; border-radius: 12px; background: #fff; object-fit: contain; }
+.footer-award span { display: block; color: #f3dfac; font-size: .72rem; font-weight: 900; line-height: 1.35; text-transform: uppercase; letter-spacing: .08em; }
 .social-links { padding: 18px 0; display: flex; flex-wrap: wrap; gap: 22px; border-top: 1px solid rgba(255,255,255,.12); }
 .social-links a { color: #b9cec6; font-size: .8rem; font-weight: 700; text-decoration: none; }
 .social-links a:hover { color: #fff; }
@@ -309,6 +312,8 @@ h3 { line-height: 1.2; }
   .team-grid { grid-template-columns: repeat(3,1fr); }
   .gallery-grid { grid-template-columns: repeat(3,1fr); }
   .partner-logo-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-award { justify-self: start; }
   .innovation-grid { gap: 45px; }
 }
 
@@ -358,6 +363,7 @@ h3 { line-height: 1.2; }
   .hero-orb-one { right: 0; width: 140px; height: 140px; }
   .hero-actions .button { width: 100%; }
   .pillar-grid, .impact-steps, .footer-grid, .programme-list, .visual-programme-list, .team-grid, .gallery-grid, .partner-logo-grid { grid-template-columns: 1fr; }
+  .footer-award { max-width: 190px; }
   .visual-programme-list img { height: 230px; }
   .project-feature-image { min-height: 330px; }
   .project-feature-image img { height: 330px; }
