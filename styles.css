@@ -205,6 +205,7 @@ h3 { line-height: 1.2; }
 .gallery-section { background: #fff; }
 .gallery-grid { display: grid; grid-template-columns: repeat(4,1fr); grid-auto-rows: 250px; gap: 12px; }
 .gallery-grid figure { margin: 0; overflow: hidden; border-radius: 14px; background: var(--green-100); }
+.gallery-grid a { display: block; width: 100%; height: 100%; cursor: zoom-in; }
 .gallery-grid figure:first-child { grid-column: span 2; grid-row: span 2; }
 .gallery-grid figure:nth-child(6) { grid-column: span 2; }
 .gallery-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
