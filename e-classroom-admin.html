@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="WHSF e-Classroom admin and teacher dashboard for managing courses, lessons, students, assignments and certificates."
+    />
+    <meta name="theme-color" content="#c93635" />
+    <title>WHSF e-Classroom Admin</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>WHSF e-Classroom administration</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="e-classroom.html">Student classroom</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html#top" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>e-Classroom Admin</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="#students">Students</a>
+          <a href="#courses">Courses</a>
+          <a href="#lessons">Lessons</a>
+          <a href="#assignments">Assignments</a>
+          <a href="#certificates">Certificates</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="admin-hero" aria-labelledby="admin-title">
+        <div class="shell admin-hero-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow">Teacher / Admin dashboard</p>
+            <h1 id="admin-title">Manage WHSF learners, courses, lessons, assignments and certificates.</h1>
+            <p class="hero-lead">
+              This dashboard is built for authorized WHSF staff. Sign in with a Supabase account that has an <code>admin</code> or <code>teacher</code> role in app metadata.
+            </p>
+          </div>
+
+          <form class="student-login-card reveal delay-one" id="admin-login-form">
+            <label>
+              Admin / teacher email
+              <input name="email" type="email" placeholder="teacher@worldhsfoundation.org" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" placeholder="Enter password" autocomplete="current-password" required />
+            </label>
+            <div class="auth-actions">
+              <button class="button" type="submit">Sign in</button>
+              <button class="button button-light auth-secondary" id="admin-signout-button" type="button" hidden>Sign out</button>
+            </div>
+            <p id="admin-status" role="status">Only authorized WHSF admin/teacher accounts should use this page.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section admin-dashboard-section" id="admin-dashboard" hidden>
+        <div class="shell admin-summary">
+          <article><span id="student-count">0</span><strong>Students</strong></article>
+          <article><span id="course-count">0</span><strong>Courses</strong></article>
+          <article><span id="lesson-count">0</span><strong>Lessons</strong></article>
+          <article><span id="assignment-count">0</span><strong>Assignments</strong></article>
+          <article><span id="certificate-count">0</span><strong>Certificates</strong></article>
+        </div>
+
+        <div class="shell admin-panel-grid">
+          <section class="admin-panel" id="students">
+            <div class="admin-panel-heading">
+              <div><p class="eyebrow">Students</p><h2>Student profiles</h2></div>
+              <button class="text-button" type="button" data-refresh="students">Refresh</button>
+            </div>
+            <form class="admin-form" id="student-profile-form">
+              <input name="full_name" type="text" placeholder="Full name" required />
+              <input name="email" type="email" placeholder="Student email" required />
+              <select name="learner_group">
+                <option value="ict_girls_club">ICT Girls Club</option>
+                <option value="techwomen">TechWomen</option>
+                <option value="community_learner">Community learner</option>
+                <option value="partner">Partner</option>
+              </select>
+              <button class="button" type="submit">Add profile</button>
+            </form>
+            <div class="admin-table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Group</th><th>Role</th></tr></thead><tbody id="students-table"></tbody></table></div>
+          </section>
+
+          <section class="admin-panel" id="courses">
+            <div class="admin-panel-heading">
+              <div><p class="eyebrow">Courses</p><h2>Course catalogue</h2></div>
+              <button class="text-button" type="button" data-refresh="courses">Refresh</button>
+            </div>
+            <form class="admin-form" id="course-form">
+              <input name="title" type="text" placeholder="Course title" required />
+              <input name="category" type="text" placeholder="Category" required />
+              <select name="level">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <input name="duration_weeks" type="number" min="1" value="4" required />
+              <textarea name="summary" placeholder="Course summary" required></textarea>
+              <button class="button" type="submit">Add course</button>
+            </form>
+            <div class="admin-table-wrap"><table><thead><tr><th>Course</th><th>Category</th><th>Level</th><th>Weeks</th></tr></thead><tbody id="courses-table"></tbody></table></div>
+          </section>
+
+          <section class="admin-panel" id="lessons">
+            <div class="admin-panel-heading">
+              <div><p class="eyebrow">Lessons</p><h2>Course lessons</h2></div>
+              <button class="text-button" type="button" data-refresh="lessons">Refresh</button>
+            </div>
+            <form class="admin-form" id="lesson-form">
+              <select name="course_id" class="course-select" required><option value="">Select course</option></select>
+              <input name="lesson_order" type="number" min="1" value="1" required />
+              <input name="title" type="text" placeholder="Lesson title" required />
+              <select name="lesson_type">
+                <option value="reading">Reading</option>
+                <option value="video">Video</option>
+                <option value="quiz">Quiz</option>
+                <option value="assignment">Assignment</option>
+                <option value="live_session">Live session</option>
+              </select>
+              <textarea name="content" placeholder="Lesson content or notes"></textarea>
+              <button class="button" type="submit">Add lesson</button>
+            </form>
+            <div class="admin-table-wrap"><table><thead><tr><th>Lesson</th><th>Course</th><th>Type</th><th>Order</th></tr></thead><tbody id="lessons-table"></tbody></table></div>
+          </section>
+
+          <section class="admin-panel" id="assignments">
+            <div class="admin-panel-heading">
+              <div><p class="eyebrow">Assignments</p><h2>Tasks and submissions</h2></div>
+              <button class="text-button" type="button" data-refresh="assignments">Refresh</button>
+            </div>
+            <form class="admin-form" id="assignment-form">
+              <select name="course_id" class="course-select" required><option value="">Select course</option></select>
+              <input name="title" type="text" placeholder="Assignment title" required />
+              <textarea name="instructions" placeholder="Assignment instructions" required></textarea>
+              <input name="due_date" type="date" />
+              <button class="button" type="submit">Add assignment</button>
+            </form>
+            <div class="admin-table-wrap"><table><thead><tr><th>Assignment</th><th>Course</th><th>Due date</th><th>Max score</th></tr></thead><tbody id="assignments-table"></tbody></table></div>
+          </section>
+
+          <section class="admin-panel" id="certificates">
+            <div class="admin-panel-heading">
+              <div><p class="eyebrow">Certificates</p><h2>Issue certificates</h2></div>
+              <button class="text-button" type="button" data-refresh="certificates">Refresh</button>
+            </div>
+            <form class="admin-form" id="certificate-form">
+              <select name="student_id" id="certificate-student-select" required><option value="">Select student</option></select>
+              <select name="course_id" class="course-select" required><option value="">Select course</option></select>
+              <input name="certificate_number" type="text" placeholder="Certificate number e.g. WHSF-2026-001" required />
+              <input name="certificate_url" type="url" placeholder="Certificate file URL optional" />
+              <button class="button" type="submit">Issue certificate</button>
+            </form>
+            <div class="admin-table-wrap"><table><thead><tr><th>Certificate</th><th>Student</th><th>Course</th><th>Issued</th></tr></thead><tbody id="certificates-table"></tbody></table></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="62" height="62" alt="WHSF emblem" />
+          <div><strong>World Humanitarian Support Foundation</strong><p>Teacher and admin dashboard for e-Classroom.</p></div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Classroom</strong><a href="e-classroom.html">Student classroom</a><a href="#students">Students</a><a href="#courses">Courses</a></div>
+          <div><strong>Website</strong><a href="index.html#top">Home</a><a href="index.html#contact">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+      const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+      const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
+
+      const adminStatus = document.querySelector('#admin-status');
+      const adminLoginForm = document.querySelector('#admin-login-form');
+      const adminDashboard = document.querySelector('#admin-dashboard');
+      const signoutButton = document.querySelector('#admin-signout-button');
+      let courses = [];
+      let students = [];
+
+      const setStatus = (message) => { if (adminStatus) adminStatus.textContent = message; };
+      const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+      const slugify = (value = '') => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const courseTitle = (id) => courses.find((course) => course.id === id)?.title || 'Unknown course';
+      const studentName = (id) => students.find((student) => student.id === id)?.full_name || 'Unknown student';
+
+      async function ensureAuthorized(session) {
+        if (!session?.user) return false;
+        const role = session.user.app_metadata?.role;
+        if (!['admin', 'teacher'].includes(role)) {
+          setStatus('Signed in, but this account is not marked as admin or teacher in Supabase app metadata.');
+          adminDashboard.hidden = true;
+          signoutButton.hidden = false;
+          return false;
+        }
+        setStatus(`Signed in as ${session.user.email} (${role}).`);
+        adminDashboard.hidden = false;
+        signoutButton.hidden = false;
+        return true;
+      }
+
+      async function loadStudents() {
+        const { data, error } = await whsfSupabase.from('eclassroom_student_profiles').select('*').order('created_at', { ascending: false });
+        if (error) { setStatus(error.message); return; }
+        students = data || [];
+        document.querySelector('#student-count').textContent = students.length;
+        document.querySelector('#students-table').innerHTML = students.map((student) => `
+          <tr><td>${escapeHtml(student.full_name)}</td><td>${escapeHtml(student.email)}</td><td>${escapeHtml(student.learner_group)}</td><td>${escapeHtml(student.role)}</td></tr>
+        `).join('');
+        document.querySelector('#certificate-student-select').innerHTML = '<option value="">Select student</option>' + students.map((student) => `<option value="${student.id}">${escapeHtml(student.full_name)} (${escapeHtml(student.email)})</option>`).join('');
+      }
+
+      async function loadCourses() {
+        const { data, error } = await whsfSupabase.from('eclassroom_courses').select('*').order('title');
+        if (error) { setStatus(error.message); return; }
+        courses = data || [];
+        document.querySelector('#course-count').textContent = courses.length;
+        document.querySelector('#courses-table').innerHTML = courses.map((course) => `
+          <tr><td>${escapeHtml(course.title)}</td><td>${escapeHtml(course.category)}</td><td>${escapeHtml(course.level)}</td><td>${course.duration_weeks}</td></tr>
+        `).join('');
+        document.querySelectorAll('.course-select').forEach((select) => {
+          const current = select.value;
+          select.innerHTML = '<option value="">Select course</option>' + courses.map((course) => `<option value="${course.id}">${escapeHtml(course.title)}</option>`).join('');
+          select.value = current;
+        });
+      }
+
+      async function loadLessons() {
+        const { data, error } = await whsfSupabase.from('eclassroom_lessons').select('*').order('created_at', { ascending: false });
+        if (error) { setStatus(error.message); return; }
+        document.querySelector('#lesson-count').textContent = data?.length || 0;
+        document.querySelector('#lessons-table').innerHTML = (data || []).map((lesson) => `
+          <tr><td>${escapeHtml(lesson.title)}</td><td>${escapeHtml(courseTitle(lesson.course_id))}</td><td>${escapeHtml(lesson.lesson_type)}</td><td>${lesson.lesson_order}</td></tr>
+        `).join('');
+      }
+
+      async function loadAssignments() {
+        const { data, error } = await whsfSupabase.from('eclassroom_assignments').select('*').order('created_at', { ascending: false });
+        if (error) { setStatus(error.message); return; }
+        document.querySelector('#assignment-count').textContent = data?.length || 0;
+        document.querySelector('#assignments-table').innerHTML = (data || []).map((assignment) => `
+          <tr><td>${escapeHtml(assignment.title)}</td><td>${escapeHtml(courseTitle(assignment.course_id))}</td><td>${escapeHtml(assignment.due_date || 'Not set')}</td><td>${assignment.max_score}</td></tr>
+        `).join('');
+      }
+
+      async function loadCertificates() {
+        const { data, error } = await whsfSupabase.from('eclassroom_certificates').select('*').order('issued_at', { ascending: false });
+        if (error) { setStatus(error.message); return; }
+        document.querySelector('#certificate-count').textContent = data?.length || 0;
+        document.querySelector('#certificates-table').innerHTML = (data || []).map((certificate) => `
+          <tr><td>${escapeHtml(certificate.certificate_number)}</td><td>${escapeHtml(studentName(certificate.student_id))}</td><td>${escapeHtml(courseTitle(certificate.course_id))}</td><td>${new Date(certificate.issued_at).toLocaleDateString()}</td></tr>
+        `).join('');
+      }
+
+      async function loadDashboard() {
+        await loadCourses();
+        await loadStudents();
+        await loadLessons();
+        await loadAssignments();
+        await loadCertificates();
+      }
+
+      adminLoginForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(adminLoginForm);
+        setStatus('Signing in…');
+        const { data, error } = await whsfSupabase.auth.signInWithPassword({
+          email: String(formData.get('email') || '').trim(),
+          password: String(formData.get('password') || '')
+        });
+        if (error) { setStatus(error.message); return; }
+        if (await ensureAuthorized(data.session)) loadDashboard();
+      });
+
+      signoutButton?.addEventListener('click', async () => {
+        await whsfSupabase.auth.signOut();
+        adminDashboard.hidden = true;
+        signoutButton.hidden = true;
+        setStatus('Signed out successfully.');
+      });
+
+      document.querySelector('#student-profile-form')?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const { error } = await whsfSupabase.from('eclassroom_student_profiles').insert({
+          full_name: String(formData.get('full_name') || '').trim(),
+          email: String(formData.get('email') || '').trim(),
+          learner_group: formData.get('learner_group'),
+          role: 'student'
+        });
+        if (error) { setStatus(error.message); return; }
+        event.currentTarget.reset();
+        setStatus('Student profile added.');
+        loadStudents();
+      });
+
+      document.querySelector('#course-form')?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const title = String(formData.get('title') || '').trim();
+        const { error } = await whsfSupabase.from('eclassroom_courses').insert({
+          title,
+          slug: slugify(title),
+          category: String(formData.get('category') || '').trim(),
+          level: formData.get('level'),
+          duration_weeks: Number(formData.get('duration_weeks') || 4),
+          summary: String(formData.get('summary') || '').trim(),
+          delivery_mode: 'online'
+        });
+        if (error) { setStatus(error.message); return; }
+        event.currentTarget.reset();
+        setStatus('Course added.');
+        loadCourses();
+      });
+
+      document.querySelector('#lesson-form')?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const { error } = await whsfSupabase.from('eclassroom_lessons').insert({
+          course_id: formData.get('course_id'),
+          lesson_order: Number(formData.get('lesson_order') || 1),
+          title: String(formData.get('title') || '').trim(),
+          lesson_type: formData.get('lesson_type'),
+          content: String(formData.get('content') || '').trim()
+        });
+        if (error) { setStatus(error.message); return; }
+        event.currentTarget.reset();
+        setStatus('Lesson added.');
+        loadLessons();
+      });
+
+      document.querySelector('#assignment-form')?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const { error } = await whsfSupabase.from('eclassroom_assignments').insert({
+          course_id: formData.get('course_id'),
+          title: String(formData.get('title') || '').trim(),
+          instructions: String(formData.get('instructions') || '').trim(),
+          due_date: formData.get('due_date') || null
+        });
+        if (error) { setStatus(error.message); return; }
+        event.currentTarget.reset();
+        setStatus('Assignment added.');
+        loadAssignments();
+      });
+
+      document.querySelector('#certificate-form')?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const { error } = await whsfSupabase.from('eclassroom_certificates').insert({
+          student_id: formData.get('student_id'),
+          course_id: formData.get('course_id'),
+          certificate_number: String(formData.get('certificate_number') || '').trim(),
+          certificate_url: String(formData.get('certificate_url') || '').trim() || null
+        });
+        if (error) { setStatus(error.message); return; }
+        event.currentTarget.reset();
+        setStatus('Certificate issued.');
+        loadCertificates();
+      });
+
+      document.querySelectorAll('[data-refresh]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const target = button.dataset.refresh;
+          if (target === 'students') loadStudents();
+          if (target === 'courses') loadCourses();
+          if (target === 'lessons') loadLessons();
+          if (target === 'assignments') loadAssignments();
+          if (target === 'certificates') loadCertificates();
+        });
+      });
+
+      whsfSupabase.auth.getSession().then(async ({ data }) => {
+        if (await ensureAuthorized(data.session)) loadDashboard();
+      });
+    </script>
+  </body>
+</html>
