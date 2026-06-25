@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="WHSF e-Classroom provides accessible technology training pathways for ICT Girls Club, TechWomen and community learners."
+    />
+    <meta name="theme-color" content="#c93635" />
+    <meta property="og:title" content="WHSF e-Classroom" />
+    <meta
+      property="og:description"
+      content="Accessible technology training in robotics, cybersecurity, drone technology, AI, STEM, eHealth and digital leadership."
+    />
+    <meta property="og:type" content="website" />
+    <title>WHSF e-Classroom</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Accessible learning for girls, women and community innovators</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html#top" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>World Humanitarian Support Foundation</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html#top">Home</a>
+          <a href="index.html#projects">Projects</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#programs">Programs</a>
+          <a href="#courses">Courses</a>
+          <a href="#student-login">Student Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="classroom-hero" aria-labelledby="classroom-title">
+        <div class="shell classroom-hero-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow">WHSF e-Classroom</p>
+            <h1 id="classroom-title">Technology training with access, dignity and inclusion at the centre.</h1>
+            <p class="hero-lead">
+              A digital learning space for ICT Girls Club, TechWomen and community learners to build future-ready skills in robotics, AI, cybersecurity, drones, accessibility technology and applied innovation.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="#student-login">Student login</a>
+              <a class="button button-light" href="#courses">Explore courses</a>
+            </div>
+          </div>
+          <div class="classroom-panel reveal delay-one">
+            <span>Learning pathways</span>
+            <strong>12 course tracks</strong>
+            <p>Designed for beginner, intermediate and community-project levels.</p>
+            <ul>
+              <li>Accessible by phone, tablet or computer</li>
+              <li>Voice-to-text and screen-reader friendly</li>
+              <li>Certificates and mentor review ready</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="student-login">
+        <div class="shell classroom-auth-grid">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Student authentication</p>
+            <h2>Secure learner access for courses, certificates and progress tracking.</h2>
+            <p>
+              This first version shows the student login experience. For production, connect this form to Supabase Auth, Firebase Auth or a learning management system so each learner has a protected account.
+            </p>
+          </div>
+
+          <form class="student-login-card reveal delay-one" id="student-login-form">
+            <label>
+              Student email
+              <input name="email" type="email" placeholder="student@example.com" required />
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" placeholder="Enter password" required />
+            </label>
+            <button class="button" type="submit">Demo student sign in</button>
+            <p id="student-login-status" role="status">Demo only: no real password is stored on this static page.</p>
+          </form>
+        </div>
+
+        <div class="shell learner-dashboard" id="learner-dashboard" hidden>
+          <div>
+            <p class="eyebrow">Learner dashboard</p>
+            <h3>Welcome to WHSF e-Classroom</h3>
+            <p>Your demo dashboard is active. Production login will show enrolled courses, assignments, badges, attendance and certificates.</p>
+          </div>
+          <a class="arrow-link" href="#courses">Choose a course pathway <span>→</span></a>
+        </div>
+      </section>
+
+      <section class="section classroom-courses" id="courses">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Course catalogue</p>
+          <h2>Classrooms for WHSF technology initiatives.</h2>
+          <p>
+            These pathways support girls, women, educators, community volunteers and partner institutions with practical skills that can become real community solutions.
+          </p>
+        </div>
+
+        <div class="shell course-grid">
+          <article class="course-card reveal"><span>Robotics</span><h3>Robotics & Automation</h3><p>Build confidence with sensors, motors, simple machines, robotics logic and automation projects.</p></article>
+          <article class="course-card reveal"><span>Cybersecurity</span><h3>Digital Safety & Cybersecurity</h3><p>Learn safe internet use, privacy, phishing prevention, cyber hygiene and beginner security concepts.</p></article>
+          <article class="course-card reveal"><span>Drone Tech</span><h3>Drone Technology</h3><p>Introduce drone safety, mapping, community use cases, STEM exploration and responsible drone operations.</p></article>
+          <article class="course-card reveal"><span>AI</span><h3>AI & Integration</h3><p>Explore AI literacy, prompts, responsible AI, automation workflows and practical tools for learning and work.</p></article>
+          <article class="course-card reveal"><span>Accessibility</span><h3>Disability Technology</h3><p>Teach assistive tools including voice-to-text, text-to-speech, screen readers, captions and inclusive design.</p></article>
+          <article class="course-card reveal"><span>Infrastructure</span><h3>Data Center Management</h3><p>Introduce cloud, servers, networking, uptime, energy efficiency, security and data centre career pathways.</p></article>
+          <article class="course-card reveal"><span>Leadership</span><h3>Project Management</h3><p>Train learners to plan projects, manage teams, track milestones, report impact and present solutions.</p></article>
+          <article class="course-card reveal"><span>Health Tech</span><h3>eHealth Systems</h3><p>Explore digital health records, telehealth, health data, privacy and community healthcare technology.</p></article>
+          <article class="course-card reveal"><span>STEM</span><h3>STEM Foundation</h3><p>Support science, technology, engineering and maths confidence through practical experiments and challenges.</p></article>
+          <article class="course-card reveal"><span>ICT Girls Club</span><h3>Digital Literacy & Productivity</h3><p>Teach computer basics, email, documents, spreadsheets, presentations and responsible online learning.</p></article>
+          <article class="course-card reveal"><span>Recommended</span><h3>Data Analytics & Visualization</h3><p>Help learners use data to tell stories, measure impact and support WHSF programmes with evidence.</p></article>
+          <article class="course-card reveal"><span>Recommended</span><h3>Green Tech & Climate Innovation</h3><p>Connect sustainability, smart agriculture, clean energy ideas and climate-smart community projects.</p></article>
+        </div>
+      </section>
+
+      <section class="section classroom-features">
+        <div class="shell classroom-feature-grid">
+          <article class="feature-note reveal">
+            <p class="eyebrow">Accessibility by design</p>
+            <h2>Built for learners with different abilities and devices.</h2>
+            <p>
+              The e-Classroom should include voice-to-text assignments, text-to-speech lessons, captions, large text, high contrast, keyboard navigation, screen-reader support and mobile-first design.
+            </p>
+          </article>
+          <article class="feature-note reveal delay-one">
+            <p class="eyebrow">Production roadmap</p>
+            <h2>Recommended next build steps.</h2>
+            <ol>
+              <li>Connect Supabase Auth for student accounts.</li>
+              <li>Create course tables for lessons, quizzes, progress and certificates.</li>
+              <li>Add teacher/admin dashboard for WHSF coordinators.</li>
+              <li>Add video lessons, downloadable PDFs and assignment uploads.</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="62" height="62" alt="WHSF emblem" />
+          <div><strong>World Humanitarian Support Foundation</strong><p>e-Classroom for inclusive technology learning.</p></div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="index.html#about">About Us</a><a href="index.html#programs">Programs</a><a href="#courses">Courses</a></div>
+          <div><strong>Connect</strong><a href="index.html#contact">Contact</a><a href="https://innovation.worldhsfoundation.org/">Innovation</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script>
+      const studentForm = document.querySelector('#student-login-form');
+      const studentStatus = document.querySelector('#student-login-status');
+      const learnerDashboard = document.querySelector('#learner-dashboard');
+
+      studentForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        studentStatus.textContent = 'Demo sign in successful. Production authentication will require Supabase, Firebase or LMS login.';
+        learnerDashboard.hidden = false;
+        learnerDashboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    </script>
+  </body>
+</html>
