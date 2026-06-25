@@ -390,6 +390,8 @@ h3 { line-height: 1.2; }
 .student-login-card label { display: block; margin-bottom: 16px; color: var(--ink); font-size: .86rem; font-weight: 800; }
 .student-login-card input { width: 100%; margin-top: 8px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 12px; font: inherit; }
 .student-login-card p { margin: 16px 0 0; color: var(--muted); font-size: .88rem; }
+.auth-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.auth-secondary { border: 1px solid rgba(201,54,53,.22); }
 .learner-dashboard { margin-top: 42px; padding: 32px; display: flex; gap: 28px; justify-content: space-between; align-items: center; border-radius: var(--radius); color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); box-shadow: var(--shadow); }
 .learner-dashboard[hidden] { display: none; }
 .learner-dashboard h3 { color: #fff; font-size: 1.8rem; }
@@ -402,6 +404,7 @@ h3 { line-height: 1.2; }
 .course-card span { display: inline-flex; margin-bottom: 18px; color: var(--red); font-size: .72rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
 .course-card h3 { margin-bottom: 12px; font-size: 1.18rem; }
 .course-card p { color: var(--muted); }
+.course-card small { display: inline-flex; margin-top: 18px; color: var(--green-800); font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .classroom-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .feature-note { padding: 36px; border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(8,55,43,.08); }
 .feature-note ol { margin: 22px 0 0; padding-left: 22px; color: var(--muted); font-weight: 700; }

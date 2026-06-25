@@ -98,21 +98,29 @@
             <p class="eyebrow">Student authentication</p>
             <h2>Secure learner access for courses, certificates and progress tracking.</h2>
             <p>
-              This first version shows the student login experience. For production, connect this form to Supabase Auth, Firebase Auth or a learning management system so each learner has a protected account.
+              Students can now sign in with Supabase email authentication. New learners can create an account, then return here to access their learning dashboard.
             </p>
           </div>
 
           <form class="student-login-card reveal delay-one" id="student-login-form">
             <label>
+              Full name
+              <input name="fullName" type="text" placeholder="Student full name" autocomplete="name" />
+            </label>
+            <label>
               Student email
-              <input name="email" type="email" placeholder="student@example.com" required />
+              <input name="email" type="email" placeholder="student@example.com" autocomplete="email" required />
             </label>
             <label>
               Password
-              <input name="password" type="password" placeholder="Enter password" required />
+              <input name="password" type="password" placeholder="Enter password" autocomplete="current-password" required />
             </label>
-            <button class="button" type="submit">Demo student sign in</button>
-            <p id="student-login-status" role="status">Demo only: no real password is stored on this static page.</p>
+            <div class="auth-actions">
+              <button class="button" type="submit">Student sign in</button>
+              <button class="button button-light auth-secondary" id="student-signup-button" type="button">Create account</button>
+              <button class="button button-light auth-secondary" id="student-signout-button" type="button" hidden>Sign out</button>
+            </div>
+            <p id="student-login-status" role="status">Use your WHSF e-Classroom student email and password.</p>
           </form>
         </div>
 
@@ -120,7 +128,7 @@
           <div>
             <p class="eyebrow">Learner dashboard</p>
             <h3>Welcome to WHSF e-Classroom</h3>
-            <p>Your demo dashboard is active. Production login will show enrolled courses, assignments, badges, attendance and certificates.</p>
+            <p id="learner-session-summary">You are signed in. Your enrolled courses, assignments, badges, attendance and certificates will appear here as the classroom grows.</p>
           </div>
           <a class="arrow-link" href="#courses">Choose a course pathway <span>→</span></a>
         </div>
@@ -135,7 +143,7 @@
           </p>
         </div>
 
-        <div class="shell course-grid">
+        <div class="shell course-grid" id="course-grid">
           <article class="course-card reveal"><span>Robotics</span><h3>Robotics & Automation</h3><p>Build confidence with sensors, motors, simple machines, robotics logic and automation projects.</p></article>
           <article class="course-card reveal"><span>Cybersecurity</span><h3>Digital Safety & Cybersecurity</h3><p>Learn safe internet use, privacy, phishing prevention, cyber hygiene and beginner security concepts.</p></article>
           <article class="course-card reveal"><span>Drone Tech</span><h3>Drone Technology</h3><p>Introduce drone safety, mapping, community use cases, STEM exploration and responsible drone operations.</p></article>
@@ -191,17 +199,146 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+      const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+      const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+      const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
+
       const studentForm = document.querySelector('#student-login-form');
       const studentStatus = document.querySelector('#student-login-status');
       const learnerDashboard = document.querySelector('#learner-dashboard');
+      const learnerSessionSummary = document.querySelector('#learner-session-summary');
+      const studentSignupButton = document.querySelector('#student-signup-button');
+      const studentSignoutButton = document.querySelector('#student-signout-button');
+      const courseGrid = document.querySelector('#course-grid');
+
+      function setAuthMessage(message) {
+        if (studentStatus) studentStatus.textContent = message;
+      }
+
+      async function upsertStudentProfile(user, fullName = '') {
+        if (!user?.email) return;
+        const profileName = fullName || user.user_metadata?.full_name || user.email.split('@')[0];
+        await whsfSupabase.from('eclassroom_student_profiles').upsert(
+          {
+            auth_user_id: user.id,
+            full_name: profileName,
+            email: user.email,
+            learner_group: 'ict_girls_club',
+            role: 'student'
+          },
+          { onConflict: 'auth_user_id' }
+        );
+      }
+
+      async function showSignedInState(session) {
+        if (!session?.user) {
+          learnerDashboard.hidden = true;
+          studentSignoutButton.hidden = true;
+          studentSignupButton.hidden = false;
+          return;
+        }
+
+        studentSignoutButton.hidden = false;
+        studentSignupButton.hidden = true;
+        learnerDashboard.hidden = false;
+        learnerSessionSummary.textContent = `Signed in as ${session.user.email}. Your enrolled courses, assignments, badges, attendance and certificates will appear here as the classroom grows.`;
+        setAuthMessage('Signed in successfully.');
+      }
+
+      async function loadCoursesFromSupabase() {
+        if (!courseGrid) return;
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_courses')
+          .select('title, category, summary, level, duration_weeks, delivery_mode')
+          .order('title');
+
+        if (error || !data?.length) {
+          console.warn('Using static course cards because Supabase courses could not be loaded.', error);
+          return;
+        }
+
+        courseGrid.innerHTML = data
+          .map((course) => `
+            <article class="course-card reveal visible">
+              <span>${course.category}</span>
+              <h3>${course.title}</h3>
+              <p>${course.summary}</p>
+              <small>${course.level} • ${course.duration_weeks} weeks • ${course.delivery_mode}</small>
+            </article>
+          `)
+          .join('');
+      }
 
       studentForm?.addEventListener('submit', (event) => {
         event.preventDefault();
-        studentStatus.textContent = 'Demo sign in successful. Production authentication will require Supabase, Firebase or LMS login.';
-        learnerDashboard.hidden = false;
-        learnerDashboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const formData = new FormData(studentForm);
+        const email = String(formData.get('email') || '').trim();
+        const password = String(formData.get('password') || '');
+
+        setAuthMessage('Signing in…');
+        whsfSupabase.auth.signInWithPassword({ email, password }).then(async ({ data, error }) => {
+          if (error) {
+            setAuthMessage(error.message);
+            return;
+          }
+          await upsertStudentProfile(data.user);
+          await showSignedInState(data.session);
+          learnerDashboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
       });
+
+      studentSignupButton?.addEventListener('click', async () => {
+        const formData = new FormData(studentForm);
+        const fullName = String(formData.get('fullName') || '').trim();
+        const email = String(formData.get('email') || '').trim();
+        const password = String(formData.get('password') || '');
+
+        if (!fullName || !email || !password) {
+          setAuthMessage('Enter full name, email and password to create a student account.');
+          return;
+        }
+
+        setAuthMessage('Creating student account…');
+        const { data, error } = await whsfSupabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: fullName },
+            emailRedirectTo: window.location.href
+          }
+        });
+
+        if (error) {
+          setAuthMessage(error.message);
+          return;
+        }
+
+        if (data.session && data.user) {
+          await upsertStudentProfile(data.user, fullName);
+          await showSignedInState(data.session);
+          learnerDashboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        setAuthMessage('Account created. Please check your email to confirm your WHSF e-Classroom account, then sign in.');
+      });
+
+      studentSignoutButton?.addEventListener('click', async () => {
+        await whsfSupabase.auth.signOut();
+        learnerDashboard.hidden = true;
+        studentSignoutButton.hidden = true;
+        studentSignupButton.hidden = false;
+        setAuthMessage('Signed out successfully.');
+      });
+
+      whsfSupabase.auth.getSession().then(({ data }) => {
+        showSignedInState(data.session);
+      });
+
+      whsfSupabase.auth.onAuthStateChange((_event, session) => showSignedInState(session));
+      loadCoursesFromSupabase();
     </script>
   </body>
 </html>
