@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="WHSF e-Classroom learner course page with lessons, progress, assignments and certificates." />
+    <meta name="theme-color" content="#c93635" />
+    <title>WHSF e-Classroom Course</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>WHSF e-Classroom learner course</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="e-classroom.html">All courses</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="e-classroom.html" aria-label="WHSF e-Classroom home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>Course learning space</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="#lessons">Lessons</a>
+          <a href="#assignments">Assignments</a>
+          <a href="#certificates">Certificates</a>
+          <a href="e-classroom-admin.html">Teacher/Admin</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="course-learner-hero" aria-labelledby="course-title">
+        <div class="shell course-learner-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow" id="course-category">WHSF e-Classroom</p>
+            <h1 id="course-title">Loading course…</h1>
+            <p class="hero-lead" id="course-summary">Please wait while we prepare your learning space.</p>
+            <div class="hero-actions">
+              <button class="button" id="enroll-button" type="button" hidden>Enroll in this course</button>
+              <a class="button button-light" href="#lessons">View lessons</a>
+            </div>
+          </div>
+
+          <form class="student-login-card reveal delay-one" id="course-login-form">
+            <p class="eyebrow">Student access</p>
+            <label>
+              Email
+              <input name="email" type="email" placeholder="student@example.com" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" placeholder="Enter password" autocomplete="current-password" required />
+            </label>
+            <div class="auth-actions">
+              <button class="button" type="submit">Sign in</button>
+              <button class="button button-light auth-secondary" id="course-signout-button" type="button" hidden>Sign out</button>
+            </div>
+            <p id="course-status" role="status">Sign in to save progress and submit assignments.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section learner-progress-section">
+        <div class="shell learner-progress-card" id="learner-progress-card" hidden>
+          <div>
+            <p class="eyebrow">Your progress</p>
+            <h2 id="progress-heading">0% complete</h2>
+            <p id="progress-summary">Complete lessons to update your progress.</p>
+          </div>
+          <div class="progress-meter" aria-label="Course progress">
+            <span id="progress-bar" style="width: 0%"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="lessons">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Lessons</p>
+          <h2>Learn step by step.</h2>
+          <p>Open each lesson, read the content and mark it complete when you are done.</p>
+        </div>
+        <div class="shell learner-list" id="lessons-list">
+          <article class="learner-empty">Lessons will appear here after your teacher adds them.</article>
+        </div>
+      </section>
+
+      <section class="section classroom-courses" id="assignments">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Assignments</p>
+          <h2>Submit your work.</h2>
+          <p>Use the assignment form to send written responses or links to your project work.</p>
+        </div>
+        <div class="shell learner-list" id="assignments-list">
+          <article class="learner-empty">Assignments will appear here after your teacher adds them.</article>
+        </div>
+      </section>
+
+      <section class="section" id="certificates">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Certificates</p>
+          <h2>Your achievements.</h2>
+          <p>Certificates issued by WHSF teachers will appear here after course completion.</p>
+        </div>
+        <div class="shell learner-list" id="certificates-list">
+          <article class="learner-empty">No certificates have been issued for this course yet.</article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="62" height="62" alt="WHSF emblem" />
+          <div><strong>World Humanitarian Support Foundation</strong><p>Course learning space for e-Classroom students.</p></div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Classroom</strong><a href="e-classroom.html">All courses</a><a href="#lessons">Lessons</a><a href="#assignments">Assignments</a></div>
+          <div><strong>Connect</strong><a href="index.html#contact">Contact</a><a href="e-classroom-admin.html">Teacher/Admin</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+      const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+      const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
+
+      const params = new URLSearchParams(window.location.search);
+      const courseSlug = params.get('course') || 'robotics-automation';
+      const statusEl = document.querySelector('#course-status');
+      const signoutButton = document.querySelector('#course-signout-button');
+      const enrollButton = document.querySelector('#enroll-button');
+      const progressCard = document.querySelector('#learner-progress-card');
+      const progressHeading = document.querySelector('#progress-heading');
+      const progressSummary = document.querySelector('#progress-summary');
+      const progressBar = document.querySelector('#progress-bar');
+      const lessonsList = document.querySelector('#lessons-list');
+      const assignmentsList = document.querySelector('#assignments-list');
+      const certificatesList = document.querySelector('#certificates-list');
+
+      let course = null;
+      let session = null;
+      let profile = null;
+      let enrollment = null;
+      let lessons = [];
+      let completedLessonIds = new Set();
+
+      const setStatus = (message) => { statusEl.textContent = message; };
+      const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+
+      async function loadCourse() {
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_courses')
+          .select('*')
+          .eq('slug', courseSlug)
+          .maybeSingle();
+
+        if (error || !data) {
+          document.querySelector('#course-title').textContent = 'Course not found';
+          document.querySelector('#course-summary').textContent = 'Please return to the e-Classroom and choose another course.';
+          setStatus(error?.message || 'Course not found.');
+          return;
+        }
+
+        course = data;
+        document.title = `${course.title} | WHSF e-Classroom`;
+        document.querySelector('#course-category').textContent = course.category;
+        document.querySelector('#course-title').textContent = course.title;
+        document.querySelector('#course-summary').textContent = `${course.summary} ${course.level} • ${course.duration_weeks} weeks • ${course.delivery_mode}`;
+        await loadLessons();
+        await loadAssignments();
+      }
+
+      async function ensureProfile(user) {
+        const { data } = await whsfSupabase
+          .from('eclassroom_student_profiles')
+          .select('*')
+          .eq('auth_user_id', user.id)
+          .maybeSingle();
+
+        if (data) {
+          profile = data;
+          return profile;
+        }
+
+        const { data: inserted, error } = await whsfSupabase
+          .from('eclassroom_student_profiles')
+          .insert({
+            auth_user_id: user.id,
+            full_name: user.user_metadata?.full_name || user.email.split('@')[0],
+            email: user.email,
+            learner_group: 'ict_girls_club',
+            role: 'student'
+          })
+          .select()
+          .single();
+
+        if (error) {
+          setStatus(error.message);
+          return null;
+        }
+
+        profile = inserted;
+        return profile;
+      }
+
+      async function loadEnrollment() {
+        if (!profile || !course) return;
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_enrollments')
+          .select('*')
+          .eq('student_id', profile.id)
+          .eq('course_id', course.id)
+          .maybeSingle();
+
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+
+        enrollment = data;
+        enrollButton.hidden = Boolean(enrollment);
+        progressCard.hidden = !enrollment;
+        if (enrollment) await loadProgress();
+      }
+
+      async function enroll() {
+        if (!session?.user) {
+          setStatus('Please sign in first.');
+          return;
+        }
+        await ensureProfile(session.user);
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_enrollments')
+          .insert({ student_id: profile.id, course_id: course.id })
+          .select()
+          .single();
+
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+
+        enrollment = data;
+        enrollButton.hidden = true;
+        progressCard.hidden = false;
+        setStatus('Enrolled successfully.');
+        await loadProgress();
+      }
+
+      async function loadLessons() {
+        if (!course) return;
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_lessons')
+          .select('*')
+          .eq('course_id', course.id)
+          .order('lesson_order');
+
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+
+        lessons = data || [];
+        renderLessons();
+      }
+
+      async function loadProgress() {
+        if (!enrollment) return;
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_lesson_progress')
+          .select('*')
+          .eq('enrollment_id', enrollment.id);
+
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+
+        completedLessonIds = new Set((data || []).filter((row) => row.is_completed).map((row) => row.lesson_id));
+        updateProgressUi();
+        renderLessons();
+        await loadCertificates();
+      }
+
+      function updateProgressUi() {
+        const total = lessons.length;
+        const complete = completedLessonIds.size;
+        const percent = total ? Math.round((complete / total) * 100) : 0;
+        progressHeading.textContent = `${percent}% complete`;
+        progressSummary.textContent = `${complete} of ${total} lessons completed.`;
+        progressBar.style.width = `${percent}%`;
+        if (enrollment && enrollment.progress_percent !== percent) {
+          whsfSupabase.from('eclassroom_enrollments').update({
+            progress_percent: percent,
+            status: percent === 100 ? 'completed' : 'active',
+            completed_at: percent === 100 ? new Date().toISOString() : null
+          }).eq('id', enrollment.id).then(() => {});
+        }
+      }
+
+      function renderLessons() {
+        if (!lessons.length) {
+          lessonsList.innerHTML = '<article class="learner-empty">Lessons will appear here after your teacher adds them.</article>';
+          return;
+        }
+
+        lessonsList.innerHTML = lessons.map((lesson) => {
+          const complete = completedLessonIds.has(lesson.id);
+          return `
+            <article class="learner-item">
+              <div>
+                <span>${escapeHtml(lesson.lesson_type)} • Lesson ${lesson.lesson_order}</span>
+                <h3>${escapeHtml(lesson.title)}</h3>
+                <p>${escapeHtml(lesson.content || 'Your teacher will add lesson notes or video resources here.')}</p>
+                ${lesson.video_url ? `<a class="arrow-link" href="${escapeHtml(lesson.video_url)}" target="_blank" rel="noreferrer">Open video →</a>` : ''}
+                ${lesson.resource_url ? `<a class="arrow-link" href="${escapeHtml(lesson.resource_url)}" target="_blank" rel="noreferrer">Download resource →</a>` : ''}
+              </div>
+              <button class="button ${complete ? 'button-light auth-secondary' : ''}" type="button" data-complete-lesson="${lesson.id}" ${!enrollment ? 'disabled' : ''}>
+                ${complete ? 'Completed' : 'Mark complete'}
+              </button>
+            </article>
+          `;
+        }).join('');
+      }
+
+      async function completeLesson(lessonId) {
+        if (!enrollment) {
+          setStatus('Enroll first before marking lessons complete.');
+          return;
+        }
+
+        const { error } = await whsfSupabase
+          .from('eclassroom_lesson_progress')
+          .upsert({
+            enrollment_id: enrollment.id,
+            lesson_id: lessonId,
+            is_completed: true,
+            completed_at: new Date().toISOString()
+          }, { onConflict: 'enrollment_id,lesson_id' });
+
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+
+        setStatus('Lesson marked complete.');
+        await loadProgress();
+      }
+
+      async function loadAssignments() {
+        if (!course) return;
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_assignments')
+          .select('*')
+          .eq('course_id', course.id)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.warn(error);
+          assignmentsList.innerHTML = '<article class="learner-empty">Assignments will appear after you sign in or after your teacher adds them.</article>';
+          return;
+        }
+
+        if (!data?.length) {
+          assignmentsList.innerHTML = '<article class="learner-empty">Assignments will appear here after your teacher adds them.</article>';
+          return;
+        }
+
+        assignmentsList.innerHTML = data.map((assignment) => `
+          <article class="learner-item assignment-item">
+            <div>
+              <span>${assignment.due_date ? `Due ${escapeHtml(assignment.due_date)}` : 'No due date'} • Max score ${assignment.max_score}</span>
+              <h3>${escapeHtml(assignment.title)}</h3>
+              <p>${escapeHtml(assignment.instructions)}</p>
+            </div>
+            <form class="assignment-submit-form" data-assignment-id="${assignment.id}">
+              <textarea name="submission_text" placeholder="Write your response or paste your project link" required></textarea>
+              <input name="file_url" type="url" placeholder="Optional file or project URL" />
+              <button class="button" type="submit" ${!profile ? 'disabled' : ''}>Submit assignment</button>
+            </form>
+          </article>
+        `).join('');
+      }
+
+      async function submitAssignment(form) {
+        if (!profile) {
+          setStatus('Please sign in before submitting assignments.');
+          return;
+        }
+        const formData = new FormData(form);
+        const { error } = await whsfSupabase
+          .from('eclassroom_assignment_submissions')
+          .upsert({
+            assignment_id: form.dataset.assignmentId,
+            student_id: profile.id,
+            submission_text: String(formData.get('submission_text') || '').trim(),
+            file_url: String(formData.get('file_url') || '').trim() || null,
+            submitted_at: new Date().toISOString()
+          }, { onConflict: 'assignment_id,student_id' });
+
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+
+        form.reset();
+        setStatus('Assignment submitted successfully.');
+      }
+
+      async function loadCertificates() {
+        if (!profile || !course) return;
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_certificates')
+          .select('*')
+          .eq('student_id', profile.id)
+          .eq('course_id', course.id)
+          .order('issued_at', { ascending: false });
+
+        if (error) {
+          certificatesList.innerHTML = `<article class="learner-empty">${escapeHtml(error.message)}</article>`;
+          return;
+        }
+
+        if (!data?.length) {
+          certificatesList.innerHTML = '<article class="learner-empty">No certificates have been issued for this course yet.</article>';
+          return;
+        }
+
+        certificatesList.innerHTML = data.map((certificate) => `
+          <article class="learner-item">
+            <div>
+              <span>Issued ${new Date(certificate.issued_at).toLocaleDateString()}</span>
+              <h3>${escapeHtml(certificate.certificate_number)}</h3>
+              <p>Congratulations. WHSF has issued a certificate for this course.</p>
+            </div>
+            ${certificate.certificate_url ? `<a class="button" href="${escapeHtml(certificate.certificate_url)}" target="_blank" rel="noreferrer">Open certificate</a>` : '<span class="certificate-pending">Certificate file pending</span>'}
+          </article>
+        `).join('');
+      }
+
+      document.querySelector('#course-login-form')?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        setStatus('Signing in…');
+        const { data, error } = await whsfSupabase.auth.signInWithPassword({
+          email: String(formData.get('email') || '').trim(),
+          password: String(formData.get('password') || '')
+        });
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+        session = data.session;
+        profile = await ensureProfile(data.user);
+        signoutButton.hidden = false;
+        setStatus(`Signed in as ${data.user.email}.`);
+        await loadEnrollment();
+        await loadAssignments();
+      });
+
+      signoutButton?.addEventListener('click', async () => {
+        await whsfSupabase.auth.signOut();
+        session = null;
+        profile = null;
+        enrollment = null;
+        completedLessonIds = new Set();
+        progressCard.hidden = true;
+        enrollButton.hidden = true;
+        signoutButton.hidden = true;
+        setStatus('Signed out successfully.');
+        renderLessons();
+      });
+
+      enrollButton?.addEventListener('click', enroll);
+
+      document.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-complete-lesson]');
+        if (button) completeLesson(button.dataset.completeLesson);
+      });
+
+      document.addEventListener('submit', (event) => {
+        const form = event.target.closest('.assignment-submit-form');
+        if (!form) return;
+        event.preventDefault();
+        submitAssignment(form);
+      });
+
+      whsfSupabase.auth.getSession().then(async ({ data }) => {
+        session = data.session;
+        if (session?.user) {
+          signoutButton.hidden = false;
+          profile = await ensureProfile(session.user);
+          setStatus(`Signed in as ${session.user.email}.`);
+        }
+        await loadCourse();
+        if (profile) await loadEnrollment();
+      });
+    </script>
+  </body>
+</html>

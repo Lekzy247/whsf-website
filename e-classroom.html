@@ -252,7 +252,7 @@
         if (!courseGrid) return;
         const { data, error } = await whsfSupabase
           .from('eclassroom_courses')
-          .select('title, category, summary, level, duration_weeks, delivery_mode')
+          .select('title, slug, category, summary, level, duration_weeks, delivery_mode')
           .order('title');
 
         if (error || !data?.length) {
@@ -267,6 +267,7 @@
               <h3>${course.title}</h3>
               <p>${course.summary}</p>
               <small>${course.level} • ${course.duration_weeks} weeks • ${course.delivery_mode}</small>
+              <a class="arrow-link course-open-link" href="e-classroom-course.html?course=${course.slug}">Open course <span>→</span></a>
             </article>
           `)
           .join('');

@@ -405,6 +405,7 @@ h3 { line-height: 1.2; }
 .course-card h3 { margin-bottom: 12px; font-size: 1.18rem; }
 .course-card p { color: var(--muted); }
 .course-card small { display: inline-flex; margin-top: 18px; color: var(--green-800); font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.course-open-link { margin-top: 18px; }
 .classroom-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .feature-note { padding: 36px; border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(8,55,43,.08); }
 .feature-note ol { margin: 22px 0 0; padding-left: 22px; color: var(--muted); font-weight: 700; }
@@ -430,9 +431,30 @@ h3 { line-height: 1.2; }
 .admin-table-wrap th, .admin-table-wrap td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .admin-table-wrap th { color: var(--green-800); background: #f8fbf9; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; }
 .admin-table-wrap tr:last-child td { border-bottom: 0; }
+.course-learner-hero { color: #fff; background: linear-gradient(135deg, var(--green-950) 0%, var(--green-800) 52%, var(--red) 100%); }
+.course-learner-grid { min-height: 520px; padding: 82px 0; display: grid; grid-template-columns: minmax(0, 1fr) 430px; gap: 62px; align-items: center; }
+.learner-progress-section { padding-top: 48px; padding-bottom: 48px; }
+.learner-progress-card { padding: 34px; display: grid; grid-template-columns: minmax(0, .8fr) minmax(260px, 1fr); gap: 34px; align-items: center; border-radius: var(--radius); color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); box-shadow: var(--shadow); }
+.learner-progress-card[hidden] { display: none; }
+.learner-progress-card h2 { color: #fff; }
+.learner-progress-card p { color: #c8d9d2; }
+.progress-meter { overflow: hidden; height: 18px; border-radius: 999px; background: rgba(255,255,255,.18); }
+.progress-meter span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f3dfac, #fff); transition: width .3s ease; }
+.learner-list { display: grid; gap: 18px; }
+.learner-item, .learner-empty { padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
+.learner-empty { display: block; color: var(--muted); font-weight: 800; text-align: center; }
+.learner-item span { display: inline-flex; margin-bottom: 12px; color: var(--red); font-size: .72rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+.learner-item h3 { margin-bottom: 10px; font-size: 1.25rem; }
+.learner-item p { color: var(--muted); }
+.learner-item button[disabled], .assignment-submit-form button[disabled] { cursor: not-allowed; opacity: .55; }
+.assignment-item { align-items: stretch; }
+.assignment-submit-form { min-width: min(420px, 100%); display: grid; gap: 10px; }
+.assignment-submit-form textarea, .assignment-submit-form input { width: 100%; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; font: inherit; }
+.assignment-submit-form textarea { min-height: 120px; resize: vertical; }
+.certificate-pending { align-self: center; color: var(--muted); font-weight: 800; }
 
 @media (max-width: 1020px) {
-  .classroom-hero-grid, .classroom-auth-grid, .classroom-feature-grid, .admin-hero-grid { grid-template-columns: 1fr; }
+  .classroom-hero-grid, .classroom-auth-grid, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card { grid-template-columns: 1fr; }
   .course-grid { grid-template-columns: 1fr 1fr; }
   .admin-summary { grid-template-columns: repeat(2, 1fr); }
   .admin-form { grid-template-columns: 1fr 1fr; }
@@ -448,4 +470,7 @@ h3 { line-height: 1.2; }
   .admin-panel { padding: 24px 18px; }
   .admin-panel-heading { flex-direction: column; }
   .admin-form textarea { grid-column: span 1; }
+  .course-learner-grid { min-height: auto; padding: 68px 0; }
+  .learner-item { grid-template-columns: 1fr; }
+  .assignment-submit-form { min-width: 0; }
 }
