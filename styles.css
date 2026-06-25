@@ -170,6 +170,17 @@ h3 { line-height: 1.2; }
 .visual-programme-list h3 { font-size: 1.15rem; }
 .visual-programme-list p { line-height: 1.65; }
 
+.community-impact-section { background: linear-gradient(135deg, #f8fff9, #fff7ef); }
+.community-impact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 60px; align-items: center; }
+.community-impact-copy .lead { color: var(--ink); font-size: 1.2rem; font-weight: 650; }
+.community-impact-copy p:not(.eyebrow) { color: var(--muted); }
+.impact-stat-card { margin-top: 28px; padding: 26px; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; border-left: 6px solid var(--red); border-radius: 18px; background: #fff; box-shadow: 0 18px 42px rgba(8,55,43,.08); }
+.impact-stat-card strong { color: var(--green-800); font-family: "Playfair Display", Georgia, serif; font-size: clamp(2.6rem, 6vw, 4.4rem); line-height: 1; }
+.impact-stat-card span { color: var(--ink); font-weight: 800; line-height: 1.45; }
+.community-video-card { overflow: hidden; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
+.community-video-card video, .community-video-card iframe { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 0; object-fit: cover; }
+.community-video-card p { margin: 0; padding: 16px 20px; color: var(--green-800); font-size: .86rem; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+
 .innovation { position: relative; overflow: hidden; color: #fff; background: linear-gradient(135deg, var(--green-950), #0c6a51); }
 .innovation::after { content: ""; position: absolute; width: 460px; height: 460px; right: -180px; bottom: -260px; border: 80px solid rgba(255,255,255,.05); border-radius: 50%; }
 .innovation-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; }
@@ -337,7 +348,7 @@ h3 { line-height: 1.2; }
   .primary-nav a { padding: 12px; font-size: 1.05rem; }
   .primary-nav .button { margin-top: 12px; }
   .hero-grid { min-height: auto; padding: 75px 0; }
-  .split-layout, .innovation-grid, .impact-header, .contact-grid, .project-feature-grid, .event-layout, .volunteer-record { grid-template-columns: 1fr; gap: 38px; }
+  .split-layout, .innovation-grid, .impact-header, .contact-grid, .project-feature-grid, .event-layout, .volunteer-record, .community-impact-grid { grid-template-columns: 1fr; gap: 38px; }
   .award-card { grid-template-columns: 1fr; }
   .partner-logo-grid { grid-template-columns: 1fr 1fr; }
   .project-feature-image { min-height: 440px; }
@@ -394,6 +405,7 @@ h3 { line-height: 1.2; }
   .pillar-card { min-height: 325px; }
   .product-content { padding: 30px 22px; }
   .metric-row { grid-template-columns: 1fr; }
+  .impact-stat-card { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; gap: 0; }
   .contact-form { padding: 24px 18px; }
   .footer-links { margin-top: 10px; }
