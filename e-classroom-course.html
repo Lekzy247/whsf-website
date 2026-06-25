@@ -409,35 +409,67 @@
             <form class="assignment-submit-form" data-assignment-id="${assignment.id}">
               <textarea name="submission_text" placeholder="Write your response or paste your project link" required></textarea>
               <input name="file_url" type="url" placeholder="Optional file or project URL" />
-              <button class="button" type="submit" ${!profile ? 'disabled' : ''}>Submit assignment</button>
+              <button class="button" type="submit">Submit assignment</button>
+              <small class="assignment-status" role="status"></small>
             </form>
           </article>
         `).join('');
       }
 
       async function submitAssignment(form) {
+        const submitButton = form.querySelector('button[type="submit"]');
+        const formStatus = form.querySelector('.assignment-status');
+        const setFormStatus = (message) => {
+          if (formStatus) formStatus.textContent = message;
+          setStatus(message);
+        };
+
+        submitButton.disabled = true;
+        setFormStatus('Submitting assignment…');
+
         if (!profile) {
-          setStatus('Please sign in before submitting assignments.');
+          const { data } = await whsfSupabase.auth.getSession();
+          session = data.session;
+          if (session?.user) {
+            profile = await ensureProfile(session.user);
+          }
+        }
+
+        if (!profile) {
+          setFormStatus('Please sign in before submitting assignments.');
+          submitButton.disabled = false;
           return;
         }
+
         const formData = new FormData(form);
+        const submissionText = String(formData.get('submission_text') || '').trim();
+        const fileUrl = String(formData.get('file_url') || '').trim();
+
+        if (!submissionText && !fileUrl) {
+          setFormStatus('Write a response or add a project/file link before submitting.');
+          submitButton.disabled = false;
+          return;
+        }
+
         const { error } = await whsfSupabase
           .from('eclassroom_assignment_submissions')
           .upsert({
             assignment_id: form.dataset.assignmentId,
             student_id: profile.id,
-            submission_text: String(formData.get('submission_text') || '').trim(),
-            file_url: String(formData.get('file_url') || '').trim() || null,
+            submission_text: submissionText,
+            file_url: fileUrl || null,
             submitted_at: new Date().toISOString()
           }, { onConflict: 'assignment_id,student_id' });
 
         if (error) {
-          setStatus(error.message);
+          setFormStatus(error.message);
+          submitButton.disabled = false;
           return;
         }
 
         form.reset();
-        setStatus('Assignment submitted successfully.');
+        setFormStatus('Assignment submitted successfully.');
+        submitButton.disabled = false;
       }
 
       async function loadCertificates() {
