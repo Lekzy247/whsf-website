@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mira is the WHSF assistant for programmes, e-Classroom, certificates, volunteering, donations and support guidance."
+    />
+    <meta name="theme-color" content="#c93635" />
+    <meta property="og:title" content="Mira | WHSF AI Assistant" />
+    <meta
+      property="og:description"
+      content="Ask WHSF questions about courses, certificates, programmes, volunteering, partnership and support."
+    />
+    <meta property="og:type" content="website" />
+    <title>Mira | WHSF AI Assistant</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="top-strip">
+      <p>Mira answers common WHSF questions and guides visitors to the right support channel.</p>
+      <div class="utility-actions" aria-label="Accessibility controls">
+        <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+        <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="shell nav-shell">
+        <a class="brand" href="index.html#top" aria-label="World Humanitarian Support Foundation home">
+          <img src="assets/whsf-logo.jpg" alt="WHSF logo" />
+          <span>
+            <strong>WHSF</strong>
+            <small>AI Assistant</small>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span></span><span></span><span></span>
+          <span class="sr-only">Toggle menu</span>
+        </button>
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html#top">Home</a>
+          <a href="index.html#programs">Programs</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="impact-dashboard.html">Impact</a>
+          <a href="help-center.html">Help Center</a>
+          <a href="ai-assistant.html">AI Assistant</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="assistant-hero" aria-labelledby="assistant-title">
+        <div class="shell assistant-hero-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow">Mira, WHSF Assistant</p>
+            <h1 id="assistant-title">Fast guidance for learners, volunteers, partners and visitors.</h1>
+            <p class="hero-lead">
+              Ask about WHSF programmes, e-Classroom access, certificate verification, volunteering, donations,
+              partnership and support. Mira helps visitors find the right next step quickly.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="#assistant-chat">Ask Mira</a>
+              <a class="button button-light" href="help-center.html">Contact support</a>
+            </div>
+          </div>
+
+          <aside class="assistant-status-card reveal delay-one" aria-label="Assistant status">
+            <span>AI-ready support</span>
+            <strong>24/7 guidance</strong>
+            <p>
+              This first version uses approved WHSF website knowledge. A secure OpenAI-powered backend can be
+              connected later without exposing API keys to the public.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section assistant-section" id="assistant-chat">
+        <div class="shell assistant-layout">
+          <div class="assistant-intro reveal">
+            <p class="eyebrow">Visitor support</p>
+            <h2>Ask Mira a WHSF question.</h2>
+            <p>
+              Mira can guide students, parents, teachers, volunteers, partners and donors to the correct programme,
+              page or support route. For urgent safeguarding or sensitive concerns, please contact WHSF directly.
+            </p>
+            <div class="assistant-note">
+              <strong>Privacy-safe first version</strong>
+              <span>No API key or private WhatsApp number is stored in this public page.</span>
+            </div>
+          </div>
+
+          <article class="assistant-chat-card reveal delay-one" aria-label="Mira assistant chat">
+            <div class="assistant-chat-head">
+              <img src="assets/whsf-logo.jpg" alt="" />
+              <div>
+                <strong>Mira</strong>
+                <span>WHSF digital assistant</span>
+              </div>
+            </div>
+
+            <div id="assistant-messages" class="assistant-messages" aria-live="polite">
+              <div class="assistant-message bot">
+                <span>Mira</span>
+                <p>Hello, I’m Mira. Ask me about WHSF programmes, e-Classroom, certificates, volunteering, donations or support.</p>
+              </div>
+            </div>
+
+            <div class="assistant-quick-actions" aria-label="Suggested questions">
+              <button type="button">How do I join e-Classroom?</button>
+              <button type="button">How do I verify a certificate?</button>
+              <button type="button">How can I volunteer?</button>
+              <button type="button">What programmes does WHSF run?</button>
+              <button type="button">How can partners work with WHSF?</button>
+              <button type="button">How do I contact support?</button>
+            </div>
+
+            <form id="assistant-form" class="assistant-form">
+              <label class="sr-only" for="assistant-input">Ask Mira</label>
+              <textarea id="assistant-input" rows="3" placeholder="Type your WHSF question..." required></textarea>
+              <button class="button" type="submit">Send</button>
+            </form>
+          </article>
+        </div>
+      </section>
+
+      <section class="section assistant-knowledge-section">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">What Mira can help with</p>
+          <h2>Clear guidance across WHSF services.</h2>
+        </div>
+        <div class="shell assistant-knowledge-grid">
+          <article class="reveal">
+            <span>01</span>
+            <h3>Student and course guidance</h3>
+            <p>Help learners find e-Classroom courses, continue lessons, submit assignments and understand certificates.</p>
+          </article>
+          <article class="reveal delay-one">
+            <span>02</span>
+            <h3>Certificate verification</h3>
+            <p>Guide employers, schools and partners to verify WHSF certificates using the certificate number or QR code.</p>
+          </article>
+          <article class="reveal delay-two">
+            <span>03</span>
+            <h3>Volunteer and partner support</h3>
+            <p>Route volunteers, mentors, donors and institutional partners to the correct WHSF contact path.</p>
+          </article>
+          <article class="reveal">
+            <span>04</span>
+            <h3>Programme discovery</h3>
+            <p>Explain WHSF focus areas including ICT Girls Club, TechWomen, robotics, drones, cybersecurity, AI and accessibility technology.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" alt="World Humanitarian Support Foundation logo" />
+          <div>
+            <strong>World Humanitarian Support Foundation</strong>
+            <p>Mira supports visitors with clear guidance across WHSF programmes and digital services.</p>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="index.html#programs">Programs</a><a href="e-classroom.html">e-Classroom</a><a href="impact-dashboard.html">Impact</a><a href="verify-certificate.html">Verify certificate</a></div>
+          <div><strong>Connect</strong><a href="help-center.html">Help Center</a><a href="index.html#contact">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      const assistantForm = document.getElementById('assistant-form');
+      const assistantInput = document.getElementById('assistant-input');
+      const assistantMessages = document.getElementById('assistant-messages');
+      const quickButtons = document.querySelectorAll('.assistant-quick-actions button');
+
+      const answers = [
+        {
+          terms: ['e-classroom', 'classroom', 'course', 'lesson', 'student', 'login', 'register', 'enrol', 'enroll'],
+          reply:
+            'You can open the WHSF e-Classroom from the main menu or visit e-classroom.html. Students can sign in, view enrolled courses, continue lessons, submit assignments and access certificates from the learner dashboard.',
+          link: { label: 'Open e-Classroom', url: 'e-classroom.html' }
+        },
+        {
+          terms: ['certificate', 'verify', 'verification', 'qr', 'number', 'completion'],
+          reply:
+            'WHSF certificates can be verified online using the certificate number printed on the certificate or through the QR code. The verification page confirms the learner, course and issue date from WHSF records.',
+          link: { label: 'Verify certificate', url: 'verify-certificate.html' }
+        },
+        {
+          terms: ['volunteer', 'mentor', 'join', 'support', 'help whsf'],
+          reply:
+            'Volunteers can support WHSF through mentoring, digital skills training, programme coordination, fundraising, community outreach and student support. Please contact WHSF with your area of interest and location.',
+          link: { label: 'Contact WHSF', url: 'index.html#contact' }
+        },
+        {
+          terms: ['partner', 'partnership', 'sponsor', 'donor', 'collaborate', 'organisation', 'organization'],
+          reply:
+            'Partners can collaborate with WHSF on technology training, scholarships, equipment support, e-Classroom delivery, community outreach, disability inclusion and climate-smart innovation. WHSF can also provide impact reporting for funders.',
+          link: { label: 'View impact dashboard', url: 'impact-dashboard.html' }
+        },
+        {
+          terms: ['donate', 'donation', 'paypal', 'fundraiser', 'give'],
+          reply:
+            'Thank you for supporting WHSF. Donations help expand access to technology education, mentorship and community programmes for girls and young women.',
+          link: { label: 'Donate securely', url: 'https://paypal.com/us/fundraiser/charity/1450337' }
+        },
+        {
+          terms: ['program', 'programme', 'ict', 'techwomen', 'robotic', 'robotics', 'drone', 'cybersecurity', 'ai', 'stem', 'agriculture', 'disability', 'accessibility'],
+          reply:
+            'WHSF programmes include ICT Girls Club, TechWomen, robotics, drone technology, cybersecurity, AI, STEM, disability technology, climate-smart agriculture, eHealth, data center management and project management training.',
+          link: { label: 'View programmes', url: 'index.html#programs' }
+        },
+        {
+          terms: ['impact', 'report', 'sdg', 'ecosoc', 'data', 'metrics', 'dashboard'],
+          reply:
+            'The public impact dashboard presents WHSF reach, programme indicators, SDG alignment, course tracks, certificates and priority countries. It is designed to support transparency for donors, partners and communities.',
+          link: { label: 'Open impact dashboard', url: 'impact-dashboard.html' }
+        },
+        {
+          terms: ['contact', 'support', 'problem', 'issue', 'help center', 'complaint', 'safeguarding', 'urgent'],
+          reply:
+            'For support, use the WHSF Help Center or email info@worldhsfoundation.org. For safeguarding or sensitive issues, include clear details so the correct WHSF team can respond.',
+          link: { label: 'Open Help Center', url: 'help-center.html' }
+        },
+        {
+          terms: ['whatsapp', 'phone', 'call', 'number', 'privacy'],
+          reply:
+            'WHSF can add official virtual numbers and WhatsApp Business later. This protects personal privacy while routing student, volunteer and partner messages to the right support team.',
+          link: { label: 'See Help Center', url: 'help-center.html' }
+        }
+      ];
+
+      function addMessage(role, text, link) {
+        const message = document.createElement('div');
+        message.className = `assistant-message ${role}`;
+        message.innerHTML = `<span>${role === 'bot' ? 'Mira' : 'You'}</span><p>${escapeAssistantHtml(text)}</p>${link ? `<a class="arrow-link" href="${link.url}">${link.label} <span>→</span></a>` : ''}`;
+        assistantMessages.appendChild(message);
+        assistantMessages.scrollTop = assistantMessages.scrollHeight;
+      }
+
+      function escapeAssistantHtml(value) {
+        return value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+      }
+
+      function getReply(question) {
+        const normalized = question.toLowerCase();
+        const match = answers.find((item) => item.terms.some((term) => normalized.includes(term)));
+        if (match) return match;
+        return {
+          reply:
+            'I can help with WHSF programmes, e-Classroom, certificates, volunteering, donations, partnerships and support. If your question is specific or urgent, please contact WHSF directly through the Help Center.',
+          link: { label: 'Contact support', url: 'help-center.html' }
+        };
+      }
+
+      function submitQuestion(question) {
+        const cleanQuestion = question.trim();
+        if (!cleanQuestion) return;
+        addMessage('user', cleanQuestion);
+        assistantInput.value = '';
+        window.setTimeout(() => {
+          const answer = getReply(cleanQuestion);
+          addMessage('bot', answer.reply, answer.link);
+        }, 220);
+      }
+
+      assistantForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        submitQuestion(assistantInput.value);
+      });
+
+      quickButtons.forEach((button) => {
+        button.addEventListener('click', () => submitQuestion(button.textContent));
+      });
+    </script>
+  </body>
+</html>
