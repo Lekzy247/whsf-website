@@ -360,8 +360,8 @@
 
         const qrCodeDataUrl = await generateQrCodeDataUrl(verificationUrl);
         if (qrCodeDataUrl) {
-          const qrBoxX = 86;
-          const qrBoxY = 112;
+          const qrBoxX = 76;
+          const qrBoxY = 292;
           doc.setFillColor(255, 255, 255);
           doc.setDrawColor(8, 55, 43);
           doc.setLineWidth(1);
@@ -375,7 +375,7 @@
           doc.setTextColor(201, 54, 53);
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(9);
-          doc.text('QR unavailable - use verification link', 147, 250, { align: 'center' });
+          doc.text('QR unavailable - use verification link', 137, 430, { align: 'center' });
         }
 
         const signatureDataUrl = await loadImageDataUrl('assets/signature-transparent.png');
