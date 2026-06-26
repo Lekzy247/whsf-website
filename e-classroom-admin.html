@@ -215,6 +215,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
     <script>
       const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
       const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
@@ -250,6 +251,24 @@
           image.onerror = () => resolve(null);
           image.src = src;
         });
+      }
+
+      async function generateQrCodeDataUrl(value) {
+        if (!window.QRCode?.toDataURL) return null;
+        try {
+          return await window.QRCode.toDataURL(value, {
+            errorCorrectionLevel: 'H',
+            margin: 1,
+            width: 180,
+            color: {
+              dark: '#08372b',
+              light: '#ffffff'
+            }
+          });
+        } catch (error) {
+          console.warn('QR code generation failed', error);
+          return null;
+        }
       }
 
       function addSecurityPaper(doc, width, height) {
@@ -350,7 +369,19 @@
         doc.text(`Certificate No: ${certificateNumber}`, 86, height - 134);
         doc.text(`Issued: ${issuedDate}`, 86, height - 112);
         doc.text('Special consultative status with ECOSOC since 2026', width / 2, height - 114, { align: 'center' });
-        doc.text(`Verify: ${verifyCertificateUrl(certificateNumber)}`, width / 2, height - 92, { align: 'center' });
+        const verificationUrl = verifyCertificateUrl(certificateNumber);
+        doc.text(`Verify: ${verificationUrl}`, width / 2, height - 92, { align: 'center' });
+
+        const qrCodeDataUrl = await generateQrCodeDataUrl(verificationUrl);
+        if (qrCodeDataUrl) {
+          doc.setFillColor(255, 255, 255);
+          doc.roundedRect(86, height - 236, 96, 116, 10, 10, 'F');
+          doc.addImage(qrCodeDataUrl, 'PNG', 96, height - 226, 76, 76);
+          doc.setTextColor(8, 55, 43);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8);
+          doc.text('Scan to verify', 134, height - 136, { align: 'center' });
+        }
 
         const signatureDataUrl = await loadImageDataUrl('assets/signature-transparent.png');
         if (signatureDataUrl) {
