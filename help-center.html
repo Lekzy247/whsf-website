@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="WHSF Help Center provides student, volunteer, partner and donor support for World Humanitarian Support Foundation programmes."
+    />
+    <meta name="theme-color" content="#c93635" />
+    <meta property="og:title" content="WHSF Help Center" />
+    <meta
+      property="og:description"
+      content="Student support, volunteer help desk, programme enquiries and e-Classroom assistance."
+    />
+    <meta property="og:type" content="website" />
+    <title>Help Center | World Humanitarian Support Foundation</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>WHSF support for students, volunteers, partners and communities</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="mailto:info@worldhsfoundation.org">Email support</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html#top" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>Help Center</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html#top">Home</a>
+          <a href="index.html#programs">Programs</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="#support-lines">Support Lines</a>
+          <a href="#request-help">Request Help</a>
+          <a href="verify-certificate.html">Verify Certificate</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="help-hero" aria-labelledby="help-title">
+        <div class="shell help-hero-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow">WHSF Help Center</p>
+            <h1 id="help-title">Support for students, volunteers and community partners.</h1>
+            <p class="hero-lead">
+              A central help desk for e-Classroom access, certificates, volunteer onboarding, programme enquiries, technical issues and safeguarding concerns.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="#request-help">Open support request</a>
+              <a class="button button-light" href="mailto:info@worldhsfoundation.org">Email WHSF</a>
+            </div>
+          </div>
+
+          <aside class="help-status-card reveal delay-one" aria-label="Help center status">
+            <span>Support desk</span>
+            <strong>Centralized assistance</strong>
+            <p>Use the form below to prepare a structured support request. WHSF can later connect these support lines to virtual numbers, WhatsApp Business or a call-center provider.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section help-support-section" id="support-lines">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Support channels</p>
+          <h2>Choose the right desk for your issue.</h2>
+          <p>
+            These support lines are organised by need. Add official WHSF virtual numbers when they are ready, then connect them to WhatsApp Business, Twilio, Google Voice or a local call-centre provider.
+          </p>
+        </div>
+
+        <div class="shell support-line-grid">
+          <article class="support-line-card reveal">
+            <span>01</span>
+            <h3>Student support</h3>
+            <p>Login help, course access, assignments, lessons, progress tracking and certificate downloads.</p>
+            <a class="arrow-link" href="#request-help" data-support-type="Student support">Request help <span>→</span></a>
+          </article>
+          <article class="support-line-card reveal delay-one">
+            <span>02</span>
+            <h3>Volunteer desk</h3>
+            <p>Volunteer onboarding, mentor applications, training roles, community outreach and programme support.</p>
+            <a class="arrow-link" href="#request-help" data-support-type="Volunteer desk">Request help <span>→</span></a>
+          </article>
+          <article class="support-line-card reveal delay-two">
+            <span>03</span>
+            <h3>Programme enquiries</h3>
+            <p>ICT Girls Club, TechWomen, robotics, drones, cybersecurity, climate-smart agriculture and STEM programmes.</p>
+            <a class="arrow-link" href="#request-help" data-support-type="Programme enquiries">Request help <span>→</span></a>
+          </article>
+          <article class="support-line-card reveal">
+            <span>04</span>
+            <h3>Safeguarding & urgent concerns</h3>
+            <p>Report concerns involving learner safety, misconduct, impersonation, fraudulent pages or misuse of WHSF identity.</p>
+            <a class="arrow-link" href="#request-help" data-support-type="Safeguarding or urgent concern">Report concern <span>→</span></a>
+          </article>
+        </div>
+
+        <div class="shell virtual-number-panel reveal">
+          <div>
+            <p class="eyebrow">Virtual number readiness</p>
+            <h2>Connect official WHSF virtual numbers when ready.</h2>
+            <p>
+              Recommended setup: one main support number, one student/e-Classroom number and one volunteer/partner number. Each can route calls, WhatsApp messages and voicemail to the correct WHSF team.
+            </p>
+          </div>
+          <div class="virtual-number-list">
+            <article><strong>Main help desk</strong><span>Virtual number pending</span></article>
+            <article><strong>Student line</strong><span>Virtual number pending</span></article>
+            <article><strong>Volunteer line</strong><span>Virtual number pending</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section request-help-section" id="request-help">
+        <div class="shell help-request-grid">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Request help</p>
+            <h2>Send a structured message to WHSF support.</h2>
+            <p>
+              This form prepares an email in your device’s email app. It helps WHSF receive clear details about the issue, the person needing support and the programme involved.
+            </p>
+            <div class="help-contact-box">
+              <strong>Official email</strong>
+              <a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a>
+              <small>For urgent safety concerns, include “URGENT” in the subject line.</small>
+            </div>
+          </div>
+
+          <form class="help-request-form reveal delay-one" id="help-request-form">
+            <label>
+              I need help with
+              <select name="supportType" id="support-type" required>
+                <option value="">Select support area</option>
+                <option>Student support</option>
+                <option>Volunteer desk</option>
+                <option>Programme enquiries</option>
+                <option>Certificate verification</option>
+                <option>Technical issue</option>
+                <option>Safeguarding or urgent concern</option>
+                <option>Partnership or donor enquiry</option>
+              </select>
+            </label>
+            <div class="field-row">
+              <label>Full name<input name="fullName" autocomplete="name" required /></label>
+              <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+            </div>
+            <label>
+              Phone / WhatsApp optional
+              <input name="phone" type="tel" placeholder="+1 or +234 number" autocomplete="tel" />
+            </label>
+            <label>
+              Programme or course optional
+              <input name="programme" placeholder="e.g. Robotics, ICT Girls Club, TechWomen" />
+            </label>
+            <label>
+              Describe the issue
+              <textarea name="message" rows="5" placeholder="Tell us what happened, what you need, and any certificate/course number if relevant." required></textarea>
+            </label>
+            <button class="button" type="submit">Prepare support email</button>
+            <p class="form-note" id="help-form-status" role="status">
+              Your message will open in your email app addressed to WHSF.
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section help-faq-section">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Common issues</p>
+          <h2>Quick answers before contacting support.</h2>
+        </div>
+        <div class="shell help-faq-grid">
+          <article><h3>I cannot sign in.</h3><p>Check your email/password, confirm your account if required, then request student support if the issue continues.</p></article>
+          <article><h3>My certificate is missing.</h3><p>Confirm that your teacher has issued the certificate, then check the course certificate section or verification page.</p></article>
+          <article><h3>I want to volunteer.</h3><p>Choose “Volunteer desk” in the support form and include your skills, location and availability.</p></article>
+          <article><h3>I found a fake WHSF page.</h3><p>Select “Safeguarding or urgent concern” and include the suspicious link, screenshot details and where you found it.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
+          <div>
+            <strong>World Humanitarian Support Foundation</strong>
+            <p>Help Center for learners, volunteers, partners and community support.</p>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Support</strong><a href="#support-lines">Support lines</a><a href="#request-help">Request help</a><a href="verify-certificate.html">Verify certificate</a></div>
+          <div><strong>Explore</strong><a href="index.html#programs">Programs</a><a href="e-classroom.html">e-Classroom</a><a href="index.html#contact">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script>
+      const helpForm = document.querySelector('#help-request-form');
+      const helpStatus = document.querySelector('#help-form-status');
+      const supportType = document.querySelector('#support-type');
+
+      document.querySelectorAll('[data-support-type]').forEach((link) => {
+        link.addEventListener('click', () => {
+          if (supportType) supportType.value = link.dataset.supportType;
+        });
+      });
+
+      helpForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(helpForm);
+        const selectedSupport = String(formData.get('supportType') || '').trim();
+        const fullName = String(formData.get('fullName') || '').trim();
+        const email = String(formData.get('email') || '').trim();
+        const phone = String(formData.get('phone') || '').trim();
+        const programme = String(formData.get('programme') || '').trim();
+        const message = String(formData.get('message') || '').trim();
+
+        const subject = `[WHSF Help Center] ${selectedSupport || 'Support request'}`;
+        const body = [
+          `Support area: ${selectedSupport}`,
+          `Name: ${fullName}`,
+          `Email: ${email}`,
+          `Phone / WhatsApp: ${phone || 'Not provided'}`,
+          `Programme / course: ${programme || 'Not provided'}`,
+          '',
+          'Issue:',
+          message
+        ].join('\n');
+
+        window.location.href = `mailto:info@worldhsfoundation.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        if (helpStatus) helpStatus.textContent = 'Opening your email app with the support request prepared.';
+      });
+    </script>
+  </body>
+</html>

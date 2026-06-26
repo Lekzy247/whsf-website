@@ -499,6 +499,40 @@ h3 { line-height: 1.2; }
 .verify-details dd { margin: 0; color: var(--ink); font-weight: 900; overflow-wrap: anywhere; }
 .verify-result-card > .button { grid-column: 1 / -1; justify-self: start; }
 .verify-result-error { grid-template-columns: auto minmax(0, 1fr); }
+.help-hero { position: relative; overflow: hidden; color: #fff; background: radial-gradient(circle at 18% 18%, rgba(243,205,98,.22), transparent 32%), linear-gradient(135deg, var(--green-950) 0%, var(--red) 62%, #ef7b54 100%); }
+.help-hero-grid { min-height: 560px; padding: 88px 0; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 62px; align-items: center; }
+.help-status-card { padding: 34px; border: 1px solid rgba(255,255,255,.22); border-radius: calc(var(--radius) + 10px); background: rgba(255,255,255,.12); box-shadow: 0 24px 70px rgba(0,0,0,.24); backdrop-filter: blur(14px); }
+.help-status-card span { display: inline-flex; margin-bottom: 16px; color: #ffe0af; font-size: .76rem; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
+.help-status-card strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: clamp(2.2rem, 4vw, 3.7rem); line-height: 1; }
+.help-status-card p { margin-top: 18px; color: rgba(255,255,255,.82); }
+.help-support-section { background: #fffaf8; }
+.support-line-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.support-line-card { min-height: 280px; padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
+.support-line-card > span { display: inline-flex; margin-bottom: 20px; color: var(--red); font-family: "Playfair Display", Georgia, serif; font-size: 2rem; font-weight: 700; }
+.support-line-card h3 { margin-bottom: 12px; font-size: 1.2rem; }
+.support-line-card p { color: var(--muted); }
+.support-line-card .arrow-link { margin-top: 22px; }
+.virtual-number-panel { margin-top: 28px; padding: 34px; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 34px; align-items: center; border-radius: var(--radius); color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); box-shadow: var(--shadow); }
+.virtual-number-panel h2 { color: #fff; font-size: clamp(1.9rem, 4vw, 3rem); }
+.virtual-number-panel p { color: #c8d9d2; }
+.virtual-number-list { display: grid; gap: 12px; }
+.virtual-number-list article { padding: 16px 18px; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; background: rgba(255,255,255,.08); }
+.virtual-number-list strong, .virtual-number-list span { display: block; }
+.virtual-number-list span { margin-top: 4px; color: #ffe0af; font-size: .78rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.help-request-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 54px; align-items: start; }
+.help-contact-box { margin-top: 24px; padding: 22px; border-radius: 18px; color: #fff; background: linear-gradient(135deg, var(--red), #7f1719); }
+.help-contact-box strong, .help-contact-box a, .help-contact-box small { display: block; color: #fff; }
+.help-contact-box a { margin-top: 8px; font-weight: 900; }
+.help-contact-box small { margin-top: 12px; color: rgba(255,255,255,.78); }
+.help-request-form { padding: 30px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
+.help-request-form label { display: block; margin-bottom: 16px; color: var(--ink); font-size: .86rem; font-weight: 800; }
+.help-request-form input, .help-request-form select, .help-request-form textarea { width: 100%; margin-top: 8px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: #fff; font: inherit; }
+.help-request-form textarea { resize: vertical; }
+.help-faq-section { background: #fffaf8; }
+.help-faq-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.help-faq-grid article { padding: 26px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
+.help-faq-grid h3 { margin-bottom: 10px; font-size: 1.08rem; }
+.help-faq-grid p { color: var(--muted); }
 
 @media (max-width: 1020px) {
   .classroom-hero-grid, .classroom-auth-grid, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card { grid-template-columns: 1fr; }
@@ -508,6 +542,8 @@ h3 { line-height: 1.2; }
   .verify-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .learner-dashboard-stats { grid-template-columns: repeat(2, 1fr); }
   .learner-dashboard-grid, .certificate-dashboard-list { grid-template-columns: 1fr; }
+  .help-hero-grid, .virtual-number-panel, .help-request-grid { grid-template-columns: 1fr; }
+  .support-line-grid, .help-faq-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 560px) {
@@ -535,4 +571,7 @@ h3 { line-height: 1.2; }
   .verify-result-card, .verify-result-error { grid-template-columns: 1fr; padding: 24px 18px; }
   .verify-badge { width: 86px; height: 86px; }
   .verify-details { grid-template-columns: 1fr; }
+  .help-hero-grid { min-height: auto; padding: 68px 0; }
+  .help-status-card, .virtual-number-panel, .help-request-form { padding: 24px 20px; }
+  .support-line-grid, .help-faq-grid { grid-template-columns: 1fr; }
 }
