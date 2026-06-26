@@ -183,8 +183,9 @@
             <form class="admin-form" id="certificate-form">
               <select name="student_id" id="certificate-student-select" required><option value="">Select student</option></select>
               <select name="course_id" class="course-select" required><option value="">Select course</option></select>
-              <input name="certificate_number" type="text" placeholder="Certificate number e.g. WHSF-2026-001" required />
+              <input name="certificate_number" id="certificate-number-input" type="text" placeholder="Auto-generated e.g. WHSF-001" readonly required />
               <input name="certificate_url" type="url" placeholder="Certificate file URL optional" />
+              <button class="button button-light auth-secondary" id="generate-certificate-number-button" type="button">Generate number</button>
               <button class="button" type="submit">Issue certificate</button>
               <button class="button button-light auth-secondary" id="download-certificate-button" type="button">Download PDF</button>
               <small class="admin-form-status" id="certificate-form-status" role="status"></small>
@@ -436,12 +437,51 @@
         `).join('');
       }
 
+      async function generateCertificateNumber() {
+        const input = document.querySelector('#certificate-number-input');
+        const formStatus = document.querySelector('#certificate-form-status');
+        const showCertificateStatus = (message) => {
+          if (formStatus) formStatus.textContent = message;
+          setStatus(message);
+        };
+
+        showCertificateStatus('Generating certificate number…');
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_certificates')
+          .select('certificate_number');
+
+        if (error) {
+          showCertificateStatus(error.message);
+          return '';
+        }
+
+        const certificates = data || [];
+        const usedNumbers = new Set(certificates.map((certificate) => certificate.certificate_number));
+        const existingThreeDigitNumbers = certificates
+          .map((certificate) => /^WHSF-(\d{3})$/i.exec(certificate.certificate_number || ''))
+          .filter(Boolean)
+          .map((match) => Number(match[1]));
+
+        let nextNumber = (existingThreeDigitNumbers.length ? Math.max(...existingThreeDigitNumbers) : 0) + 1;
+        let certificateNumber = `WHSF-${String(nextNumber).padStart(3, '0')}`;
+
+        while (usedNumbers.has(certificateNumber)) {
+          nextNumber += 1;
+          certificateNumber = `WHSF-${String(nextNumber).padStart(3, '0')}`;
+        }
+
+        input.value = certificateNumber;
+        showCertificateStatus(`Certificate number generated: ${certificateNumber}`);
+        return certificateNumber;
+      }
+
       async function loadDashboard() {
         await loadCourses();
         await loadStudents();
         await loadLessons();
         await loadAssignments();
         await loadCertificates();
+        await generateCertificateNumber();
       }
 
       adminLoginForm?.addEventListener('submit', async (event) => {
@@ -528,6 +568,8 @@
         loadAssignments();
       });
 
+      document.querySelector('#generate-certificate-number-button')?.addEventListener('click', generateCertificateNumber);
+
       document.querySelector('#certificate-form')?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -540,11 +582,15 @@
         const formData = new FormData(form);
         const studentId = String(formData.get('student_id') || '').trim();
         const courseId = String(formData.get('course_id') || '').trim();
-        const certificateNumber = String(formData.get('certificate_number') || '').trim();
+        let certificateNumber = String(formData.get('certificate_number') || '').trim();
         const certificateUrl = String(formData.get('certificate_url') || '').trim();
 
+        if (!certificateNumber) {
+          certificateNumber = await generateCertificateNumber();
+        }
+
         if (!studentId || !courseId || !certificateNumber) {
-          showCertificateStatus('Select a student, select a course, and enter a certificate number.');
+          showCertificateStatus('Select a student and course. The certificate number will be generated automatically.');
           return;
         }
 
@@ -570,7 +616,8 @@
 
         form.reset();
         showCertificateStatus('Certificate issued successfully.');
-        loadCertificates();
+        await loadCertificates();
+        await generateCertificateNumber();
       });
 
       document.querySelector('#download-certificate-button')?.addEventListener('click', async () => {
@@ -583,12 +630,16 @@
         const formData = new FormData(form);
         const studentId = String(formData.get('student_id') || '').trim();
         const courseId = String(formData.get('course_id') || '').trim();
-        const certificateNumber = String(formData.get('certificate_number') || '').trim();
+        let certificateNumber = String(formData.get('certificate_number') || '').trim();
         const student = students.find((item) => item.id === studentId);
         const course = courses.find((item) => item.id === courseId);
 
+        if (!certificateNumber) {
+          certificateNumber = await generateCertificateNumber();
+        }
+
         if (!student || !course || !certificateNumber) {
-          showCertificateStatus('Select a student, select a course, and enter a certificate number before downloading the PDF.');
+          showCertificateStatus('Select a student and course before downloading the PDF. The certificate number will be generated automatically.');
           return;
         }
 
