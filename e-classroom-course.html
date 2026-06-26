@@ -301,10 +301,16 @@
         doc.text('Special consultative status with ECOSOC since 2026', width / 2, height - 114, { align: 'center' });
         doc.text(`Verify: ${verifyCertificateUrl(certificateNumber)}`, width / 2, height - 92, { align: 'center' });
 
+        doc.setTextColor(8, 55, 43);
+        doc.setFont('times', 'italic');
+        doc.setFontSize(22);
+        doc.text('Olalekan Okunola', width - 178, height - 158, { align: 'center' });
         doc.setDrawColor(8, 55, 43);
-        doc.line(width - 306, height - 108, width - 168, height - 108);
+        doc.setLineWidth(2);
+        doc.line(width - 286, height - 146, width - 70, height - 146);
         doc.setFont('helvetica', 'bold');
-        doc.text('Authorized WHSF Signatory', width - 237, height - 86, { align: 'center' });
+        doc.setFontSize(11);
+        doc.text('Chairman CEO / President', width - 178, height - 124, { align: 'center' });
       }
 
       async function loadCourse() {
