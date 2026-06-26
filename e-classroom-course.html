@@ -301,10 +301,15 @@
         doc.text('Special consultative status with ECOSOC since 2026', width / 2, height - 114, { align: 'center' });
         doc.text(`Verify: ${verifyCertificateUrl(certificateNumber)}`, width / 2, height - 92, { align: 'center' });
 
-        doc.setTextColor(8, 55, 43);
-        doc.setFont('times', 'italic');
-        doc.setFontSize(22);
-        doc.text('Olalekan Okunola', width - 178, height - 158, { align: 'center' });
+        const signatureDataUrl = await loadImageDataUrl('assets/signature.jpg');
+        if (signatureDataUrl) {
+          doc.addImage(signatureDataUrl, 'JPEG', width - 282, height - 184, 208, 52);
+        } else {
+          doc.setTextColor(8, 55, 43);
+          doc.setFont('times', 'italic');
+          doc.setFontSize(22);
+          doc.text('Signature', width - 178, height - 158, { align: 'center' });
+        }
         doc.setDrawColor(8, 55, 43);
         doc.setLineWidth(2);
         doc.line(width - 286, height - 146, width - 70, height - 146);
