@@ -140,13 +140,55 @@
           </form>
         </div>
 
-        <div class="shell learner-dashboard" id="learner-dashboard" hidden>
-          <div>
+        <div class="shell learner-dashboard learner-dashboard-full" id="learner-dashboard" hidden>
+          <div class="learner-dashboard-head">
             <p class="eyebrow">Learner dashboard</p>
             <h3>Welcome to WHSF e-Classroom</h3>
-            <p id="learner-session-summary">You are signed in. Your enrolled courses, assignments, badges, attendance and certificates will appear here as the classroom grows.</p>
+            <p id="learner-session-summary">Sign in to see your enrolled courses, progress, assignments and certificates.</p>
           </div>
-          <a class="arrow-link" href="#courses">Choose a course pathway <span>→</span></a>
+          <div class="learner-dashboard-actions">
+            <a class="button button-light" href="#courses">Choose a course</a>
+            <a class="button button-light" href="verify-certificate.html">Verify certificate</a>
+          </div>
+
+          <div class="learner-dashboard-stats" aria-label="Learner progress summary">
+            <article><span id="learner-enrolled-count">0</span><strong>Enrolled courses</strong></article>
+            <article><span id="learner-average-progress">0%</span><strong>Average progress</strong></article>
+            <article><span id="learner-submission-count">0</span><strong>Submitted assignments</strong></article>
+            <article><span id="learner-certificate-count">0</span><strong>Issued certificates</strong></article>
+          </div>
+
+          <div class="learner-dashboard-grid">
+            <section class="learner-dashboard-panel" aria-labelledby="enrolled-courses-title">
+              <div class="mini-panel-heading">
+                <p class="eyebrow">My courses</p>
+                <h4 id="enrolled-courses-title">Enrolled courses and progress</h4>
+              </div>
+              <div class="dashboard-list" id="learner-enrolled-list">
+                <article class="dashboard-empty">Your enrolled courses will appear here.</article>
+              </div>
+            </section>
+
+            <section class="learner-dashboard-panel" aria-labelledby="submitted-assignments-title">
+              <div class="mini-panel-heading">
+                <p class="eyebrow">Assignments</p>
+                <h4 id="submitted-assignments-title">Submitted assignments</h4>
+              </div>
+              <div class="dashboard-list" id="learner-submissions-list">
+                <article class="dashboard-empty">Submitted assignments will appear here.</article>
+              </div>
+            </section>
+
+            <section class="learner-dashboard-panel learner-dashboard-panel-wide" aria-labelledby="issued-certificates-title">
+              <div class="mini-panel-heading">
+                <p class="eyebrow">Certificates</p>
+                <h4 id="issued-certificates-title">Issued certificates</h4>
+              </div>
+              <div class="dashboard-list certificate-dashboard-list" id="learner-certificates-list">
+                <article class="dashboard-empty">Issued certificates will appear here.</article>
+              </div>
+            </section>
+          </div>
         </div>
       </section>
 
@@ -228,15 +270,24 @@
       const studentSignupButton = document.querySelector('#student-signup-button');
       const studentSignoutButton = document.querySelector('#student-signout-button');
       const courseGrid = document.querySelector('#course-grid');
+      const learnerEnrolledCount = document.querySelector('#learner-enrolled-count');
+      const learnerAverageProgress = document.querySelector('#learner-average-progress');
+      const learnerSubmissionCount = document.querySelector('#learner-submission-count');
+      const learnerCertificateCount = document.querySelector('#learner-certificate-count');
+      const learnerEnrolledList = document.querySelector('#learner-enrolled-list');
+      const learnerSubmissionsList = document.querySelector('#learner-submissions-list');
+      const learnerCertificatesList = document.querySelector('#learner-certificates-list');
+
+      const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
 
       function setAuthMessage(message) {
         if (studentStatus) studentStatus.textContent = message;
       }
 
       async function upsertStudentProfile(user, fullName = '') {
-        if (!user?.email) return;
+        if (!user?.email) return null;
         const profileName = fullName || user.user_metadata?.full_name || user.email.split('@')[0];
-        await whsfSupabase.from('eclassroom_student_profiles').upsert(
+        const { data, error } = await whsfSupabase.from('eclassroom_student_profiles').upsert(
           {
             auth_user_id: user.id,
             full_name: profileName,
@@ -245,7 +296,152 @@
             role: 'student'
           },
           { onConflict: 'auth_user_id' }
-        );
+        ).select().single();
+
+        if (error) {
+          setAuthMessage(error.message);
+          return null;
+        }
+
+        return data;
+      }
+
+      async function getStudentProfile(user) {
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_student_profiles')
+          .select('*')
+          .eq('auth_user_id', user.id)
+          .maybeSingle();
+
+        if (error) {
+          setAuthMessage(error.message);
+          return null;
+        }
+
+        return data || await upsertStudentProfile(user);
+      }
+
+      function resetLearnerDashboard() {
+        learnerEnrolledCount.textContent = '0';
+        learnerAverageProgress.textContent = '0%';
+        learnerSubmissionCount.textContent = '0';
+        learnerCertificateCount.textContent = '0';
+        learnerEnrolledList.innerHTML = '<article class="dashboard-empty">Your enrolled courses will appear here.</article>';
+        learnerSubmissionsList.innerHTML = '<article class="dashboard-empty">Submitted assignments will appear here.</article>';
+        learnerCertificatesList.innerHTML = '<article class="dashboard-empty">Issued certificates will appear here.</article>';
+      }
+
+      async function loadLearnerDashboard(user) {
+        const profile = await getStudentProfile(user);
+        if (!profile) {
+          resetLearnerDashboard();
+          return;
+        }
+
+        learnerSessionSummary.textContent = `Signed in as ${user.email}. Your dashboard below shows current courses, progress, submissions and certificates.`;
+
+        const [
+          enrollmentsResult,
+          coursesResult,
+          submissionsResult,
+          assignmentsResult,
+          certificatesResult
+        ] = await Promise.all([
+          whsfSupabase.from('eclassroom_enrollments').select('*').eq('student_id', profile.id).order('enrolled_at', { ascending: false }),
+          whsfSupabase.from('eclassroom_courses').select('id,title,slug,category,summary,level,duration_weeks,delivery_mode'),
+          whsfSupabase.from('eclassroom_assignment_submissions').select('*').eq('student_id', profile.id).order('submitted_at', { ascending: false }),
+          whsfSupabase.from('eclassroom_assignments').select('id,title,course_id,due_date,max_score'),
+          whsfSupabase.from('eclassroom_certificates').select('*').eq('student_id', profile.id).order('issued_at', { ascending: false })
+        ]);
+
+        const firstError = [enrollmentsResult, coursesResult, submissionsResult, assignmentsResult, certificatesResult].find((result) => result.error)?.error;
+        if (firstError) {
+          setAuthMessage(firstError.message);
+          return;
+        }
+
+        const enrollments = enrollmentsResult.data || [];
+        const courses = coursesResult.data || [];
+        const submissions = submissionsResult.data || [];
+        const assignments = assignmentsResult.data || [];
+        const certificates = certificatesResult.data || [];
+        const courseById = new Map(courses.map((course) => [course.id, course]));
+        const assignmentById = new Map(assignments.map((assignment) => [assignment.id, assignment]));
+        const certificatesByCourse = certificates.reduce((map, certificate) => {
+          if (!map.has(certificate.course_id)) map.set(certificate.course_id, []);
+          map.get(certificate.course_id).push(certificate);
+          return map;
+        }, new Map());
+
+        const averageProgress = enrollments.length
+          ? Math.round(enrollments.reduce((sum, enrollment) => sum + Number(enrollment.progress_percent || 0), 0) / enrollments.length)
+          : 0;
+
+        learnerEnrolledCount.textContent = enrollments.length;
+        learnerAverageProgress.textContent = `${averageProgress}%`;
+        learnerSubmissionCount.textContent = submissions.length;
+        learnerCertificateCount.textContent = certificates.length;
+
+        learnerEnrolledList.innerHTML = enrollments.length
+          ? enrollments.map((enrollment) => {
+              const course = courseById.get(enrollment.course_id);
+              const progress = Number(enrollment.progress_percent || 0);
+              const courseUrl = course?.slug ? `e-classroom-course.html?course=${encodeURIComponent(course.slug)}` : '#courses';
+              const courseCertificates = certificatesByCourse.get(enrollment.course_id) || [];
+              return `
+                <article class="dashboard-course-card">
+                  <div>
+                    <span>${escapeHtml(course?.category || enrollment.status || 'Course')}</span>
+                    <h5>${escapeHtml(course?.title || 'Course')}</h5>
+                    <p>${escapeHtml(course?.summary || 'Continue your WHSF e-Classroom learning pathway.')}</p>
+                  </div>
+                  <div class="dashboard-progress-wrap" aria-label="${progress}% complete">
+                    <strong>${progress}%</strong>
+                    <div class="dashboard-progress"><span style="width: ${progress}%"></span></div>
+                  </div>
+                  <div class="dashboard-actions-row">
+                    <a class="button" href="${courseUrl}">Continue course</a>
+                    ${courseCertificates.length ? `<a class="button button-light" href="${courseUrl}#certificates">Download certificate</a>` : ''}
+                  </div>
+                </article>
+              `;
+            }).join('')
+          : '<article class="dashboard-empty">You have not enrolled in a course yet. Choose a course pathway below to begin.</article>';
+
+        learnerSubmissionsList.innerHTML = submissions.length
+          ? submissions.map((submission) => {
+              const assignment = assignmentById.get(submission.assignment_id);
+              const course = assignment ? courseById.get(assignment.course_id) : null;
+              return `
+                <article class="dashboard-mini-item">
+                  <span>${submission.status ? escapeHtml(submission.status) : 'Submitted'} • ${submission.submitted_at ? new Date(submission.submitted_at).toLocaleDateString() : 'Date pending'}</span>
+                  <h5>${escapeHtml(assignment?.title || 'Assignment submission')}</h5>
+                  <p>${escapeHtml(course?.title || 'WHSF e-Classroom')}</p>
+                  ${submission.score !== null && submission.score !== undefined ? `<strong>Score: ${submission.score}/${assignment?.max_score || 100}</strong>` : ''}
+                </article>
+              `;
+            }).join('')
+          : '<article class="dashboard-empty">No assignment submissions yet.</article>';
+
+        learnerCertificatesList.innerHTML = certificates.length
+          ? certificates.map((certificate) => {
+              const course = courseById.get(certificate.course_id);
+              const courseUrl = course?.slug ? `e-classroom-course.html?course=${encodeURIComponent(course.slug)}#certificates` : 'verify-certificate.html';
+              return `
+                <article class="dashboard-certificate-card">
+                  <div>
+                    <span>Issued ${certificate.issued_at ? new Date(certificate.issued_at).toLocaleDateString() : 'Date pending'}</span>
+                    <h5>${escapeHtml(certificate.certificate_number)}</h5>
+                    <p>${escapeHtml(course?.title || 'WHSF e-Classroom certificate')}</p>
+                  </div>
+                  <div class="dashboard-actions-row">
+                    <a class="button" href="${courseUrl}">Download certificate</a>
+                    <a class="button button-light" href="verify-certificate.html?number=${encodeURIComponent(certificate.certificate_number)}">Verify</a>
+                  </div>
+                </article>
+              `;
+            }).join('')
+          : '<article class="dashboard-empty">No certificates have been issued yet.</article>';
       }
 
       async function showSignedInState(session) {
@@ -253,14 +449,16 @@
           learnerDashboard.hidden = true;
           studentSignoutButton.hidden = true;
           studentSignupButton.hidden = false;
+          resetLearnerDashboard();
           return;
         }
 
         studentSignoutButton.hidden = false;
         studentSignupButton.hidden = true;
         learnerDashboard.hidden = false;
-        learnerSessionSummary.textContent = `Signed in as ${session.user.email}. Your enrolled courses, assignments, badges, attendance and certificates will appear here as the classroom grows.`;
+        learnerSessionSummary.textContent = `Signed in as ${session.user.email}. Loading your learner dashboard…`;
         setAuthMessage('Signed in successfully.');
+        await loadLearnerDashboard(session.user);
       }
 
       async function loadCoursesFromSupabase() {

@@ -401,6 +401,33 @@ h3 { line-height: 1.2; }
 .learner-dashboard h3 { color: #fff; font-size: 1.8rem; }
 .learner-dashboard p { color: #c8d9d2; }
 .learner-dashboard .arrow-link { color: #fff; }
+.learner-dashboard-full { display: block; color: var(--ink); background: #fff; border: 1px solid rgba(201,54,53,.13); }
+.learner-dashboard-full h3 { color: var(--ink); font-size: clamp(1.9rem, 4vw, 3rem); }
+.learner-dashboard-full p { color: var(--muted); }
+.learner-dashboard-head { max-width: 780px; }
+.learner-dashboard-actions { margin: 24px 0 0; display: flex; flex-wrap: wrap; gap: 12px; }
+.learner-dashboard-stats { margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.learner-dashboard-stats article { padding: 22px; border-radius: 18px; color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); box-shadow: 0 12px 30px rgba(8,55,43,.12); }
+.learner-dashboard-stats span { display: block; font-family: "Playfair Display", Georgia, serif; font-size: 2.25rem; line-height: 1; }
+.learner-dashboard-stats strong { display: block; margin-top: 8px; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+.learner-dashboard-grid { margin-top: 28px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; }
+.learner-dashboard-panel { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: #fffaf8; }
+.learner-dashboard-panel-wide { grid-column: 1 / -1; }
+.mini-panel-heading { margin-bottom: 18px; }
+.mini-panel-heading h4 { margin: 0; font-size: 1.3rem; }
+.dashboard-list { display: grid; gap: 14px; }
+.dashboard-course-card, .dashboard-mini-item, .dashboard-certificate-card, .dashboard-empty { padding: 20px; border: 1px solid rgba(201,54,53,.13); border-radius: 18px; background: #fff; box-shadow: 0 10px 26px rgba(45,18,18,.05); }
+.dashboard-course-card span, .dashboard-mini-item span, .dashboard-certificate-card span { display: inline-flex; margin-bottom: 10px; color: var(--red); font-size: .68rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+.dashboard-course-card h5, .dashboard-mini-item h5, .dashboard-certificate-card h5 { margin: 0 0 8px; color: var(--ink); font-size: 1.05rem; }
+.dashboard-course-card p, .dashboard-mini-item p, .dashboard-certificate-card p, .dashboard-empty { color: var(--muted); }
+.dashboard-progress-wrap { margin-top: 16px; display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 12px; align-items: center; }
+.dashboard-progress-wrap strong { color: var(--green-800); }
+.dashboard-progress { overflow: hidden; height: 12px; border-radius: 999px; background: #f1e6df; }
+.dashboard-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--red), #ef7b54); }
+.dashboard-actions-row { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
+.dashboard-actions-row .button { min-height: 40px; padding: 10px 14px; font-size: .78rem; }
+.certificate-dashboard-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dashboard-empty { font-weight: 800; text-align: center; }
 .classroom-courses { background: #fffaf8; }
 .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .course-card { min-height: 245px; padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
@@ -479,6 +506,8 @@ h3 { line-height: 1.2; }
   .admin-summary { grid-template-columns: repeat(2, 1fr); }
   .admin-form { grid-template-columns: 1fr 1fr; }
   .verify-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .learner-dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+  .learner-dashboard-grid, .certificate-dashboard-list { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 560px) {
@@ -488,6 +517,12 @@ h3 { line-height: 1.2; }
   .certificate-verify-card .button { width: 100%; justify-content: center; }
   .classroom-panel, .student-login-card, .feature-note { padding: 24px 20px; }
   .learner-dashboard { flex-direction: column; align-items: flex-start; }
+  .learner-dashboard-full { padding: 24px 18px; }
+  .learner-dashboard-actions .button { width: 100%; justify-content: center; }
+  .learner-dashboard-stats { grid-template-columns: 1fr; }
+  .learner-dashboard-panel { padding: 20px 16px; }
+  .dashboard-progress-wrap { grid-template-columns: 1fr; }
+  .dashboard-actions-row .button { width: 100%; justify-content: center; }
   .course-grid { grid-template-columns: 1fr; }
   .admin-hero-grid { min-height: auto; padding: 68px 0; }
   .admin-summary, .admin-form { grid-template-columns: 1fr; }
