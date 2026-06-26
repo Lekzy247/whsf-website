@@ -260,15 +260,15 @@
         for (let x = -height; x < width; x += 22) doc.line(x, 0, x + height, height);
         for (let x = 0; x < width + height; x += 26) doc.line(x, 0, x - height, height);
 
-        doc.setDrawColor(230, 208, 161);
-        doc.setLineWidth(1.2);
-        doc.roundedRect(30, 30, width - 60, height - 60, 18, 18);
         doc.setDrawColor(201, 54, 53);
-        doc.setLineWidth(4);
-        doc.roundedRect(42, 42, width - 84, height - 84, 16, 16);
+        doc.setLineWidth(8);
+        doc.roundedRect(22, 22, width - 44, height - 44, 22, 22);
+        doc.setDrawColor(177, 139, 54);
+        doc.setLineWidth(3);
+        doc.roundedRect(42, 42, width - 84, height - 84, 18, 18);
         doc.setDrawColor(8, 55, 43);
-        doc.setLineWidth(1.6);
-        doc.roundedRect(56, 56, width - 112, height - 112, 12, 12);
+        doc.setLineWidth(2);
+        doc.roundedRect(62, 62, width - 124, height - 124, 14, 14);
 
         doc.setTextColor(244, 230, 221);
         doc.setFont('times', 'bold');
@@ -278,27 +278,9 @@
         doc.setTextColor(177, 139, 54);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(6);
-        const microText = ' WORLD HUMANITARIAN SUPPORT FOUNDATION • VERIFIED DIGITAL CERTIFICATE • ';
-        doc.text(microText.repeat(6), width / 2, 64, { align: 'center' });
-        doc.text(microText.repeat(6), width / 2, height - 54, { align: 'center' });
-      }
-
-      function addGoldSeal(doc, x, y) {
-        doc.setFillColor(184, 126, 33);
-        doc.circle(x, y, 46, 'F');
-        doc.setFillColor(243, 205, 98);
-        doc.circle(x, y, 39, 'F');
-        doc.setDrawColor(127, 83, 24);
-        doc.setLineWidth(1.6);
-        doc.circle(x, y, 32, 'S');
-        doc.setTextColor(82, 48, 8);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(12);
-        doc.text('OFFICIAL', x, y - 6, { align: 'center' });
-        doc.setFontSize(10);
-        doc.text('WHSF', x, y + 10, { align: 'center' });
-        doc.setFontSize(7);
-        doc.text('CERTIFICATE', x, y + 23, { align: 'center' });
+        const microText = ' WHSF-Verified Certificate • ';
+        doc.text(microText.repeat(10), width / 2, 76, { align: 'center', maxWidth: width - 160 });
+        doc.text(microText.repeat(10), width / 2, height - 68, { align: 'center', maxWidth: width - 160 });
       }
 
       async function drawProfessionalCertificate(doc, recipientName, courseTitleValue, certificateNumber, issuedAt) {
@@ -333,32 +315,33 @@
 
         doc.setTextColor(24, 30, 29);
         doc.setFont('times', 'bold');
-        doc.setFontSize(44);
-        doc.text('Certificate of Completion', width / 2, 260, { align: 'center' });
+        doc.setFontSize(42);
+        doc.text('Certificate of Completion', width / 2, 255, { align: 'center' });
 
         doc.setDrawColor(177, 139, 54);
         doc.setLineWidth(1.2);
-        doc.line(width / 2 - 160, 278, width / 2 + 160, 278);
+        doc.line(width / 2 - 175, 273, width / 2 + 175, 273);
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(14);
-        doc.text('This certificate is proudly awarded to', width / 2, 320, { align: 'center' });
+        doc.text('This certificate is proudly awarded to', width / 2, 308, { align: 'center' });
 
         doc.setTextColor(201, 54, 53);
         doc.setFont('times', 'bold');
-        doc.setFontSize(36);
-        doc.text(recipientName, width / 2, 372, { align: 'center', maxWidth: width - 170 });
+        doc.setFontSize(33);
+        const recipientLines = doc.splitTextToSize(recipientName, width - 190);
+        doc.text(recipientLines, width / 2, 355, { align: 'center' });
+        const courseIntroY = 355 + (recipientLines.length * 30) + 18;
 
         doc.setTextColor(24, 30, 29);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(14);
-        doc.text('for successfully completing the WHSF e-Classroom course', width / 2, 414, { align: 'center' });
+        doc.text('for successfully completing the WHSF e-Classroom course', width / 2, courseIntroY, { align: 'center' });
 
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(22);
-        doc.text(courseTitleValue, width / 2, 452, { align: 'center', maxWidth: width - 190 });
-
-        addGoldSeal(doc, width - 124, height - 142);
+        doc.setFontSize(20);
+        const courseLines = doc.splitTextToSize(courseTitleValue, width - 210);
+        doc.text(courseLines, width / 2, courseIntroY + 38, { align: 'center' });
 
         doc.setTextColor(24, 30, 29);
         doc.setFont('helvetica', 'normal');
