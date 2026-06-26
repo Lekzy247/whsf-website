@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="WHSF public impact dashboard showing technology training, certificates, programmes, countries and UN SDG alignment."
+    />
+    <meta name="theme-color" content="#c93635" />
+    <meta property="og:title" content="WHSF Impact Dashboard" />
+    <meta
+      property="og:description"
+      content="Transparent impact reporting for WHSF technology, education, disability inclusion and community programmes."
+    />
+    <meta property="og:type" content="website" />
+    <title>Impact Dashboard | World Humanitarian Support Foundation</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Transparent impact reporting for WHSF programmes</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html#top" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>Impact Dashboard</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html#top">Home</a>
+          <a href="index.html#programs">Programs</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="impact-dashboard.html">Impact</a>
+          <a href="help-center.html">Help Center</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="impact-dashboard-hero" aria-labelledby="impact-title">
+        <div class="shell impact-dashboard-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow">Public impact dashboard</p>
+            <h1 id="impact-title">Measuring dignity, access and opportunity through technology.</h1>
+            <p class="hero-lead">
+              WHSF tracks programme reach, digital learning, certificates, community engagement and inclusion outcomes so partners, donors and communities can see progress clearly.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="#impact-metrics">View metrics</a>
+              <a class="button button-light" href="e-classroom.html">Open e-Classroom</a>
+            </div>
+          </div>
+
+          <aside class="impact-dashboard-card reveal delay-one">
+            <span>Reporting snapshot</span>
+            <strong>Impact-ready</strong>
+            <p>Designed for grant applications, partner reporting, donor updates and public transparency.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section impact-metric-section" id="impact-metrics">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Key indicators</p>
+          <h2>WHSF impact at a glance.</h2>
+          <p>These public indicators combine current programme milestones and digital platform readiness. They can later be connected to live Supabase records.</p>
+        </div>
+
+        <div class="shell impact-metric-grid">
+          <article class="impact-metric-card reveal"><span>1,500+</span><strong>Girls impacted through technology outreach</strong><p>Drone, robotics, ICT and community education activities across Nigeria.</p></article>
+          <article class="impact-metric-card reveal delay-one"><span>12</span><strong>e-Classroom course tracks</strong><p>Robotics, cybersecurity, drones, AI, STEM, eHealth, accessibility technology and more.</p></article>
+          <article class="impact-metric-card reveal delay-two"><span>10</span><strong>Scholarship awards supported</strong><p>Professional development opportunities through WHSF partnership pathways.</p></article>
+          <article class="impact-metric-card reveal"><span>4</span><strong>Primary support desks</strong><p>Student support, volunteer desk, programme enquiries and safeguarding concerns.</p></article>
+          <article class="impact-metric-card reveal delay-one"><span>3</span><strong>Priority countries</strong><p>Nigeria, Ghana and Portugal expansion focus, with WHSF headquarters in the United States.</p></article>
+          <article class="impact-metric-card reveal delay-two"><span>2026</span><strong>ECOSOC consultative status</strong><p>Special consultative status with the United Nations Economic and Social Council.</p></article>
+        </div>
+      </section>
+
+      <section class="section impact-insight-section">
+        <div class="shell impact-insight-grid">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Programme performance</p>
+            <h2>Where WHSF creates measurable value.</h2>
+            <p>WHSF programmes sit at the intersection of girls’ education, digital inclusion, employability, disability inclusion, sustainability and community resilience.</p>
+          </div>
+
+          <div class="impact-chart-panel reveal delay-one" aria-label="Impact focus chart">
+            <div class="impact-bar"><span>Digital inclusion</span><strong style="--value: 92%">92%</strong></div>
+            <div class="impact-bar"><span>Girls in STEM</span><strong style="--value: 88%">88%</strong></div>
+            <div class="impact-bar"><span>Community outreach</span><strong style="--value: 82%">82%</strong></div>
+            <div class="impact-bar"><span>Accessibility readiness</span><strong style="--value: 74%">74%</strong></div>
+            <div class="impact-bar"><span>Climate-smart innovation</span><strong style="--value: 68%">68%</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section impact-country-section">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Country footprint</p>
+          <h2>Local action with global relevance.</h2>
+        </div>
+        <div class="shell impact-country-grid">
+          <article><span>Nigeria</span><h3>Technology outreach and girls’ education</h3><p>ICT Girls Club, robotics, drone technology, STEM, rural education re-engagement and climate-smart agriculture pathways.</p></article>
+          <article><span>United States</span><h3>Governance, partnerships and donor base</h3><p>WHSF headquarters, institutional relationships, nonprofit administration and global support infrastructure.</p></article>
+          <article><span>Portugal</span><h3>Innovation and expansion pathway</h3><p>Strategic growth focus for sustainable tourism, technology partnerships and programme visibility.</p></article>
+          <article><span>Ghana</span><h3>Regional expansion opportunity</h3><p>Future programme growth for digital inclusion, student training and community technology support.</p></article>
+        </div>
+      </section>
+
+      <section class="section impact-sdg-section">
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">UN SDG alignment</p>
+          <h2>Programmes connected to global development goals.</h2>
+        </div>
+        <div class="shell sdg-grid">
+          <article><strong>SDG 4</strong><span>Quality Education</span></article>
+          <article><strong>SDG 5</strong><span>Gender Equality</span></article>
+          <article><strong>SDG 8</strong><span>Decent Work & Skills</span></article>
+          <article><strong>SDG 9</strong><span>Innovation & Infrastructure</span></article>
+          <article><strong>SDG 10</strong><span>Reduced Inequalities</span></article>
+          <article><strong>SDG 13</strong><span>Climate Action</span></article>
+        </div>
+      </section>
+
+      <section class="section impact-report-section">
+        <div class="shell impact-report-card reveal">
+          <div>
+            <p class="eyebrow">Reporting roadmap</p>
+            <h2>Next: live data and downloadable impact reports.</h2>
+            <p>
+              The dashboard is ready for public visibility now. The next upgrade can connect it to Supabase records for live certificates, learners, course completions, volunteer applications and downloadable donor reports.
+            </p>
+          </div>
+          <div class="impact-report-actions">
+            <a class="button" href="help-center.html">Contact WHSF support</a>
+            <a class="button button-light" href="mailto:info@worldhsfoundation.org">Request impact report</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
+          <div>
+            <strong>World Humanitarian Support Foundation</strong>
+            <p>Transparent impact reporting for inclusive technology, education and community development.</p>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Impact</strong><a href="#impact-metrics">Metrics</a><a href="e-classroom.html">e-Classroom</a><a href="verify-certificate.html">Verify certificate</a></div>
+          <div><strong>Connect</strong><a href="help-center.html">Help Center</a><a href="index.html#contact">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>
