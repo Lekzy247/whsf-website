@@ -385,6 +385,10 @@ h3 { line-height: 1.2; }
 .classroom-panel li { padding-left: 28px; position: relative; color: #fff; font-weight: 800; }
 .classroom-panel li::before { content: "✓"; position: absolute; left: 0; color: #ffe0af; }
 .button-light { color: var(--red); background: #fff; box-shadow: none; }
+.certificate-verify-strip { margin-top: -54px; position: relative; z-index: 2; }
+.certificate-verify-card { padding: 30px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; border: 1px solid rgba(201,54,53,.14); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
+.certificate-verify-card h2 { margin-bottom: 10px; font-size: clamp(1.8rem, 3vw, 2.7rem); }
+.certificate-verify-card p { color: var(--muted); }
 .classroom-auth-grid { display: grid; grid-template-columns: 1fr 420px; gap: 62px; align-items: start; }
 .student-login-card { padding: 30px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
 .student-login-card label { display: block; margin-bottom: 16px; color: var(--ink); font-size: .86rem; font-weight: 800; }
@@ -479,6 +483,9 @@ h3 { line-height: 1.2; }
 
 @media (max-width: 560px) {
   .classroom-hero-grid { min-height: auto; padding: 72px 0; }
+  .certificate-verify-strip { margin-top: 0; padding-top: 28px; background: #fffaf8; }
+  .certificate-verify-card { grid-template-columns: 1fr; padding: 24px 20px; }
+  .certificate-verify-card .button { width: 100%; justify-content: center; }
   .classroom-panel, .student-login-card, .feature-note { padding: 24px 20px; }
   .learner-dashboard { flex-direction: column; align-items: flex-start; }
   .course-grid { grid-template-columns: 1fr; }
