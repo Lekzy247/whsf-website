@@ -408,20 +408,22 @@
 
         const qrCodeDataUrl = await generateQrCodeDataUrl(verificationUrl);
         if (qrCodeDataUrl) {
+          const qrBoxX = 86;
+          const qrBoxY = 112;
           doc.setFillColor(255, 255, 255);
           doc.setDrawColor(8, 55, 43);
           doc.setLineWidth(1);
-          doc.roundedRect(80, height - 250, 122, 142, 10, 10, 'FD');
-          doc.addImage(qrCodeDataUrl, 'PNG', 91, height - 239, 100, 100);
+          doc.roundedRect(qrBoxX, qrBoxY, 122, 142, 10, 10, 'FD');
+          doc.addImage(qrCodeDataUrl, 'PNG', qrBoxX + 11, qrBoxY + 11, 100, 100);
           doc.setTextColor(8, 55, 43);
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(9);
-          doc.text('Scan to verify', 141, height - 123, { align: 'center' });
+          doc.text('Scan to verify', qrBoxX + 61, qrBoxY + 127, { align: 'center' });
         } else {
           doc.setTextColor(201, 54, 53);
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(9);
-          doc.text('QR unavailable - use verification link', 141, height - 123, { align: 'center' });
+          doc.text('QR unavailable - use verification link', 147, 250, { align: 'center' });
         }
 
         const signatureDataUrl = await loadImageDataUrl('assets/signature-transparent.png');
