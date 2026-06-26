@@ -244,7 +244,7 @@
             canvas.height = image.naturalHeight;
             const context = canvas.getContext('2d');
             context.drawImage(image, 0, 0);
-            resolve(canvas.toDataURL('image/jpeg', 0.92));
+            resolve(canvas.toDataURL('image/png'));
           };
           image.onerror = () => resolve(null);
           image.src = src;
@@ -293,7 +293,7 @@
         addSecurityPaper(doc, width, height);
         const logoDataUrl = await loadImageDataUrl('assets/whsf-logo.jpg');
         if (logoDataUrl) {
-          doc.addImage(logoDataUrl, 'JPEG', width / 2 - 42, 70, 84, 84);
+          doc.addImage(logoDataUrl, 'PNG', width / 2 - 42, 70, 84, 84);
         } else {
           doc.setFillColor(255, 255, 255);
           doc.circle(width / 2, 112, 42, 'F');
@@ -351,9 +351,9 @@
         doc.text('Special consultative status with ECOSOC since 2026', width / 2, height - 114, { align: 'center' });
         doc.text(`Verify: ${verifyCertificateUrl(certificateNumber)}`, width / 2, height - 92, { align: 'center' });
 
-        const signatureDataUrl = await loadImageDataUrl('assets/signature.jpg');
+        const signatureDataUrl = await loadImageDataUrl('assets/signature-transparent.png');
         if (signatureDataUrl) {
-          doc.addImage(signatureDataUrl, 'JPEG', width - 282, height - 184, 208, 52);
+          doc.addImage(signatureDataUrl, 'PNG', width - 282, height - 184, 208, 52);
         } else {
           doc.setTextColor(8, 55, 43);
           doc.setFont('times', 'italic');
