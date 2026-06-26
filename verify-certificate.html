@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Verify WHSF e-Classroom certificates issued by World Humanitarian Support Foundation."
+    />
+    <meta name="theme-color" content="#c93635" />
+    <meta property="og:title" content="Verify WHSF Certificate" />
+    <meta
+      property="og:description"
+      content="Confirm whether a WHSF e-Classroom certificate number is valid."
+    />
+    <meta property="og:type" content="website" />
+    <title>Verify Certificate | WHSF e-Classroom</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Official WHSF certificate verification</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html#top" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>World Humanitarian Support Foundation</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html#top">Home</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#programs">Programs</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="e-classroom-admin.html">Teacher/Admin</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="classroom-hero verify-hero" aria-labelledby="verify-title">
+        <div class="shell classroom-hero-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow">Certificate verification</p>
+            <h1 id="verify-title">Confirm a WHSF e-Classroom certificate.</h1>
+            <p class="hero-lead">
+              Enter the certificate number exactly as shown on the certificate to confirm the learner, course and issue date from WHSF records.
+            </p>
+          </div>
+          <form class="student-login-card verify-card reveal delay-one" id="verify-certificate-form">
+            <label>
+              Certificate number
+              <input
+                id="certificate-number"
+                name="certificate_number"
+                type="text"
+                placeholder="Example: WHSF-2567"
+                autocomplete="off"
+                required
+              />
+            </label>
+            <button class="button" type="submit">Verify certificate</button>
+            <p id="verify-status" role="status">Enter a certificate number to begin verification.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <article class="verify-result-card" id="verify-result" hidden>
+            <div class="verify-badge" id="verify-badge">Valid</div>
+            <div>
+              <p class="eyebrow">Verification result</p>
+              <h2 id="result-heading">Certificate verified</h2>
+              <p id="result-summary">This certificate was issued by World Humanitarian Support Foundation.</p>
+            </div>
+            <dl class="verify-details">
+              <div>
+                <dt>Certificate number</dt>
+                <dd id="result-number">—</dd>
+              </div>
+              <div>
+                <dt>Learner</dt>
+                <dd id="result-student">—</dd>
+              </div>
+              <div>
+                <dt>Course</dt>
+                <dd id="result-course">—</dd>
+              </div>
+              <div>
+                <dt>Category</dt>
+                <dd id="result-category">—</dd>
+              </div>
+              <div>
+                <dt>Issued date</dt>
+                <dd id="result-issued">—</dd>
+              </div>
+            </dl>
+            <a class="button" id="certificate-file-link" href="#" target="_blank" rel="noreferrer" hidden>Open certificate file</a>
+          </article>
+
+          <article class="verify-result-card verify-result-error" id="verify-error" hidden>
+            <div class="verify-badge invalid">Not found</div>
+            <div>
+              <p class="eyebrow">Verification result</p>
+              <h2>Certificate not found</h2>
+              <p>
+                We could not find this certificate number in WHSF records. Check the number and try again, or contact WHSF for support.
+              </p>
+              <a class="arrow-link" href="index.html#contact">Contact WHSF <span>→</span></a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="74" height="74" alt="WHSF emblem" />
+          <div>
+            <strong>World Humanitarian Support Foundation</strong>
+            <p>Certificate verification for WHSF e-Classroom learners and partners.</p>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Classroom</strong><a href="e-classroom.html">All courses</a><a href="e-classroom-admin.html">Teacher/Admin</a></div>
+          <div><strong>Connect</strong><a href="index.html#contact">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+      const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+      const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
+
+      const params = new URLSearchParams(window.location.search);
+      const form = document.querySelector('#verify-certificate-form');
+      const input = document.querySelector('#certificate-number');
+      const statusEl = document.querySelector('#verify-status');
+      const resultCard = document.querySelector('#verify-result');
+      const errorCard = document.querySelector('#verify-error');
+      const certificateFileLink = document.querySelector('#certificate-file-link');
+
+      const setText = (selector, value) => {
+        document.querySelector(selector).textContent = value || '—';
+      };
+
+      const setStatus = (message) => {
+        statusEl.textContent = message;
+      };
+
+      function showError(message = 'Certificate not found.') {
+        resultCard.hidden = true;
+        errorCard.hidden = false;
+        setStatus(message);
+      }
+
+      function showResult(certificate) {
+        errorCard.hidden = true;
+        resultCard.hidden = false;
+        setText('#result-number', certificate.certificate_number);
+        setText('#result-student', certificate.student_name);
+        setText('#result-course', certificate.course_title);
+        setText('#result-category', certificate.course_category);
+        setText('#result-issued', new Date(certificate.issued_at).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }));
+        if (certificate.certificate_url) {
+          certificateFileLink.hidden = false;
+          certificateFileLink.href = certificate.certificate_url;
+        } else {
+          certificateFileLink.hidden = true;
+          certificateFileLink.href = '#';
+        }
+        setStatus('Certificate verified successfully.');
+      }
+
+      async function verifyCertificate(certificateNumber) {
+        const cleanedNumber = String(certificateNumber || '').trim();
+        if (!cleanedNumber) {
+          showError('Enter a certificate number first.');
+          return;
+        }
+
+        setStatus('Checking WHSF certificate records…');
+        resultCard.hidden = true;
+        errorCard.hidden = true;
+
+        const { data, error } = await whsfSupabase.rpc('verify_eclassroom_certificate', {
+          p_certificate_number: cleanedNumber
+        });
+
+        if (error) {
+          showError(error.message);
+          return;
+        }
+
+        if (!data?.length) {
+          showError('Certificate number was not found.');
+          return;
+        }
+
+        showResult(data[0]);
+      }
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const certificateNumber = formData.get('certificate_number');
+        const url = new URL(window.location.href);
+        url.searchParams.set('number', String(certificateNumber || '').trim());
+        window.history.replaceState({}, '', url);
+        verifyCertificate(certificateNumber);
+      });
+
+      const initialNumber = params.get('number');
+      if (initialNumber) {
+        input.value = initialNumber;
+        verifyCertificate(initialNumber);
+      }
+    </script>
+  </body>
+</html>

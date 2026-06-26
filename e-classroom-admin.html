@@ -55,6 +55,7 @@
           <a href="#lessons">Lessons</a>
           <a href="#assignments">Assignments</a>
           <a href="#certificates">Certificates</a>
+          <a href="verify-certificate.html">Verify Certificate</a>
         </nav>
       </div>
     </header>
@@ -514,7 +515,8 @@
         doc.setFontSize(12);
         doc.text(`Certificate No: ${certificateNumber}`, 92, height - 112);
         doc.text(`Issued: ${issuedDate}`, 92, height - 88);
-        doc.text('Special consultative status with ECOSOC since 2026', width / 2, height - 88, { align: 'center' });
+        doc.text('Special consultative status with ECOSOC since 2026', width / 2, height - 98, { align: 'center' });
+        doc.text(`Verify: www.worldhsfoundation.org/verify-certificate?number=${certificateNumber}`, width / 2, height - 78, { align: 'center' });
 
         doc.setDrawColor(201, 54, 53);
         doc.line(width - 250, height - 118, width - 92, height - 118);
