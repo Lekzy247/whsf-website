@@ -202,20 +202,57 @@
         });
       }
 
+      function loadQrLibrary() {
+        if (window.QRCode?.toCanvas) return Promise.resolve(true);
+        return new Promise((resolve) => {
+          const existing = document.querySelector('[data-qr-library="fallback"]');
+          if (existing) {
+            existing.addEventListener('load', () => resolve(Boolean(window.QRCode?.toCanvas)), { once: true });
+            existing.addEventListener('error', () => resolve(false), { once: true });
+            return;
+          }
+          const script = document.createElement('script');
+          script.src = 'https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js';
+          script.dataset.qrLibrary = 'fallback';
+          script.onload = () => resolve(Boolean(window.QRCode?.toCanvas));
+          script.onerror = () => resolve(false);
+          document.head.appendChild(script);
+        });
+      }
+
       async function generateQrCodeDataUrl(value) {
-        if (!window.QRCode?.toDataURL) return null;
+        const qrReady = await loadQrLibrary();
         try {
-          return await window.QRCode.toDataURL(value, {
-            errorCorrectionLevel: 'H',
-            margin: 1,
-            width: 180,
-            color: {
-              dark: '#08372b',
-              light: '#ffffff'
-            }
-          });
+          if (qrReady && window.QRCode?.toCanvas) {
+            const canvas = document.createElement('canvas');
+            await window.QRCode.toCanvas(canvas, value, {
+              errorCorrectionLevel: 'H',
+              margin: 1,
+              width: 220,
+              color: {
+                dark: '#08372b',
+                light: '#ffffff'
+              }
+            });
+            return canvas.toDataURL('image/png');
+          }
         } catch (error) {
           console.warn('QR code generation failed', error);
+        }
+
+        try {
+          const quickChartUrl = `https://quickchart.io/qr?text=${encodeURIComponent(value)}&size=220&margin=1&ecLevel=H&dark=08372b&light=ffffff`;
+          const response = await fetch(quickChartUrl, { mode: 'cors' });
+          if (!response.ok) return null;
+          const blob = await response.blob();
+          return await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        } catch (error) {
+          console.warn('QR code fallback failed', error);
           return null;
         }
       }
@@ -324,12 +361,19 @@
         const qrCodeDataUrl = await generateQrCodeDataUrl(verificationUrl);
         if (qrCodeDataUrl) {
           doc.setFillColor(255, 255, 255);
-          doc.roundedRect(86, height - 236, 96, 116, 10, 10, 'F');
-          doc.addImage(qrCodeDataUrl, 'PNG', 96, height - 226, 76, 76);
+          doc.setDrawColor(8, 55, 43);
+          doc.setLineWidth(1);
+          doc.roundedRect(80, height - 250, 122, 142, 10, 10, 'FD');
+          doc.addImage(qrCodeDataUrl, 'PNG', 91, height - 239, 100, 100);
           doc.setTextColor(8, 55, 43);
           doc.setFont('helvetica', 'bold');
-          doc.setFontSize(8);
-          doc.text('Scan to verify', 134, height - 136, { align: 'center' });
+          doc.setFontSize(9);
+          doc.text('Scan to verify', 141, height - 123, { align: 'center' });
+        } else {
+          doc.setTextColor(201, 54, 53);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(9);
+          doc.text('QR unavailable - use verification link', 141, height - 123, { align: 'center' });
         }
 
         const signatureDataUrl = await loadImageDataUrl('assets/signature-transparent.png');
