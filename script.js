@@ -271,6 +271,10 @@ const contactGuidanceContent = {
     guidance: 'Tell WHSF what e-Classroom access, course, assignment or certificate issue you need help with.',
     placeholder: 'Share your student email, course name and what happened, such as login, lesson, assignment or certificate issue.'
   },
+  'TechBridge / Device Donation': {
+    guidance: 'Tell WHSF how you want to support rural learning access, device donation, connectivity, livestream teaching or virtual partner rooms.',
+    placeholder: 'Share whether you want to donate laptops/tablets, sponsor connectivity, teach remotely, support sustainable technology, or partner on virtual rooms.'
+  },
   'Supporting WHSF': {
     guidance: 'Tell WHSF how you would like to support the mission.',
     placeholder: 'Share whether you want to support programmes, events, outreach, equipment, scholarships or general operations.'
