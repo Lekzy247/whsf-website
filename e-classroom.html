@@ -56,15 +56,11 @@
 
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
           <a href="index.html#top">Home</a>
-          <a href="index.html#projects">Projects</a>
-          <a href="index.html#about">About</a>
-          <a href="index.html#programs">Programs</a>
           <a href="#courses">Courses</a>
-          <a href="#student-login">Student Login</a>
           <a href="#skills-passport">Skills Passport</a>
+          <a href="#student-login">Student Portal</a>
           <a href="verify-certificate.html">Verify Certificate</a>
           <a href="impact-dashboard.html">Impact</a>
-          <a href="index.html#contact">Contact &amp; Support</a>
           <a href="e-classroom-admin.html">Teacher/Admin</a>
         </nav>
       </div>
@@ -83,7 +79,6 @@
               <a class="button" href="#student-login">Student login</a>
               <a class="button button-light" href="#courses">Explore courses</a>
               <a class="button button-light" href="#skills-passport">View skills passport</a>
-              <a class="button button-light" href="verify-certificate.html">Verify certificate</a>
             </div>
           </div>
           <div class="classroom-panel reveal delay-one">
@@ -209,11 +204,11 @@
               <a class="button button-light" href="verify-certificate.html">Verify certificate</a>
             </div>
             <div class="passport-flow" aria-label="Skills passport pathway">
-              <span>Learn</span>
-              <span>Submit project</span>
-              <span>Earn badge</span>
-              <span>Receive certificate</span>
-              <span>Build portfolio</span>
+              <a href="#courses">Learn</a>
+              <a href="e-classroom-course.html#assignments">Submit project</a>
+              <a href="#skills-passport">Earn badge</a>
+              <a href="verify-certificate.html">Receive certificate</a>
+              <a href="#student-login">Build portfolio</a>
             </div>
           </div>
 
@@ -304,8 +299,8 @@
           <div><strong>World Humanitarian Support Foundation</strong><p>e-Classroom for inclusive technology learning.</p></div>
         </div>
         <div class="footer-links">
-          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="index.html#about">About Us</a><a href="index.html#programs">Programs</a><a href="#courses">Courses</a></div>
-          <div><strong>Connect</strong><a href="index.html#contact">Contact &amp; Support</a><a href="https://innovation.worldhsfoundation.org/">Innovation</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+          <div><strong>Classroom</strong><a href="#courses">Courses</a><a href="#skills-passport">Skills Passport</a><a href="verify-certificate.html">Verify Certificate</a></div>
+          <div><strong>Connect</strong><a href="index.html#contact">Contact WHSF</a><a href="impact-dashboard.html">Impact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
         </div>
       </div>
       <div class="shell footer-bottom">
@@ -339,6 +334,12 @@
 
       function setAuthMessage(message) {
         if (studentStatus) studentStatus.textContent = message;
+      }
+
+      function setStudentSignedIn(isSignedIn) {
+        studentForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
+        if (studentSignoutButton) studentSignoutButton.hidden = !isSignedIn;
+        if (studentSignupButton) studentSignupButton.hidden = Boolean(isSignedIn);
       }
 
       async function upsertStudentProfile(user, fullName = '') {
@@ -386,6 +387,14 @@
         learnerEnrolledList.innerHTML = '<article class="dashboard-empty">Your enrolled courses will appear here.</article>';
         learnerSubmissionsList.innerHTML = '<article class="dashboard-empty">Submitted assignments will appear here.</article>';
         learnerCertificatesList.innerHTML = '<article class="dashboard-empty">Issued certificates will appear here.</article>';
+      }
+
+      function showStudentSignInBox(message = 'Use your WHSF e-Classroom student email and password.') {
+        setStudentSignedIn(false);
+        if (learnerDashboard) learnerDashboard.hidden = true;
+        studentForm?.reset();
+        resetLearnerDashboard();
+        setAuthMessage(message);
       }
 
       async function loadLearnerDashboard(user) {
@@ -503,17 +512,11 @@
 
       async function showSignedInState(session) {
         if (!session?.user) {
-          studentForm?.classList.remove('is-signed-in');
-          learnerDashboard.hidden = true;
-          studentSignoutButton.hidden = true;
-          studentSignupButton.hidden = false;
-          resetLearnerDashboard();
+          showStudentSignInBox();
           return;
         }
 
-        studentForm?.classList.add('is-signed-in');
-        studentSignoutButton.hidden = false;
-        studentSignupButton.hidden = true;
+        setStudentSignedIn(true);
         learnerDashboard.hidden = false;
         learnerSessionSummary.textContent = `Signed in as ${session.user.email}. Loading your learner dashboard…`;
         setAuthMessage('Signed in successfully.');
@@ -599,13 +602,17 @@
         setAuthMessage('Account created. Please check your email to confirm your WHSF e-Classroom account, then sign in.');
       });
 
-      studentSignoutButton?.addEventListener('click', async () => {
-        await whsfSupabase.auth.signOut();
-        studentForm?.classList.remove('is-signed-in');
-        learnerDashboard.hidden = true;
-        studentSignoutButton.hidden = true;
-        studentSignupButton.hidden = false;
-        setAuthMessage('Signed out successfully.');
+      studentSignoutButton?.addEventListener('click', async (event) => {
+        event.preventDefault();
+        studentSignoutButton.disabled = true;
+        setAuthMessage('Signing out…');
+        const { error } = await whsfSupabase.auth.signOut();
+        studentSignoutButton.disabled = false;
+        if (error) {
+          setAuthMessage(error.message);
+          return;
+        }
+        showStudentSignInBox('Signed out successfully. You can sign in again below.');
       });
 
       whsfSupabase.auth.getSession().then(({ data }) => {

@@ -187,6 +187,19 @@
         courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
         if (signoutButton) signoutButton.hidden = !isSignedIn;
       };
+
+      function showCourseSignInBox(message = 'Signed out successfully. You can sign in again below.') {
+        session = null;
+        profile = null;
+        enrollment = null;
+        completedLessonIds = new Set();
+        setCourseSignedIn(false);
+        courseLoginForm?.reset();
+        progressCard.hidden = true;
+        enrollButton.hidden = true;
+        setStatus(message);
+        renderLessons();
+      }
       const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
       const cleanFileName = (value = '') => String(value).replace(/[^a-z0-9-]+/gi, '-').replace(/(^-|-$)/g, '').toLowerCase();
       const verifyCertificateUrl = (certificateNumber) => `https://www.worldhsfoundation.org/verify-certificate?number=${encodeURIComponent(certificateNumber)}`;
@@ -787,17 +800,17 @@
         await loadAssignments();
       });
 
-      signoutButton?.addEventListener('click', async () => {
-        await whsfSupabase.auth.signOut();
-        session = null;
-        profile = null;
-        enrollment = null;
-        completedLessonIds = new Set();
-        progressCard.hidden = true;
-        enrollButton.hidden = true;
-        setCourseSignedIn(false);
-        setStatus('Signed out successfully.');
-        renderLessons();
+      signoutButton?.addEventListener('click', async (event) => {
+        event.preventDefault();
+        signoutButton.disabled = true;
+        setStatus('Signing out…');
+        const { error } = await whsfSupabase.auth.signOut();
+        signoutButton.disabled = false;
+        if (error) {
+          setStatus(error.message);
+          return;
+        }
+        showCourseSignInBox();
       });
 
       enrollButton?.addEventListener('click', enroll);
