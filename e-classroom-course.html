@@ -594,7 +594,6 @@
                 <h3>${escapeHtml(lesson.title)}</h3>
                 <p>${escapeHtml(lessonIntro)}</p>
                 <div class="lesson-resource-row">
-                  ${lesson.video_url ? `<a class="arrow-link" href="${escapeHtml(lesson.video_url)}" target="_blank" rel="noreferrer">Open video lesson →</a>` : ''}
                   ${lesson.resource_url ? `<a class="arrow-link" href="${escapeHtml(lesson.resource_url)}" target="_blank" rel="noreferrer">Download resource →</a>` : ''}
                 </div>
                 <button class="text-button lesson-open-button" type="button" data-open-lesson="${lesson.id}">
