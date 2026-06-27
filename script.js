@@ -453,6 +453,8 @@ function renderMobileSession(session) {
 
   const roleContent = mobileRoleContent[session.role] || mobileRoleContent.member;
   mobileDashboard.hidden = false;
+  mobileDashboard.removeAttribute('hidden');
+  mobileDashboard.classList.add('is-active');
   if (mobileLoginCard) mobileLoginCard.hidden = true;
   if (mobileWelcome) mobileWelcome.textContent = `Welcome, ${session.name}`;
   if (mobileRoleSummary) mobileRoleSummary.textContent = `${roleContent.label} access • ${roleContent.summary}`;
@@ -504,6 +506,7 @@ mobileSignout?.addEventListener('click', () => {
     // Browser storage may be unavailable in some privacy modes; the visible session can still be cleared.
   }
   mobileDashboard.hidden = true;
+  mobileDashboard.classList.remove('is-active');
   mobileLoginForm?.reset();
   if (mobileLoginCard) mobileLoginCard.hidden = false;
   setMobileLoginStatus('Signed out successfully.');

@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v2';
+const WHSF_CACHE_NAME = 'whsf-pwa-v3';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -43,11 +43,17 @@ self.addEventListener('fetch', (event) => {
 
   const requestUrl = new URL(event.request.url);
   if (requestUrl.origin !== self.location.origin) return;
+  const shouldRefreshFirst =
+    event.request.destination === 'script' ||
+    event.request.destination === 'style' ||
+    requestUrl.pathname.endsWith('.html') ||
+    requestUrl.pathname === '/mobile-app';
 
-  if (event.request.mode === 'navigate') {
+  if (event.request.mode === 'navigate' || shouldRefreshFirst) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
+          if (!response || response.status !== 200) return response;
           const copy = response.clone();
           caches.open(WHSF_CACHE_NAME).then((cache) => cache.put(event.request, copy));
           return response;
