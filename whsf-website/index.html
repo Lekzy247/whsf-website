@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="World Humanitarian Support Foundation advances inclusive humanitarian action, sustainable communities and responsible innovation."
+    />
+    <meta name="theme-color" content="#0c5b46" />
+    <meta property="og:title" content="World Humanitarian Support Foundation" />
+    <meta
+      property="og:description"
+      content="Human dignity, inclusive innovation and sustainable communities."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.worldhsfoundation.org/" />
+    <title>World Humanitarian Support Foundation</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Advancing dignity, inclusion and sustainable development</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">
+            Larger text
+          </button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">
+            High contrast
+          </button>
+          <a
+            class="utility-donate"
+            href="https://paypal.com/us/fundraiser/charity/1450337"
+            target="_blank"
+            rel="noreferrer"
+          >Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="#top" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>World Humanitarian Support Foundation</small>
+          </span>
+        </a>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+        >
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="#top">Home</a>
+          <a href="#find-your-path">Find Your Path</a>
+          <a href="#programs">Programs</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="impact-dashboard.html">Impact</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-orb hero-orb-one" aria-hidden="true"></div>
+        <div class="hero-orb hero-orb-two" aria-hidden="true"></div>
+        <div class="shell hero-grid">
+          <div class="hero-copy reveal">
+            <p class="eyebrow">Humanity in action</p>
+            <h1 id="hero-title">We impact lives through technology.</h1>
+            <p class="hero-lead">
+              We empower women and girls in technology, bridge the digital divide and create a
+              more inclusive, sustainable and tech-driven future.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="#projects">Explore our projects</a>
+              <a class="button button-secondary" href="#find-your-path">Find your path</a>
+              <a class="button button-light" href="impact-dashboard.html">View impact</a>
+            </div>
+            <ul class="hero-tags" aria-label="WHSF priorities">
+              <li>Girls in ICT</li>
+              <li>TechWomen</li>
+              <li>Community development</li>
+            </ul>
+          </div>
+
+          <figure class="hero-image-panel reveal delay-one">
+            <img src="assets/home/hero-technology-impact.jpg" alt="A WHSF girl participating in hands-on technology training" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="trust-strip" aria-label="WHSF commitment">
+        <div class="shell trust-grid">
+          <p><strong>People first</strong><span>Human dignity guides every initiative.</span></p>
+          <p><strong>Locally informed</strong><span>Communities shape lasting solutions.</span></p>
+          <p><strong>Globally connected</strong><span>Partnerships turn ideas into action.</span></p>
+        </div>
+      </section>
+
+      <section class="section path-finder-section" id="find-your-path" aria-labelledby="path-title">
+        <div class="shell path-finder-grid">
+          <div class="path-finder-copy reveal">
+            <p class="eyebrow">Find your WHSF path</p>
+            <h2 id="path-title">Tell us what you need, and we’ll point you in the right direction.</h2>
+            <p>
+              Whether you are a student, volunteer, mentor, donor, school, partner or certificate checker,
+              choose the option that best describes you and get a clear next step.
+            </p>
+          </div>
+
+          <div class="path-finder-panel reveal delay-one">
+            <div class="path-option-grid" role="list" aria-label="WHSF visitor pathways">
+              <button class="path-option active" type="button" data-path="student" role="listitem">I am a student</button>
+              <button class="path-option" type="button" data-path="volunteer" role="listitem">I want to volunteer</button>
+              <button class="path-option" type="button" data-path="partner" role="listitem">I am a partner or sponsor</button>
+              <button class="path-option" type="button" data-path="donate" role="listitem">I want to donate</button>
+              <button class="path-option" type="button" data-path="certificate" role="listitem">I need certificate help</button>
+              <button class="path-option" type="button" data-path="programme" role="listitem">I want to join a programme</button>
+            </div>
+
+            <article class="path-result-card" id="path-result" aria-live="polite">
+              <span id="path-result-label">Student pathway</span>
+              <h3 id="path-result-title">Start or continue learning with WHSF e-Classroom.</h3>
+              <p id="path-result-copy">
+                Explore technology training in robotics, cybersecurity, drone technology, AI, STEM,
+                eHealth and accessibility technology.
+              </p>
+              <div class="path-result-actions">
+                <a class="button" id="path-primary-action" href="e-classroom.html">Open e-Classroom</a>
+                <a class="arrow-link" id="path-secondary-action" href="#contact">Contact support <span>→</span></a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section project-feature" id="projects">
+        <div class="shell project-feature-grid">
+          <div class="project-feature-image reveal">
+            <img src="assets/gallery/project-02.jpg" alt="WHSF girls and young women participating in a technology programme" />
+            <span>Technology • Inclusion • Opportunity</span>
+          </div>
+          <div class="project-feature-copy reveal delay-one">
+            <p class="eyebrow">Featured project</p>
+            <h2>Girls in ICT Club &amp; TechWomen</h2>
+            <p class="lead">
+              We ensure a more inclusive, sustainable and tech-driven future for women and girls
+              in ICT by bridging the digital divide and promoting gender equality.
+            </p>
+            <p>
+              WHSF has empowered more than 2,500 young women through technology education,
+              entrepreneurship exposure, mentorship and global networking opportunities. Our
+              holistic approach helps girls and young women build confidence, develop practical
+              skills and access pathways into innovation, enterprise and employment.
+            </p>
+            <a class="button" href="#programs">View all programmes</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-about" id="about">
+        <div class="shell split-layout">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Who we are</p>
+            <h2>Humanitarian ambition, grounded in practical action.</h2>
+          </div>
+          <div class="prose reveal delay-one">
+            <p class="lead">
+              WHSF is a registered California nonprofit organisation, established in the United
+              States in June 2015 and subsequently registered in Nigeria in 2021. Our programmes
+              have also extended to Malawi and South Africa. World Humanitarian Support Foundation
+              has been in special consultative status with the United Nations Economic and Social
+              Council (ECOSOC) since 2026.
+            </p>
+            <p>
+              Our aim is to provide humanitarian support through poverty alleviation by
+              maintaining human dignity, enhancing communities, and developing children and
+              adults to reach their full potential.
+            </p>
+            <p>
+              We confront poverty and inequality through a tech-forward approach, integrating
+              digital innovation with agricultural empowerment. Our work focuses on community
+              development, youth and women’s empowerment, children’s wellbeing and inclusive
+              education—ensuring that no one is left behind.
+            </p>
+            <p>
+              Technology is a catalyst for transformation. Through ICT programmes and training,
+              we open pathways into STEM careers, entrepreneurship and digital literacy,
+              particularly for girls and women.
+            </p>
+            <a class="arrow-link" href="#programs">Discover our programmes <span>→</span></a>
+          </div>
+        </div>
+
+        <div class="shell mission-vision-grid">
+          <article><span>Our aim</span><h3>Protect dignity and unlock potential</h3><p>Provide humanitarian support, alleviate poverty and strengthen communities.</p></article>
+          <article><span>Our vision</span><h3>A future grounded in hope</h3><p>A world where poverty is eradicated and every person can reach their fullest potential.</p></article>
+          <article><span>Global alignment</span><h3>United Nations SDGs</h3><p>Our mission supports inclusive, sustainable development and shared prosperity.</p></article>
+        </div>
+
+      </section>
+
+      <section class="section section-tint" id="programs">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Our programmes</p>
+            <h2>Skills, confidence and opportunity.</h2>
+            <p>
+              Our technology and education programmes help girls and young women participate,
+              lead and build solutions for their communities.
+            </p>
+          </div>
+
+          <div class="programme-list visual-programme-list">
+            <article>
+              <img src="assets/home/girls-agriculture-climate-smart.png" alt="Girls in Agriculture and Climate-Smart Technology programme" loading="lazy" />
+              <div><span>2026</span><h3>Girls in Agriculture &amp; Climate-Smart Technology</h3><p>A climate-focused, gender-responsive programme equipping rural and peri-urban girls aged 12–24 with practical skills in climate-smart agriculture, sustainability and applied technology.</p></div>
+            </article>
+            <article>
+              <img src="assets/home/hero-technology-impact.jpg" alt="Tech excursion and robotic automation activity" loading="lazy" />
+              <div><span>Experience</span><h3>2025 Tech Excursion - Robotic Automation</h3><p>Girls in the ICT Club and TechWomen explore robotic automation, AI detection and tracking, and autonomous VTOL technology through practical exposure.</p></div>
+            </article>
+            <article>
+              <img src="assets/partners/partner-cpi.png" alt="Scholarship Award and Center for Project Innovation partnership" loading="lazy" />
+              <div><span>Opportunity</span><h3>Scholarship Award</h3><p>WHSF’s partnership with the Center for Project Innovation in Washington, D.C. has supported ten scholarship awards and widened access to professional development opportunities.</p></div>
+            </article>
+            <article>
+              <img src="assets/gallery/project-10.jpg" alt="Robotic programme with girls learning STEM skills" loading="lazy" />
+              <div><span>STEM</span><h3>Robotic Programme</h3><p>Hands-on robotics classes help girls build confidence, explore engineering concepts and develop practical problem-solving skills in STEM fields.</p></div>
+            </article>
+            <article>
+              <img src="assets/gallery/project-17.jpg" alt="Drone Tech Programme for girls and communities" loading="lazy" />
+              <div><span>Drone Tech</span><h3>Drone Tech Programme (DTP)</h3><p>WHSF uses drone technology to bring un-educated and out-of-school girls from rural communities back into learning. The programme contributes to WHSF’s wider impact of reaching more than 7,500 girls across Nigeria and other African countries through practical technology and education programmes.</p></div>
+            </article>
+            <article>
+              <img src="assets/gallery/project-12.jpg" alt="ICT Girls Club and TechWomen programme activity" loading="lazy" />
+              <div><span>Digital Inclusion</span><h3>ICT Girls Club</h3><p>WHSF promotes girls’ participation in ICT by creating safe learning spaces, mentorship pathways and opportunities for practical digital literacy.</p></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section community-impact-section" id="community-impact">
+        <div class="shell community-impact-grid">
+          <div class="community-impact-copy reveal">
+            <p class="eyebrow">Community impact through technology</p>
+            <h2>Drone &amp; Robotic technology is helping rural girls find their way back to school.</h2>
+            <p class="lead">
+              WHSF introduces drone technology as a practical bridge between curiosity, education
+              and opportunity for girls in rural communities.
+            </p>
+            <p>
+              Through demonstrations, hands-on learning, entrepreneurship exposure and mentorship,
+              WHSF encourages un-educated and out-of-school girls to return to learning, build
+              digital confidence and see a future for themselves in STEM, enterprise and meaningful
+              work.
+            </p>
+            <div class="impact-stat-card" aria-label="Drone technology impact">
+              <strong>7,500+</strong>
+              <span>girls impacted across Nigeria and other African countries through WHSF technology and education programmes</span>
+            </div>
+            <div class="impact-stat-card" aria-label="Young women empowerment impact">
+              <strong>2,500+</strong>
+              <span>young women empowered through entrepreneurship, mentorship, networking and career pathways around the world</span>
+            </div>
+          </div>
+          <div class="community-video-card reveal delay-one">
+            <iframe
+              src="https://www.youtube.com/embed/gJv4kYLfa-U"
+              title="Community impact through technology - WHSF Drone Tech Programme"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <p>Community impact through technology — WHSF Drone Tech Programme</p>
+          </div>
+          <div class="community-video-card reveal">
+            <iframe
+              src="https://www.youtube.com/embed/wwu1r5GCknE"
+              title="WHSF technology and community programme video"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <p>Technology for education, confidence and opportunity</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section innovation" id="innovation">
+        <div class="shell innovation-grid">
+          <div class="innovation-copy reveal">
+            <p class="eyebrow eyebrow-light">WHSF Innovation</p>
+            <h2>Technology should improve lives—not leave people behind.</h2>
+            <p>
+              Our innovation work explores how responsible AI and accessible digital services
+              can support sustainable organisations and better human experiences.
+            </p>
+            <div class="innovation-actions">
+              <a
+                class="button button-light"
+                href="https://innovation.worldhsfoundation.org/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Visit WHSF SmartStay
+              </a>
+              <span>Smart tourism • Accessibility • Sustainability</span>
+            </div>
+          </div>
+          <div class="product-panel reveal delay-one">
+            <div class="product-browser">
+              <div class="browser-top"><i></i><i></i><i></i></div>
+              <div class="product-content">
+                <span class="product-badge">AI4Hospitality</span>
+                <h3>WHSF SmartStay</h3>
+                <p>A smarter way to manage sustainable and guest-centred hospitality.</p>
+                <div class="metric-row">
+                  <span><b>Energy</b><em>Track</em></span>
+                  <span><b>Water</b><em>Measure</em></span>
+                  <span><b>Access</b><em>Improve</em></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section techbridge-section" id="techbridge" aria-labelledby="techbridge-title">
+        <div class="shell techbridge-hero">
+          <div class="section-heading reveal">
+            <p class="eyebrow">WHSF TechBridge</p>
+            <h2 id="techbridge-title">Connecting rural girls and young women to education, devices, mentors and opportunity.</h2>
+            <p>
+              WHSF TechBridge is a proposed technology empowerment programme designed to connect access to education for out-of-school, uneducated and rural girls and young women through devices, sustainable technology, remote connectivity, livestream classrooms and partner-supported learning.
+            </p>
+          </div>
+          <div class="techbridge-callout reveal delay-one">
+            <span>Technology for poverty reduction</span>
+            <strong>Access → Skills → Income</strong>
+            <p>When girls gain access to devices, teachers, digital skills and mentors, technology becomes a pathway to education, enterprise and dignity.</p>
+            <button class="button button-light techbridge-donate-trigger" type="button" data-open-techbridge-form>Donate device</button>
+          </div>
+        </div>
+
+        <div class="shell techbridge-grid">
+          <article class="techbridge-card reveal">
+            <span>01</span>
+            <h3>Device donation hub</h3>
+            <p>Collect donated laptops, tablets, phones, solar chargers and safe electronics for learners, rural classrooms and community technology clubs.</p>
+          </article>
+          <article class="techbridge-card reveal">
+            <span>02</span>
+            <h3>Remote learning access</h3>
+            <p>Connect learners in underserved communities to WHSF e-Classroom, downloadable lessons, offline resources and low-bandwidth learning support.</p>
+          </article>
+          <article class="techbridge-card reveal">
+            <span>03</span>
+            <h3>Global teacher link</h3>
+            <p>Connect students and teachers from advanced countries through livestream classes, mentorship sessions, virtual workshops and career talks.</p>
+          </article>
+          <article class="techbridge-card reveal">
+            <span>04</span>
+            <h3>Sustainable technology</h3>
+            <p>Promote repair, reuse, solar-powered learning kits, e-waste responsibility and climate-smart technology for rural education spaces.</p>
+          </article>
+          <article class="techbridge-card reveal">
+            <span>05</span>
+            <h3>Virtual partner rooms</h3>
+            <p>Create virtual rooms and conference spaces where donors, partners and ethical brands can showcase products, support training and sponsor learners.</p>
+          </article>
+          <article class="techbridge-card reveal">
+            <span>06</span>
+            <h3>Poverty reduction pathway</h3>
+            <p>Link digital skills to entrepreneurship, remote work readiness, project management, eHealth, data skills, agritech and local income opportunities.</p>
+          </article>
+        </div>
+
+        <div class="shell techbridge-monetization reveal">
+          <div>
+            <p class="eyebrow">Nonprofit sustainability model</p>
+            <h3>What WHSF can monetize ethically</h3>
+            <p>Revenue should support the mission, not replace it. WHSF can create earned-income pathways that fund free access for vulnerable learners.</p>
+          </div>
+          <ul>
+            <li>Corporate-sponsored device donation drives and branded impact reports</li>
+            <li>Paid partner booths in virtual conferences and innovation rooms</li>
+            <li>Fee-based professional training for organisations, with scholarships for girls</li>
+            <li>Certificate verification, advanced workshops and mentor-led bootcamps</li>
+            <li>Grant-funded rural connectivity and sustainable technology pilots</li>
+          </ul>
+        </div>
+
+        <div class="shell techbridge-donation-panel" id="techbridge-donation" hidden>
+          <div class="techbridge-donation-copy reveal">
+            <p class="eyebrow">TechBridge device donation</p>
+            <h2>Donate devices, sponsor connectivity or help teach remotely.</h2>
+            <p>
+              Use this form if you want to donate laptops, tablets, phones, routers, solar chargers, projectors, fund connectivity, teach by livestream, or sponsor a WHSF virtual partner room.
+            </p>
+          </div>
+          <form class="techbridge-donation-form reveal delay-one" id="techbridge-donation-form">
+            <div class="field-row">
+              <label>Full name / Organisation<input name="donorName" autocomplete="organization" required /></label>
+              <label>Email address<input type="email" name="donorEmail" autocomplete="email" required /></label>
+            </div>
+            <div class="field-row">
+              <label>Phone / WhatsApp<input name="donorPhone" autocomplete="tel" placeholder="Best contact number" /></label>
+              <label>Location<input name="donorLocation" placeholder="City, state/country" required /></label>
+            </div>
+            <div class="field-row">
+              <label>
+                Support type
+                <select name="supportType" required>
+                  <option value="">Select one</option>
+                  <option>Laptop donation</option>
+                  <option>Tablet donation</option>
+                  <option>Phone donation</option>
+                  <option>Router / internet device</option>
+                  <option>Solar charger / power support</option>
+                  <option>Projector / classroom equipment</option>
+                  <option>Connectivity sponsorship</option>
+                  <option>Remote teaching / livestream class</option>
+                  <option>Virtual partner room sponsorship</option>
+                  <option>Funding / grant support</option>
+                  <option>Other technology support</option>
+                </select>
+              </label>
+              <label>Quantity / Sponsorship size<input name="quantity" placeholder="Example: 5 laptops, $500, 2 classes/month" required /></label>
+            </div>
+            <label>
+              Device condition or support details
+              <select name="condition" required>
+                <option value="">Select one</option>
+                <option>New</option>
+                <option>Used but working</option>
+                <option>Needs minor repair</option>
+                <option>Funding or service support</option>
+                <option>Teaching / mentorship support</option>
+                <option>Not applicable</option>
+              </select>
+            </label>
+            <label>Pickup, shipping or availability note<textarea name="logistics" rows="3" required placeholder="Tell us where the devices are, how WHSF can receive them, or when you are available to support."></textarea></label>
+            <label>Message<textarea name="donationMessage" rows="4" placeholder="Share any extra details about your donation, sponsorship, virtual room idea or remote teaching offer."></textarea></label>
+            <label class="consent-check">
+              <input type="checkbox" name="consent" required />
+              <span>I confirm that WHSF may contact me about this TechBridge donation or partnership enquiry.</span>
+            </label>
+            <button class="button" type="submit">Prepare TechBridge message</button>
+            <p class="form-note" id="techbridge-donation-status" role="status">This prepares an email to WHSF for review and follow-up.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section gallery-section" id="gallery">
+        <div class="shell">
+          <div class="impact-header">
+            <div><p class="eyebrow">Gallery</p><h2>WHSF programmes in action.</h2></div>
+            <p>Moments from our technology, education and community programmes with girls and young women.</p>
+          </div>
+          <div class="gallery-slider" data-gallery-slider>
+            <div class="gallery-stage">
+              <a class="gallery-main-link" href="assets/gallery/project-02.jpg" target="_blank" rel="noreferrer" aria-label="Open current gallery image">
+                <img id="gallery-main-image" src="assets/gallery/project-02.jpg" alt="Girls participating in a WHSF technology activity" />
+              </a>
+              <div class="gallery-caption">
+                <span id="gallery-counter">1 / 18</span>
+                <strong id="gallery-title">WHSF technology activity</strong>
+                <p id="gallery-description">Girls and young women participating in WHSF technology and education programmes.</p>
+              </div>
+              <button class="gallery-control gallery-prev" type="button" aria-label="Previous gallery image">‹</button>
+              <button class="gallery-control gallery-next" type="button" aria-label="Next gallery image">›</button>
+            </div>
+
+            <div class="gallery-thumbs" aria-label="Gallery thumbnails">
+              <button class="gallery-thumb active" type="button" data-src="assets/gallery/project-02.jpg" data-title="WHSF technology activity" data-description="Girls and young women participating in WHSF technology and education programmes." data-alt="Girls participating in a WHSF technology activity"><img src="assets/gallery/project-02.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-04.jpg" data-title="Young women in action" data-description="Young women taking part in WHSF learning, empowerment and community programmes." data-alt="Young women taking part in a WHSF programme"><img src="assets/gallery/project-04.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-05.jpg" data-title="Learning and innovation" data-description="WHSF learning sessions that connect confidence, technology and opportunity." data-alt="WHSF learning and innovation session"><img src="assets/gallery/project-05.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-06.jpg" data-title="Community programme" data-description="Participants engaging in WHSF community development and education activities." data-alt="Participants at a WHSF community event"><img src="assets/gallery/project-06.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-07.jpg" data-title="Girls in ICT" data-description="WHSF creates safe pathways for girls to participate in ICT and digital learning." data-alt="WHSF girls in ICT activity"><img src="assets/gallery/project-07.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-08.jpg" data-title="Skills development" data-description="Practical skills development for learners, volunteers and programme participants." data-alt="WHSF skills development programme"><img src="assets/gallery/project-08.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-09.jpg" data-title="Programme community" data-description="WHSF programme participants building connection, confidence and shared purpose." data-alt="WHSF programme group photograph"><img src="assets/gallery/project-09.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-10.jpg" data-title="STEM and technology" data-description="Hands-on STEM and technology learning that supports girls’ future-ready skills." data-alt="WHSF STEM and technology activity"><img src="assets/gallery/project-10.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-11.jpg" data-title="Community outreach" data-description="WHSF outreach moments connecting technology, dignity and community support." data-alt="WHSF community outreach moment"><img src="assets/gallery/project-11.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-12.jpg" data-title="Girls empowerment" data-description="Girls and young women gaining confidence through WHSF empowerment programmes." data-alt="WHSF girls empowerment programme"><img src="assets/gallery/project-12.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-13.jpg" data-title="Training session" data-description="WHSF training and learning activities designed around access and opportunity." data-alt="WHSF training and learning session"><img src="assets/gallery/project-13.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-14.jpg" data-title="Innovation participants" data-description="Participants engaging with WHSF innovation and education programming." data-alt="WHSF innovation programme participants"><img src="assets/gallery/project-14.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-15.jpg" data-title="Programme delivery" data-description="WHSF programme delivery in action across education and community spaces." data-alt="WHSF programme delivery in action"><img src="assets/gallery/project-15.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-17.jpg" data-title="Girls in technology" data-description="Girls exploring technology pathways through WHSF learning opportunities." data-alt="WHSF girls in technology programme"><img src="assets/gallery/project-17.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-18.jpg" data-title="Project participants" data-description="WHSF project participants sharing learning, leadership and community action." data-alt="WHSF project participants"><img src="assets/gallery/project-18.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-19.jpg" data-title="Group activity" data-description="WHSF group activity supporting practical learning and inclusion." data-alt="WHSF group activity"><img src="assets/gallery/project-19.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-22.jpg" data-title="Humanitarian support" data-description="WHSF humanitarian support programme connecting care, education and dignity." data-alt="WHSF humanitarian support programme"><img src="assets/gallery/project-22.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-24.jpg" data-title="Gallery highlight" data-description="A WHSF programme highlight from community learning and support activities." data-alt="WHSF gallery highlight"><img src="assets/gallery/project-24.jpg" alt="" loading="lazy" /></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="impact">
+        <div class="shell">
+          <div class="impact-header reveal">
+            <div>
+              <p class="eyebrow">How we create value</p>
+              <h2>From shared purpose to sustainable progress.</h2>
+            </div>
+            <p>
+              We focus on practical initiatives that can be tested, improved and strengthened
+              through collaboration.
+            </p>
+          </div>
+          <ol class="impact-steps">
+            <li class="reveal">
+              <span>01</span>
+              <div><h3>Listen</h3><p>Understand lived experience and local priorities.</p></div>
+            </li>
+            <li class="reveal delay-one">
+              <span>02</span>
+              <div><h3>Co-design</h3><p>Shape solutions with communities and partners.</p></div>
+            </li>
+            <li class="reveal delay-two">
+              <span>03</span>
+              <div><h3>Deliver</h3><p>Turn ideas into useful programmes and services.</p></div>
+            </li>
+            <li class="reveal">
+              <span>04</span>
+              <div><h3>Learn</h3><p>Measure progress and improve what comes next.</p></div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section section-tint" id="more">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Take part</p>
+            <h2>There is a place for you in this work.</h2>
+          </div>
+          <div class="involve-grid">
+            <article class="involve-card reveal">
+              <span aria-hidden="true">↗</span>
+              <h3>Partner</h3>
+              <p>Build programmes, pilots and long-term collaborations with WHSF.</p>
+              <a class="arrow-link" href="#contact">Start a conversation →</a>
+            </article>
+            <article class="involve-card reveal delay-one">
+              <span aria-hidden="true">+</span>
+              <h3>Volunteer</h3>
+              <p>Contribute your time, experience and ideas to meaningful initiatives.</p>
+              <a class="arrow-link" href="#contact">Register your interest →</a>
+            </article>
+            <article class="involve-card reveal delay-two">
+              <span aria-hidden="true">♡</span>
+              <h3>Support</h3>
+              <p>Help humanitarian and community-led work reach more people.</p>
+              <a class="arrow-link" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Support our mission →</a>
+            </article>
+          </div>
+          <div class="volunteer-record">
+            <div><p class="eyebrow">Volunteer recognition</p><h3>Thank you to the people who give their time to WHSF.</h3></div>
+            <ul aria-label="WHSF volunteer record">
+              <li>Olufunke Osho</li><li>Olusegun Ajileye</li><li>Jacob Iorleva</li><li>Oyebanji Felix</li>
+              <li>Mary Aina</li><li>Abayomi Okunola</li><li>Toyin Akinola-Idowu</li>
+              <li>Ahmad Usman Maina</li><li>Omobola Agboola</li><li>Oluseyi Oyegoke</li>
+              <li>Elah Peter</li><li>Michael Patrick</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact">
+        <div class="shell contact-grid">
+          <div class="contact-copy reveal">
+            <p class="eyebrow eyebrow-light">Connect with WHSF</p>
+            <h2>Let’s turn shared values into meaningful action.</h2>
+            <p>
+              Contact WHSF for partnership, volunteering, e-Classroom support, certificate help,
+              programme enquiries, safeguarding concerns or responsible innovation.
+            </p>
+            <div class="address-list">
+              <address><strong>Head Office</strong>11535 Western Ave<br />Torrance, CA 90501<br />United States</address>
+              <address><strong>Africa Head Office</strong>No. 5 Akinyemi Avenue<br />Mobil Ring Road, Ibadan<br />Nigeria</address>
+              <a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a>
+            </div>
+          </div>
+          <form class="contact-form reveal delay-one" id="contact-form">
+            <div class="field-row">
+              <label>First name<input name="firstName" autocomplete="given-name" required /></label>
+              <label>Last name<input name="lastName" autocomplete="family-name" required /></label>
+            </div>
+            <div class="field-row">
+              <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
+              <label>Phone / WhatsApp <span class="optional-label">optional</span><input name="phone" autocomplete="tel" placeholder="Only if you want WHSF to call or message you" /></label>
+            </div>
+            <label>
+              I am interested in
+              <select name="interest" required>
+                <option value="">Select one</option>
+                <option>Partnership</option>
+                <option>Volunteering</option>
+                <option>Mentorship</option>
+                <option>School / Programme interest</option>
+                <option>Certificate help</option>
+                <option>Donation / Sponsorship</option>
+                <option>e-Classroom support</option>
+                <option>TechBridge / Device Donation</option>
+                <option>Supporting WHSF</option>
+                <option>WHSF SmartStay</option>
+                <option>General enquiry</option>
+              </select>
+            </label>
+            <p class="form-guidance" id="contact-guidance">Choose an interest area and share a short message. WHSF will review your enquiry and respond by email.</p>
+            <label>Message<textarea name="message" rows="4" required placeholder="Tell us what you need and how WHSF can help."></textarea></label>
+            <div class="contact-next-steps" aria-label="What happens next">
+              <strong>What happens next?</strong>
+              <span>1. Your email app opens with the message prepared.</span>
+              <span>2. You review and send it to WHSF.</span>
+              <span>3. WHSF follows up through the right programme or support team.</span>
+            </div>
+            <button class="button button-light" type="submit">Prepare message</button>
+            <p class="form-note" id="form-status" role="status">
+              This form prepares an email in your device’s email application. No personal WhatsApp number is published on this website.
+            </p>
+          </form>
+        </div>
+
+        <div class="shell fraud-alert" role="note">
+          <strong>Fraud awareness</strong>
+          <p>Scammers have misused the WHSF name, logo and images to create fraudulent Facebook pages and WhatsApp groups. WHSF is not offering financial promotions. Please report suspicious activity to your local authorities.</p>
+        </div>
+      </section>
+
+      <section class="section partner-section" id="partners">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Partners and collaborators</p>
+            <h2>Working with organisations that expand opportunity.</h2>
+            <p>
+              These partner and programme logos were migrated from the current WHSF website so the
+              new portal reflects the foundation’s existing collaborations and programme ecosystem.
+            </p>
+          </div>
+          <div class="partner-logo-grid reveal delay-one">
+            <figure><img src="assets/partners/partner-cpi.png" alt="Center for Project Innovation partner logo" /></figure>
+            <figure><img src="assets/partners/partner-giva.png" alt="Giva partner logo" /></figure>
+            <figure><img src="assets/partners/partner-reef.png" alt="Reef partner logo" /></figure>
+            <figure><img src="assets/partners/partner-gellezz.png" alt="Gellezz partner logo" /></figure>
+            <figure><img src="assets/partners/partner-techwomen.jpg" alt="TechWomen programme logo" /></figure>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
+          <div>
+            <strong>World Humanitarian<br />Support Foundation</strong>
+            <p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="#projects">Projects</a><a href="#about">About Us</a><a href="#gallery">Gallery</a><a href="#programs">Programs</a><a href="e-classroom.html">e-Classroom</a><a href="impact-dashboard.html">Impact</a><a href="#partners">Partners</a></div>
+          <div><strong>Connect</strong><a href="#more">Get involved</a><a href="#contact">Contact &amp; Support</a><a href="https://innovation.worldhsfoundation.org/">Innovation</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+        <div class="footer-award" aria-label="WHSF recognition">
+          <img src="assets/home/london-data-center-award-2025.png" alt="2025 London Data Center World Award Winner" />
+          <span>2025 London Data Center World Award Winner</span>
+        </div>
+      </div>
+      <div class="shell social-links" aria-label="WHSF social media">
+        <a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>
