@@ -117,70 +117,48 @@
       <section class="section mobile-architecture-section">
         <div class="shell innovation-feature-panel reveal">
           <div>
-            <p class="eyebrow">Recommended build approach</p>
-            <h2>Launch as a PWA first, then package for iOS and Android.</h2>
-            <p>For the fastest and most affordable MVP, WHSF can start with a Progressive Web App connected to the existing website. Later, the same experience can be packaged for Google Play and the Apple App Store.</p>
+            <p class="eyebrow">Current build focus</p>
+            <h2>Launch the WHSF mobile experience as an installable web app.</h2>
+            <p>The first version gives WHSF a practical, branded mobile experience that opens from the website, supports key programme links and helps donors, volunteers, members and learners stay connected.</p>
           </div>
           <div class="innovation-stack-list">
-            <article><strong>Frontend</strong><span>Responsive PWA using the existing WHSF website style</span></article>
-            <article><strong>Backend</strong><span>Supabase or Firebase for user profiles, roles and activity records</span></article>
-            <article><strong>Notifications</strong><span>Firebase Cloud Messaging or OneSignal for app alerts</span></article>
-            <article><strong>Giving</strong><span>Connect the official PayPal charity donation link and future campaigns</span></article>
-            <article><strong>Learning</strong><span>Link directly to WHSF e-Classroom, certificates and learner dashboards</span></article>
-            <article><strong>Packaging</strong><span>Use Capacitor or Flutter later for native app-store release</span></article>
+            <article><strong>Mobile-first design</strong><span>Responsive pages that work smoothly on phones, tablets and desktop screens.</span></article>
+            <article><strong>Community access</strong><span>Quick access for donors, volunteers, members, students and partners.</span></article>
+            <article><strong>Giving</strong><span>Direct connection to the official WHSF charity donation link and future campaigns.</span></article>
+            <article><strong>Learning</strong><span>Fast links to WHSF e-Classroom, certificates and learner dashboards.</span></article>
+            <article><strong>Support</strong><span>Simple routes to contact WHSF, request help and follow programme updates.</span></article>
+            <article><strong>Offline support</strong><span>A basic offline screen helps users understand what to do when connectivity is limited.</span></article>
           </div>
         </div>
         <div class="shell global-roadmap-grid">
-          <article><span>Phase 1</span><h3>Branded mobile web app</h3><p>Mobile-first interface, donor links, volunteer interest, member updates and e-Classroom shortcuts.</p></article>
-          <article><span>Phase 2</span><h3>Login and dashboards</h3><p>Member profiles, volunteer tasks, donor updates, push notifications and role-based content.</p></article>
-          <article><span>Phase 3</span><h3>Native app launch</h3><p>Package for iOS and Android, integrate app-store assets and launch donor/member campaigns.</p></article>
+          <article><span>Phase 1</span><h3>Installable WHSF app</h3><p>Mobile-first interface, donor links, volunteer interest, member updates and e-Classroom shortcuts.</p></article>
+          <article><span>Phase 2</span><h3>Member dashboards</h3><p>Member profiles, volunteer tasks, donor updates, announcements and role-based content.</p></article>
+          <article><span>Phase 3</span><h3>Connected community</h3><p>Stronger communication, impact updates, learning records, event coordination and support workflows.</p></article>
         </div>
       </section>
 
-      <section class="section" id="app-store-options">
+      <section class="section" id="pwa-pilot">
         <div class="shell">
           <div class="section-heading centered reveal">
-            <p class="eyebrow">App store options</p>
-            <h2>Three launch paths for WHSF.</h2>
-            <p>WHSF can begin with a low-cost app-like experience immediately, then move toward official store distribution when the product is ready.</p>
+            <p class="eyebrow">PWA pilot</p>
+            <h2>Install WHSF from the website.</h2>
+            <p>The pilot gives supporters a simple app-like experience directly from the WHSF domain, with no separate download page required.</p>
           </div>
-          <div class="app-store-option-grid">
-            <article class="app-store-option-card reveal">
-              <span>Fastest</span>
-              <h3>Progressive Web App</h3>
-              <p>Launch first as a mobile web app that users can install from the browser. This is best for early testing, donor updates, volunteer coordination and member communication.</p>
+          <div class="pwa-pilot-grid">
+            <article class="pwa-pilot-card reveal">
+              <span>Active pilot</span>
+              <h3>WHSF Mobile Web App</h3>
+              <p>Users can open the WHSF website on their mobile browser and add it to their home screen for faster access to learning, support, giving and programme updates.</p>
               <ul>
-                <li>No app-store approval required</li>
                 <li>Works from the WHSF website domain</li>
-                <li>Best first step for MVP validation</li>
+                <li>Simple install flow from supported browsers</li>
+                <li>Useful for early testing with donors, volunteers and members</li>
               </ul>
               <div class="pwa-install-actions">
                 <button class="button" type="button" data-install-pwa>Install WHSF App</button>
                 <a class="arrow-link" href="contact.html">Start PWA pilot <span>→</span></a>
               </div>
-              <p class="pwa-install-note" data-pwa-install-status>On iPhone, open Safari, tap Share, then Add to Home Screen.</p>
-            </article>
-            <article class="app-store-option-card reveal">
-              <span>Android</span>
-              <h3>Google Play Store</h3>
-              <p>Package the WHSF app for Android and publish through Google Play Console once login, privacy, notifications and content management are ready.</p>
-              <ul>
-                <li>One-time Google Play registration fee</li>
-                <li>Android App Bundle / release signing workflow</li>
-                <li>Best for broad access across Africa and global Android users</li>
-              </ul>
-              <a class="arrow-link" href="https://support.google.com/googleplay/android-developer/answer/6112435" target="_blank" rel="noreferrer">Google Play setup <span>→</span></a>
-            </article>
-            <article class="app-store-option-card reveal">
-              <span>iOS</span>
-              <h3>Apple App Store</h3>
-              <p>Release for iPhone through Apple Developer Program and App Store Connect after the app has a polished onboarding, privacy policy and support workflow.</p>
-              <ul>
-                <li>Annual Apple Developer Program membership</li>
-                <li>TestFlight beta testing before public launch</li>
-                <li>Best for donors, partners and international supporters using iPhone</li>
-              </ul>
-              <a class="arrow-link" href="https://developer.apple.com/programs/" target="_blank" rel="noreferrer">Apple Developer setup <span>→</span></a>
+              <p class="pwa-install-note" data-pwa-install-status>On mobile, use the browser menu or share button, then choose Add to Home Screen or Install App.</p>
             </article>
           </div>
         </div>
@@ -209,16 +187,15 @@
       <section class="section" id="production-checklist">
         <div class="shell production-checklist-card reveal">
           <div>
-            <p class="eyebrow">Production readiness checklist</p>
-            <h2>What WHSF should prepare before public app-store launch.</h2>
+            <p class="eyebrow">Pilot readiness checklist</p>
+            <h2>What WHSF should prepare before inviting more users.</h2>
           </div>
           <ol>
-            <li>Create WHSF developer accounts for Google Play and Apple Developer.</li>
-            <li>Prepare app name, icon, screenshots, description, privacy policy and support email.</li>
+            <li>Confirm the app name, icon, privacy policy and support email.</li>
             <li>Confirm login roles: donor, volunteer, member, coordinator and admin.</li>
             <li>Test notifications, donation links, contact forms and e-Classroom links.</li>
             <li>Run a small pilot with WHSF volunteers, members and trusted donors.</li>
-            <li>Collect feedback, fix usability issues, then publish to app stores.</li>
+            <li>Collect feedback, fix usability issues and improve the experience before wider promotion.</li>
           </ol>
         </div>
       </section>

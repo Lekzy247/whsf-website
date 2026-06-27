@@ -779,14 +779,14 @@ h3 { line-height: 1.2; }
 .mobile-audience-grid p { color: var(--muted); }
 .mobile-feature-grid .global-feature-card { min-height: 275px; }
 .mobile-architecture-section { background: linear-gradient(180deg, #fff 0%, #fff7f4 100%); }
-.app-store-option-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.app-store-option-card { min-height: 430px; padding: 32px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
-.app-store-option-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-.app-store-option-card > span { display: inline-flex; margin-bottom: 20px; padding: 8px 12px; border-radius: 999px; color: #fff; background: linear-gradient(135deg, var(--red), #7f1719); font-size: .72rem; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
-.app-store-option-card h3 { margin-bottom: 12px; font-size: 1.35rem; }
-.app-store-option-card p { color: var(--muted); }
-.app-store-option-card ul { margin: 20px 0; padding-left: 20px; color: var(--ink); font-weight: 800; }
-.app-store-option-card li { margin-bottom: 9px; }
+.pwa-pilot-grid { display: grid; grid-template-columns: minmax(0, 720px); justify-content: center; gap: 18px; }
+.pwa-pilot-card { min-height: 360px; padding: 32px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
+.pwa-pilot-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.pwa-pilot-card > span { display: inline-flex; margin-bottom: 20px; padding: 8px 12px; border-radius: 999px; color: #fff; background: linear-gradient(135deg, var(--red), #7f1719); font-size: .72rem; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+.pwa-pilot-card h3 { margin-bottom: 12px; font-size: 1.35rem; }
+.pwa-pilot-card p { color: var(--muted); }
+.pwa-pilot-card ul { margin: 20px 0; padding-left: 20px; color: var(--ink); font-weight: 800; }
+.pwa-pilot-card li { margin-bottom: 9px; }
 .pwa-install-actions { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; margin-top: 22px; }
 .pwa-install-actions .button { min-height: 44px; }
 .pwa-install-note { margin-top: 14px; color: var(--muted); font-size: .88rem; font-weight: 800; }
@@ -815,7 +815,7 @@ h3 { line-height: 1.2; }
   .learner-dashboard-grid, .certificate-dashboard-list { grid-template-columns: 1fr; }
   .help-hero-grid, .virtual-number-panel, .help-request-grid { grid-template-columns: 1fr; }
   .support-line-grid, .help-faq-grid { grid-template-columns: repeat(2, 1fr); }
-  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .app-store-option-grid, .production-integration-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .production-integration-grid { grid-template-columns: repeat(2, 1fr); }
   .impact-report-actions { justify-content: flex-start; }
 }
 
@@ -855,10 +855,10 @@ h3 { line-height: 1.2; }
   .support-line-grid, .help-faq-grid { grid-template-columns: 1fr; }
   .impact-dashboard-grid { min-height: auto; padding: 68px 0; }
   .impact-dashboard-card, .impact-metric-card, .impact-chart-panel, .impact-report-card { padding: 24px 20px; }
-  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-feature-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .app-store-option-grid, .production-integration-grid { grid-template-columns: 1fr; }
+  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-feature-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .pwa-pilot-grid, .production-integration-grid { grid-template-columns: 1fr; }
   .global-feature-wide { grid-column: auto; }
   .phone-shell { min-height: 520px; }
-  .app-store-option-card, .production-checklist-card { padding: 24px 20px; }
+  .pwa-pilot-card, .production-checklist-card { padding: 24px 20px; }
   .impact-bar { grid-template-columns: 1fr; gap: 8px; }
   .impact-report-actions .button { width: 100%; justify-content: center; }
 }
