@@ -59,12 +59,11 @@
           <div class="reveal">
             <p class="eyebrow eyebrow-light">WHSF Innovation Project</p>
             <h1 id="mobile-app-title">WHSF Mobile App</h1>
-            <p class="hero-lead">Equip donors, volunteers and members with a branded mobile app so the WHSF community can stay connected, informed and active wherever they are.</p>
+            <p class="hero-lead">Equip donors, volunteers, partners, students and members with a branded mobile app so the WHSF community can stay connected, informed and active wherever they are.</p>
             <div class="hero-actions">
               <button class="button button-light" type="button" data-install-pwa>Install WHSF App</button>
               <a class="button button-light" href="#mobile-portal">Open app portal</a>
-              <a class="button button-light" href="#mvp-features">View app features</a>
-              <a class="button button-light" href="contact.html">Join the app pilot</a>
+              <a class="button button-light" href="#install-guide">Install guide</a>
             </div>
           </div>
           <div class="mobile-phone-card reveal delay-one" aria-label="WHSF mobile app preview">
@@ -101,16 +100,50 @@
       <section class="section section-tint" id="mvp-features">
         <div class="shell">
           <div class="section-heading centered reveal">
-            <p class="eyebrow">Mobile app MVP</p>
-            <h2>Practical features for the first version.</h2>
+            <p class="eyebrow">App features</p>
+            <h2>Simple tools for action, learning and collaboration.</h2>
           </div>
           <div class="mobile-feature-grid">
             <article class="global-feature-card reveal"><span>01</span><h3>Impact Feed</h3><p>Real-time WHSF stories, programme updates, photos, videos and field progress for donors, volunteers and members.</p></article>
-            <article class="global-feature-card reveal"><span>02</span><h3>Volunteer Hub</h3><p>Volunteer sign-up, task lists, reminders, service-hour logging, event participation and coordinator messages.</p></article>
+            <article class="global-feature-card reveal"><span>02</span><h3>Community Chat</h3><p>Volunteers, donors, members, partners and students can share updates, coordinate support and stay connected.</p></article>
             <article class="global-feature-card reveal"><span>03</span><h3>Donor Giving Portal</h3><p>Donation links, campaign pages, giving history guidance, impact reports and sponsor updates in one branded experience.</p></article>
-            <article class="global-feature-card reveal"><span>04</span><h3>Member Dashboard</h3><p>Membership profile, announcements, certificates, e-Classroom links, programme invitations and community updates.</p></article>
-            <article class="global-feature-card reveal"><span>05</span><h3>Push Notifications</h3><p>Send urgent updates, volunteer reminders, campaign launches, event alerts and programme announcements directly to users.</p></article>
-            <article class="global-feature-card reveal"><span>06</span><h3>Support & Help Center</h3><p>Contact WHSF, request support, report concerns, ask certificate questions and find the right programme contact faster.</p></article>
+            <article class="global-feature-card reveal"><span>04</span><h3>Video Rooms</h3><p>Create meeting links for mentoring, donor briefings, volunteer coordination, student support and partner conversations.</p></article>
+            <article class="global-feature-card reveal"><span>05</span><h3>Member Dashboard</h3><p>Membership profile, announcements, certificates, e-Classroom links, programme invitations and community updates.</p></article>
+            <article class="global-feature-card reveal"><span>06</span><h3>Alerts & Support</h3><p>Receive important reminders, contact WHSF, request support and find the right programme contact faster.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="install-guide">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Install guide</p>
+            <h2>Add WHSF Mobile App to your phone.</h2>
+            <p>No app store is required. Open the WHSF Mobile App page in your phone browser and add it to your home screen.</p>
+          </div>
+          <div class="install-guide-grid">
+            <article class="install-guide-card reveal">
+              <span>iPhone</span>
+              <h3>Install on iPhone</h3>
+              <ol>
+                <li>Open Safari on your iPhone.</li>
+                <li>Go to worldhsfoundation.org/mobile-app.</li>
+                <li>Tap the Share icon.</li>
+                <li>Choose Add to Home Screen.</li>
+                <li>Tap Add to place WHSF on your screen.</li>
+              </ol>
+            </article>
+            <article class="install-guide-card reveal delay-one">
+              <span>Android</span>
+              <h3>Install on Android</h3>
+              <ol>
+                <li>Open Chrome on your Android phone.</li>
+                <li>Go to worldhsfoundation.org/mobile-app.</li>
+                <li>Tap the menu icon.</li>
+                <li>Choose Install app or Add to Home screen.</li>
+                <li>Tap Install or Add.</li>
+              </ol>
+            </article>
           </div>
         </div>
       </section>
@@ -118,7 +151,7 @@
       <section class="section mobile-portal-section" id="mobile-portal" aria-labelledby="mobile-portal-title">
         <div class="shell">
           <div class="section-heading centered reveal">
-            <p class="eyebrow">Internal app portal</p>
+            <p class="eyebrow">WHSF Connect portal</p>
             <h2 id="mobile-portal-title">A secure collaborative space for WHSF users.</h2>
             <p>Volunteers, partners, students, members and donors can sign in to a guided dashboard, follow impact updates, manage tasks and connect with WHSF support.</p>
           </div>
@@ -129,7 +162,7 @@
                 <img src="assets/whsf-logo.jpg" alt="WHSF logo" />
                 <div>
                   <span>WHSF Connect</span>
-                  <strong>Secure pilot access</strong>
+                  <strong>Community access</strong>
                 </div>
               </div>
               <form id="mobile-app-login-form" class="mobile-login-form">
@@ -149,9 +182,7 @@
                   <option value="donor">Donor</option>
                 </select>
 
-                <label for="mobile-access-code">Access code</label>
-                <input id="mobile-access-code" name="code" type="password" placeholder="Optional for pilot demo" />
-                <p class="form-hint">Pilot demo access opens the dashboard immediately. For production, this portal should connect to Supabase Auth or Firebase Auth with role-based access and protected records.</p>
+                <p class="form-hint">This preview opens a role-based WHSF dashboard for collaboration, updates and support.</p>
 
                 <button class="button" type="submit">Enter WHSF App</button>
                 <p id="mobile-login-status" class="form-status" role="status" aria-live="polite"></p>
@@ -173,6 +204,8 @@
                 <button type="button" data-mobile-tab="volunteer">Volunteer Hub</button>
                 <button type="button" data-mobile-tab="donor">Donor Hub</button>
                 <button type="button" data-mobile-tab="member">Member Dashboard</button>
+                <button type="button" data-mobile-tab="chat">Community Chat</button>
+                <button type="button" data-mobile-tab="video">Video Rooms</button>
                 <button type="button" data-mobile-tab="notifications">Notifications</button>
               </div>
 
@@ -231,6 +264,48 @@
                   </div>
                 </section>
 
+                <section class="mobile-dashboard-panel" data-mobile-panel="chat">
+                  <div class="portal-panel-heading">
+                    <h4>Community chat</h4>
+                    <span>Volunteers • Donors • Partners • Members • Students</span>
+                  </div>
+                  <div class="community-chat-box" data-community-chat>
+                    <article><strong>Volunteer coordinator</strong><p>Welcome. Use this space to coordinate mentoring, outreach and programme support.</p></article>
+                    <article><strong>Student support</strong><p>Students can ask learning questions and receive direction to e-Classroom resources.</p></article>
+                    <article><strong>Donor relations</strong><p>Donors and partners can request impact updates or connect with WHSF programme teams.</p></article>
+                  </div>
+                  <form class="community-chat-form" data-community-chat-form>
+                    <label for="community-chat-message" class="sr-only">Write a message</label>
+                    <input id="community-chat-message" name="message" type="text" placeholder="Write a collaboration message..." required />
+                    <button class="button" type="submit">Send</button>
+                  </form>
+                  <p class="form-hint">Messages in this preview stay on this page. A live version should use protected accounts and moderation.</p>
+                </section>
+
+                <section class="mobile-dashboard-panel" data-mobile-panel="video">
+                  <div class="portal-panel-heading">
+                    <h4>Video rooms</h4>
+                    <span>Mentoring, donor meetings and team collaboration</span>
+                  </div>
+                  <div class="video-room-grid">
+                    <article>
+                      <strong>Mentorship room</strong>
+                      <p>For students, mentors and TechWomen learning support.</p>
+                      <a class="arrow-link" href="https://meet.google.com/new" target="_blank" rel="noreferrer">Open meeting room <span>→</span></a>
+                    </article>
+                    <article>
+                      <strong>Volunteer briefing</strong>
+                      <p>For volunteer orientation, task review and event planning.</p>
+                      <a class="arrow-link" href="https://meet.google.com/new" target="_blank" rel="noreferrer">Start briefing <span>→</span></a>
+                    </article>
+                    <article>
+                      <strong>Partner and donor meeting</strong>
+                      <p>For programme presentations, impact updates and collaboration calls.</p>
+                      <a class="arrow-link" href="contact.html">Request meeting <span>→</span></a>
+                    </article>
+                  </div>
+                </section>
+
                 <section class="mobile-dashboard-panel" data-mobile-panel="notifications">
                   <div class="portal-panel-heading">
                     <h4>Push notification preferences</h4>
@@ -243,98 +318,12 @@
                     <label><input type="checkbox" /> Donor campaign updates</label>
                     <label><input type="checkbox" /> Partner and event opportunities</label>
                   </div>
-                  <p class="security-note">Security note: real push notifications should use confirmed user consent, encrypted authentication, role-based permissions and an auditable admin workflow.</p>
+                  <p class="security-note">WHSF will only send important alerts, reminders and programme updates with user consent.</p>
                   <p data-notification-status class="form-status" role="status" aria-live="polite"></p>
                 </section>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section class="section mobile-architecture-section">
-        <div class="shell innovation-feature-panel reveal">
-          <div>
-            <p class="eyebrow">Current build focus</p>
-            <h2>Launch the WHSF mobile experience as an installable web app.</h2>
-            <p>The first version gives WHSF a practical, branded mobile experience that opens from the website, supports key programme links and helps donors, volunteers, members and learners stay connected.</p>
-          </div>
-          <div class="innovation-stack-list">
-            <article><strong>Mobile-first design</strong><span>Responsive pages that work smoothly on phones, tablets and desktop screens.</span></article>
-            <article><strong>Community access</strong><span>Quick access for donors, volunteers, members, students and partners.</span></article>
-            <article><strong>Giving</strong><span>Direct connection to the official WHSF charity donation link and future campaigns.</span></article>
-            <article><strong>Learning</strong><span>Fast links to WHSF e-Classroom, certificates and learner dashboards.</span></article>
-            <article><strong>Support</strong><span>Simple routes to contact WHSF, request help and follow programme updates.</span></article>
-            <article><strong>Offline support</strong><span>A basic offline screen helps users understand what to do when connectivity is limited.</span></article>
-          </div>
-        </div>
-        <div class="shell global-roadmap-grid">
-          <article><span>Phase 1</span><h3>Installable WHSF app</h3><p>Mobile-first interface, donor links, volunteer interest, member updates and e-Classroom shortcuts.</p></article>
-          <article><span>Phase 2</span><h3>Member dashboards</h3><p>Member profiles, volunteer tasks, donor updates, announcements and role-based content.</p></article>
-          <article><span>Phase 3</span><h3>Connected community</h3><p>Stronger communication, impact updates, learning records, event coordination and support workflows.</p></article>
-        </div>
-      </section>
-
-      <section class="section" id="pwa-pilot">
-        <div class="shell">
-          <div class="section-heading centered reveal">
-            <p class="eyebrow">PWA pilot</p>
-            <h2>Install WHSF from the website.</h2>
-            <p>The pilot gives supporters a simple app-like experience directly from the WHSF domain, with no separate download page required.</p>
-          </div>
-          <div class="pwa-pilot-grid">
-            <article class="pwa-pilot-card reveal">
-              <span>Active pilot</span>
-              <h3>WHSF Mobile Web App</h3>
-              <p>Users can open the WHSF website on their mobile browser and add it to their home screen for faster access to learning, support, giving and programme updates.</p>
-              <ul>
-                <li>Works from the WHSF website domain</li>
-                <li>Simple install flow from supported browsers</li>
-                <li>Useful for early testing with donors, volunteers and members</li>
-              </ul>
-              <div class="pwa-install-actions">
-                <button class="button" type="button" data-install-pwa>Install WHSF App</button>
-                <a class="arrow-link" href="contact.html">Start PWA pilot <span>→</span></a>
-              </div>
-              <p class="pwa-install-note" data-pwa-install-status>On mobile, use the browser menu or share button, then choose Add to Home Screen or Install App.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section-tint" id="production-integrations">
-        <div class="shell">
-          <div class="section-heading centered reveal">
-            <p class="eyebrow">Production integrations</p>
-            <h2>Best integrations to make the app useful from day one.</h2>
-          </div>
-          <div class="production-integration-grid">
-            <article><strong>Authentication</strong><span>Supabase Auth or Firebase Auth for donors, volunteers, members and admins.</span></article>
-            <article><strong>Role-based access</strong><span>Different dashboards for donors, volunteers, members, coordinators and WHSF admins.</span></article>
-            <article><strong>Push notifications</strong><span>Firebase Cloud Messaging or OneSignal for event reminders, campaigns and urgent updates.</span></article>
-            <article><strong>Donation integration</strong><span>Connect the official WHSF PayPal charity link and future campaign pages.</span></article>
-            <article><strong>Volunteer management</strong><span>Tasks, event sign-up, service-hour logs, coordinator approvals and attendance tracking.</span></article>
-            <article><strong>Impact reporting</strong><span>Impact feed, field updates, donor reports, photos, videos and transparent programme metrics.</span></article>
-            <article><strong>e-Classroom access</strong><span>Direct links to courses, certificates, learner dashboard and certificate verification.</span></article>
-            <article><strong>Analytics</strong><span>Privacy-conscious app analytics for installs, active members, volunteer engagement and donor journeys.</span></article>
-            <article><strong>Security & privacy</strong><span>Privacy policy, consent notices, data minimisation, admin approval and safe reporting workflows.</span></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="production-checklist">
-        <div class="shell production-checklist-card reveal">
-          <div>
-            <p class="eyebrow">Pilot readiness checklist</p>
-            <h2>What WHSF should prepare before inviting more users.</h2>
-          </div>
-          <ol>
-            <li>Confirm the app name, icon, privacy policy and support email.</li>
-            <li>Confirm login roles: donor, volunteer, member, coordinator and admin.</li>
-            <li>Test notifications, donation links, contact forms and e-Classroom links.</li>
-            <li>Run a small pilot with WHSF volunteers, members and trusted donors.</li>
-            <li>Collect feedback, fix usability issues and improve the experience before wider promotion.</li>
-          </ol>
         </div>
       </section>
 

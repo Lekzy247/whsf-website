@@ -393,6 +393,8 @@ const collabStatus = document.querySelector('[data-collab-status]');
 const saveCollabNote = document.querySelector('[data-save-collab-note]');
 const addImpactUpdate = document.querySelector('[data-add-impact-update]');
 const impactFeed = document.querySelector('[data-impact-feed]');
+const communityChat = document.querySelector('[data-community-chat]');
+const communityChatForm = document.querySelector('[data-community-chat-form]');
 const requestNotifications = document.querySelector('[data-request-notifications]');
 const notificationStatus = document.querySelector('[data-notification-status]');
 const mobileSessionKey = 'whsf_mobile_app_session';
@@ -545,6 +547,23 @@ addImpactUpdate?.addEventListener('click', () => {
   impactFeed.prepend(update);
 });
 
+communityChatForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!communityChatForm.reportValidity() || !communityChat) return;
+
+  const data = new FormData(communityChatForm);
+  const message = String(data.get('message') || '').trim();
+  const session = loadMobileSession();
+  const sender = session?.name || 'WHSF community member';
+  if (!message) return;
+
+  const chatItem = document.createElement('article');
+  chatItem.innerHTML = `<strong>${sender}</strong><p>${message.replace(/[<>&]/g, (char) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[char]))}</p>`;
+  communityChat.append(chatItem);
+  communityChatForm.reset();
+  chatItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
 requestNotifications?.addEventListener('click', async () => {
   if (!notificationStatus) return;
 
@@ -556,7 +575,7 @@ requestNotifications?.addEventListener('click', async () => {
   const permission = await Notification.requestPermission();
   notificationStatus.textContent =
     permission === 'granted'
-      ? 'Notifications allowed. Production alerts should be sent only through a secure WHSF notification service.'
+      ? 'Notifications allowed. WHSF can use alerts for important reminders and programme updates.'
       : 'Notifications were not enabled. Users can still receive updates through the WHSF website and email.';
 });
 
