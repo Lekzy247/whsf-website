@@ -219,22 +219,39 @@ h3 { line-height: 1.2; }
 .metric-row b { color: var(--green-800); font-size: .85rem; }
 .metric-row em { color: var(--muted); font-size: .7rem; font-style: normal; }
 
-.techbridge-section { position: relative; overflow: hidden; background: linear-gradient(180deg, #fffaf8 0%, #fff 100%); }
-.techbridge-section::before { content: ""; position: absolute; inset: 90px auto auto -140px; width: 340px; height: 340px; border-radius: 50%; background: rgba(201,54,53,.08); pointer-events: none; }
-.techbridge-hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 430px; gap: 46px; align-items: center; }
-.techbridge-callout { overflow: hidden; position: relative; padding: 34px; border-radius: calc(var(--radius) + 10px); color: #fff; background: radial-gradient(circle at 18% 18%, rgba(229,185,87,.24), transparent 32%), linear-gradient(135deg, var(--green-950), var(--red)); box-shadow: var(--shadow); }
-.techbridge-callout::after { content: "ACCESS"; position: absolute; right: -18px; bottom: -22px; color: rgba(255,255,255,.08); font-family: "Playfair Display", Georgia, serif; font-size: 4.7rem; font-weight: 900; line-height: 1; }
+.techbridge-section { position: relative; overflow: hidden; background: radial-gradient(circle at 8% 12%, rgba(201,54,53,.08), transparent 26%), linear-gradient(180deg, #fffaf8 0%, #fff 44%, #fff7f4 100%); }
+.techbridge-section::before { content: ""; position: absolute; inset: 72px auto auto -160px; width: 380px; height: 380px; border-radius: 50%; background: rgba(201,54,53,.08); pointer-events: none; }
+.techbridge-section::after { content: ""; position: absolute; right: -150px; top: 160px; width: 360px; height: 360px; border: 70px solid rgba(229,185,87,.14); border-radius: 50%; pointer-events: none; }
+.techbridge-hero { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 50px; align-items: center; }
+.innovation-lab-hero .section-heading { max-width: 840px; }
+.innovation-lab-actions { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; margin-top: 30px; }
+.techbridge-callout { overflow: hidden; position: relative; padding: 36px; border-radius: calc(var(--radius) + 12px); color: #fff; background: radial-gradient(circle at 18% 18%, rgba(229,185,87,.24), transparent 32%), linear-gradient(135deg, #250609 0%, var(--red-dark) 45%, var(--green-950) 100%); box-shadow: 0 28px 80px rgba(95,20,24,.22); }
+.techbridge-callout::after { content: "LAB"; position: absolute; right: -14px; bottom: -22px; color: rgba(255,255,255,.08); font-family: "Playfair Display", Georgia, serif; font-size: 6.2rem; font-weight: 900; line-height: 1; }
 .techbridge-callout span { display: inline-flex; margin-bottom: 16px; color: #ffe0af; font-size: .74rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-.techbridge-callout strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; }
+.techbridge-callout strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.02; }
 .techbridge-callout p { position: relative; margin-top: 18px; color: rgba(255,255,255,.84); }
 .techbridge-donate-trigger { position: relative; margin-top: 22px; }
-.techbridge-grid { position: relative; margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.techbridge-card { min-height: 255px; padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
+.command-metrics { position: relative; margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.command-metrics b, .command-metrics small { display: block; }
+.command-metrics b { color: #ffe0af; font-family: "Playfair Display", Georgia, serif; font-size: clamp(1.55rem, 3vw, 2.4rem); line-height: 1; }
+.command-metrics small { margin-top: 4px; color: rgba(255,255,255,.72); font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.techbridge-grid, .innovation-track-grid { position: relative; z-index: 1; margin-top: 38px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.techbridge-card { min-height: 255px; padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: rgba(255,255,255,.92); box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease; }
 .techbridge-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
 .techbridge-card span { display: inline-flex; margin-bottom: 18px; color: var(--red); font-family: "Playfair Display", Georgia, serif; font-size: 1.9rem; font-weight: 800; }
 .techbridge-card h3 { margin-bottom: 10px; font-size: 1.18rem; }
 .techbridge-card p { color: var(--muted); }
-.techbridge-monetization { margin-top: 24px; padding: 34px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: start; border-radius: var(--radius); color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); box-shadow: var(--shadow); }
+.innovation-track-card { min-height: 285px; }
+.innovation-track-card:hover { border-color: rgba(201,54,53,.32); }
+.innovation-feature-panel { position: relative; z-index: 1; margin-top: 28px; padding: 38px; display: grid; grid-template-columns: .95fr 1.05fr; gap: 34px; align-items: center; border-radius: calc(var(--radius) + 8px); color: #fff; background: radial-gradient(circle at 12% 15%, rgba(229,185,87,.22), transparent 32%), linear-gradient(135deg, var(--green-950), #240507 70%, var(--red-dark)); box-shadow: 0 30px 90px rgba(8,55,43,.2); }
+.innovation-feature-panel h3 { color: #fff; font-size: clamp(1.9rem, 4vw, 3rem); }
+.innovation-feature-panel p { color: rgba(255,255,255,.82); }
+.innovation-stack-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.innovation-stack-list article { padding: 18px; border: 1px solid rgba(255,255,255,.14); border-radius: 18px; background: rgba(255,255,255,.08); backdrop-filter: blur(10px); }
+.innovation-stack-list strong, .innovation-stack-list span { display: block; }
+.innovation-stack-list strong { color: #ffe0af; font-size: 1rem; }
+.innovation-stack-list span { margin-top: 6px; color: rgba(255,255,255,.78); font-size: .86rem; }
+.techbridge-monetization { position: relative; z-index: 1; margin-top: 24px; padding: 34px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: start; border-radius: var(--radius); color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); box-shadow: var(--shadow); }
 .techbridge-monetization h3 { color: #fff; font-size: clamp(1.7rem, 3vw, 2.5rem); }
 .techbridge-monetization p { color: rgba(255,255,255,.8); }
 .techbridge-monetization ul { margin: 0; padding-left: 22px; color: rgba(255,255,255,.86); font-weight: 800; }
@@ -301,7 +318,8 @@ h3 { line-height: 1.2; }
 .contact-next-steps strong { color: #fff; }
 .contact-next-steps span { color: #c8ddd5; font-size: .82rem; }
 .form-note { margin: 14px 0 0; color: #a9c9bd; font-size: .75rem; }
-.techbridge-donation-panel { margin-top: 46px; padding: 34px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 34px; align-items: start; border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); background: rgba(255,255,255,.06); box-shadow: 0 24px 70px rgba(0,0,0,.18); }
+.techbridge-donation-panel { position: relative; z-index: 1; margin-top: 34px; padding: 34px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 34px; align-items: start; border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); color: #fff; background: radial-gradient(circle at 14% 16%, rgba(229,185,87,.18), transparent 32%), linear-gradient(135deg, var(--green-950), #240507 72%, var(--red-dark)); box-shadow: 0 24px 70px rgba(0,0,0,.18); }
+.techbridge-donation-copy h2 { color: #fff; }
 .techbridge-donation-copy p:not(.eyebrow) { color: #c8ddd5; }
 .techbridge-donation-form { padding: 30px; border: 1px solid rgba(255,255,255,.18); border-radius: calc(var(--radius) - 4px); background: rgba(0,0,0,.12); }
 .techbridge-donation-form label { display: block; margin-bottom: 16px; color: #e8f4ef; font-size: .82rem; font-weight: 700; }
@@ -385,13 +403,13 @@ h3 { line-height: 1.2; }
   .primary-nav a { padding: 12px; font-size: 1.05rem; }
   .primary-nav .button { margin-top: 12px; }
   .hero-grid { min-height: auto; padding: 75px 0; }
-  .split-layout, .innovation-grid, .impact-header, .contact-grid, .project-feature-grid, .volunteer-record, .community-impact-grid, .path-finder-grid, .techbridge-hero, .techbridge-monetization, .techbridge-donation-panel { grid-template-columns: 1fr; gap: 38px; }
+  .split-layout, .innovation-grid, .impact-header, .contact-grid, .project-feature-grid, .volunteer-record, .community-impact-grid, .path-finder-grid, .techbridge-hero, .innovation-feature-panel, .techbridge-monetization, .techbridge-donation-panel { grid-template-columns: 1fr; gap: 38px; }
   .community-impact-copy { grid-row: auto; padding-right: 0; }
   .partner-logo-grid { grid-template-columns: 1fr 1fr; }
   .project-feature-image { min-height: 440px; }
   .project-feature-image img { height: 440px; }
   .mission-vision-grid { grid-template-columns: 1fr; }
-  .techbridge-grid { grid-template-columns: 1fr 1fr; }
+  .techbridge-grid, .innovation-track-grid { grid-template-columns: 1fr 1fr; }
   .gallery-stage { min-height: 520px; }
   .gallery-main-link { height: 520px; }
   .gallery-thumbs { grid-template-columns: repeat(4, minmax(64px, 1fr)); }
@@ -434,8 +452,8 @@ h3 { line-height: 1.2; }
   .gallery-prev { left: 12px; }
   .gallery-next { right: 12px; }
   .gallery-thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px; }
-  .pillar-grid, .impact-steps, .footer-grid, .programme-list, .visual-programme-list, .partner-logo-grid, .techbridge-grid { grid-template-columns: 1fr; }
-  .techbridge-callout, .techbridge-card, .techbridge-monetization { padding: 24px 20px; }
+  .pillar-grid, .impact-steps, .footer-grid, .programme-list, .visual-programme-list, .partner-logo-grid, .techbridge-grid, .innovation-track-grid, .innovation-stack-list, .command-metrics { grid-template-columns: 1fr; }
+  .techbridge-callout, .techbridge-card, .innovation-feature-panel, .techbridge-monetization { padding: 24px 20px; }
   .footer-award { max-width: 190px; }
   .visual-programme-list img { height: 230px; }
   .project-feature-image { min-height: 330px; }
