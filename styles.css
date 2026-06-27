@@ -180,7 +180,7 @@ h3 { line-height: 1.2; }
 .visual-programme-list article:nth-child(1) img,
 .visual-programme-list article:nth-child(4) img,
 .visual-programme-list article:nth-child(7) img { object-fit: contain; padding: 22px; }
-.visual-programme-list img[src$="girls-agriculture-climate-smart.png"] { object-fit: cover; object-position: center; padding: 0; background: #fff; }
+.visual-programme-list article:first-child img[src$="girls-agriculture-climate-smart.png"] { height: 245px; object-fit: cover !important; object-position: center center; padding: 0 !important; background: #fff; }
 .visual-programme-list img[src$="partner-cpi.png"] { object-fit: contain; padding: 18px; background: #fff; }
 .visual-programme-list article > div { padding: 24px; display: flex; flex-direction: column; flex: 1; }
 .visual-programme-list h3 { font-size: 1.15rem; }
