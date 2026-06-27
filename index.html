@@ -476,7 +476,10 @@
               <label>First name<input name="firstName" autocomplete="given-name" required /></label>
               <label>Last name<input name="lastName" autocomplete="family-name" required /></label>
             </div>
-            <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
+            <div class="field-row">
+              <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
+              <label>Phone / WhatsApp <span class="optional-label">optional</span><input name="phone" autocomplete="tel" placeholder="Only if you want WHSF to call or message you" /></label>
+            </div>
             <label>
               I am interested in
               <select name="interest" required>
@@ -493,10 +496,17 @@
                 <option>General enquiry</option>
               </select>
             </label>
-            <label>Message<textarea name="message" rows="4" required></textarea></label>
+            <p class="form-guidance" id="contact-guidance">Choose an interest area and share a short message. WHSF will review your enquiry and respond by email.</p>
+            <label>Message<textarea name="message" rows="4" required placeholder="Tell us what you need and how WHSF can help."></textarea></label>
+            <div class="contact-next-steps" aria-label="What happens next">
+              <strong>What happens next?</strong>
+              <span>1. Your email app opens with the message prepared.</span>
+              <span>2. You review and send it to WHSF.</span>
+              <span>3. WHSF follows up through the right programme or support team.</span>
+            </div>
             <button class="button button-light" type="submit">Prepare message</button>
             <p class="form-note" id="form-status" role="status">
-              This form prepares an email in your device’s email application.
+              This form prepares an email in your device’s email application. No personal WhatsApp number is published on this website.
             </p>
           </form>
         </div>

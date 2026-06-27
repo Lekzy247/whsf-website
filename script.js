@@ -132,7 +132,10 @@ function setContactInterest(value) {
   const interestSelect = document.querySelector('#contact-form select[name="interest"]');
   if (!interestSelect || !value) return;
   const matchingOption = [...interestSelect.options].find((option) => option.textContent === value);
-  if (matchingOption) interestSelect.value = matchingOption.value || matchingOption.textContent;
+  if (matchingOption) {
+    interestSelect.value = matchingOption.value || matchingOption.textContent;
+    updateContactGuidance(interestSelect.value);
+  }
 }
 
 function updatePathResult(path) {
@@ -166,6 +169,64 @@ pathOptions.forEach((button) => {
 
 const form = document.querySelector('#contact-form');
 const formStatus = document.querySelector('#form-status');
+const interestSelect = document.querySelector('#contact-form select[name="interest"]');
+const messageField = document.querySelector('#contact-form textarea[name="message"]');
+const contactGuidance = document.querySelector('#contact-guidance');
+
+const contactGuidanceContent = {
+  Partnership: {
+    guidance: 'Tell WHSF what kind of partnership, sponsorship or collaboration you want to explore.',
+    placeholder: 'Share your organisation name, partnership idea, country or programme area, and the best way for WHSF to follow up.'
+  },
+  Volunteering: {
+    guidance: 'Tell WHSF the skills, time and location you can offer as a volunteer.',
+    placeholder: 'Share your skills, availability, country/city, and the WHSF programme area you want to support.'
+  },
+  Mentorship: {
+    guidance: 'Tell WHSF how you can mentor girls, students or young women in technology, leadership or enterprise.',
+    placeholder: 'Share your professional background, mentoring area, availability and preferred learner group.'
+  },
+  'School / Programme interest': {
+    guidance: 'Tell WHSF which school, community or programme group needs support.',
+    placeholder: 'Share the school/community name, location, number of learners, programme interest and any urgent needs.'
+  },
+  'Certificate help': {
+    guidance: 'Tell WHSF the certificate number and the issue you want checked.',
+    placeholder: 'Share the certificate number, learner name, course title and what needs correction or verification.'
+  },
+  'Donation / Sponsorship': {
+    guidance: 'Tell WHSF the type of support you want to provide.',
+    placeholder: 'Share whether you want to donate, sponsor learners, fund equipment, support events or discuss a grant.'
+  },
+  'e-Classroom support': {
+    guidance: 'Tell WHSF what e-Classroom access, course, assignment or certificate issue you need help with.',
+    placeholder: 'Share your student email, course name and what happened, such as login, lesson, assignment or certificate issue.'
+  },
+  'Supporting WHSF': {
+    guidance: 'Tell WHSF how you would like to support the mission.',
+    placeholder: 'Share whether you want to support programmes, events, outreach, equipment, scholarships or general operations.'
+  },
+  'WHSF SmartStay': {
+    guidance: 'Tell WHSF about your tourism, hospitality, sustainability or accessibility technology interest.',
+    placeholder: 'Share your organisation, location, sustainability or accessibility goal, and what support you need.'
+  },
+  'General enquiry': {
+    guidance: 'Tell WHSF what you need and the right team will review it.',
+    placeholder: 'Share your question, location and the best way for WHSF to respond.'
+  }
+};
+
+function updateContactGuidance(value) {
+  const content = contactGuidanceContent[value] || {
+    guidance: 'Choose an interest area and share a short message. WHSF will review your enquiry and respond by email.',
+    placeholder: 'Tell us what you need and how WHSF can help.'
+  };
+  if (contactGuidance) contactGuidance.textContent = content.guidance;
+  if (messageField) messageField.placeholder = content.placeholder;
+}
+
+interestSelect?.addEventListener('change', () => updateContactGuidance(interestSelect.value));
+updateContactGuidance(interestSelect?.value);
 
 form?.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -173,12 +234,13 @@ form?.addEventListener('submit', (event) => {
 
   const data = new FormData(form);
   const name = `${data.get('firstName')} ${data.get('lastName')}`.trim();
+  const phone = String(data.get('phone') || '').trim();
   const subject = encodeURIComponent(`WHSF enquiry: ${data.get('interest')}`);
   const body = encodeURIComponent(
-    `Name: ${name}\nEmail: ${data.get('email')}\nInterest: ${data.get('interest')}\n\n${data.get('message')}`
+    `Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${data.get('interest')}\n\nMessage:\n${data.get('message')}`
   );
 
-  if (formStatus) formStatus.textContent = 'Opening your email application…';
+  if (formStatus) formStatus.textContent = 'Opening your email application. Please review and send the prepared message to WHSF.';
   window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
 });
 

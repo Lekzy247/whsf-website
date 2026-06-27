@@ -259,9 +259,15 @@ h3 { line-height: 1.2; }
 .contact-form { padding: 36px; border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); background: rgba(255,255,255,.07); }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .contact-form label { display: block; margin-bottom: 16px; color: #e8f4ef; font-size: .82rem; font-weight: 700; }
+.optional-label { color: #a9c9bd; font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .contact-form input, .contact-form select, .contact-form textarea { width: 100%; margin-top: 7px; padding: 13px 14px; border: 1px solid rgba(255,255,255,.25); border-radius: 10px; color: #fff; background: rgba(0,0,0,.14); }
+.contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,.62); }
 .contact-form option { color: #111; }
 .contact-form textarea { resize: vertical; }
+.form-guidance { margin: 8px 0 16px; padding: 14px 16px; border: 1px solid rgba(229,185,87,.35); border-radius: 14px; color: #f3dfac; background: rgba(229,185,87,.08); font-size: .84rem; font-weight: 800; }
+.contact-next-steps { margin: 12px 0 22px; padding: 18px; display: grid; gap: 8px; border-radius: 16px; background: rgba(255,255,255,.08); }
+.contact-next-steps strong { color: #fff; }
+.contact-next-steps span { color: #c8ddd5; font-size: .82rem; }
 .form-note { margin: 14px 0 0; color: #a9c9bd; font-size: .75rem; }
 .fraud-alert { margin-top: 55px; padding: 20px 24px; display: grid; grid-template-columns: 150px 1fr; gap: 20px; border: 1px solid rgba(229,185,87,.45); border-radius: 14px; background: rgba(229,185,87,.08); }
 .fraud-alert strong { color: var(--gold); }
