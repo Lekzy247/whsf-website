@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Contact World Humanitarian Support Foundation for partnerships, volunteering, e-Classroom support and programme enquiries." />
+    <meta name="theme-color" content="#0c5b46" />
+    <title>Contact & Support | WHSF</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Advancing dignity, inclusion and sustainable development</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+        </button>
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a>
+          <a href="index.html#find-your-path">Find Your Path</a>
+          <a href="programs.html">Programs</a>
+          <a href="innovation.html">Innovation</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="impact-dashboard.html">Impact</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="contact-section" id="contact">
+        <div class="shell contact-grid">
+          <div class="contact-copy reveal">
+            <p class="eyebrow eyebrow-light">Connect with WHSF</p>
+            <h1>Let’s turn shared values into meaningful action.</h1>
+            <p>Contact WHSF for partnership, volunteering, e-Classroom support, certificate help, programme enquiries, safeguarding concerns or responsible innovation.</p>
+            <div class="address-list">
+              <address><strong>Head Office</strong>11535 Western Ave<br />Torrance, CA 90501<br />United States</address>
+              <address><strong>Africa Head Office</strong>No. 5 Akinyemi Avenue<br />Mobil Ring Road, Ibadan<br />Nigeria</address>
+              <a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a>
+            </div>
+          </div>
+          <form class="contact-form reveal delay-one" id="contact-form">
+            <div class="field-row">
+              <label>First name<input name="firstName" autocomplete="given-name" required /></label>
+              <label>Last name<input name="lastName" autocomplete="family-name" required /></label>
+            </div>
+            <div class="field-row">
+              <label>Email address<input type="email" name="email" autocomplete="email" required /></label>
+              <label>Phone / WhatsApp <span class="optional-label">optional</span><input name="phone" autocomplete="tel" placeholder="Only if you want WHSF to call or message you" /></label>
+            </div>
+            <label>
+              I am interested in
+              <select name="interest" required>
+                <option value="">Select one</option>
+                <option>Partnership</option>
+                <option>Volunteering</option>
+                <option>Mentorship</option>
+                <option>School / Programme interest</option>
+                <option>Certificate help</option>
+                <option>Donation / Sponsorship</option>
+                <option>e-Classroom support</option>
+                <option>TechBridge / Device Donation</option>
+                <option>Supporting WHSF</option>
+                <option>WHSF SmartStay</option>
+                <option>General enquiry</option>
+              </select>
+            </label>
+            <p class="form-guidance" id="contact-guidance">Choose an interest area and share a short message. WHSF will review your enquiry and respond by email.</p>
+            <label>Message<textarea name="message" rows="4" required placeholder="Tell us what you need and how WHSF can help."></textarea></label>
+            <div class="contact-next-steps" aria-label="What happens next">
+              <strong>What happens next?</strong>
+              <span>1. Your email app opens with the message prepared.</span>
+              <span>2. You review and send it to WHSF.</span>
+              <span>3. WHSF follows up through the right programme or support team.</span>
+            </div>
+            <button class="button button-light" type="submit">Prepare message</button>
+            <p class="form-note" id="form-status" role="status">This form prepares an email in your device’s email application. No personal WhatsApp number is published on this website.</p>
+          </form>
+        </div>
+
+        <div class="shell fraud-alert" role="note">
+          <strong>Fraud awareness</strong>
+          <p>Scammers have misused the WHSF name, logo and images to create fraudulent Facebook pages and WhatsApp groups. WHSF is not offering financial promotions. Please report suspicious activity to your local authorities.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand"><img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" /><div><strong>World Humanitarian<br />Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p></div></div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="index.html#about">About Us</a><a href="index.html#gallery">Gallery</a><a href="programs.html">Programs</a><a href="e-classroom.html">e-Classroom</a><a href="impact-dashboard.html">Impact</a><a href="index.html#partners">Partners</a></div>
+          <div><strong>Connect</strong><a href="index.html#more">Get involved</a><a href="contact.html">Contact &amp; Support</a><a href="innovation.html">Innovation</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+        <div class="footer-award" aria-label="WHSF recognition"><img src="assets/home/london-data-center-award-2025.png" alt="2025 London Data Center World Award Winner" /><span>2025 London Data Center World Award Winner</span></div>
+      </div>
+      <div class="shell social-links" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a></div>
+      <div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </body>
+</html>
