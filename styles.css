@@ -474,6 +474,32 @@ h3 { line-height: 1.2; }
 .dashboard-actions-row .button { min-height: 40px; padding: 10px 14px; font-size: .78rem; }
 .certificate-dashboard-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .dashboard-empty { font-weight: 800; text-align: center; }
+.skills-passport-section { position: relative; overflow: hidden; background: radial-gradient(circle at 15% 10%, rgba(229,185,87,.24), transparent 30%), linear-gradient(180deg, #fff 0%, #fff5f2 100%); }
+.skills-passport-section::before { content: ""; position: absolute; inset: 36px auto auto -120px; width: 260px; height: 260px; border-radius: 50%; background: rgba(201,54,53,.08); pointer-events: none; }
+.skills-passport-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 430px; gap: 44px; align-items: center; }
+.skills-passport-copy h2 { max-width: 820px; }
+.skills-passport-copy p { max-width: 760px; color: var(--muted); }
+.passport-flow { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px; }
+.passport-flow span { display: inline-flex; align-items: center; min-height: 42px; padding: 10px 14px; border: 1px solid rgba(201,54,53,.14); border-radius: 999px; color: var(--red); background: #fff; font-size: .78rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 10px 28px rgba(45,18,18,.06); }
+.skills-passport-card { position: relative; overflow: hidden; padding: 30px; border-radius: calc(var(--radius) + 12px); color: #fff; background: linear-gradient(145deg, #240507 0%, var(--red) 54%, #ef7b54 100%); box-shadow: 0 24px 70px rgba(45,18,18,.22); }
+.skills-passport-card::before { content: "WHSF"; position: absolute; right: -12px; bottom: -28px; color: rgba(255,255,255,.08); font-family: "Playfair Display", Georgia, serif; font-size: 7rem; font-weight: 900; line-height: 1; }
+.passport-card-top { position: relative; display: flex; gap: 18px; align-items: center; }
+.passport-card-top img { flex: 0 0 auto; width: 76px; height: 76px; border: 4px solid rgba(255,255,255,.82); border-radius: 50%; object-fit: cover; background: #fff; }
+.passport-card-top span { display: block; margin-bottom: 6px; color: #ffe0af; font-size: .72rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+.passport-card-top strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 2rem; line-height: 1; }
+.passport-card-top small { display: inline-flex; margin-top: 8px; color: rgba(255,255,255,.8); font-weight: 800; }
+.passport-card-stats { position: relative; margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.passport-card-stats article { padding: 16px 12px; border: 1px solid rgba(255,255,255,.18); border-radius: 18px; background: rgba(255,255,255,.12); backdrop-filter: blur(12px); }
+.passport-card-stats strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 1.8rem; line-height: 1; }
+.passport-card-stats span { display: block; margin-top: 8px; color: rgba(255,255,255,.78); font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.passport-card-note { position: relative; margin: 24px 0 0; color: rgba(255,255,255,.82); }
+.skill-badge-grid { position: relative; margin-top: 34px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.skill-badge { min-height: 150px; padding: 22px; display: grid; gap: 14px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
+.skill-badge:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.skill-badge > span { width: 46px; height: 46px; display: inline-grid; place-items: center; border-radius: 16px; background: #fff1ed; font-size: 1.35rem; }
+.skill-badge strong { display: block; color: var(--ink); font-size: 1rem; }
+.skill-badge small { display: block; margin-top: 6px; color: var(--muted); font-weight: 700; line-height: 1.45; }
+.skill-badge em { align-self: end; justify-self: start; padding: 7px 10px; border-radius: 999px; color: var(--green-900); background: #e8f4ef; font-size: .68rem; font-style: normal; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .classroom-courses { background: #fffaf8; }
 .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .course-card { min-height: 245px; padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
@@ -617,8 +643,9 @@ h3 { line-height: 1.2; }
 .impact-report-card p { color: rgba(255,255,255,.82); }
 .impact-report-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
 @media (max-width: 1020px) {
-  .classroom-hero-grid, .classroom-auth-grid, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card, .impact-dashboard-grid, .impact-insight-grid, .impact-report-card { grid-template-columns: 1fr; }
+  .classroom-hero-grid, .classroom-auth-grid, .skills-passport-grid, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card, .impact-dashboard-grid, .impact-insight-grid, .impact-report-card { grid-template-columns: 1fr; }
   .course-grid { grid-template-columns: 1fr 1fr; }
+  .skill-badge-grid { grid-template-columns: repeat(2, 1fr); }
   .admin-summary { grid-template-columns: repeat(2, 1fr); }
   .admin-form { grid-template-columns: 1fr 1fr; }
   .verify-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -643,6 +670,10 @@ h3 { line-height: 1.2; }
   .learner-dashboard-panel { padding: 20px 16px; }
   .dashboard-progress-wrap { grid-template-columns: 1fr; }
   .dashboard-actions-row .button { width: 100%; justify-content: center; }
+  .skills-passport-card { padding: 24px 20px; }
+  .passport-card-top { align-items: flex-start; }
+  .passport-card-stats, .skill-badge-grid { grid-template-columns: 1fr; }
+  .passport-flow span { width: 100%; justify-content: center; text-align: center; }
   .course-grid { grid-template-columns: 1fr; }
   .admin-hero-grid { min-height: auto; padding: 68px 0; }
   .admin-summary, .admin-form { grid-template-columns: 1fr; }
