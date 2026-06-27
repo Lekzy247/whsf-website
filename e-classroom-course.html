@@ -164,6 +164,7 @@
       const params = new URLSearchParams(window.location.search);
       const courseSlug = params.get('course') || 'robotics-automation';
       const statusEl = document.querySelector('#course-status');
+      const courseLoginForm = document.querySelector('#course-login-form');
       const signoutButton = document.querySelector('#course-signout-button');
       const enrollButton = document.querySelector('#enroll-button');
       const progressCard = document.querySelector('#learner-progress-card');
@@ -182,6 +183,10 @@
       let completedLessonIds = new Set();
 
       const setStatus = (message) => { statusEl.textContent = message; };
+      const setCourseSignedIn = (isSignedIn) => {
+        courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
+        if (signoutButton) signoutButton.hidden = !isSignedIn;
+      };
       const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
       const cleanFileName = (value = '') => String(value).replace(/[^a-z0-9-]+/gi, '-').replace(/(^-|-$)/g, '').toLowerCase();
       const verifyCertificateUrl = (certificateNumber) => `https://www.worldhsfoundation.org/verify-certificate?number=${encodeURIComponent(certificateNumber)}`;
@@ -525,7 +530,7 @@
           return;
         }
 
-        completedLessonIds = new Set((data || []).filter((row) => row.is_completed).map((row) => row.lesson_id));
+        completedLessonIds = new Set((data || []).filter((row) => row.is_completed).map((row) => String(row.lesson_id)));
         updateProgressUi();
         renderLessons();
         await loadCertificates();
@@ -553,8 +558,13 @@
           return;
         }
 
-        lessonsList.innerHTML = lessons.map((lesson) => {
-          const complete = completedLessonIds.has(lesson.id);
+        lessonsList.innerHTML = lessons.map((lesson, index) => {
+          const lessonKey = String(lesson.id);
+          const complete = completedLessonIds.has(lessonKey);
+          const previousLesson = lessons[index - 1];
+          const locked = Boolean(enrollment && !complete && previousLesson && !completedLessonIds.has(String(previousLesson.id)));
+          const buttonDisabled = !enrollment || complete || locked;
+          const buttonLabel = complete ? 'Completed' : locked ? 'Complete previous lesson first' : 'Mark complete';
           return `
             <article class="learner-item">
               <div>
@@ -563,9 +573,10 @@
                 <p>${escapeHtml(lesson.content || 'Your teacher will add lesson notes or video resources here.')}</p>
                 ${lesson.video_url ? `<a class="arrow-link" href="${escapeHtml(lesson.video_url)}" target="_blank" rel="noreferrer">Open video →</a>` : ''}
                 ${lesson.resource_url ? `<a class="arrow-link" href="${escapeHtml(lesson.resource_url)}" target="_blank" rel="noreferrer">Download resource →</a>` : ''}
+                ${locked ? '<small class="lesson-lock-note">This lesson unlocks after the previous lesson is completed.</small>' : ''}
               </div>
-              <button class="button ${complete ? 'button-light auth-secondary' : ''}" type="button" data-complete-lesson="${lesson.id}" ${!enrollment ? 'disabled' : ''}>
-                ${complete ? 'Completed' : 'Mark complete'}
+              <button class="button ${complete || locked ? 'button-light auth-secondary' : ''}" type="button" data-complete-lesson="${lesson.id}" ${buttonDisabled ? 'disabled' : ''}>
+                ${buttonLabel}
               </button>
             </article>
           `;
@@ -575,6 +586,23 @@
       async function completeLesson(lessonId) {
         if (!enrollment) {
           setStatus('Enroll first before marking lessons complete.');
+          return;
+        }
+
+        const lessonIndex = lessons.findIndex((lesson) => String(lesson.id) === String(lessonId));
+        if (lessonIndex === -1) {
+          setStatus('Lesson not found. Please refresh the page and try again.');
+          return;
+        }
+
+        if (completedLessonIds.has(String(lessonId))) {
+          setStatus('This lesson is already complete.');
+          return;
+        }
+
+        const previousLesson = lessons[lessonIndex - 1];
+        if (previousLesson && !completedLessonIds.has(String(previousLesson.id))) {
+          setStatus('Please complete the previous lesson before marking this lesson complete.');
           return;
         }
 
@@ -753,7 +781,7 @@
         }
         session = data.session;
         profile = await ensureProfile(data.user);
-        signoutButton.hidden = false;
+        setCourseSignedIn(true);
         setStatus(`Signed in as ${data.user.email}.`);
         await loadEnrollment();
         await loadAssignments();
@@ -767,7 +795,7 @@
         completedLessonIds = new Set();
         progressCard.hidden = true;
         enrollButton.hidden = true;
-        signoutButton.hidden = true;
+        setCourseSignedIn(false);
         setStatus('Signed out successfully.');
         renderLessons();
       });
@@ -794,9 +822,11 @@
       whsfSupabase.auth.getSession().then(async ({ data }) => {
         session = data.session;
         if (session?.user) {
-          signoutButton.hidden = false;
+          setCourseSignedIn(true);
           profile = await ensureProfile(session.user);
           setStatus(`Signed in as ${session.user.email}.`);
+        } else {
+          setCourseSignedIn(false);
         }
         await loadCourse();
         if (profile) await loadEnrollment();

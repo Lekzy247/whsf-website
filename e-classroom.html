@@ -503,6 +503,7 @@
 
       async function showSignedInState(session) {
         if (!session?.user) {
+          studentForm?.classList.remove('is-signed-in');
           learnerDashboard.hidden = true;
           studentSignoutButton.hidden = true;
           studentSignupButton.hidden = false;
@@ -510,6 +511,7 @@
           return;
         }
 
+        studentForm?.classList.add('is-signed-in');
         studentSignoutButton.hidden = false;
         studentSignupButton.hidden = true;
         learnerDashboard.hidden = false;
@@ -599,6 +601,7 @@
 
       studentSignoutButton?.addEventListener('click', async () => {
         await whsfSupabase.auth.signOut();
+        studentForm?.classList.remove('is-signed-in');
         learnerDashboard.hidden = true;
         studentSignoutButton.hidden = true;
         studentSignupButton.hidden = false;
