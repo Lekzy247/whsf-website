@@ -794,6 +794,9 @@ h3 { line-height: 1.2; }
 .mobile-login-header span, .mobile-login-header strong { display: block; }
 .mobile-login-header span { color: var(--red); font-size: .76rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .mobile-login-header strong { color: var(--ink); font-family: "Playfair Display", Georgia, serif; font-size: 1.35rem; line-height: 1.1; }
+.auth-mode-toggle { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 18px; padding: 6px; border-radius: 999px; background: #fff7f4; border: 1px solid rgba(201,54,53,.12); }
+.auth-mode-toggle button { border: 0; border-radius: 999px; padding: 10px 12px; background: transparent; color: var(--muted); font-weight: 900; cursor: pointer; }
+.auth-mode-toggle button.active { background: var(--red); color: #fff; box-shadow: 0 10px 24px rgba(143,31,36,.16); }
 .mobile-login-form { display: grid; gap: 11px; }
 .mobile-login-form label, .collaboration-board label { color: var(--ink); font-weight: 900; }
 .mobile-login-form input, .mobile-login-form select, .collaboration-board textarea { width: 100%; border: 1px solid rgba(95,20,24,.18); border-radius: 14px; padding: 13px 14px; background: #fff; color: var(--ink); font: inherit; }

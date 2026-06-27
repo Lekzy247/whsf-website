@@ -165,9 +165,13 @@
                   <strong>Secure member login</strong>
                 </div>
               </div>
+              <div class="auth-mode-toggle" role="tablist" aria-label="Account access mode">
+                <button type="button" class="active" data-auth-mode="create">Create account</button>
+                <button type="button" data-auth-mode="signin">Sign in</button>
+              </div>
               <form id="mobile-app-login-form" class="mobile-login-form">
                 <label for="mobile-user-name">Full name</label>
-                <input id="mobile-user-name" name="name" type="text" autocomplete="name" placeholder="Enter your full name" required />
+                <input id="mobile-user-name" name="name" type="text" autocomplete="name" placeholder="Enter your full name" required data-create-required />
 
                 <label for="mobile-user-email">Email address</label>
                 <input id="mobile-user-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
@@ -175,8 +179,13 @@
                 <label for="mobile-user-password">Password</label>
                 <input id="mobile-user-password" name="password" type="password" autocomplete="current-password" minlength="8" placeholder="Enter your password" required />
 
+                <div data-confirm-password-wrap>
+                  <label for="mobile-user-password-confirm">Confirm password</label>
+                  <input id="mobile-user-password-confirm" name="passwordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm your password" required data-create-required />
+                </div>
+
                 <label for="mobile-user-role">User role</label>
-                <select id="mobile-user-role" name="role" required>
+                <select id="mobile-user-role" name="role" required data-create-required>
                   <option value="">Choose your role</option>
                   <option value="volunteer">Volunteer</option>
                   <option value="partner">Partner</option>
@@ -185,9 +194,9 @@
                   <option value="donor">Donor</option>
                 </select>
 
-                <p class="form-hint">Email and password are required for this secure app preview. Full database authentication can be connected for live WHSF accounts.</p>
+                <p class="form-hint">Create an account before using the WHSF app portal. Full database authentication can be connected for live WHSF accounts.</p>
 
-                <button class="button" type="submit">Enter WHSF App</button>
+                <button class="button" type="submit" data-auth-submit>Create Account</button>
                 <p id="mobile-login-status" class="form-status" role="status" aria-live="polite"></p>
               </form>
             </aside>

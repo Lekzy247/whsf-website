@@ -384,6 +384,10 @@ const mobileDashboard = document.querySelector('[data-mobile-dashboard]');
 const mobileWelcome = document.querySelector('[data-mobile-welcome]');
 const mobileRoleSummary = document.querySelector('[data-mobile-role-summary]');
 const mobileSignout = document.querySelector('[data-mobile-signout]');
+const authModeButtons = document.querySelectorAll('[data-auth-mode]');
+const authSubmitButton = document.querySelector('[data-auth-submit]');
+const confirmPasswordWrap = document.querySelector('[data-confirm-password-wrap]');
+const createRequiredFields = document.querySelectorAll('[data-create-required]');
 const mobileTabs = document.querySelectorAll('[data-mobile-tab]');
 const mobilePanels = document.querySelectorAll('[data-mobile-panel]');
 const volunteerTasks = document.querySelectorAll('[data-volunteer-tasks] input[type="checkbox"]');
@@ -403,9 +407,11 @@ const adminAnnouncementForm = document.querySelector('[data-admin-announcement-f
 const requestNotifications = document.querySelector('[data-request-notifications]');
 const notificationStatus = document.querySelector('[data-notification-status]');
 const mobileSessionKey = 'whsf_mobile_app_session';
+const mobileAccountsKey = 'whsf_mobile_app_accounts';
 const mobileNoteKey = 'whsf_mobile_app_collaboration_note';
 const mobileChatKey = 'whsf_mobile_app_chat_rooms';
 let activeChatRoom = 'volunteers';
+let mobileAuthMode = 'create';
 
 const mobileRoleContent = {
   volunteer: {
@@ -625,6 +631,54 @@ function setMobileLoginStatus(message) {
   if (mobileLoginStatus) mobileLoginStatus.textContent = message || '';
 }
 
+function setMobileAuthMode(mode) {
+  mobileAuthMode = mode === 'signin' ? 'signin' : 'create';
+  const isCreateMode = mobileAuthMode === 'create';
+
+  authModeButtons.forEach((button) => {
+    const isActive = button.dataset.authMode === mobileAuthMode;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-selected', String(isActive));
+  });
+
+  if (authSubmitButton) authSubmitButton.textContent = isCreateMode ? 'Create Account' : 'Sign In';
+  if (confirmPasswordWrap) confirmPasswordWrap.hidden = !isCreateMode;
+  createRequiredFields.forEach((field) => {
+    if (field instanceof HTMLInputElement || field instanceof HTMLSelectElement) {
+      field.required = isCreateMode;
+    }
+  });
+  setMobileLoginStatus(isCreateMode ? 'Create your WHSF account to continue.' : 'Sign in with your existing WHSF account.');
+}
+
+async function hashMobilePassword(email, password) {
+  const value = `${email.toLowerCase()}::${password}`;
+  if (window.crypto?.subtle) {
+    const encoded = new TextEncoder().encode(value);
+    const digest = await window.crypto.subtle.digest('SHA-256', encoded);
+    return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
+  }
+  return btoa(unescape(encodeURIComponent(value)));
+}
+
+function loadMobileAccounts() {
+  try {
+    return JSON.parse(localStorage.getItem(mobileAccountsKey) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveMobileAccounts(accounts) {
+  try {
+    localStorage.setItem(mobileAccountsKey, JSON.stringify(accounts));
+    return true;
+  } catch {
+    setMobileLoginStatus('Account could not be saved because browser storage is unavailable.');
+    return false;
+  }
+}
+
 function activateMobileTab(tabName) {
   mobileTabs.forEach((tab) => {
     const isActive = tab.dataset.mobileTab === tabName;
@@ -674,14 +728,15 @@ function saveMobileSession(session) {
   }
 }
 
-mobileLoginForm?.addEventListener('submit', (event) => {
+mobileLoginForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!mobileLoginForm.reportValidity()) return;
 
   const data = new FormData(mobileLoginForm);
   const name = String(data.get('name') || '').trim();
-  const email = String(data.get('email') || '').trim();
+  const email = String(data.get('email') || '').trim().toLowerCase();
   const password = String(data.get('password') || '');
+  const passwordConfirm = String(data.get('passwordConfirm') || '');
   const role = String(data.get('role') || '').trim();
 
   if (!email || !password || password.length < 8) {
@@ -689,16 +744,57 @@ mobileLoginForm?.addEventListener('submit', (event) => {
     return;
   }
 
+  const accounts = loadMobileAccounts();
+  const passwordHash = await hashMobilePassword(email, password);
+
+  if (mobileAuthMode === 'create') {
+    if (!name || !role) {
+      setMobileLoginStatus('Please enter your full name and select your role to create an account.');
+      return;
+    }
+    if (password !== passwordConfirm) {
+      setMobileLoginStatus('Passwords do not match. Please confirm your password.');
+      return;
+    }
+    if (accounts[email]) {
+      setMobileLoginStatus('An account already exists for this email. Please sign in.');
+      setMobileAuthMode('signin');
+      return;
+    }
+    accounts[email] = {
+      name,
+      email,
+      role,
+      passwordHash,
+      createdAt: new Date().toISOString()
+    };
+    if (!saveMobileAccounts(accounts)) return;
+    setMobileLoginStatus('Account created successfully. Opening your dashboard...');
+  } else {
+    const account = accounts[email];
+    if (!account || account.passwordHash !== passwordHash) {
+      setMobileLoginStatus('Account not found or password is incorrect. Please create an account first if you are new.');
+      return;
+    }
+  }
+
+  const account = accounts[email];
   const session = {
-    name,
+    name: account?.name || name || email,
     email,
-    role: role || 'member',
+    role: account?.role || role || 'member',
     signedInAt: new Date().toISOString()
   };
 
   renderMobileSession(session);
   saveMobileSession(session);
 });
+
+authModeButtons.forEach((button) => {
+  button.addEventListener('click', () => setMobileAuthMode(button.dataset.authMode));
+});
+
+setMobileAuthMode('create');
 
 mobileSignout?.addEventListener('click', () => {
   try {
