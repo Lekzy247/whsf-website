@@ -649,7 +649,7 @@ h3 { line-height: 1.2; }
 .impact-dashboard-card span { display: inline-flex; margin-bottom: 16px; color: #ffe0af; font-size: .76rem; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
 .impact-dashboard-card strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: clamp(2.6rem, 5vw, 4.5rem); line-height: .95; }
 .impact-dashboard-card p { margin-top: 18px; color: rgba(255,255,255,.82); }
-.impact-metric-section, .impact-country-section { background: #fffaf8; }
+.impact-metric-section { background: #fffaf8; }
 .impact-metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .impact-metric-card { min-height: 260px; padding: 30px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
 .impact-metric-card span { display: block; color: var(--red); font-family: "Playfair Display", Georgia, serif; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1; }
@@ -665,11 +665,6 @@ h3 { line-height: 1.2; }
 .impact-bar strong::after { content: attr(style); display: none; }
 .impact-bar strong { text-shadow: 0 1px 1px rgba(0,0,0,.25); }
 .impact-bar strong { background-image: linear-gradient(90deg, var(--red) var(--value), #f1e6df var(--value)); }
-.impact-country-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.impact-country-grid article { padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
-.impact-country-grid span { display: inline-flex; margin-bottom: 18px; color: var(--red); font-size: .72rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-.impact-country-grid h3 { margin-bottom: 12px; font-size: 1.12rem; }
-.impact-country-grid p { color: var(--muted); }
 .impact-sdg-section { color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); }
 .impact-sdg-section .section-heading h2, .impact-sdg-section .section-heading p { color: #fff; }
 .sdg-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
@@ -692,7 +687,7 @@ h3 { line-height: 1.2; }
   .learner-dashboard-grid, .certificate-dashboard-list { grid-template-columns: 1fr; }
   .help-hero-grid, .virtual-number-panel, .help-request-grid { grid-template-columns: 1fr; }
   .support-line-grid, .help-faq-grid { grid-template-columns: repeat(2, 1fr); }
-  .impact-metric-grid, .impact-country-grid, .sdg-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-metric-grid, .sdg-grid { grid-template-columns: repeat(2, 1fr); }
   .impact-report-actions { justify-content: flex-start; }
 }
 
@@ -732,7 +727,7 @@ h3 { line-height: 1.2; }
   .support-line-grid, .help-faq-grid { grid-template-columns: 1fr; }
   .impact-dashboard-grid { min-height: auto; padding: 68px 0; }
   .impact-dashboard-card, .impact-metric-card, .impact-chart-panel, .impact-report-card { padding: 24px 20px; }
-  .impact-metric-grid, .impact-country-grid, .sdg-grid { grid-template-columns: 1fr; }
+  .impact-metric-grid, .sdg-grid { grid-template-columns: 1fr; }
   .impact-bar { grid-template-columns: 1fr; gap: 8px; }
   .impact-report-actions .button { width: 100%; justify-content: center; }
 }
