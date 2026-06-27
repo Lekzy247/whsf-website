@@ -167,6 +167,75 @@ pathOptions.forEach((button) => {
   button.addEventListener('click', () => updatePathResult(button.dataset.path));
 });
 
+const gallerySlider = document.querySelector('[data-gallery-slider]');
+const galleryMainImage = document.querySelector('#gallery-main-image');
+const galleryMainLink = document.querySelector('.gallery-main-link');
+const galleryCounter = document.querySelector('#gallery-counter');
+const galleryTitle = document.querySelector('#gallery-title');
+const galleryDescription = document.querySelector('#gallery-description');
+const galleryThumbs = [...document.querySelectorAll('.gallery-thumb')];
+const galleryPrev = document.querySelector('.gallery-prev');
+const galleryNext = document.querySelector('.gallery-next');
+let galleryIndex = 0;
+let galleryTimer;
+
+function showGallerySlide(index) {
+  if (!galleryThumbs.length || !galleryMainImage) return;
+  galleryIndex = (index + galleryThumbs.length) % galleryThumbs.length;
+  const selected = galleryThumbs[galleryIndex];
+  const { src, title, description, alt } = selected.dataset;
+
+  galleryThumbs.forEach((thumb, thumbIndex) => {
+    thumb.classList.toggle('active', thumbIndex === galleryIndex);
+    thumb.setAttribute('aria-pressed', String(thumbIndex === galleryIndex));
+  });
+
+  galleryMainImage.style.opacity = '0';
+  window.setTimeout(() => {
+    galleryMainImage.src = src;
+    galleryMainImage.alt = alt || title || 'WHSF gallery image';
+    if (galleryMainLink) galleryMainLink.href = src;
+    if (galleryCounter) galleryCounter.textContent = `${galleryIndex + 1} / ${galleryThumbs.length}`;
+    if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
+    if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
+    galleryMainImage.style.opacity = '1';
+  }, 120);
+}
+
+function startGalleryAutoplay() {
+  if (!galleryThumbs.length) return;
+  window.clearInterval(galleryTimer);
+  galleryTimer = window.setInterval(() => showGallerySlide(galleryIndex + 1), 6500);
+}
+
+galleryThumbs.forEach((thumb, index) => {
+  thumb.setAttribute('aria-pressed', String(index === 0));
+  thumb.addEventListener('click', () => {
+    showGallerySlide(index);
+    startGalleryAutoplay();
+  });
+});
+
+galleryPrev?.addEventListener('click', () => {
+  showGallerySlide(galleryIndex - 1);
+  startGalleryAutoplay();
+});
+
+galleryNext?.addEventListener('click', () => {
+  showGallerySlide(galleryIndex + 1);
+  startGalleryAutoplay();
+});
+
+gallerySlider?.addEventListener('mouseenter', () => window.clearInterval(galleryTimer));
+gallerySlider?.addEventListener('mouseleave', startGalleryAutoplay);
+document.addEventListener('keydown', (event) => {
+  if (!gallerySlider) return;
+  if (event.key === 'ArrowLeft') showGallerySlide(galleryIndex - 1);
+  if (event.key === 'ArrowRight') showGallerySlide(galleryIndex + 1);
+});
+showGallerySlide(0);
+startGalleryAutoplay();
+
 const form = document.querySelector('#contact-form');
 const formStatus = document.querySelector('#form-status');
 const interestSelect = document.querySelector('#contact-form select[name="interest"]');
