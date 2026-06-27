@@ -396,6 +396,7 @@ const impactFeed = document.querySelector('[data-impact-feed]');
 const communityChat = document.querySelector('[data-community-chat]');
 const communityChatForm = document.querySelector('[data-community-chat-form]');
 const chatRoomButtons = document.querySelectorAll('[data-chat-room]');
+const chatRoomShortcuts = document.querySelectorAll('[data-chat-room-shortcut]');
 const chatRoomTitle = document.querySelector('[data-chat-room-title]');
 const chatRoomDescription = document.querySelector('[data-chat-room-description]');
 const adminAnnouncementForm = document.querySelector('[data-admin-announcement-form]');
@@ -469,6 +470,56 @@ const chatRooms = {
     description: 'Follow WHSF announcements, events and member opportunities.',
     messages: [
       { sender: 'WHSF membership', text: 'Members can follow announcements, events, learning opportunities and community updates here.', time: '09:25' }
+    ]
+  },
+  technology: {
+    title: 'Technology advancement room',
+    description: 'Discuss AI, robotics, cybersecurity, drones, accessibility tools and data skills that can support WHSF programmes.',
+    messages: [
+      { sender: 'Innovation desk', text: 'Share technology ideas that can improve learning access, disability inclusion, rural outreach and digital skills training.', time: '09:30' },
+      { sender: 'Tech mentor', text: 'Suggested topics: AI learning assistants, drone mapping for rural access, robotics clubs, cybersecurity awareness and assistive technology.', time: '09:35' }
+    ]
+  },
+  impact: {
+    title: 'Community impact room',
+    description: 'Share field stories, measurable outcomes, beneficiary needs, donor updates and programme results.',
+    messages: [
+      { sender: 'Impact team', text: 'Use this room to collect stories, photos, milestones and evidence of how WHSF programmes are changing lives.', time: '09:40' }
+    ]
+  },
+  trends: {
+    title: 'Technology trends room',
+    description: 'Track emerging technologies, responsible innovation and skills that girls and young women should learn next.',
+    messages: [
+      { sender: 'Trend watch', text: 'Share useful technology trends such as AI safety, cloud skills, low-cost devices, accessibility tools, green technology and data literacy.', time: '09:45' }
+    ]
+  },
+  events: {
+    title: 'Global tech events room',
+    description: 'Share conferences, webinars, hackathons, STEM competitions, awards and training events around the world.',
+    messages: [
+      { sender: 'Events desk', text: 'Post upcoming tech events, competitions, webinars and innovation showcases that can benefit WHSF learners and partners.', time: '09:50' }
+    ]
+  },
+  exchange: {
+    title: 'Student exchange room',
+    description: 'Coordinate virtual exchange, mentorship, international classrooms, peer learning and global student exposure.',
+    messages: [
+      { sender: 'Exchange coordinator', text: 'Use this room for virtual classroom ideas, international mentor sessions, student presentations and cross-country learning links.', time: '09:55' }
+    ]
+  },
+  opportunities: {
+    title: 'Scholarships and career opportunities room',
+    description: 'Share scholarships, fellowships, internships, grants, entrepreneurship support and career pathways.',
+    messages: [
+      { sender: 'Opportunities desk', text: 'Share opportunities that can help girls and young women access training, jobs, mentorship, enterprise support and global networks.', time: '10:00' }
+    ]
+  },
+  safeguarding: {
+    title: 'Support and safeguarding room',
+    description: 'Raise support needs, accessibility concerns, wellbeing issues and safe participation questions.',
+    messages: [
+      { sender: 'WHSF support', text: 'Use this room for respectful support requests, accessibility needs and safeguarding-aware programme concerns.', time: '10:05' }
     ]
   }
 };
@@ -681,6 +732,10 @@ communityChatForm?.addEventListener('submit', (event) => {
 
 chatRoomButtons.forEach((button) => {
   button.addEventListener('click', () => renderChatRoom(button.dataset.chatRoom));
+});
+
+chatRoomShortcuts.forEach((button) => {
+  button.addEventListener('click', () => renderChatRoom(button.dataset.chatRoomShortcut));
 });
 
 adminAnnouncementForm?.addEventListener('submit', (event) => {

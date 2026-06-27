@@ -833,6 +833,12 @@ h3 { line-height: 1.2; }
 .chat-room-tabs button { border: 1px solid rgba(201,54,53,.16); border-radius: 999px; padding: 10px 13px; background: #fff; color: var(--ink); font-size: .86rem; font-weight: 900; cursor: pointer; transition: transform .2s ease, background .2s ease, color .2s ease; }
 .chat-room-tabs button:hover { transform: translateY(-2px); }
 .chat-room-tabs button.active { border-color: var(--red); background: var(--red); color: #fff; }
+.collaboration-topic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+.collaboration-topic-grid button { padding: 16px; border: 1px solid rgba(201,54,53,.12); border-radius: 18px; background: #fff; color: var(--ink); text-align: left; cursor: pointer; box-shadow: 0 8px 18px rgba(45,18,18,.04); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.collaboration-topic-grid button:hover { transform: translateY(-3px); border-color: rgba(201,54,53,.28); box-shadow: 0 16px 30px rgba(45,18,18,.09); }
+.collaboration-topic-grid strong, .collaboration-topic-grid span { display: block; }
+.collaboration-topic-grid strong { margin-bottom: 6px; color: var(--red-dark); font-size: .96rem; }
+.collaboration-topic-grid span { color: var(--muted); font-size: .82rem; font-weight: 750; line-height: 1.45; }
 .chat-room-meta { margin-bottom: 14px; padding: 16px; border: 1px solid rgba(201,54,53,.12); border-radius: 18px; background: #fff; }
 .chat-room-meta strong, .chat-room-meta span { display: block; }
 .chat-room-meta strong { margin-bottom: 4px; color: var(--red-dark); font-size: 1.05rem; }
@@ -895,7 +901,7 @@ h3 { line-height: 1.2; }
   .support-line-grid, .help-faq-grid { grid-template-columns: repeat(2, 1fr); }
   .mobile-login-card { position: static; }
   .portal-action-grid { grid-template-columns: 1fr; }
-  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .install-guide-grid, .notification-preferences, .video-room-grid, .production-integration-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .install-guide-grid, .collaboration-topic-grid, .notification-preferences, .video-room-grid, .production-integration-grid { grid-template-columns: repeat(2, 1fr); }
   .impact-report-actions { justify-content: flex-start; }
 }
 
@@ -935,7 +941,7 @@ h3 { line-height: 1.2; }
   .support-line-grid, .help-faq-grid { grid-template-columns: 1fr; }
   .impact-dashboard-grid { min-height: auto; padding: 68px 0; }
   .impact-dashboard-card, .impact-metric-card, .impact-chart-panel, .impact-report-card { padding: 24px 20px; }
-  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-feature-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .install-guide-grid, .pwa-pilot-grid, .notification-preferences, .video-room-grid, .production-integration-grid { grid-template-columns: 1fr; }
+  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-feature-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .install-guide-grid, .collaboration-topic-grid, .pwa-pilot-grid, .notification-preferences, .video-room-grid, .production-integration-grid { grid-template-columns: 1fr; }
   .global-feature-wide { grid-column: auto; }
   .phone-shell { min-height: 520px; }
   .mobile-dashboard-card, .mobile-login-card, .pwa-pilot-card, .production-checklist-card { padding: 24px 20px; }
