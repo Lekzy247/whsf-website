@@ -73,7 +73,7 @@ const pathContent = {
     primaryText: 'Open e-Classroom',
     primaryHref: 'e-classroom.html',
     secondaryText: 'Contact support',
-    secondaryHref: '#contact',
+    secondaryHref: 'contact.html',
     interest: 'e-Classroom support'
   },
   volunteer: {
@@ -81,9 +81,9 @@ const pathContent = {
     title: 'Share your time, skills and experience with WHSF.',
     copy: 'Support programme delivery, student mentoring, community outreach, digital skills sessions and events that expand opportunity for girls and young women.',
     primaryText: 'Register interest',
-    primaryHref: '#contact',
+    primaryHref: 'contact.html',
     secondaryText: 'See programmes',
-    secondaryHref: '#programs',
+    secondaryHref: 'programs.html',
     interest: 'Volunteering'
   },
   partner: {
@@ -91,7 +91,7 @@ const pathContent = {
     title: 'Build programmes, scholarships and impact with WHSF.',
     copy: 'Schools, companies, foundations and institutions can collaborate on training, sponsorship, equipment, mentorship, research and community innovation.',
     primaryText: 'Start partnership enquiry',
-    primaryHref: '#contact',
+    primaryHref: 'contact.html',
     secondaryText: 'View impact',
     secondaryHref: 'impact-dashboard.html',
     interest: 'Partnership'
@@ -103,7 +103,7 @@ const pathContent = {
     primaryText: 'Donate securely',
     primaryHref: 'https://paypal.com/us/fundraiser/charity/1450337',
     secondaryText: 'Contact WHSF',
-    secondaryHref: '#contact',
+    secondaryHref: 'contact.html',
     interest: 'Donation / Sponsorship'
   },
   certificate: {
@@ -113,7 +113,7 @@ const pathContent = {
     primaryText: 'Verify certificate',
     primaryHref: 'verify-certificate.html',
     secondaryText: 'Ask for certificate help',
-    secondaryHref: '#contact',
+    secondaryHref: 'contact.html',
     interest: 'Certificate help'
   },
   programme: {
@@ -121,9 +121,9 @@ const pathContent = {
     title: 'Find a WHSF programme that fits your goals.',
     copy: 'Explore ICT Girls Club, TechWomen, robotics, drone technology, cybersecurity, AI, STEM, agriculture and accessibility technology pathways.',
     primaryText: 'View programmes',
-    primaryHref: '#programs',
+    primaryHref: 'programs.html',
     secondaryText: 'Request programme info',
-    secondaryHref: '#contact',
+    secondaryHref: 'contact.html',
     interest: 'School / Programme interest'
   }
 };
@@ -364,3 +364,53 @@ techbridgeDonationForm?.addEventListener('submit', (event) => {
 
 const yearElement = document.querySelector('#year');
 if (yearElement) yearElement.textContent = new Date().getFullYear();
+
+const pwaInstallButtons = document.querySelectorAll('[data-install-pwa]');
+const pwaInstallStatus = document.querySelector('[data-pwa-install-status]');
+let deferredPwaPrompt;
+
+function updatePwaInstallStatus(message) {
+  if (pwaInstallStatus && message) pwaInstallStatus.textContent = message;
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then(() => updatePwaInstallStatus('WHSF App is ready for browser installation where supported.'))
+      .catch(() => updatePwaInstallStatus('WHSF App install support is preparing. Please try again after publishing.'));
+  });
+}
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredPwaPrompt = event;
+  pwaInstallButtons.forEach((button) => {
+    button.hidden = false;
+    button.disabled = false;
+  });
+  updatePwaInstallStatus('Tap Install WHSF App to add it to this device.');
+});
+
+pwaInstallButtons.forEach((button) => {
+  button.addEventListener('click', async () => {
+    if (!deferredPwaPrompt) {
+      updatePwaInstallStatus('If the install prompt does not appear, use your browser menu and choose Add to Home Screen or Install app.');
+      return;
+    }
+
+    deferredPwaPrompt.prompt();
+    const result = await deferredPwaPrompt.userChoice;
+    deferredPwaPrompt = null;
+    updatePwaInstallStatus(
+      result.outcome === 'accepted'
+        ? 'Thank you. WHSF App has been added to this device.'
+        : 'Install was not completed. You can try again from your browser install menu.'
+    );
+  });
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredPwaPrompt = null;
+  updatePwaInstallStatus('WHSF App installed successfully.');
+});

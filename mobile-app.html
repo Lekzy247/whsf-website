@@ -7,6 +7,11 @@
     <meta name="theme-color" content="#0c5b46" />
     <title>WHSF Mobile App | Donors, Volunteers & Members</title>
     <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="WHSF" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
@@ -56,6 +61,7 @@
             <h1 id="mobile-app-title">WHSF Mobile App</h1>
             <p class="hero-lead">Equip donors, volunteers and members with a branded mobile app so the WHSF community can stay connected, informed and active wherever they are.</p>
             <div class="hero-actions">
+              <button class="button button-light" type="button" data-install-pwa>Install WHSF App</button>
               <a class="button button-light" href="#mvp-features">View app features</a>
               <a class="button button-light" href="contact.html">Join the app pilot</a>
             </div>
@@ -148,7 +154,11 @@
                 <li>Works from the WHSF website domain</li>
                 <li>Best first step for MVP validation</li>
               </ul>
-              <a class="arrow-link" href="contact.html">Start PWA pilot <span>→</span></a>
+              <div class="pwa-install-actions">
+                <button class="button" type="button" data-install-pwa>Install WHSF App</button>
+                <a class="arrow-link" href="contact.html">Start PWA pilot <span>→</span></a>
+              </div>
+              <p class="pwa-install-note" data-pwa-install-status>On iPhone, open Safari, tap Share, then Add to Home Screen.</p>
             </article>
             <article class="app-store-option-card reveal">
               <span>Android</span>
