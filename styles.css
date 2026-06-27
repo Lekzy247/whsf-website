@@ -756,8 +756,31 @@ h3 { line-height: 1.2; }
 .global-roadmap-grid article { padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
 .global-roadmap-grid span { display: inline-flex; margin-bottom: 14px; color: var(--red); font-size: .72rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
 .global-roadmap-grid p { color: var(--muted); }
+.mobile-app-hero { position: relative; overflow: hidden; color: #fff; background: radial-gradient(circle at 18% 18%, rgba(229,185,87,.24), transparent 32%), linear-gradient(135deg, var(--green-950) 0%, #240507 56%, var(--red-dark) 100%); }
+.mobile-app-hero::after { content: ""; position: absolute; right: -150px; top: -160px; width: 430px; height: 430px; border: 80px solid rgba(255,255,255,.06); border-radius: 50%; }
+.mobile-app-hero-grid { position: relative; z-index: 1; min-height: 650px; padding: 92px 0; display: grid; grid-template-columns: minmax(0, 1fr) 430px; gap: 66px; align-items: center; }
+.mobile-app-hero h1 { color: #fff; }
+.mobile-phone-card { display: grid; place-items: center; }
+.phone-shell { position: relative; width: min(100%, 310px); min-height: 585px; padding: 54px 22px 28px; border: 10px solid rgba(255,255,255,.18); border-radius: 42px; background: linear-gradient(180deg, #fff, #fff7f3); box-shadow: 0 34px 90px rgba(0,0,0,.35); color: var(--ink); text-align: center; }
+.phone-top { position: absolute; top: 17px; left: 50%; width: 92px; height: 24px; border-radius: 999px; background: #1f1112; transform: translateX(-50%); }
+.phone-shell img { width: 86px; height: 86px; margin: 0 auto 18px; border-radius: 50%; object-fit: cover; box-shadow: 0 14px 34px rgba(95,20,24,.18); }
+.phone-shell strong { display: block; color: var(--red); font-family: "Playfair Display", Georgia, serif; font-size: 2rem; line-height: 1; }
+.phone-shell > span { display: block; margin-top: 8px; color: var(--muted); font-size: .75rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.phone-menu { margin-top: 28px; display: grid; gap: 12px; text-align: left; }
+.phone-menu p { margin: 0; padding: 16px; border: 1px solid rgba(201,54,53,.14); border-radius: 18px; background: #fff; box-shadow: 0 10px 24px rgba(45,18,18,.06); }
+.phone-menu b, .phone-menu small { display: block; }
+.phone-menu b { color: var(--ink); }
+.phone-menu small { margin-top: 5px; color: var(--muted); }
+.mobile-audience-grid, .mobile-feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.mobile-audience-grid article { min-height: 275px; padding: 32px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
+.mobile-audience-grid article:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.mobile-audience-grid span { display: inline-flex; margin-bottom: 22px; padding: 8px 12px; border-radius: 999px; color: #fff; background: var(--red); font-size: .72rem; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+.mobile-audience-grid h3 { margin-bottom: 12px; font-size: 1.35rem; }
+.mobile-audience-grid p { color: var(--muted); }
+.mobile-feature-grid .global-feature-card { min-height: 275px; }
+.mobile-architecture-section { background: linear-gradient(180deg, #fff 0%, #fff7f4 100%); }
 @media (max-width: 1020px) {
-  .classroom-hero-grid, .classroom-auth-grid, .cloud-lms-hero, .skills-passport-grid, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card, .impact-dashboard-grid, .impact-insight-grid, .impact-report-card, .techbridge-global-hero-grid { grid-template-columns: 1fr; }
+  .classroom-hero-grid, .classroom-auth-grid, .cloud-lms-hero, .skills-passport-grid, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card, .impact-dashboard-grid, .impact-insight-grid, .impact-report-card, .techbridge-global-hero-grid, .mobile-app-hero-grid { grid-template-columns: 1fr; }
   .course-grid { grid-template-columns: 1fr 1fr; }
   .lms-feature-grid { grid-template-columns: repeat(2, 1fr); }
   .skill-badge-grid { grid-template-columns: repeat(2, 1fr); }
@@ -768,12 +791,12 @@ h3 { line-height: 1.2; }
   .learner-dashboard-grid, .certificate-dashboard-list { grid-template-columns: 1fr; }
   .help-hero-grid, .virtual-number-panel, .help-request-grid { grid-template-columns: 1fr; }
   .support-line-grid, .help-faq-grid { grid-template-columns: repeat(2, 1fr); }
-  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid { grid-template-columns: repeat(2, 1fr); }
   .impact-report-actions { justify-content: flex-start; }
 }
 
 @media (max-width: 560px) {
-  .classroom-hero-grid, .techbridge-global-hero-grid { min-height: auto; padding: 72px 0; }
+  .classroom-hero-grid, .techbridge-global-hero-grid, .mobile-app-hero-grid { min-height: auto; padding: 72px 0; }
   .certificate-verify-strip { margin-top: 0; padding-top: 28px; background: #fffaf8; }
   .certificate-verify-card { grid-template-columns: 1fr; padding: 24px 20px; }
   .certificate-verify-card .button { width: 100%; justify-content: center; }
@@ -808,8 +831,9 @@ h3 { line-height: 1.2; }
   .support-line-grid, .help-faq-grid { grid-template-columns: 1fr; }
   .impact-dashboard-grid { min-height: auto; padding: 68px 0; }
   .impact-dashboard-card, .impact-metric-card, .impact-chart-panel, .impact-report-card { padding: 24px 20px; }
-  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-feature-grid, .global-roadmap-grid { grid-template-columns: 1fr; }
+  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-feature-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid { grid-template-columns: 1fr; }
   .global-feature-wide { grid-column: auto; }
+  .phone-shell { min-height: 520px; }
   .impact-bar { grid-template-columns: 1fr; gap: 8px; }
   .impact-report-actions .button { width: 100%; justify-content: center; }
 }
