@@ -180,6 +180,8 @@ h3 { line-height: 1.2; }
 .visual-programme-list article:nth-child(1) img,
 .visual-programme-list article:nth-child(4) img,
 .visual-programme-list article:nth-child(7) img { object-fit: contain; padding: 22px; }
+.visual-programme-list img[src$="girls-agriculture-climate-smart.png"],
+.visual-programme-list img[src$="partner-cpi.png"] { object-fit: contain; padding: 18px; background: #fff; }
 .visual-programme-list article > div { padding: 24px; display: flex; flex-direction: column; flex: 1; }
 .visual-programme-list h3 { font-size: 1.15rem; }
 .visual-programme-list p { line-height: 1.65; }
@@ -313,6 +315,7 @@ h3 { line-height: 1.2; }
 .partner-logo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; align-items: stretch; }
 .partner-logo-grid figure { min-height: 155px; margin: 0; display: grid; place-items: center; padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.92); box-shadow: 0 14px 35px rgba(95,20,24,.07); transition: transform .25s ease, box-shadow .25s ease; }
 .partner-logo-grid img { max-width: 100%; max-height: 96px; object-fit: contain; filter: saturate(.92); transition: transform .25s ease, filter .25s ease; }
+.partner-logo-grid img[src$="partner-cpi.png"] { width: 100%; max-height: 112px; padding: 4px; }
 .partner-logo-grid figure:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
 .partner-logo-grid figure:hover img { transform: scale(1.04); filter: saturate(1.05); }
 
