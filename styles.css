@@ -227,6 +227,7 @@ h3 { line-height: 1.2; }
 .techbridge-callout span { display: inline-flex; margin-bottom: 16px; color: #ffe0af; font-size: .74rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
 .techbridge-callout strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; }
 .techbridge-callout p { position: relative; margin-top: 18px; color: rgba(255,255,255,.84); }
+.techbridge-donate-trigger { position: relative; margin-top: 22px; }
 .techbridge-grid { position: relative; margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .techbridge-card { min-height: 255px; padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
 .techbridge-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }

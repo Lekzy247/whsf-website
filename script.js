@@ -319,6 +319,24 @@ form?.addEventListener('submit', (event) => {
 
 const techbridgeDonationForm = document.querySelector('#techbridge-donation-form');
 const techbridgeDonationStatus = document.querySelector('#techbridge-donation-status');
+const techbridgeDonationPanel = document.querySelector('#techbridge-donation');
+const techbridgeDonationTriggers = document.querySelectorAll('[data-open-techbridge-form]');
+
+function openTechbridgeDonationForm() {
+  if (!techbridgeDonationPanel) return;
+  techbridgeDonationPanel.hidden = false;
+  techbridgeDonationPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const firstInput = techbridgeDonationPanel.querySelector('input, select, textarea, button');
+  window.setTimeout(() => firstInput?.focus(), 400);
+}
+
+techbridgeDonationTriggers.forEach((button) => {
+  button.addEventListener('click', openTechbridgeDonationForm);
+});
+
+if (window.location.hash === '#techbridge-donation') {
+  openTechbridgeDonationForm();
+}
 
 techbridgeDonationForm?.addEventListener('submit', (event) => {
   event.preventDefault();
