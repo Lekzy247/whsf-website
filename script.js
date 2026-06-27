@@ -515,6 +515,30 @@ const chatRooms = {
       { sender: 'Opportunities desk', text: 'Share opportunities that can help girls and young women access training, jobs, mentorship, enterprise support and global networks.', time: '10:00' }
     ]
   },
+  employment: {
+    title: 'Employment opportunities room',
+    description: 'Share jobs, internships, apprenticeships, remote work, CV support and workplace readiness resources.',
+    messages: [
+      { sender: 'Career desk', text: 'Post youth-friendly job openings, internships, remote roles, apprenticeship pathways and interview preparation support.', time: '10:10' },
+      { sender: 'WHSF mentor', text: 'Useful topics include CV review, LinkedIn profile building, workplace communication and digital portfolio development.', time: '10:15' }
+    ]
+  },
+  entrepreneurship: {
+    title: 'Entrepreneurship room',
+    description: 'Support business ideas, social enterprise, digital services, startup mentoring and income-generation pathways.',
+    messages: [
+      { sender: 'Enterprise mentor', text: 'Share business ideas, startup questions, funding opportunities, digital marketing tips and social enterprise models.', time: '10:20' },
+      { sender: 'WHSF innovation', text: 'Girls and young women can explore technology-enabled businesses such as digital services, agritech, e-commerce, repair labs and training services.', time: '10:25' }
+    ]
+  },
+  networking: {
+    title: 'Networking room',
+    description: 'Build connections with mentors, alumni, partners, donors, volunteers and international supporters.',
+    messages: [
+      { sender: 'Networking desk', text: 'Introduce yourself, share your skills, ask for mentorship and connect with people who can support your learning or project goals.', time: '10:30' },
+      { sender: 'Partner relations', text: 'Partners can use this room to offer mentorship, speaking sessions, workplace exposure and collaborative learning opportunities.', time: '10:35' }
+    ]
+  },
   safeguarding: {
     title: 'Support and safeguarding room',
     description: 'Raise support needs, accessibility concerns, wellbeing issues and safe participation questions.',
@@ -657,7 +681,13 @@ mobileLoginForm?.addEventListener('submit', (event) => {
   const data = new FormData(mobileLoginForm);
   const name = String(data.get('name') || '').trim();
   const email = String(data.get('email') || '').trim();
+  const password = String(data.get('password') || '');
   const role = String(data.get('role') || '').trim();
+
+  if (!email || !password || password.length < 8) {
+    setMobileLoginStatus('Please enter your email and a password of at least 8 characters.');
+    return;
+  }
 
   const session = {
     name,

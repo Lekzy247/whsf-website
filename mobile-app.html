@@ -162,7 +162,7 @@
                 <img src="assets/whsf-logo.jpg" alt="WHSF logo" />
                 <div>
                   <span>WHSF Connect</span>
-                  <strong>Community access</strong>
+                  <strong>Secure member login</strong>
                 </div>
               </div>
               <form id="mobile-app-login-form" class="mobile-login-form">
@@ -171,6 +171,9 @@
 
                 <label for="mobile-user-email">Email address</label>
                 <input id="mobile-user-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
+
+                <label for="mobile-user-password">Password</label>
+                <input id="mobile-user-password" name="password" type="password" autocomplete="current-password" minlength="8" placeholder="Enter your password" required />
 
                 <label for="mobile-user-role">User role</label>
                 <select id="mobile-user-role" name="role" required>
@@ -182,7 +185,7 @@
                   <option value="donor">Donor</option>
                 </select>
 
-                <p class="form-hint">This preview opens a role-based WHSF dashboard for collaboration, updates and support.</p>
+                <p class="form-hint">Email and password are required for this secure app preview. Full database authentication can be connected for live WHSF accounts.</p>
 
                 <button class="button" type="submit">Enter WHSF App</button>
                 <p id="mobile-login-status" class="form-status" role="status" aria-live="polite"></p>
@@ -281,6 +284,9 @@
                     <button type="button" data-chat-room="events">Global Tech Events</button>
                     <button type="button" data-chat-room="exchange">Student Exchange</button>
                     <button type="button" data-chat-room="opportunities">Opportunities</button>
+                    <button type="button" data-chat-room="employment">Employment</button>
+                    <button type="button" data-chat-room="entrepreneurship">Entrepreneurship</button>
+                    <button type="button" data-chat-room="networking">Networking</button>
                     <button type="button" data-chat-room="safeguarding">Support & Safeguarding</button>
                   </div>
                   <div class="collaboration-topic-grid" aria-label="Collaboration focus areas">
@@ -290,6 +296,9 @@
                     <button type="button" data-chat-room-shortcut="events"><strong>Tech events worldwide</strong><span>Conferences, webinars, hackathons, competitions and showcases.</span></button>
                     <button type="button" data-chat-room-shortcut="exchange"><strong>Student exchange</strong><span>Mentorship, virtual classrooms, cultural learning and international exposure.</span></button>
                     <button type="button" data-chat-room-shortcut="opportunities"><strong>Scholarships & careers</strong><span>Scholarships, fellowships, internships, grants and entrepreneurship support.</span></button>
+                    <button type="button" data-chat-room-shortcut="employment"><strong>Employment opportunities</strong><span>Jobs, internships, apprenticeships, remote work and workplace readiness.</span></button>
+                    <button type="button" data-chat-room-shortcut="entrepreneurship"><strong>Entrepreneurship</strong><span>Startup ideas, digital business, social enterprise and income generation.</span></button>
+                    <button type="button" data-chat-room-shortcut="networking"><strong>Networking</strong><span>Mentor links, partner introductions, alumni support and global connections.</span></button>
                   </div>
                   <div class="chat-room-meta">
                     <strong data-chat-room-title>Volunteers room</strong>
