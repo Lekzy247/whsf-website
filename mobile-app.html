@@ -269,17 +269,33 @@
                     <h4>Community chat</h4>
                     <span>Volunteers • Donors • Partners • Members • Students</span>
                   </div>
-                  <div class="community-chat-box" data-community-chat>
-                    <article><strong>Volunteer coordinator</strong><p>Welcome. Use this space to coordinate mentoring, outreach and programme support.</p></article>
-                    <article><strong>Student support</strong><p>Students can ask learning questions and receive direction to e-Classroom resources.</p></article>
-                    <article><strong>Donor relations</strong><p>Donors and partners can request impact updates or connect with WHSF programme teams.</p></article>
+                  <div class="chat-room-tabs" role="tablist" aria-label="Community chat rooms">
+                    <button type="button" class="active" data-chat-room="volunteers">Volunteers</button>
+                    <button type="button" data-chat-room="donors">Donors</button>
+                    <button type="button" data-chat-room="students">Students</button>
+                    <button type="button" data-chat-room="partners">Partners</button>
+                    <button type="button" data-chat-room="members">Members</button>
                   </div>
+                  <div class="chat-room-meta">
+                    <strong data-chat-room-title>Volunteers room</strong>
+                    <span data-chat-room-description>Coordinate service activities, mentorship and event support.</span>
+                  </div>
+                  <div class="community-chat-box" data-community-chat aria-live="polite"></div>
                   <form class="community-chat-form" data-community-chat-form>
                     <label for="community-chat-message" class="sr-only">Write a message</label>
                     <input id="community-chat-message" name="message" type="text" placeholder="Write a collaboration message..." required />
                     <button class="button" type="submit">Send</button>
                   </form>
-                  <p class="form-hint">Messages in this preview stay on this page. A live version should use protected accounts and moderation.</p>
+                  <div class="admin-announcement-card">
+                    <strong>WHSF admin announcement</strong>
+                    <p>Post one message to every room for important reminders, programme updates or urgent support notices.</p>
+                    <form data-admin-announcement-form>
+                      <label for="admin-announcement-message" class="sr-only">Announcement message</label>
+                      <input id="admin-announcement-message" name="announcement" type="text" placeholder="Write announcement for all rooms..." required />
+                      <button class="mini-action" type="submit">Send announcement</button>
+                    </form>
+                  </div>
+                  <p class="moderation-notice">Moderation notice: keep messages respectful, safeguarding-aware and programme-related. Shared chat history can later be connected to protected WHSF user accounts for secure records.</p>
                 </section>
 
                 <section class="mobile-dashboard-panel" data-mobile-panel="video">

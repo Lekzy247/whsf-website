@@ -395,10 +395,16 @@ const addImpactUpdate = document.querySelector('[data-add-impact-update]');
 const impactFeed = document.querySelector('[data-impact-feed]');
 const communityChat = document.querySelector('[data-community-chat]');
 const communityChatForm = document.querySelector('[data-community-chat-form]');
+const chatRoomButtons = document.querySelectorAll('[data-chat-room]');
+const chatRoomTitle = document.querySelector('[data-chat-room-title]');
+const chatRoomDescription = document.querySelector('[data-chat-room-description]');
+const adminAnnouncementForm = document.querySelector('[data-admin-announcement-form]');
 const requestNotifications = document.querySelector('[data-request-notifications]');
 const notificationStatus = document.querySelector('[data-notification-status]');
 const mobileSessionKey = 'whsf_mobile_app_session';
 const mobileNoteKey = 'whsf_mobile_app_collaboration_note';
+const mobileChatKey = 'whsf_mobile_app_chat_rooms';
+let activeChatRoom = 'volunteers';
 
 const mobileRoleContent = {
   volunteer: {
@@ -427,6 +433,118 @@ const mobileRoleContent = {
     tab: 'donor'
   }
 };
+
+const chatRooms = {
+  volunteers: {
+    title: 'Volunteers room',
+    description: 'Coordinate service activities, mentorship and event support.',
+    messages: [
+      { sender: 'Volunteer coordinator', text: 'Welcome. Use this room to coordinate mentoring, outreach and programme support.', time: '09:00' },
+      { sender: 'WHSF team', text: 'Please share availability early so coordinators can plan volunteer assignments.', time: '09:05' }
+    ]
+  },
+  donors: {
+    title: 'Donors room',
+    description: 'Share campaign updates, giving questions and impact reporting requests.',
+    messages: [
+      { sender: 'Donor relations', text: 'Welcome. Donors can request updates, campaign details and impact stories here.', time: '09:10' }
+    ]
+  },
+  students: {
+    title: 'Students room',
+    description: 'Ask learning questions and receive guidance for WHSF e-Classroom.',
+    messages: [
+      { sender: 'Student support', text: 'Students can ask course questions and receive direction to e-Classroom resources.', time: '09:15' }
+    ]
+  },
+  partners: {
+    title: 'Partners room',
+    description: 'Coordinate programme support, technology donations and institutional collaboration.',
+    messages: [
+      { sender: 'Partnership desk', text: 'Partners can discuss collaboration, device donation, training support and programme opportunities.', time: '09:20' }
+    ]
+  },
+  members: {
+    title: 'Members room',
+    description: 'Follow WHSF announcements, events and member opportunities.',
+    messages: [
+      { sender: 'WHSF membership', text: 'Members can follow announcements, events, learning opportunities and community updates here.', time: '09:25' }
+    ]
+  }
+};
+
+function escapeHtml(value) {
+  return String(value).replace(/[<>&"]/g, (char) => ({
+    '<': '&lt;',
+    '>': '&gt;',
+    '&': '&amp;',
+    '"': '&quot;'
+  }[char]));
+}
+
+function formatChatTime(date = new Date()) {
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function loadChatRooms() {
+  try {
+    const savedRooms = JSON.parse(localStorage.getItem(mobileChatKey) || 'null');
+    if (savedRooms && typeof savedRooms === 'object') {
+      Object.keys(chatRooms).forEach((room) => {
+        if (Array.isArray(savedRooms[room])) chatRooms[room].messages = savedRooms[room];
+      });
+    }
+  } catch {
+    // Chat remains available with default preview messages when storage is unavailable.
+  }
+}
+
+function saveChatRooms() {
+  try {
+    const messagesByRoom = Object.fromEntries(
+      Object.entries(chatRooms).map(([room, details]) => [room, details.messages])
+    );
+    localStorage.setItem(mobileChatKey, JSON.stringify(messagesByRoom));
+  } catch {
+    // Chat can still work for the active page session without saved preview history.
+  }
+}
+
+function renderChatRoom(roomName = activeChatRoom) {
+  if (!communityChat) return;
+  const room = chatRooms[roomName] || chatRooms.volunteers;
+  activeChatRoom = roomName;
+
+  if (chatRoomTitle) chatRoomTitle.textContent = room.title;
+  if (chatRoomDescription) chatRoomDescription.textContent = room.description;
+
+  chatRoomButtons.forEach((button) => {
+    const isActive = button.dataset.chatRoom === roomName;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-selected', String(isActive));
+  });
+
+  communityChat.innerHTML = room.messages.map((message) => `
+    <article class="${message.type === 'announcement' ? 'chat-announcement' : ''}">
+      <strong>${escapeHtml(message.sender)}</strong>
+      <p>${escapeHtml(message.text)}</p>
+      <time>${escapeHtml(message.time)}</time>
+    </article>
+  `).join('');
+  communityChat.scrollTop = communityChat.scrollHeight;
+}
+
+function addChatMessage(roomName, sender, text, type = 'message') {
+  const room = chatRooms[roomName] || chatRooms.volunteers;
+  room.messages.push({
+    sender,
+    text,
+    type,
+    time: formatChatTime()
+  });
+  saveChatRooms();
+  renderChatRoom(roomName);
+}
 
 function setMobileLoginStatus(message) {
   if (mobileLoginStatus) mobileLoginStatus.textContent = message || '';
@@ -557,12 +675,36 @@ communityChatForm?.addEventListener('submit', (event) => {
   const sender = session?.name || 'WHSF community member';
   if (!message) return;
 
-  const chatItem = document.createElement('article');
-  chatItem.innerHTML = `<strong>${sender}</strong><p>${message.replace(/[<>&]/g, (char) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[char]))}</p>`;
-  communityChat.append(chatItem);
+  addChatMessage(activeChatRoom, sender, message);
   communityChatForm.reset();
-  chatItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
+
+chatRoomButtons.forEach((button) => {
+  button.addEventListener('click', () => renderChatRoom(button.dataset.chatRoom));
+});
+
+adminAnnouncementForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!adminAnnouncementForm.reportValidity()) return;
+  const data = new FormData(adminAnnouncementForm);
+  const announcement = String(data.get('announcement') || '').trim();
+  if (!announcement) return;
+
+  Object.keys(chatRooms).forEach((roomName) => {
+    chatRooms[roomName].messages.push({
+      sender: 'WHSF Admin',
+      text: announcement,
+      type: 'announcement',
+      time: formatChatTime()
+    });
+  });
+  saveChatRooms();
+  renderChatRoom(activeChatRoom);
+  adminAnnouncementForm.reset();
+});
+
+loadChatRooms();
+renderChatRoom(activeChatRoom);
 
 requestNotifications?.addEventListener('click', async () => {
   if (!notificationStatus) return;
