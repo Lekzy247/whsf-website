@@ -793,9 +793,26 @@ function profileToMobileSession(user, profile) {
     name: profile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'WHSF member',
     email: user.email,
     role,
+    status: profile?.status || 'active',
     isAdmin: role === 'admin',
     signedInAt: new Date().toISOString()
   };
+}
+
+async function stopBlockedMobileUser() {
+  currentMobileProfile = null;
+  try {
+    sessionStorage.removeItem(mobileSessionKey);
+  } catch {
+    // Browser storage may be unavailable; signing out still protects the visible session.
+  }
+  if (whsfMobileSupabase) await whsfMobileSupabase.auth.signOut();
+  if (mobileDashboard) {
+    mobileDashboard.hidden = true;
+    mobileDashboard.classList.remove('is-active');
+  }
+  if (mobileLoginCard) mobileLoginCard.hidden = false;
+  setMobileLoginStatus('This WHSF app account is currently blocked. Please contact WHSF support if you believe this is a mistake.');
 }
 
 mobileLoginForm?.addEventListener('submit', async (event) => {
@@ -873,6 +890,10 @@ mobileLoginForm?.addEventListener('submit', async (event) => {
       currentMobileProfile = await upsertMobileProfile(authData.user, name, role || 'member');
     }
     if (!currentMobileProfile) return;
+    if (currentMobileProfile.status === 'blocked') {
+      await stopBlockedMobileUser();
+      return;
+    }
 
     const session = profileToMobileSession(authData.user, currentMobileProfile);
     renderMobileSession(session);
@@ -1028,6 +1049,10 @@ async function restoreMobileSupabaseSession() {
     currentMobileProfile = await upsertMobileProfile(user, user.user_metadata?.full_name, user.user_metadata?.role || 'member');
   }
   if (!currentMobileProfile) return;
+  if (currentMobileProfile.status === 'blocked') {
+    await stopBlockedMobileUser();
+    return;
+  }
 
   const session = profileToMobileSession(user, currentMobileProfile);
   renderMobileSession(session);

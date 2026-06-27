@@ -1,10 +1,11 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v10';
+const WHSF_CACHE_NAME = 'whsf-pwa-v11';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
   '/',
   '/index.html',
   '/mobile-app.html',
+  '/mobile-app-admin.html',
   '/programs.html',
   '/innovation.html',
   '/contact.html',
@@ -47,7 +48,8 @@ self.addEventListener('fetch', (event) => {
     event.request.destination === 'script' ||
     event.request.destination === 'style' ||
     requestUrl.pathname.endsWith('.html') ||
-    requestUrl.pathname === '/mobile-app';
+    requestUrl.pathname === '/mobile-app' ||
+    requestUrl.pathname === '/mobile-app-admin';
 
   if (event.request.mode === 'navigate' || shouldRefreshFirst) {
     event.respondWith(
