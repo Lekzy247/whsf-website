@@ -69,7 +69,8 @@ h3 { line-height: 1.2; }
 .primary-nav { display: flex; align-items: center; gap: 18px; font-size: .82rem; font-weight: 700; }
 .primary-nav > a:not(.button) { text-decoration: none; position: relative; }
 .primary-nav > a:not(.button)::after { content: ""; position: absolute; right: 0; bottom: -8px; left: 0; height: 2px; background: var(--red); transform: scaleX(0); transition: transform .2s ease; }
-.primary-nav > a:hover::after { transform: scaleX(1); }
+.primary-nav > a:hover::after, .primary-nav > a[aria-current="page"]::after { transform: scaleX(1); }
+.primary-nav > a[aria-current="page"] { color: var(--red); }
 .menu-toggle { display: none; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; background: #fff; cursor: pointer; }
 .menu-lines, .menu-lines::before, .menu-lines::after { display: block; width: 20px; height: 2px; background: var(--ink); content: ""; transition: .2s ease; }
 .menu-lines { margin: auto; position: relative; }
@@ -251,6 +252,9 @@ h3 { line-height: 1.2; }
 .innovation-stack-list strong, .innovation-stack-list span { display: block; }
 .innovation-stack-list strong { color: #ffe0af; font-size: 1rem; }
 .innovation-stack-list span { margin-top: 6px; color: rgba(255,255,255,.78); font-size: .86rem; }
+.stack-action-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.stack-action-row a { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: #fff; background: rgba(255,255,255,.1); font-size: .76rem; font-weight: 900; text-decoration: none; transition: transform .2s ease, background .2s ease, border-color .2s ease; }
+.stack-action-row a:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.2); }
 .techbridge-monetization { position: relative; z-index: 1; margin-top: 24px; padding: 34px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: start; border-radius: var(--radius); color: #fff; background: linear-gradient(135deg, var(--green-900), var(--green-950)); box-shadow: var(--shadow); }
 .techbridge-monetization h3 { color: #fff; font-size: clamp(1.7rem, 3vw, 2.5rem); }
 .techbridge-monetization p { color: rgba(255,255,255,.8); }
