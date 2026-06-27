@@ -365,6 +365,178 @@ techbridgeDonationForm?.addEventListener('submit', (event) => {
 const yearElement = document.querySelector('#year');
 if (yearElement) yearElement.textContent = new Date().getFullYear();
 
+const mobileLoginForm = document.querySelector('#mobile-app-login-form');
+const mobileLoginCard = mobileLoginForm?.closest('.mobile-login-card');
+const mobileLoginStatus = document.querySelector('#mobile-login-status');
+const mobileDashboard = document.querySelector('[data-mobile-dashboard]');
+const mobileWelcome = document.querySelector('[data-mobile-welcome]');
+const mobileRoleSummary = document.querySelector('[data-mobile-role-summary]');
+const mobileSignout = document.querySelector('[data-mobile-signout]');
+const mobileTabs = document.querySelectorAll('[data-mobile-tab]');
+const mobilePanels = document.querySelectorAll('[data-mobile-panel]');
+const volunteerTasks = document.querySelectorAll('[data-volunteer-tasks] input[type="checkbox"]');
+const volunteerProgress = document.querySelector('[data-volunteer-progress]');
+const collabNote = document.querySelector('#mobile-collab-note');
+const collabStatus = document.querySelector('[data-collab-status]');
+const saveCollabNote = document.querySelector('[data-save-collab-note]');
+const addImpactUpdate = document.querySelector('[data-add-impact-update]');
+const impactFeed = document.querySelector('[data-impact-feed]');
+const requestNotifications = document.querySelector('[data-request-notifications]');
+const notificationStatus = document.querySelector('[data-notification-status]');
+const mobileSessionKey = 'whsf_mobile_app_session';
+const mobileNoteKey = 'whsf_mobile_app_collaboration_note';
+
+const mobileRoleContent = {
+  volunteer: {
+    label: 'Volunteer',
+    summary: 'Volunteer Hub is ready with tasks, reminders and collaboration notes.',
+    tab: 'volunteer'
+  },
+  partner: {
+    label: 'Partner',
+    summary: 'Partner view is ready for collaboration, impact updates and programme coordination.',
+    tab: 'impact'
+  },
+  student: {
+    label: 'Student',
+    summary: 'Student view is ready with e-Classroom, certificates and learning support.',
+    tab: 'member'
+  },
+  member: {
+    label: 'Member',
+    summary: 'Member dashboard is ready with announcements, learning and programme access.',
+    tab: 'member'
+  },
+  donor: {
+    label: 'Donor',
+    summary: 'Donor Hub is ready with giving, impact reporting and support access.',
+    tab: 'donor'
+  }
+};
+
+function setMobileLoginStatus(message) {
+  if (mobileLoginStatus) mobileLoginStatus.textContent = message || '';
+}
+
+function activateMobileTab(tabName) {
+  mobileTabs.forEach((tab) => {
+    const isActive = tab.dataset.mobileTab === tabName;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+
+  mobilePanels.forEach((panel) => {
+    panel.classList.toggle('active', panel.dataset.mobilePanel === tabName);
+  });
+}
+
+function updateVolunteerProgress() {
+  if (!volunteerProgress || !volunteerTasks.length) return;
+  const completed = Array.from(volunteerTasks).filter((task) => task.checked).length;
+  volunteerProgress.textContent = `${completed} of ${volunteerTasks.length} tasks completed`;
+}
+
+function renderMobileSession(session) {
+  if (!mobileDashboard || !mobileLoginForm || !session) return;
+
+  const roleContent = mobileRoleContent[session.role] || mobileRoleContent.member;
+  mobileDashboard.hidden = false;
+  if (mobileLoginCard) mobileLoginCard.hidden = true;
+  if (mobileWelcome) mobileWelcome.textContent = `Welcome, ${session.name}`;
+  if (mobileRoleSummary) mobileRoleSummary.textContent = `${roleContent.label} access • ${roleContent.summary}`;
+  activateMobileTab(roleContent.tab);
+  setMobileLoginStatus(`Signed in as ${roleContent.label}.`);
+}
+
+function loadMobileSession() {
+  try {
+    return JSON.parse(sessionStorage.getItem(mobileSessionKey) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function saveMobileSession(session) {
+  sessionStorage.setItem(mobileSessionKey, JSON.stringify(session));
+}
+
+mobileLoginForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!mobileLoginForm.reportValidity()) return;
+
+  const data = new FormData(mobileLoginForm);
+  const name = String(data.get('name') || '').trim();
+  const email = String(data.get('email') || '').trim();
+  const role = String(data.get('role') || '').trim();
+  const code = String(data.get('code') || '').trim();
+
+  if (code.length < 6) {
+    setMobileLoginStatus('Please enter a valid WHSF pilot access code.');
+    return;
+  }
+
+  const session = {
+    name,
+    email,
+    role,
+    signedInAt: new Date().toISOString()
+  };
+
+  saveMobileSession(session);
+  renderMobileSession(session);
+});
+
+mobileSignout?.addEventListener('click', () => {
+  sessionStorage.removeItem(mobileSessionKey);
+  mobileDashboard.hidden = true;
+  mobileLoginForm?.reset();
+  if (mobileLoginCard) mobileLoginCard.hidden = false;
+  setMobileLoginStatus('Signed out successfully.');
+  mobileLoginForm?.querySelector('input, select, button')?.focus();
+});
+
+mobileTabs.forEach((tab) => {
+  tab.addEventListener('click', () => activateMobileTab(tab.dataset.mobileTab));
+});
+
+volunteerTasks.forEach((task) => task.addEventListener('change', updateVolunteerProgress));
+updateVolunteerProgress();
+
+if (collabNote) {
+  collabNote.value = localStorage.getItem(mobileNoteKey) || '';
+}
+
+saveCollabNote?.addEventListener('click', () => {
+  if (!collabNote) return;
+  localStorage.setItem(mobileNoteKey, collabNote.value.trim());
+  if (collabStatus) collabStatus.textContent = 'Collaboration note saved on this device for the pilot.';
+});
+
+addImpactUpdate?.addEventListener('click', () => {
+  if (!impactFeed) return;
+  const update = document.createElement('article');
+  update.innerHTML = '<span>New pilot update</span><strong>Draft impact update added.</strong><p>Use this space for WHSF coordinators to publish programme stories, field photos, training updates and donor-visible progress.</p>';
+  impactFeed.prepend(update);
+});
+
+requestNotifications?.addEventListener('click', async () => {
+  if (!notificationStatus) return;
+
+  if (!('Notification' in window)) {
+    notificationStatus.textContent = 'This browser does not support notification prompts.';
+    return;
+  }
+
+  const permission = await Notification.requestPermission();
+  notificationStatus.textContent =
+    permission === 'granted'
+      ? 'Notifications allowed. Production alerts should be sent only through a secure WHSF notification service.'
+      : 'Notifications were not enabled. Users can still receive updates through the WHSF website and email.';
+});
+
+const savedMobileSession = loadMobileSession();
+if (savedMobileSession) renderMobileSession(savedMobileSession);
+
 const pwaInstallButtons = document.querySelectorAll('[data-install-pwa]');
 const pwaInstallStatus = document.querySelector('[data-pwa-install-status]');
 let deferredPwaPrompt;

@@ -62,6 +62,7 @@
             <p class="hero-lead">Equip donors, volunteers and members with a branded mobile app so the WHSF community can stay connected, informed and active wherever they are.</p>
             <div class="hero-actions">
               <button class="button button-light" type="button" data-install-pwa>Install WHSF App</button>
+              <a class="button button-light" href="#mobile-portal">Open app portal</a>
               <a class="button button-light" href="#mvp-features">View app features</a>
               <a class="button button-light" href="contact.html">Join the app pilot</a>
             </div>
@@ -110,6 +111,143 @@
             <article class="global-feature-card reveal"><span>04</span><h3>Member Dashboard</h3><p>Membership profile, announcements, certificates, e-Classroom links, programme invitations and community updates.</p></article>
             <article class="global-feature-card reveal"><span>05</span><h3>Push Notifications</h3><p>Send urgent updates, volunteer reminders, campaign launches, event alerts and programme announcements directly to users.</p></article>
             <article class="global-feature-card reveal"><span>06</span><h3>Support & Help Center</h3><p>Contact WHSF, request support, report concerns, ask certificate questions and find the right programme contact faster.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section mobile-portal-section" id="mobile-portal" aria-labelledby="mobile-portal-title">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Internal app portal</p>
+            <h2 id="mobile-portal-title">A secure collaborative space for WHSF users.</h2>
+            <p>Volunteers, partners, students, members and donors can sign in to a guided dashboard, follow impact updates, manage tasks and connect with WHSF support.</p>
+          </div>
+
+          <div class="mobile-portal-grid">
+            <aside class="mobile-login-card reveal" aria-label="WHSF mobile app sign in">
+              <div class="mobile-login-header">
+                <img src="assets/whsf-logo.jpg" alt="WHSF logo" />
+                <div>
+                  <span>WHSF Connect</span>
+                  <strong>Secure pilot access</strong>
+                </div>
+              </div>
+              <form id="mobile-app-login-form" class="mobile-login-form">
+                <label for="mobile-user-name">Full name</label>
+                <input id="mobile-user-name" name="name" type="text" autocomplete="name" placeholder="Enter your full name" required />
+
+                <label for="mobile-user-email">Email address</label>
+                <input id="mobile-user-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
+
+                <label for="mobile-user-role">User role</label>
+                <select id="mobile-user-role" name="role" required>
+                  <option value="">Choose your role</option>
+                  <option value="volunteer">Volunteer</option>
+                  <option value="partner">Partner</option>
+                  <option value="student">Student</option>
+                  <option value="member">Member</option>
+                  <option value="donor">Donor</option>
+                </select>
+
+                <label for="mobile-access-code">Access code</label>
+                <input id="mobile-access-code" name="code" type="password" minlength="6" placeholder="Enter WHSF pilot code" required />
+                <p class="form-hint">For production, this portal should connect to Supabase Auth or Firebase Auth with role-based access and protected records.</p>
+
+                <button class="button" type="submit">Enter WHSF App</button>
+                <p id="mobile-login-status" class="form-status" role="status" aria-live="polite"></p>
+              </form>
+            </aside>
+
+            <div class="mobile-dashboard-card reveal delay-one" data-mobile-dashboard hidden>
+              <div class="mobile-dashboard-topbar">
+                <div>
+                  <p class="eyebrow">Signed in</p>
+                  <h3 data-mobile-welcome>Welcome to WHSF Connect</h3>
+                  <span data-mobile-role-summary>Role-based dashboard</span>
+                </div>
+                <button class="text-button" type="button" data-mobile-signout>Sign out</button>
+              </div>
+
+              <div class="mobile-dashboard-tabs" role="tablist" aria-label="Mobile app dashboard sections">
+                <button type="button" class="active" data-mobile-tab="impact">Impact Feed</button>
+                <button type="button" data-mobile-tab="volunteer">Volunteer Hub</button>
+                <button type="button" data-mobile-tab="donor">Donor Hub</button>
+                <button type="button" data-mobile-tab="member">Member Dashboard</button>
+                <button type="button" data-mobile-tab="notifications">Notifications</button>
+              </div>
+
+              <div class="mobile-dashboard-panels">
+                <section class="mobile-dashboard-panel active" data-mobile-panel="impact">
+                  <div class="portal-panel-heading">
+                    <h4>Impact feed</h4>
+                    <button type="button" class="mini-action" data-add-impact-update>Add update</button>
+                  </div>
+                  <div class="impact-feed-list" data-impact-feed>
+                    <article><span>Education access</span><strong>7,500 girls reached through WHSF technology and education programmes.</strong><p>Programme teams can publish field updates, photos, stories and measurable results for supporters.</p></article>
+                    <article><span>e-Classroom</span><strong>New digital learning pathway available.</strong><p>Students can continue learning, track progress and access certificates from WHSF learning pages.</p></article>
+                    <article><span>Volunteer action</span><strong>Mentorship session planning in progress.</strong><p>Coordinators can share event needs and invite volunteers to support upcoming programmes.</p></article>
+                  </div>
+                </section>
+
+                <section class="mobile-dashboard-panel" data-mobile-panel="volunteer">
+                  <div class="portal-panel-heading">
+                    <h4>Volunteer hub</h4>
+                    <span data-volunteer-progress>0 of 3 tasks completed</span>
+                  </div>
+                  <div class="task-list" data-volunteer-tasks>
+                    <label><input type="checkbox" /> Confirm availability for mentoring session</label>
+                    <label><input type="checkbox" /> Review safeguarding and programme guidance</label>
+                    <label><input type="checkbox" /> Submit service-hour update after activity</label>
+                  </div>
+                  <div class="collaboration-board">
+                    <label for="mobile-collab-note">Collaboration note</label>
+                    <textarea id="mobile-collab-note" rows="4" placeholder="Share a short update for WHSF coordinators, partners or team members."></textarea>
+                    <button class="button" type="button" data-save-collab-note>Save note</button>
+                    <p data-collab-status class="form-status" role="status" aria-live="polite"></p>
+                  </div>
+                </section>
+
+                <section class="mobile-dashboard-panel" data-mobile-panel="donor">
+                  <div class="portal-panel-heading">
+                    <h4>Donor hub</h4>
+                    <span>Transparent giving and impact</span>
+                  </div>
+                  <div class="portal-action-grid">
+                    <a class="portal-action-card" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer"><strong>Donate securely</strong><span>Open the official WHSF PayPal charity page.</span></a>
+                    <a class="portal-action-card" href="impact-dashboard.html"><strong>View impact dashboard</strong><span>See programme reach, training outcomes and public impact metrics.</span></a>
+                    <a class="portal-action-card" href="contact.html"><strong>Request donor update</strong><span>Contact WHSF for campaign, reporting or partnership support.</span></a>
+                  </div>
+                </section>
+
+                <section class="mobile-dashboard-panel" data-mobile-panel="member">
+                  <div class="portal-panel-heading">
+                    <h4>Member dashboard</h4>
+                    <span>Learning, certificates and announcements</span>
+                  </div>
+                  <div class="portal-action-grid">
+                    <a class="portal-action-card" href="e-classroom.html"><strong>Continue e-Classroom</strong><span>Open WHSF technology training and learner dashboard.</span></a>
+                    <a class="portal-action-card" href="verify-certificate.html"><strong>Verify certificate</strong><span>Check WHSF-issued certificates using the verification page.</span></a>
+                    <a class="portal-action-card" href="programs.html"><strong>Explore programmes</strong><span>View WHSF learning, robotics, drone, ICT and community programmes.</span></a>
+                  </div>
+                </section>
+
+                <section class="mobile-dashboard-panel" data-mobile-panel="notifications">
+                  <div class="portal-panel-heading">
+                    <h4>Push notification preferences</h4>
+                    <button type="button" class="mini-action" data-request-notifications>Enable browser alerts</button>
+                  </div>
+                  <div class="notification-preferences">
+                    <label><input type="checkbox" checked /> Programme announcements</label>
+                    <label><input type="checkbox" checked /> Volunteer reminders</label>
+                    <label><input type="checkbox" checked /> e-Classroom and certificate updates</label>
+                    <label><input type="checkbox" /> Donor campaign updates</label>
+                    <label><input type="checkbox" /> Partner and event opportunities</label>
+                  </div>
+                  <p class="security-note">Security note: real push notifications should use confirmed user consent, encrypted authentication, role-based permissions and an auditable admin workflow.</p>
+                  <p data-notification-status class="form-status" role="status" aria-live="polite"></p>
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </section>
