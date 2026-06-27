@@ -313,4 +313,5 @@ form?.addEventListener('submit', (event) => {
   window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
 });
 
-document.querySelector('#year').textContent = new Date().getFullYear();
+const yearElement = document.querySelector('#year');
+if (yearElement) yearElement.textContent = new Date().getFullYear();
