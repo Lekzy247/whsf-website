@@ -71,6 +71,7 @@
 
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
           <a href="#top">Home</a>
+          <a href="#find-your-path">Find Your Path</a>
           <a href="#projects">Projects</a>
           <a href="#about">About</a>
           <a href="#gallery">Gallery</a>
@@ -96,6 +97,7 @@
             </p>
             <div class="hero-actions">
               <a class="button" href="#projects">Explore our projects</a>
+              <a class="button button-secondary" href="#find-your-path">Find your path</a>
               <a class="button button-light" href="impact-dashboard.html">View impact</a>
             </div>
             <ul class="hero-tags" aria-label="WHSF priorities">
@@ -116,6 +118,43 @@
           <p><strong>People first</strong><span>Human dignity guides every initiative.</span></p>
           <p><strong>Locally informed</strong><span>Communities shape lasting solutions.</span></p>
           <p><strong>Globally connected</strong><span>Partnerships turn ideas into action.</span></p>
+        </div>
+      </section>
+
+      <section class="section path-finder-section" id="find-your-path" aria-labelledby="path-title">
+        <div class="shell path-finder-grid">
+          <div class="path-finder-copy reveal">
+            <p class="eyebrow">Find your WHSF path</p>
+            <h2 id="path-title">Tell us what you need, and we’ll point you in the right direction.</h2>
+            <p>
+              Whether you are a student, volunteer, mentor, donor, school, partner or certificate checker,
+              choose the option that best describes you and get a clear next step.
+            </p>
+          </div>
+
+          <div class="path-finder-panel reveal delay-one">
+            <div class="path-option-grid" role="list" aria-label="WHSF visitor pathways">
+              <button class="path-option active" type="button" data-path="student" role="listitem">I am a student</button>
+              <button class="path-option" type="button" data-path="volunteer" role="listitem">I want to volunteer</button>
+              <button class="path-option" type="button" data-path="partner" role="listitem">I am a partner or sponsor</button>
+              <button class="path-option" type="button" data-path="donate" role="listitem">I want to donate</button>
+              <button class="path-option" type="button" data-path="certificate" role="listitem">I need certificate help</button>
+              <button class="path-option" type="button" data-path="programme" role="listitem">I want to join a programme</button>
+            </div>
+
+            <article class="path-result-card" id="path-result" aria-live="polite">
+              <span id="path-result-label">Student pathway</span>
+              <h3 id="path-result-title">Start or continue learning with WHSF e-Classroom.</h3>
+              <p id="path-result-copy">
+                Explore technology training in robotics, cybersecurity, drone technology, AI, STEM,
+                eHealth and accessibility technology.
+              </p>
+              <div class="path-result-actions">
+                <a class="button" id="path-primary-action" href="e-classroom.html">Open e-Classroom</a>
+                <a class="arrow-link" id="path-secondary-action" href="#contact">Contact support <span>→</span></a>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -444,6 +483,11 @@
                 <option value="">Select one</option>
                 <option>Partnership</option>
                 <option>Volunteering</option>
+                <option>Mentorship</option>
+                <option>School / Programme interest</option>
+                <option>Certificate help</option>
+                <option>Donation / Sponsorship</option>
+                <option>e-Classroom support</option>
                 <option>Supporting WHSF</option>
                 <option>WHSF SmartStay</option>
                 <option>General enquiry</option>
