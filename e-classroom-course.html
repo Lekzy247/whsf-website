@@ -181,6 +181,7 @@
       let enrollment = null;
       let lessons = [];
       let completedLessonIds = new Set();
+      let openedLessonIds = new Set();
 
       const setStatus = (message) => { statusEl.textContent = message; };
       const setCourseSignedIn = (isSignedIn) => {
@@ -193,6 +194,7 @@
         profile = null;
         enrollment = null;
         completedLessonIds = new Set();
+        openedLessonIds = new Set();
         setCourseSignedIn(false);
         courseLoginForm?.reset();
         progressCard.hidden = true;
@@ -201,6 +203,10 @@
         renderLessons();
       }
       const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+      const formatLessonContent = (value = '') => String(value || 'Your teacher will add lesson notes or video resources here.')
+        .split(/\n{2,}/)
+        .map((paragraph) => `<p>${escapeHtml(paragraph.trim())}</p>`)
+        .join('');
       const cleanFileName = (value = '') => String(value).replace(/[^a-z0-9-]+/gi, '-').replace(/(^-|-$)/g, '').toLowerCase();
       const verifyCertificateUrl = (certificateNumber) => `https://www.worldhsfoundation.org/verify-certificate?number=${encodeURIComponent(certificateNumber)}`;
 
@@ -574,19 +580,29 @@
         lessonsList.innerHTML = lessons.map((lesson, index) => {
           const lessonKey = String(lesson.id);
           const complete = completedLessonIds.has(lessonKey);
+          const opened = openedLessonIds.has(lessonKey);
           const previousLesson = lessons[index - 1];
           const locked = Boolean(enrollment && !complete && previousLesson && !completedLessonIds.has(String(previousLesson.id)));
-          const buttonDisabled = !enrollment || complete || locked;
-          const buttonLabel = complete ? 'Completed' : locked ? 'Complete previous lesson first' : 'Mark complete';
+          const buttonDisabled = !enrollment || complete || locked || !opened;
+          const buttonLabel = complete ? 'Completed' : locked ? 'Complete previous lesson first' : opened ? 'Mark complete' : 'Open lesson first';
+          const lessonIntro = String(lesson.content || 'Your teacher will add lesson notes or video resources here.').split(/\n{2,}/)[0];
+          const lectureContent = formatLessonContent(lesson.content);
           return `
             <article class="learner-item">
               <div>
-                <span>${escapeHtml(lesson.lesson_type)} • Lesson ${lesson.lesson_order}</span>
+                <span>${escapeHtml(lesson.lesson_type)} • Lesson ${lesson.lesson_order} • ${Number(lesson.estimated_minutes || 30)} min</span>
                 <h3>${escapeHtml(lesson.title)}</h3>
-                <p>${escapeHtml(lesson.content || 'Your teacher will add lesson notes or video resources here.')}</p>
-                ${lesson.video_url ? `<a class="arrow-link" href="${escapeHtml(lesson.video_url)}" target="_blank" rel="noreferrer">Open video →</a>` : ''}
-                ${lesson.resource_url ? `<a class="arrow-link" href="${escapeHtml(lesson.resource_url)}" target="_blank" rel="noreferrer">Download resource →</a>` : ''}
+                <p>${escapeHtml(lessonIntro)}</p>
+                <div class="lesson-resource-row">
+                  ${lesson.video_url ? `<a class="arrow-link" href="${escapeHtml(lesson.video_url)}" target="_blank" rel="noreferrer">Open video lesson →</a>` : ''}
+                  ${lesson.resource_url ? `<a class="arrow-link" href="${escapeHtml(lesson.resource_url)}" target="_blank" rel="noreferrer">Download resource →</a>` : ''}
+                </div>
+                <button class="text-button lesson-open-button" type="button" data-open-lesson="${lesson.id}">
+                  ${opened ? 'Review classroom lecture' : 'Open full classroom lecture'}
+                </button>
+                ${opened ? `<div class="lesson-lecture-panel" id="lesson-${lessonKey}">${lectureContent}<p><strong>Class activity:</strong> Write one practical idea, example or question from this lesson before you mark it complete.</p></div>` : ''}
                 ${locked ? '<small class="lesson-lock-note">This lesson unlocks after the previous lesson is completed.</small>' : ''}
+                ${!opened && !locked && !complete ? '<small class="lesson-lock-note">Open and review the full lesson lecture before marking complete.</small>' : ''}
               </div>
               <button class="button ${complete || locked ? 'button-light auth-secondary' : ''}" type="button" data-complete-lesson="${lesson.id}" ${buttonDisabled ? 'disabled' : ''}>
                 ${buttonLabel}
@@ -616,6 +632,11 @@
         const previousLesson = lessons[lessonIndex - 1];
         if (previousLesson && !completedLessonIds.has(String(previousLesson.id))) {
           setStatus('Please complete the previous lesson before marking this lesson complete.');
+          return;
+        }
+
+        if (!openedLessonIds.has(String(lessonId))) {
+          setStatus('Open and review the lesson lecture before marking it complete.');
           return;
         }
 
@@ -816,6 +837,15 @@
       enrollButton?.addEventListener('click', enroll);
 
       document.addEventListener('click', (event) => {
+        const openLessonButton = event.target.closest('[data-open-lesson]');
+        if (openLessonButton) {
+          openedLessonIds.add(String(openLessonButton.dataset.openLesson));
+          setStatus('Lesson lecture opened. Review the lecture, video and class activity before marking complete.');
+          renderLessons();
+          document.querySelector(`#lesson-${CSS.escape(String(openLessonButton.dataset.openLesson))}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
         const button = event.target.closest('[data-complete-lesson]');
         if (button) completeLesson(button.dataset.completeLesson);
 
