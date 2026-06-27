@@ -16,6 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -194,7 +195,7 @@
                   <option value="donor">Donor</option>
                 </select>
 
-                <p class="form-hint">Create an account before using the WHSF app portal. Full database authentication can be connected for live WHSF accounts.</p>
+                <p class="form-hint">Create an account before using the WHSF app portal. Accounts and chat are protected with Supabase authentication.</p>
 
                 <button class="button" type="submit" data-auth-submit>Create Account</button>
                 <p id="mobile-login-status" class="form-status" role="status" aria-live="polite"></p>
@@ -319,7 +320,7 @@
                     <input id="community-chat-message" name="message" type="text" placeholder="Write a collaboration message..." required />
                     <button class="button" type="submit">Send</button>
                   </form>
-                  <div class="admin-announcement-card">
+                  <div class="admin-announcement-card" hidden>
                     <strong>WHSF admin announcement</strong>
                     <p>Post one message to every room for important reminders, programme updates or urgent support notices.</p>
                     <form data-admin-announcement-form>
@@ -327,6 +328,7 @@
                       <input id="admin-announcement-message" name="announcement" type="text" placeholder="Write announcement for all rooms..." required />
                       <button class="mini-action" type="submit">Send announcement</button>
                     </form>
+                    <p class="form-hint">Announcement access is restricted to WHSF admin accounts.</p>
                   </div>
                   <p class="moderation-notice">Moderation notice: keep messages respectful, safeguarding-aware and programme-related. Shared chat history can later be connected to protected WHSF user accounts for secure records.</p>
                 </section>

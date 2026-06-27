@@ -410,8 +410,15 @@ const mobileSessionKey = 'whsf_mobile_app_session';
 const mobileAccountsKey = 'whsf_mobile_app_accounts';
 const mobileNoteKey = 'whsf_mobile_app_collaboration_note';
 const mobileChatKey = 'whsf_mobile_app_chat_rooms';
+const adminAnnouncementCard = document.querySelector('.admin-announcement-card');
+const WHSF_MOBILE_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+const WHSF_MOBILE_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+const whsfMobileSupabase = mobileLoginForm && window.supabase
+  ? window.supabase.createClient(WHSF_MOBILE_SUPABASE_URL, WHSF_MOBILE_SUPABASE_ANON_KEY)
+  : null;
 let activeChatRoom = 'volunteers';
 let mobileAuthMode = 'create';
+let currentMobileProfile = null;
 
 const mobileRoleContent = {
   volunteer: {
@@ -567,28 +574,40 @@ function formatChatTime(date = new Date()) {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function loadChatRooms() {
-  try {
-    const savedRooms = JSON.parse(localStorage.getItem(mobileChatKey) || 'null');
-    if (savedRooms && typeof savedRooms === 'object') {
-      Object.keys(chatRooms).forEach((room) => {
-        if (Array.isArray(savedRooms[room])) chatRooms[room].messages = savedRooms[room];
-      });
-    }
-  } catch {
-    // Chat remains available with default preview messages when storage is unavailable.
+async function loadChatRooms() {
+  if (!whsfMobileSupabase || !currentMobileProfile) {
+    renderChatRoom(activeChatRoom);
+    return;
   }
-}
 
-function saveChatRooms() {
-  try {
-    const messagesByRoom = Object.fromEntries(
-      Object.entries(chatRooms).map(([room, details]) => [room, details.messages])
-    );
-    localStorage.setItem(mobileChatKey, JSON.stringify(messagesByRoom));
-  } catch {
-    // Chat can still work for the active page session without saved preview history.
+  const { data, error } = await whsfMobileSupabase
+    .from('mobile_app_chat_messages')
+    .select('room,sender_name,sender_role,message,message_type,created_at')
+    .order('created_at', { ascending: true })
+    .limit(500);
+
+  if (error) {
+    setMobileLoginStatus(error.message);
+    renderChatRoom(activeChatRoom);
+    return;
   }
+
+  Object.keys(chatRooms).forEach((roomName) => {
+    chatRooms[roomName].messages = [];
+  });
+
+  (data || []).forEach((message) => {
+    if (!chatRooms[message.room]) return;
+    chatRooms[message.room].messages.push({
+      sender: message.sender_name,
+      text: message.message,
+      role: message.sender_role,
+      type: message.message_type,
+      time: new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+  });
+
+  renderChatRoom(activeChatRoom);
 }
 
 function renderChatRoom(roomName = activeChatRoom) {
@@ -615,20 +634,45 @@ function renderChatRoom(roomName = activeChatRoom) {
   communityChat.scrollTop = communityChat.scrollHeight;
 }
 
-function addChatMessage(roomName, sender, text, type = 'message') {
+async function addChatMessage(roomName, sender, text, type = 'message') {
   const room = chatRooms[roomName] || chatRooms.volunteers;
-  room.messages.push({
+  const newMessage = {
     sender,
     text,
     type,
     time: formatChatTime()
-  });
-  saveChatRooms();
+  };
+
+  if (whsfMobileSupabase && currentMobileProfile) {
+    const { error } = await whsfMobileSupabase
+      .from('mobile_app_chat_messages')
+      .insert({
+        room: roomName,
+        sender_id: currentMobileProfile.id,
+        sender_name: currentMobileProfile.full_name,
+        sender_role: currentMobileProfile.role,
+        message: text,
+        message_type: type
+      });
+
+    if (error) {
+      setMobileLoginStatus(error.message);
+      return;
+    }
+  }
+
+  room.messages.push(newMessage);
   renderChatRoom(roomName);
 }
 
 function setMobileLoginStatus(message) {
   if (mobileLoginStatus) mobileLoginStatus.textContent = message || '';
+}
+
+function ensureMobileSupabase() {
+  if (whsfMobileSupabase) return true;
+  setMobileLoginStatus('Secure account service is still loading. Please refresh the page and try again.');
+  return false;
 }
 
 function setMobileAuthMode(mode) {
@@ -649,34 +693,6 @@ function setMobileAuthMode(mode) {
     }
   });
   setMobileLoginStatus(isCreateMode ? 'Create your WHSF account to continue.' : 'Sign in with your existing WHSF account.');
-}
-
-async function hashMobilePassword(email, password) {
-  const value = `${email.toLowerCase()}::${password}`;
-  if (window.crypto?.subtle) {
-    const encoded = new TextEncoder().encode(value);
-    const digest = await window.crypto.subtle.digest('SHA-256', encoded);
-    return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
-  }
-  return btoa(unescape(encodeURIComponent(value)));
-}
-
-function loadMobileAccounts() {
-  try {
-    return JSON.parse(localStorage.getItem(mobileAccountsKey) || '{}');
-  } catch {
-    return {};
-  }
-}
-
-function saveMobileAccounts(accounts) {
-  try {
-    localStorage.setItem(mobileAccountsKey, JSON.stringify(accounts));
-    return true;
-  } catch {
-    setMobileLoginStatus('Account could not be saved because browser storage is unavailable.');
-    return false;
-  }
 }
 
 function activateMobileTab(tabName) {
@@ -707,6 +723,7 @@ function renderMobileSession(session) {
   if (mobileLoginCard) mobileLoginCard.hidden = true;
   if (mobileWelcome) mobileWelcome.textContent = `Welcome, ${session.name}`;
   if (mobileRoleSummary) mobileRoleSummary.textContent = `${roleContent.label} access • ${roleContent.summary}`;
+  if (adminAnnouncementCard) adminAnnouncementCard.hidden = !session.isAdmin;
   activateMobileTab(roleContent.tab);
   setMobileLoginStatus(`Signed in as ${roleContent.label}.`);
   mobileDashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -728,9 +745,63 @@ function saveMobileSession(session) {
   }
 }
 
+async function getMobileProfile(user) {
+  if (!whsfMobileSupabase || !user) return null;
+  const { data, error } = await whsfMobileSupabase
+    .from('mobile_app_profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (error) {
+    setMobileLoginStatus(error.message);
+    return null;
+  }
+
+  return data;
+}
+
+async function upsertMobileProfile(user, fullName, role) {
+  if (!whsfMobileSupabase || !user) return null;
+  const profile = {
+    id: user.id,
+    full_name: fullName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'WHSF member',
+    email: user.email,
+    role: role || user.user_metadata?.role || 'member',
+    updated_at: new Date().toISOString()
+  };
+
+  const { data, error } = await whsfMobileSupabase
+    .from('mobile_app_profiles')
+    .upsert(profile)
+    .select()
+    .single();
+
+  if (error) {
+    setMobileLoginStatus(error.message);
+    return null;
+  }
+
+  return data;
+}
+
+function profileToMobileSession(user, profile) {
+  const appRole = user?.app_metadata?.role;
+  const role = appRole === 'admin' ? 'admin' : profile?.role || user?.user_metadata?.role || 'member';
+  return {
+    id: user.id,
+    name: profile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'WHSF member',
+    email: user.email,
+    role,
+    isAdmin: role === 'admin',
+    signedInAt: new Date().toISOString()
+  };
+}
+
 mobileLoginForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!mobileLoginForm.reportValidity()) return;
+  if (!ensureMobileSupabase()) return;
 
   const data = new FormData(mobileLoginForm);
   const name = String(data.get('name') || '').trim();
@@ -744,9 +815,6 @@ mobileLoginForm?.addEventListener('submit', async (event) => {
     return;
   }
 
-  const accounts = loadMobileAccounts();
-  const passwordHash = await hashMobilePassword(email, password);
-
   if (mobileAuthMode === 'create') {
     if (!name || !role) {
       setMobileLoginStatus('Please enter your full name and select your role to create an account.');
@@ -756,38 +824,61 @@ mobileLoginForm?.addEventListener('submit', async (event) => {
       setMobileLoginStatus('Passwords do not match. Please confirm your password.');
       return;
     }
-    if (accounts[email]) {
-      setMobileLoginStatus('An account already exists for this email. Please sign in.');
+
+    setMobileLoginStatus('Creating your secure WHSF account…');
+    const { data: authData, error } = await whsfMobileSupabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+          role
+        }
+      }
+    });
+
+    if (error) {
+      setMobileLoginStatus(error.message);
+      return;
+    }
+
+    if (!authData.session) {
+      setMobileLoginStatus('Account created. Please check your email to confirm the account, then sign in.');
       setMobileAuthMode('signin');
       return;
     }
-    accounts[email] = {
-      name,
-      email,
-      role,
-      passwordHash,
-      createdAt: new Date().toISOString()
-    };
-    if (!saveMobileAccounts(accounts)) return;
-    setMobileLoginStatus('Account created successfully. Opening your dashboard...');
+
+    currentMobileProfile = await upsertMobileProfile(authData.user, name, role);
+    if (!currentMobileProfile) return;
+
+    const session = profileToMobileSession(authData.user, currentMobileProfile);
+    renderMobileSession(session);
+    saveMobileSession(session);
+    await loadChatRooms();
+    return;
   } else {
-    const account = accounts[email];
-    if (!account || account.passwordHash !== passwordHash) {
-      setMobileLoginStatus('Account not found or password is incorrect. Please create an account first if you are new.');
+    setMobileLoginStatus('Signing in securely…');
+    const { data: authData, error } = await whsfMobileSupabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      setMobileLoginStatus(error.message);
       return;
     }
+
+    currentMobileProfile = await getMobileProfile(authData.user);
+    if (!currentMobileProfile) {
+      currentMobileProfile = await upsertMobileProfile(authData.user, name, role || 'member');
+    }
+    if (!currentMobileProfile) return;
+
+    const session = profileToMobileSession(authData.user, currentMobileProfile);
+    renderMobileSession(session);
+    saveMobileSession(session);
+    await loadChatRooms();
   }
-
-  const account = accounts[email];
-  const session = {
-    name: account?.name || name || email,
-    email,
-    role: account?.role || role || 'member',
-    signedInAt: new Date().toISOString()
-  };
-
-  renderMobileSession(session);
-  saveMobileSession(session);
 });
 
 authModeButtons.forEach((button) => {
@@ -796,7 +887,8 @@ authModeButtons.forEach((button) => {
 
 setMobileAuthMode('create');
 
-mobileSignout?.addEventListener('click', () => {
+mobileSignout?.addEventListener('click', async () => {
+  if (whsfMobileSupabase) await whsfMobileSupabase.auth.signOut();
   try {
     sessionStorage.removeItem(mobileSessionKey);
   } catch {
@@ -804,6 +896,7 @@ mobileSignout?.addEventListener('click', () => {
   }
   mobileDashboard.hidden = true;
   mobileDashboard.classList.remove('is-active');
+  currentMobileProfile = null;
   mobileLoginForm?.reset();
   if (mobileLoginCard) mobileLoginCard.hidden = false;
   setMobileLoginStatus('Signed out successfully.');
@@ -842,17 +935,20 @@ addImpactUpdate?.addEventListener('click', () => {
   impactFeed.prepend(update);
 });
 
-communityChatForm?.addEventListener('submit', (event) => {
+communityChatForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!communityChatForm.reportValidity() || !communityChat) return;
+  if (!currentMobileProfile) {
+    setMobileLoginStatus('Please sign in before sending chat messages.');
+    return;
+  }
 
   const data = new FormData(communityChatForm);
   const message = String(data.get('message') || '').trim();
-  const session = loadMobileSession();
-  const sender = session?.name || 'WHSF community member';
+  const sender = currentMobileProfile.full_name || 'WHSF community member';
   if (!message) return;
 
-  addChatMessage(activeChatRoom, sender, message);
+  await addChatMessage(activeChatRoom, sender, message);
   communityChatForm.reset();
 });
 
@@ -864,27 +960,39 @@ chatRoomShortcuts.forEach((button) => {
   button.addEventListener('click', () => renderChatRoom(button.dataset.chatRoomShortcut));
 });
 
-adminAnnouncementForm?.addEventListener('submit', (event) => {
+adminAnnouncementForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!adminAnnouncementForm.reportValidity()) return;
+  if (!currentMobileProfile || currentMobileProfile.role !== 'admin') {
+    setMobileLoginStatus('Only WHSF admin accounts can send announcements.');
+    return;
+  }
   const data = new FormData(adminAnnouncementForm);
   const announcement = String(data.get('announcement') || '').trim();
   if (!announcement) return;
 
-  Object.keys(chatRooms).forEach((roomName) => {
-    chatRooms[roomName].messages.push({
-      sender: 'WHSF Admin',
-      text: announcement,
-      type: 'announcement',
-      time: formatChatTime()
-    });
-  });
-  saveChatRooms();
-  renderChatRoom(activeChatRoom);
+  const rows = Object.keys(chatRooms).map((roomName) => ({
+    room: roomName,
+    sender_id: currentMobileProfile.id,
+    sender_name: currentMobileProfile.full_name,
+    sender_role: currentMobileProfile.role,
+    message: announcement,
+    message_type: 'announcement'
+  }));
+
+  const { error } = await whsfMobileSupabase
+    .from('mobile_app_chat_messages')
+    .insert(rows);
+
+  if (error) {
+    setMobileLoginStatus(error.message);
+    return;
+  }
+
+  await loadChatRooms();
   adminAnnouncementForm.reset();
 });
 
-loadChatRooms();
 renderChatRoom(activeChatRoom);
 
 requestNotifications?.addEventListener('click', async () => {
@@ -902,8 +1010,32 @@ requestNotifications?.addEventListener('click', async () => {
       : 'Notifications were not enabled. Users can still receive updates through the WHSF website and email.';
 });
 
-const savedMobileSession = loadMobileSession();
-if (savedMobileSession) renderMobileSession(savedMobileSession);
+async function restoreMobileSupabaseSession() {
+  if (!whsfMobileSupabase || !mobileLoginForm) {
+    renderChatRoom(activeChatRoom);
+    return;
+  }
+
+  const { data } = await whsfMobileSupabase.auth.getSession();
+  const user = data.session?.user;
+  if (!user) {
+    renderChatRoom(activeChatRoom);
+    return;
+  }
+
+  currentMobileProfile = await getMobileProfile(user);
+  if (!currentMobileProfile) {
+    currentMobileProfile = await upsertMobileProfile(user, user.user_metadata?.full_name, user.user_metadata?.role || 'member');
+  }
+  if (!currentMobileProfile) return;
+
+  const session = profileToMobileSession(user, currentMobileProfile);
+  renderMobileSession(session);
+  saveMobileSession(session);
+  await loadChatRooms();
+}
+
+restoreMobileSupabaseSession();
 
 const pwaInstallButtons = document.querySelectorAll('[data-install-pwa]');
 const pwaInstallStatus = document.querySelector('[data-pwa-install-status]');
