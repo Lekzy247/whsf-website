@@ -317,5 +317,32 @@ form?.addEventListener('submit', (event) => {
   window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
 });
 
+const techbridgeDonationForm = document.querySelector('#techbridge-donation-form');
+const techbridgeDonationStatus = document.querySelector('#techbridge-donation-status');
+
+techbridgeDonationForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!techbridgeDonationForm.reportValidity()) return;
+
+  const data = new FormData(techbridgeDonationForm);
+  const subject = encodeURIComponent(`WHSF TechBridge enquiry: ${data.get('supportType')}`);
+  const body = encodeURIComponent(
+    `TechBridge Device Donation / Partner Interest\n\n` +
+    `Name / Organisation: ${data.get('donorName')}\n` +
+    `Email: ${data.get('donorEmail')}\n` +
+    `Phone / WhatsApp: ${data.get('donorPhone') || 'Not provided'}\n` +
+    `Location: ${data.get('donorLocation')}\n` +
+    `Support type: ${data.get('supportType')}\n` +
+    `Quantity / Sponsorship size: ${data.get('quantity')}\n` +
+    `Condition / Support details: ${data.get('condition')}\n\n` +
+    `Pickup, shipping or availability note:\n${data.get('logistics')}\n\n` +
+    `Message:\n${data.get('donationMessage') || 'No additional message provided.'}\n\n` +
+    `Consent: The sender confirmed WHSF may contact them about this TechBridge enquiry.`
+  );
+
+  if (techbridgeDonationStatus) techbridgeDonationStatus.textContent = 'Opening your email application. Please review and send the prepared TechBridge message to WHSF.';
+  window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
+});
+
 const yearElement = document.querySelector('#year');
 if (yearElement) yearElement.textContent = new Date().getFullYear();

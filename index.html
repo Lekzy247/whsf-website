@@ -582,6 +582,67 @@
             </p>
           </form>
         </div>
+
+        <div class="shell techbridge-donation-panel" id="techbridge-donation">
+          <div class="techbridge-donation-copy reveal">
+            <p class="eyebrow">TechBridge device donation</p>
+            <h2>Donate devices, sponsor connectivity or help teach remotely.</h2>
+            <p>
+              Use this form if you want to donate laptops, tablets, phones, routers, solar chargers, projectors, fund connectivity, teach by livestream, or sponsor a WHSF virtual partner room.
+            </p>
+          </div>
+          <form class="techbridge-donation-form reveal delay-one" id="techbridge-donation-form">
+            <div class="field-row">
+              <label>Full name / Organisation<input name="donorName" autocomplete="organization" required /></label>
+              <label>Email address<input type="email" name="donorEmail" autocomplete="email" required /></label>
+            </div>
+            <div class="field-row">
+              <label>Phone / WhatsApp<input name="donorPhone" autocomplete="tel" placeholder="Best contact number" /></label>
+              <label>Location<input name="donorLocation" placeholder="City, state/country" required /></label>
+            </div>
+            <div class="field-row">
+              <label>
+                Support type
+                <select name="supportType" required>
+                  <option value="">Select one</option>
+                  <option>Laptop donation</option>
+                  <option>Tablet donation</option>
+                  <option>Phone donation</option>
+                  <option>Router / internet device</option>
+                  <option>Solar charger / power support</option>
+                  <option>Projector / classroom equipment</option>
+                  <option>Connectivity sponsorship</option>
+                  <option>Remote teaching / livestream class</option>
+                  <option>Virtual partner room sponsorship</option>
+                  <option>Funding / grant support</option>
+                  <option>Other technology support</option>
+                </select>
+              </label>
+              <label>Quantity / Sponsorship size<input name="quantity" placeholder="Example: 5 laptops, $500, 2 classes/month" required /></label>
+            </div>
+            <label>
+              Device condition or support details
+              <select name="condition" required>
+                <option value="">Select one</option>
+                <option>New</option>
+                <option>Used but working</option>
+                <option>Needs minor repair</option>
+                <option>Funding or service support</option>
+                <option>Teaching / mentorship support</option>
+                <option>Not applicable</option>
+              </select>
+            </label>
+            <label>Pickup, shipping or availability note<textarea name="logistics" rows="3" required placeholder="Tell us where the devices are, how WHSF can receive them, or when you are available to support."></textarea></label>
+            <label>Message<textarea name="donationMessage" rows="4" placeholder="Share any extra details about your donation, sponsorship, virtual room idea or remote teaching offer."></textarea></label>
+            <label class="consent-check">
+              <input type="checkbox" name="consent" required />
+              <span>I confirm that WHSF may contact me about this TechBridge donation or partnership enquiry.</span>
+            </label>
+            <button class="button" type="submit">Prepare TechBridge message</button>
+            <p class="form-note" id="techbridge-donation-status" role="status">This prepares an email to WHSF for review and follow-up.</p>
+          </form>
+        </div>
+
         <div class="shell fraud-alert" role="note">
           <strong>Fraud awareness</strong>
           <p>Scammers have misused the WHSF name, logo and images to create fraudulent Facebook pages and WhatsApp groups. WHSF is not offering financial promotions. Please report suspicious activity to your local authorities.</p>
