@@ -29,14 +29,26 @@ function setPreference(button, className, storageKey) {
   const active = !document.body.classList.contains(className);
   document.body.classList.toggle(className, active);
   button?.setAttribute('aria-pressed', String(active));
-  localStorage.setItem(storageKey, String(active));
+  try {
+    localStorage.setItem(storageKey, String(active));
+  } catch {
+    // Some privacy modes block storage; accessibility toggles should still work visually.
+  }
 }
 
-if (localStorage.getItem('whsf-large-text') === 'true') {
+function getStoredPreference(storageKey) {
+  try {
+    return localStorage.getItem(storageKey);
+  } catch {
+    return null;
+  }
+}
+
+if (getStoredPreference('whsf-large-text') === 'true') {
   document.body.classList.add('large-text');
   fontToggle?.setAttribute('aria-pressed', 'true');
 }
-if (localStorage.getItem('whsf-high-contrast') === 'true') {
+if (getStoredPreference('whsf-high-contrast') === 'true') {
   document.body.classList.add('high-contrast');
   contrastToggle?.setAttribute('aria-pressed', 'true');
 }
@@ -446,6 +458,7 @@ function renderMobileSession(session) {
   if (mobileRoleSummary) mobileRoleSummary.textContent = `${roleContent.label} access • ${roleContent.summary}`;
   activateMobileTab(roleContent.tab);
   setMobileLoginStatus(`Signed in as ${roleContent.label}.`);
+  mobileDashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function loadMobileSession() {
@@ -457,7 +470,11 @@ function loadMobileSession() {
 }
 
 function saveMobileSession(session) {
-  sessionStorage.setItem(mobileSessionKey, JSON.stringify(session));
+  try {
+    sessionStorage.setItem(mobileSessionKey, JSON.stringify(session));
+  } catch {
+    setMobileLoginStatus('Signed in for this page session. Browser storage is not available.');
+  }
 }
 
 mobileLoginForm?.addEventListener('submit', (event) => {
@@ -468,26 +485,24 @@ mobileLoginForm?.addEventListener('submit', (event) => {
   const name = String(data.get('name') || '').trim();
   const email = String(data.get('email') || '').trim();
   const role = String(data.get('role') || '').trim();
-  const code = String(data.get('code') || '').trim();
-
-  if (code.length < 6) {
-    setMobileLoginStatus('Please enter a valid WHSF pilot access code.');
-    return;
-  }
 
   const session = {
     name,
     email,
-    role,
+    role: role || 'member',
     signedInAt: new Date().toISOString()
   };
 
-  saveMobileSession(session);
   renderMobileSession(session);
+  saveMobileSession(session);
 });
 
 mobileSignout?.addEventListener('click', () => {
-  sessionStorage.removeItem(mobileSessionKey);
+  try {
+    sessionStorage.removeItem(mobileSessionKey);
+  } catch {
+    // Browser storage may be unavailable in some privacy modes; the visible session can still be cleared.
+  }
   mobileDashboard.hidden = true;
   mobileLoginForm?.reset();
   if (mobileLoginCard) mobileLoginCard.hidden = false;
@@ -503,13 +518,21 @@ volunteerTasks.forEach((task) => task.addEventListener('change', updateVolunteer
 updateVolunteerProgress();
 
 if (collabNote) {
-  collabNote.value = localStorage.getItem(mobileNoteKey) || '';
+  try {
+    collabNote.value = localStorage.getItem(mobileNoteKey) || '';
+  } catch {
+    collabNote.value = '';
+  }
 }
 
 saveCollabNote?.addEventListener('click', () => {
   if (!collabNote) return;
-  localStorage.setItem(mobileNoteKey, collabNote.value.trim());
-  if (collabStatus) collabStatus.textContent = 'Collaboration note saved on this device for the pilot.';
+  try {
+    localStorage.setItem(mobileNoteKey, collabNote.value.trim());
+    if (collabStatus) collabStatus.textContent = 'Collaboration note saved on this device for the pilot.';
+  } catch {
+    if (collabStatus) collabStatus.textContent = 'Note captured for this session. Browser storage is not available.';
+  }
 });
 
 addImpactUpdate?.addEventListener('click', () => {
