@@ -1167,6 +1167,13 @@ body {
 }
 
 .tech-impact-hero .hero-lead,
+.classroom-hero .hero-lead,
+.course-learner-hero .hero-lead,
+.help-hero .hero-lead,
+.impact-dashboard-hero .hero-lead,
+.techbridge-global-hero .hero-lead,
+.mobile-app-hero .hero-lead,
+.mobile-admin-hero .hero-lead,
 .innovation-copy p:not(.eyebrow),
 .contact-copy p:not(.eyebrow),
 .address-list address,
@@ -1180,6 +1187,17 @@ body {
 .digital-ecosystem-card p:not(.eyebrow),
 .path-result-card p {
   color: #fff4f6;
+}
+
+.tech-impact-hero .eyebrow,
+.classroom-hero .eyebrow,
+.course-learner-hero .eyebrow,
+.help-hero .eyebrow,
+.impact-dashboard-hero .eyebrow,
+.techbridge-global-hero .eyebrow,
+.mobile-app-hero .eyebrow,
+.mobile-admin-hero .eyebrow {
+  color: #f7d37a;
 }
 
 .eyebrow-light,
