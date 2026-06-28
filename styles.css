@@ -241,6 +241,11 @@ p, li { text-wrap: pretty; }
 .mission-vision-grid span, .programme-list span { color: var(--red); font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .mission-vision-grid h3 { margin: 14px 0 10px; font-family: "Playfair Display", Georgia, serif; font-size: 1.4rem; }
 .mission-vision-grid p { margin: 0; color: var(--muted); font-size: .9rem; }
+.leadership-video-card { margin-top: 58px; padding: 30px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: center; border: 1px solid rgba(95,20,24,.12); border-radius: var(--radius); background: #fff; box-shadow: 0 16px 44px rgba(59,7,17,.08); }
+.leadership-video-card h3 { margin-bottom: 10px; color: var(--red-dark); font-family: "Playfair Display", Georgia, serif; font-size: clamp(1.7rem, 3vw, 2.4rem); }
+.leadership-video-card p:not(.eyebrow) { margin: 0; color: var(--muted); font-weight: 750; line-height: 1.65; }
+.leadership-video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 18px; background: #20050a; }
+.leadership-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .pillar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .pillar-card { position: relative; min-height: 360px; padding: 30px 26px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; transition: transform .25s ease, box-shadow .25s ease; }
 .pillar-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
@@ -496,7 +501,7 @@ p, li { text-wrap: pretty; }
   .primary-nav a { padding: 12px; font-size: 1.05rem; }
   .primary-nav .button { margin-top: 12px; }
   .hero-grid { min-height: auto; padding: 75px 0; }
-  .split-layout, .innovation-grid, .impact-header, .contact-grid, .project-feature-grid, .volunteer-record, .community-impact-grid, .path-finder-grid, .techbridge-hero, .innovation-feature-panel, .techbridge-monetization, .techbridge-donation-panel, .digital-ecosystem-card { grid-template-columns: 1fr; gap: 38px; }
+  .split-layout, .innovation-grid, .impact-header, .contact-grid, .project-feature-grid, .volunteer-record, .community-impact-grid, .path-finder-grid, .techbridge-hero, .innovation-feature-panel, .techbridge-monetization, .techbridge-donation-panel, .digital-ecosystem-card, .leadership-video-card { grid-template-columns: 1fr; gap: 38px; }
   .community-impact-copy { grid-row: auto; padding-right: 0; }
   .partner-logo-grid { grid-template-columns: 1fr 1fr; }
   .tech-impact-metrics, .technology-track-grid { grid-template-columns: repeat(2, 1fr); }
