@@ -1,6 +1,10 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/events", "destination": "/events/index.html" },
+    { "source": "/career-fair", "destination": "/career-fair.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
