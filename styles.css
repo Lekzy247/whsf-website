@@ -1235,6 +1235,11 @@ body {
   gap: 18px;
   padding: 34px 0;
   background: transparent;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.impact-metric-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 .tech-impact-metrics article,
