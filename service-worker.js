@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v27';
+const WHSF_CACHE_NAME = 'whsf-pwa-v28';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -8,9 +8,6 @@ const WHSF_CORE_ASSETS = [
   '/mobile-app-admin.html',
   '/programs.html',
   '/innovation.html',
-  '/events.html',
-  '/events/index.html',
-  '/career-fair.html',
   '/contact.html',
   '/e-classroom.html',
   '/impact-dashboard.html',
@@ -51,8 +48,6 @@ self.addEventListener('fetch', (event) => {
     event.request.destination === 'script' ||
     event.request.destination === 'style' ||
     requestUrl.pathname.endsWith('.html') ||
-    requestUrl.pathname === '/events' ||
-    requestUrl.pathname === '/career-fair' ||
     requestUrl.pathname === '/mobile-app' ||
     requestUrl.pathname === '/mobile-app-admin';
 
