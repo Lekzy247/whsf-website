@@ -1123,3 +1123,269 @@ p, li { text-wrap: pretty; }
   .mobile-admin-topbar { flex-direction: column; }
   .mobile-admin-actions .button, .mobile-admin-message-list .mini-action { width: 100%; justify-content: center; }
 }
+
+/* Final WHSF readability palette
+   The site now uses deep wine as the brand anchor, warm white for reading,
+   and gold only as an accent. This keeps mobile text readable and avoids
+   too many competing background colors. */
+body {
+  background: #fffdfa;
+}
+
+.section-tint,
+.technology-track-section,
+.path-finder-section,
+.community-impact-section,
+.techbridge-section,
+.partner-section,
+.cloud-lms-section,
+.skills-passport-section,
+.mobile-portal-section,
+.mobile-architecture-section,
+.mobile-admin-page,
+.offline-page {
+  background: #fff8f5;
+}
+
+.hero {
+  background: linear-gradient(135deg, #fffdfa 0%, #fff7f4 100%);
+}
+
+.tech-impact-hero,
+.classroom-hero,
+.course-learner-hero,
+.help-hero,
+.impact-dashboard-hero,
+.techbridge-global-hero,
+.mobile-app-hero,
+.mobile-admin-hero,
+.admin-hero {
+  color: #fff;
+  background:
+    radial-gradient(circle at 82% 16%, rgba(229,185,87,.16), transparent 26rem),
+    linear-gradient(135deg, #26060d 0%, #3b0711 58%, #5a0f1d 100%);
+}
+
+.tech-impact-hero .hero-lead,
+.innovation-copy p:not(.eyebrow),
+.contact-copy p:not(.eyebrow),
+.address-list address,
+.contact-next-steps span,
+.techbridge-donation-copy p:not(.eyebrow),
+.consent-check span,
+.fraud-alert p,
+.learner-dashboard p,
+.learner-progress-card p,
+.virtual-number-panel p,
+.digital-ecosystem-card p:not(.eyebrow),
+.path-result-card p {
+  color: #fff4f6;
+}
+
+.eyebrow-light,
+.tech-impact-hero .hero-tags,
+.command-core span,
+.command-signal-grid span,
+.tech-impact-metrics strong,
+.path-result-card > span,
+.techbridge-callout span,
+.command-metrics b,
+.innovation-stack-list strong,
+.gallery-caption span,
+.classroom-copy .eyebrow,
+.classroom-panel span,
+.classroom-panel li::before,
+.cloud-lms-panel span,
+.passport-card-top span,
+.help-status-card span,
+.virtual-number-list span,
+.impact-dashboard-card span,
+.sdg-grid strong,
+.techbridge-global-card span {
+  color: #f7d37a;
+}
+
+.tech-impact-strip,
+.trust-strip,
+.digital-ecosystem-section,
+.impact-sdg-section {
+  color: var(--ink);
+  background: #fffdfa;
+}
+
+.tech-impact-metrics {
+  gap: 18px;
+  padding: 34px 0;
+  background: transparent;
+}
+
+.tech-impact-metrics article,
+.sdg-grid article {
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid rgba(95,20,24,.12);
+  border-radius: 22px;
+  box-shadow: 0 14px 38px rgba(59,7,17,.07);
+}
+
+.tech-impact-metrics strong,
+.sdg-grid strong {
+  color: var(--red-dark);
+}
+
+.tech-impact-metrics span,
+.trust-grid span,
+.sdg-grid span {
+  color: var(--muted);
+}
+
+.trust-grid p {
+  border-color: rgba(95,20,24,.12);
+}
+
+.trust-grid strong {
+  color: var(--red-dark);
+}
+
+.digital-ecosystem-card,
+.innovation,
+.contact-section,
+.techbridge-callout,
+.innovation-feature-panel,
+.techbridge-monetization,
+.techbridge-donation-panel,
+.learner-dashboard,
+.learner-dashboard-stats article,
+.cloud-lms-panel,
+.skills-passport-card,
+.learner-progress-card,
+.virtual-number-panel,
+.impact-report-card,
+.path-result-card {
+  background:
+    radial-gradient(circle at 84% 12%, rgba(229,185,87,.13), transparent 24rem),
+    linear-gradient(135deg, #2b0610 0%, #3b0711 68%, #5a0f1d 100%);
+}
+
+.tech-command-panel,
+.classroom-panel,
+.help-status-card,
+.impact-dashboard-card,
+.techbridge-global-card {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.24);
+}
+
+.command-signal-grid article,
+.command-core,
+.virtual-number-list article {
+  background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.22);
+}
+
+.button {
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+}
+
+.button:hover {
+  background: #3b0711;
+  border-color: #3b0711;
+}
+
+.button-secondary {
+  color: var(--red-dark);
+  background: #fff;
+  border-color: rgba(95,20,24,.28);
+}
+
+.button-secondary:hover {
+  color: #fff;
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+}
+
+.button-light,
+.tech-impact-hero .button-secondary,
+.classroom-hero .button-secondary,
+.course-learner-hero .button-secondary,
+.help-hero .button-secondary,
+.impact-dashboard-hero .button-secondary,
+.techbridge-global-hero .button-secondary,
+.mobile-app-hero .button-secondary,
+.mobile-admin-hero .button-secondary {
+  color: #3b0711;
+  background: #fff;
+  border-color: #fff;
+}
+
+.button-light:hover,
+.tech-impact-hero .button-secondary:hover,
+.classroom-hero .button-secondary:hover,
+.course-learner-hero .button-secondary:hover,
+.help-hero .button-secondary:hover,
+.impact-dashboard-hero .button-secondary:hover,
+.techbridge-global-hero .button-secondary:hover,
+.mobile-app-hero .button-secondary:hover,
+.mobile-admin-hero .button-secondary:hover {
+  color: #3b0711;
+  background: #f7d37a;
+  border-color: #f7d37a;
+}
+
+.site-footer {
+  color: #fff4f6;
+  background: #20050a;
+}
+
+.site-footer .footer-links a,
+.site-footer .social-links a,
+.footer-links a,
+.social-links a {
+  color: #fff4f6;
+}
+
+.site-footer .footer-links a:hover,
+.site-footer .social-links a:hover {
+  color: #f7d37a;
+}
+
+@media (max-width: 560px) {
+  .tech-impact-hero,
+  .classroom-hero,
+  .course-learner-hero,
+  .help-hero,
+  .impact-dashboard-hero,
+  .techbridge-global-hero,
+  .mobile-app-hero,
+  .mobile-admin-hero,
+  .admin-hero {
+    background: linear-gradient(180deg, #26060d 0%, #3b0711 100%);
+  }
+
+  .tech-impact-metrics {
+    grid-template-columns: 1fr;
+    padding: 24px 0;
+  }
+
+  .tech-command-panel,
+  .digital-ecosystem-card,
+  .techbridge-callout,
+  .innovation-feature-panel,
+  .techbridge-monetization,
+  .techbridge-donation-panel,
+  .learner-dashboard,
+  .cloud-lms-panel,
+  .skills-passport-card,
+  .learner-progress-card,
+  .virtual-number-panel,
+  .impact-report-card {
+    border-radius: 22px;
+  }
+
+  .hero-lead,
+  p,
+  li {
+    word-break: normal;
+  }
+}
