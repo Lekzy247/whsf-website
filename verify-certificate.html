@@ -153,7 +153,7 @@
             <p class="eyebrow">Employee / Staff verification</p>
             <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
             <p>
-              Use this form to submit staff identity details for WHSF verification. For privacy and safety, WHSF may still confirm final employment status directly through official records.
+              Use this form to confirm WHSF staff identity details. Employee name, employee number, phone number and gender must match WHSF records.
             </p>
             <ul class="staff-verify-notes">
               <li>Use the employee name exactly as provided by WHSF.</li>
@@ -195,12 +195,12 @@
 
         <div class="shell">
           <article class="verify-result-card staff-verify-result" id="staff-verify-result" hidden>
-            <div class="verify-badge">Review</div>
+            <div class="verify-badge">Verified</div>
             <div>
               <p class="eyebrow">Staff verification review</p>
-              <h2>Employee details received</h2>
+              <h2>Employee verified</h2>
               <p>
-                These details are ready for WHSF staff identity review. Final confirmation should be matched against official WHSF employee records.
+                This person matches WHSF staff records using the submitted name, employee number, phone number and gender.
               </p>
             </div>
             <div class="staff-picture-preview">
@@ -225,10 +225,10 @@
               </div>
               <div>
                 <dt>Status</dt>
-                <dd>Pending official WHSF confirmation</dd>
+                <dd id="staff-result-status">Verified WHSF staff</dd>
               </div>
             </dl>
-            <a class="button button-light" href="contact.html">Contact WHSF for final confirmation</a>
+            <a class="button button-light" href="contact.html">Contact WHSF for further confirmation</a>
           </article>
         </div>
       </section>
@@ -361,10 +361,10 @@
         const file = staffPictureInput.files?.[0];
         if (!file) return;
         staffPicturePreview.src = URL.createObjectURL(file);
-        setStaffStatus('Picture selected. Complete the remaining details and submit for review.');
+        setStaffStatus('Picture selected. Complete the remaining details and submit for verification.');
       });
 
-      staffForm?.addEventListener('submit', (event) => {
+      staffForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(staffForm);
         const employeeName = String(formData.get('employee_name') || '').trim();
@@ -378,17 +378,41 @@
           return;
         }
 
-        setText('#staff-result-name', employeeName);
-        setText('#staff-result-number', employeeNumber);
-        setText('#staff-result-phone', employeePhone);
-        setText('#staff-result-gender', employeeGender);
+        setStaffStatus('Checking WHSF staff records…');
+        staffResult.hidden = true;
+
+        const { data, error } = await whsfSupabase.rpc('verify_whsf_staff', {
+          p_full_name: employeeName,
+          p_employee_number: employeeNumber,
+          p_phone: employeePhone,
+          p_gender: employeeGender
+        });
+
+        if (error) {
+          setStaffStatus('Staff verification database is not ready. Run the staff verification SQL file in Supabase, then try again.');
+          alert('Staff verification database is not ready. Please run the staff verification SQL file in Supabase.');
+          return;
+        }
+
+        if (!data?.length) {
+          setStaffStatus('This person is not a staff of WHSF.');
+          alert('This person is not a staff of WHSF.');
+          return;
+        }
+
+        const verifiedStaff = data[0];
+        setText('#staff-result-name', verifiedStaff.full_name);
+        setText('#staff-result-number', verifiedStaff.employee_number);
+        setText('#staff-result-phone', verifiedStaff.phone);
+        setText('#staff-result-gender', verifiedStaff.gender);
+        setText('#staff-result-status', verifiedStaff.verification_status || 'Verified WHSF staff');
 
         if (!staffPicturePreview.src) {
           staffPicturePreview.src = URL.createObjectURL(employeePicture);
         }
 
         staffResult.hidden = false;
-        setStaffStatus('Staff verification details prepared for WHSF review.');
+        setStaffStatus('Staff verified successfully.');
         staffResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     </script>
