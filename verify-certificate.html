@@ -158,7 +158,7 @@
             <ul class="staff-verify-notes">
               <li>Use the employee name exactly as provided by WHSF.</li>
               <li>Enter the official employee number or staff ID.</li>
-              <li>Upload a clear picture for visual identity review.</li>
+              <li>Name, employee number, phone number and gender must all match WHSF records.</li>
             </ul>
           </div>
 
@@ -170,10 +170,6 @@
             <label>
               Employee #
               <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-STAFF-001" autocomplete="off" required />
-            </label>
-            <label>
-              Picture
-              <input id="employee-picture" name="employee_picture" type="file" accept="image/*" required />
             </label>
             <label>
               Phone #
@@ -202,9 +198,6 @@
               <p>
                 This person matches WHSF staff records using the submitted name, employee number, phone number and gender.
               </p>
-            </div>
-            <div class="staff-picture-preview">
-              <img id="staff-picture-preview" src="" alt="Uploaded employee picture preview" />
             </div>
             <dl class="verify-details staff-details">
               <div>
@@ -270,8 +263,6 @@
       const staffForm = document.querySelector('#staff-verification-form');
       const staffStatus = document.querySelector('#staff-verify-status');
       const staffResult = document.querySelector('#staff-verify-result');
-      const staffPictureInput = document.querySelector('#employee-picture');
-      const staffPicturePreview = document.querySelector('#staff-picture-preview');
 
       const setText = (selector, value) => {
         document.querySelector(selector).textContent = value || '—';
@@ -357,13 +348,6 @@
         verifyCertificate(initialNumber);
       }
 
-      staffPictureInput?.addEventListener('change', () => {
-        const file = staffPictureInput.files?.[0];
-        if (!file) return;
-        staffPicturePreview.src = URL.createObjectURL(file);
-        setStaffStatus('Picture selected. Complete the remaining details and submit for verification.');
-      });
-
       staffForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(staffForm);
@@ -371,10 +355,9 @@
         const employeeNumber = String(formData.get('employee_number') || '').trim();
         const employeePhone = String(formData.get('employee_phone') || '').trim();
         const employeeGender = String(formData.get('employee_gender') || '').trim();
-        const employeePicture = formData.get('employee_picture');
 
-        if (!employeeName || !employeeNumber || !employeePhone || !employeeGender || !(employeePicture instanceof File) || !employeePicture.size) {
-          setStaffStatus('Complete all staff verification fields, including picture.');
+        if (!employeeName || !employeeNumber || !employeePhone || !employeeGender) {
+          setStaffStatus('Complete all staff verification fields.');
           return;
         }
 
@@ -406,10 +389,6 @@
         setText('#staff-result-phone', verifiedStaff.phone);
         setText('#staff-result-gender', verifiedStaff.gender);
         setText('#staff-result-status', verifiedStaff.verification_status || 'Verified WHSF staff');
-
-        if (!staffPicturePreview.src) {
-          staffPicturePreview.src = URL.createObjectURL(employeePicture);
-        }
 
         staffResult.hidden = false;
         setStaffStatus('Staff verified successfully.');
