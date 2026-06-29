@@ -158,11 +158,11 @@ p, li { text-wrap: pretty; }
 .tech-impact-hero .hero-tags { color: #ffe0af; }
 .tech-impact-hero .hero-tags li::before { color: var(--gold); }
 .tech-grid-overlay { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 18% 28%, rgba(255,255,255,.12), transparent 1px), radial-gradient(circle at 63% 64%, rgba(229,185,87,.18), transparent 1px); background-size: 88px 88px, 112px 112px; opacity: .7; }
-.tech-impact-hero .hero-grid { grid-template-columns: minmax(0, .92fr) minmax(420px, 1.08fr); min-height: 560px; }
+.tech-impact-hero .hero-grid { grid-template-columns: minmax(0, .82fr) minmax(480px, 1.18fr); min-height: 600px; }
 .tech-impact-hero .hero-copy { max-width: 760px; padding: 52px 0; }
 .tech-hero-media { display: grid; gap: 18px; align-self: center; }
-.tech-hero-media .hero-image-panel { margin: 0; min-height: 440px; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
-.tech-hero-media .hero-image-panel img { min-height: 440px; border: 0; border-radius: 0; object-fit: cover; object-position: center; filter: saturate(1.05) contrast(1.04); }
+.tech-hero-media .hero-image-panel { margin: 0; min-height: 510px; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
+.tech-hero-media .hero-image-panel img { min-height: 510px; border: 0; border-radius: 0; object-fit: cover; object-position: center center; filter: saturate(1.06) contrast(1.05); }
 .tech-hero-media-actions { justify-content: center; }
 .tech-hero-media-actions .button { box-shadow: 0 18px 42px rgba(0,0,0,.18); }
 .tech-command-panel { position: relative; overflow: hidden; padding: 24px; border: 1px solid rgba(255,255,255,.2); border-radius: 34px; background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08)); box-shadow: 0 34px 100px rgba(0,0,0,.32); backdrop-filter: blur(18px); }
@@ -471,7 +471,7 @@ p, li { text-wrap: pretty; }
   .tech-impact-hero .hero-copy { grid-template-columns: 1fr; }
   .tech-impact-hero .hero-copy .hero-actions,
   .tech-impact-hero .hero-copy .home-verification-actions { grid-column: 1; justify-content: flex-start; max-width: 100%; }
-  .tech-hero-media { width: min(100%, 820px); }
+  .tech-hero-media { width: min(100%, 920px); }
   .hero-image-panel { min-height: 420px; }
   .hero-image-panel img { min-height: 420px; }
   .hero-visual { width: min(560px, 100%); margin: 0 auto; }
@@ -1056,7 +1056,7 @@ p, li { text-wrap: pretty; }
   .tech-impact-hero .hero-copy { padding: 24px 18px; border-radius: 24px; }
   .tech-impact-hero .hero-copy h1 { font-size: clamp(2.55rem, 11vw, 3.5rem); }
   .tech-hero-media .hero-image-panel,
-  .tech-hero-media .hero-image-panel img { min-height: 260px; }
+  .tech-hero-media .hero-image-panel img { min-height: 310px; }
   .tech-hero-media-actions { display: grid; grid-template-columns: 1fr; }
   .tech-impact-hero .hero-actions .button,
   .classroom-hero .hero-actions .button,
