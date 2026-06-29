@@ -1227,7 +1227,7 @@ function getAssistantAnswer(question) {
     title: 'WHSF support',
     answer: 'I can help with WHSF public information including programmes, e-Classroom, certificate verification, employee/staff verification, partnerships, donations, volunteering, mobile app support and impact reporting. For a personal case, please contact WHSF directly.',
     link: 'contact.html',
-    linkText: 'Ask WHSF support'
+    linkText: 'Chat with WHSF support'
   };
 }
 
@@ -1268,7 +1268,7 @@ function initWhsfAssistant() {
   chatbot.setAttribute('aria-label', 'WHSF public help assistant');
   chatbot.innerHTML = `
     <button class="whsf-chatbot-toggle" type="button" aria-expanded="false">
-      <span aria-hidden="true">?</span><span>Ask WHSF</span>
+      <span aria-hidden="true">💬</span><span>Chat Us</span>
     </button>
     <section class="whsf-chatbot-panel" hidden>
       <div class="whsf-chatbot-head">
