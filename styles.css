@@ -208,17 +208,6 @@ p, li { text-wrap: pretty; }
 .tech-impact-metrics strong { display: block; color: #ffe0af; font-family: "Playfair Display", Georgia, serif; font-size: clamp(2.1rem, 4vw, 3.4rem); line-height: .95; }
 .tech-impact-metrics span { display: block; margin-top: 12px; color: #f0ccd4; font-size: .9rem; font-weight: 800; line-height: 1.45; }
 
-.impact-picture-section { background: linear-gradient(180deg, #fffdfa 0%, #fff5f7 100%); }
-.impact-picture-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-flow: dense; gap: 16px; }
-.impact-picture-grid figure { position: relative; min-height: 260px; margin: 0; overflow: hidden; border: 1px solid rgba(201,54,53,.13); border-radius: 24px; background: #fff; box-shadow: 0 18px 48px rgba(59,7,17,.09); }
-.impact-picture-grid img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .45s ease; }
-.impact-picture-grid figure:hover img { transform: scale(1.045); }
-.impact-picture-grid figcaption { position: absolute; left: 12px; right: 12px; bottom: 12px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.32); border-radius: 16px; color: #fff; background: linear-gradient(135deg, rgba(59,7,17,.86), rgba(109,16,36,.76)); box-shadow: 0 16px 34px rgba(0,0,0,.18); backdrop-filter: blur(10px); font-weight: 800; line-height: 1.4; }
-.impact-picture-grid figcaption span { display: block; color: #ffe0af; font-size: .7rem; font-weight: 950; letter-spacing: .1em; text-transform: uppercase; }
-.impact-picture-grid figcaption strong { display: block; margin-top: 4px; color: #fff; font-size: 1rem; }
-.impact-picture-feature { grid-column: span 2; grid-row: span 2; min-height: 540px !important; }
-.impact-picture-wide { grid-column: span 2; min-height: 320px !important; }
-
 .technology-track-section { background: radial-gradient(circle at 10% 10%, rgba(229,185,87,.12), transparent 24rem), linear-gradient(180deg, #fffdfa 0%, #fff5f7 100%); }
 .technology-track-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .technology-track-grid article { position: relative; overflow: hidden; min-height: 250px; padding: 30px; border: 1px solid rgba(143,31,36,.14); border-radius: var(--radius); background: rgba(255,255,255,.92); box-shadow: 0 16px 44px rgba(59,7,17,.08); transition: transform .22s ease, box-shadow .22s ease; }
@@ -1107,7 +1096,7 @@ p, li { text-wrap: pretty; }
   .support-line-grid, .help-faq-grid { grid-template-columns: repeat(2, 1fr); }
   .mobile-login-card { position: static; }
   .portal-action-grid { grid-template-columns: 1fr; }
-  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .install-guide-grid, .collaboration-topic-grid, .notification-preferences, .video-room-grid, .production-integration-grid, .mobile-admin-summary, .impact-picture-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-metric-grid, .sdg-grid, .global-user-grid, .global-roadmap-grid, .mobile-audience-grid, .mobile-feature-grid, .install-guide-grid, .collaboration-topic-grid, .notification-preferences, .video-room-grid, .production-integration-grid, .mobile-admin-summary { grid-template-columns: repeat(2, 1fr); }
   .impact-report-actions { justify-content: flex-start; }
 }
 
@@ -1153,10 +1142,6 @@ p, li { text-wrap: pretty; }
   .home-impact-gallery figure:not(.home-impact-main) { min-height: 230px; }
   .home-impact-gallery figcaption { left: 12px; right: 12px; bottom: 12px; padding: 12px 14px; }
   .home-impact-proof { grid-template-columns: 1fr; gap: 8px; padding: 18px; text-align: center; }
-  .impact-picture-grid { grid-template-columns: 1fr; }
-  .impact-picture-grid figure,
-  .impact-picture-feature,
-  .impact-picture-wide { grid-column: auto; grid-row: auto; min-height: 290px !important; }
   .ecosystem-flow a { width: 100%; justify-content: center; }
   .ecosystem-flow span { display: none; }
   .certificate-verify-strip { margin-top: 0; padding-top: 28px; background: #fffaf8; }
