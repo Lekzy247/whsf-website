@@ -169,7 +169,7 @@
             </label>
             <label>
               Employee #
-              <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-STAFF-001" autocomplete="off" required />
+              <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-001" pattern="WHSF-[0-9]{3}" title="Use the format WHSF-001" autocomplete="off" required />
             </label>
             <label>
               Phone #
@@ -263,6 +263,7 @@
       const staffForm = document.querySelector('#staff-verification-form');
       const staffStatus = document.querySelector('#staff-verify-status');
       const staffResult = document.querySelector('#staff-verify-result');
+      const employeeNumberInput = document.querySelector('#employee-number');
 
       const setText = (selector, value) => {
         document.querySelector(selector).textContent = value || '—';
@@ -275,6 +276,13 @@
       const setStaffStatus = (message) => {
         staffStatus.textContent = message;
       };
+
+      function formatEmployeeNumber(value) {
+        const cleaned = String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (/^\d+$/.test(cleaned)) return `WHSF-${cleaned.padStart(3, '0')}`;
+        if (/^WHSF\d+$/.test(cleaned)) return `WHSF-${cleaned.replace('WHSF', '').padStart(3, '0')}`;
+        return String(value || '').trim().toUpperCase();
+      }
 
       function showError(message = 'Certificate not found.') {
         resultCard.hidden = true;
@@ -348,11 +356,16 @@
         verifyCertificate(initialNumber);
       }
 
+      employeeNumberInput?.addEventListener('blur', () => {
+        employeeNumberInput.value = formatEmployeeNumber(employeeNumberInput.value);
+      });
+
       staffForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(staffForm);
         const employeeName = String(formData.get('employee_name') || '').trim();
-        const employeeNumber = String(formData.get('employee_number') || '').trim();
+        const employeeNumber = formatEmployeeNumber(formData.get('employee_number'));
+        employeeNumberInput.value = employeeNumber;
         const employeePhone = String(formData.get('employee_phone') || '').trim();
         const employeeGender = String(formData.get('employee_gender') || '').trim();
 
