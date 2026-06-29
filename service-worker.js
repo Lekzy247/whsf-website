@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v49';
+const WHSF_CACHE_NAME = 'whsf-pwa-v50';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -16,7 +16,8 @@ const WHSF_CORE_ASSETS = [
   '/script.js',
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
-  '/assets/whsf-logo.jpg'
+  '/assets/whsf-logo.jpg',
+  '/assets/home/lapalabras-drone-learning.jpg'
 ];
 
 self.addEventListener('install', (event) => {
