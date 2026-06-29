@@ -173,7 +173,7 @@
             </label>
             <label>
               Phone #
-              <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: +1 555 000 0000" autocomplete="tel" required />
+              <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: +1 555 000 0000 or +234 8035740987" pattern="^\+[0-9][0-9\s\-()]{6,}$" title="Phone number must include country code, for example +1 424-396-9671 or +234 8035740987" autocomplete="tel" required />
             </label>
             <label>
               Gender
@@ -284,6 +284,10 @@
         return String(value || '').trim().toUpperCase();
       }
 
+      function hasCountryCode(phoneNumber) {
+        return /^\+[0-9][0-9\s\-()]{6,}$/.test(String(phoneNumber || '').trim());
+      }
+
       function showError(message = 'Certificate not found.') {
         resultCard.hidden = true;
         errorCard.hidden = false;
@@ -371,6 +375,12 @@
 
         if (!employeeName || !employeeNumber || !employeePhone || !employeeGender) {
           setStaffStatus('Complete all staff verification fields.');
+          return;
+        }
+
+        if (!hasCountryCode(employeePhone)) {
+          setStaffStatus('Phone number must include country code, for example +1 424-396-9671 or +234 8035740987.');
+          alert('Phone number must include country code.');
           return;
         }
 
