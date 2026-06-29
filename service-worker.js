@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v40';
+const WHSF_CACHE_NAME = 'whsf-pwa-v41';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
