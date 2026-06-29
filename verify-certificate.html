@@ -153,12 +153,12 @@
             <p class="eyebrow">Employee / Staff verification</p>
             <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
             <p>
-              Use this form to confirm WHSF staff identity details. Employee name, employee number, phone number and gender must match WHSF records.
+              Use this form to confirm WHSF staff identity details. Employee name and phone number are required. Employee number and gender are optional, but if entered they must match WHSF records.
             </p>
             <ul class="staff-verify-notes">
               <li>Use the employee name exactly as provided by WHSF.</li>
-              <li>Enter the official employee number or staff ID.</li>
-              <li>Name, employee number, phone number and gender must all match WHSF records.</li>
+              <li>Phone number must include the country code.</li>
+              <li>Employee number and gender may be used for stronger confirmation when available.</li>
             </ul>
           </div>
 
@@ -168,17 +168,17 @@
               <input id="employee-name" name="employee_name" type="text" placeholder="Example: Olalekan Okunola" autocomplete="name" required />
             </label>
             <label>
-              Employee #
-              <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-001" pattern="WHSF-[0-9]{3}" title="Use the format WHSF-001" autocomplete="off" required />
+              Employee # <span class="optional-label">Optional</span>
+              <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-001" pattern="WHSF-[0-9]{3}" title="Use the format WHSF-001 when available" autocomplete="off" />
             </label>
             <label>
               Phone #
               <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: +1 555 000 0000 or +234 8035740987" pattern="^\+[0-9][0-9\s\-()]{6,}$" title="Phone number must include country code, for example +1 424-396-9671 or +234 8035740987" autocomplete="tel" required />
             </label>
             <label>
-              Gender
-              <select id="employee-gender" name="employee_gender" required>
-                <option value="">Select gender</option>
+              Gender <span class="optional-label">Optional</span>
+              <select id="employee-gender" name="employee_gender">
+                <option value="">Select gender if known</option>
                 <option>Female</option>
                 <option>Male</option>
                 <option>Prefer not to say</option>
@@ -196,7 +196,7 @@
               <p class="eyebrow">Staff verification review</p>
               <h2>Employee verified</h2>
               <p>
-                This person matches WHSF staff records using the submitted name, employee number, phone number and gender.
+                This person matches WHSF staff records using the submitted identity details.
               </p>
             </div>
             <dl class="verify-details staff-details">
@@ -373,8 +373,8 @@
         const employeePhone = String(formData.get('employee_phone') || '').trim();
         const employeeGender = String(formData.get('employee_gender') || '').trim();
 
-        if (!employeeName || !employeeNumber || !employeePhone || !employeeGender) {
-          setStaffStatus('Complete all staff verification fields.');
+        if (!employeeName || !employeePhone) {
+          setStaffStatus('Enter employee name and phone number to verify staff details.');
           return;
         }
 

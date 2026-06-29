@@ -1111,3 +1111,237 @@ window.addEventListener('appinstalled', () => {
   deferredPwaPrompt = null;
   updatePwaInstallStatus('WHSF App installed successfully.');
 });
+
+const whsfAssistantAnswers = [
+  {
+    keys: ['certificate', 'verify certificate', 'certificate verification', 'certificate number', 'pdf certificate'],
+    title: 'Certificate verification',
+    answer: 'You can verify a WHSF e-Classroom certificate by entering the certificate number on the verification page. If a certificate is valid, the portal shows the learner, course, issue date and download link when available.',
+    link: 'verify-certificate.html',
+    linkText: 'Open certificate verification'
+  },
+  {
+    keys: ['employee', 'staff', 'staff verification', 'employee verification', 'identity', 'gender', 'employee number'],
+    title: 'Employee / Staff verification',
+    answer: 'Use Employee / Staff verification to confirm WHSF staff identity. Employee name and phone number with country code are required. Employee number and gender are optional, but if entered they must match WHSF records.',
+    link: 'verify-certificate.html#staff-verification',
+    linkText: 'Open staff verification'
+  },
+  {
+    keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
+    title: 'WHSF e-Classroom',
+    answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM and accessibility technology. Learners can view lessons, submit assignments, track progress and receive certificates.',
+    link: 'e-classroom.html',
+    linkText: 'Open e-Classroom'
+  },
+  {
+    keys: ['admin', 'teacher', 'teacher dashboard', 'course management', 'students'],
+    title: 'Teacher/Admin dashboard',
+    answer: 'Authorized WHSF staff can manage courses, students, lessons, assignments and certificates through the e-Classroom admin dashboard. Admin or teacher access must be approved by WHSF.',
+    link: 'e-classroom-admin.html',
+    linkText: 'Open admin dashboard'
+  },
+  {
+    keys: ['donate', 'donation', 'paypal', 'support', 'sponsor', 'give'],
+    title: 'Donations and sponsorship',
+    answer: 'WHSF accepts donations through the official PayPal charity link. Donors can also contact WHSF about sponsorship, programme support, devices, connectivity and learner support.',
+    link: 'https://paypal.com/us/fundraiser/charity/1450337',
+    linkText: 'Donate through PayPal'
+  },
+  {
+    keys: ['partner', 'partnership', 'sponsor', 'collaboration', 'university', 'company', 'donor'],
+    title: 'Partnerships',
+    answer: 'WHSF works with partners, donors, schools, universities, companies and volunteers to expand technology education, digital inclusion, mentorship, devices, career pathways and community impact.',
+    link: 'contact.html',
+    linkText: 'Contact WHSF'
+  },
+  {
+    keys: ['program', 'programme', 'programs', 'girls in ict', 'techwomen', 'robotics', 'drone', 'stem', 'cybersecurity', 'ai'],
+    title: 'Technology programmes',
+    answer: 'WHSF programmes include Girls in ICT Club, TechWomen, robotics, drone technology, AI and digital skills, cybersecurity, STEM, climate-smart technology and practical pathways for girls and young women.',
+    link: 'programs.html',
+    linkText: 'Explore programmes'
+  },
+  {
+    keys: ['mobile app', 'app', 'volunteer hub', 'donor hub', 'member dashboard', 'chat', 'community'],
+    title: 'WHSF Mobile App',
+    answer: 'The WHSF Mobile App portal helps donors, volunteers, partners, students and members stay connected with impact updates, collaboration chat, volunteer tasks, donor information, member dashboards and announcements.',
+    link: 'mobile-app.html',
+    linkText: 'Open mobile app portal'
+  },
+  {
+    keys: ['impact', 'metrics', 'report', 'dashboard', 'sdg', 'data', 'statistics'],
+    title: 'Impact dashboard',
+    answer: 'The WHSF impact dashboard presents public metrics including girls impacted, young women empowered, course pathways, certificates, programme performance and reporting indicators for partners and donors.',
+    link: 'impact-dashboard.html',
+    linkText: 'View impact dashboard'
+  },
+  {
+    keys: ['contact', 'help', 'support', 'email', 'phone', 'whatsapp', 'issue'],
+    title: 'Contact and support',
+    answer: 'For direct help, use the Contact & Support page. You can request programme support, e-Classroom help, certificate assistance, partnership information, donation guidance or safeguarding support.',
+    link: 'contact.html',
+    linkText: 'Open Contact & Support'
+  },
+  {
+    keys: ['volunteer', 'mentor', 'teach', 'remote teacher', 'livestream'],
+    title: 'Volunteers and mentors',
+    answer: 'Volunteers and mentors can support WHSF through teaching, mentorship, technology training, career guidance, device support, content support, events and community outreach.',
+    link: 'contact.html',
+    linkText: 'Volunteer or mentor'
+  },
+  {
+    keys: ['accessibility', 'disabled', 'disability', 'voice', 'screen reader', 'inclusive'],
+    title: 'Accessibility and inclusion',
+    answer: 'WHSF supports disability inclusion and accessible technology through inclusive learning design, voice-enabled support ideas, assistive technology awareness, digital inclusion and accessible website controls such as larger text and high contrast.',
+    link: 'programs.html',
+    linkText: 'View inclusion programmes'
+  }
+];
+
+function normalizeAssistantText(value) {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9+#\s-]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function getAssistantAnswer(question) {
+  const normalized = normalizeAssistantText(question);
+  if (!normalized) {
+    return {
+      title: 'How can I help?',
+      answer: 'Ask about certificates, staff verification, e-Classroom, programmes, donations, partnerships, mobile app, volunteering or WHSF impact.',
+      link: 'contact.html',
+      linkText: 'Contact WHSF'
+    };
+  }
+
+  const scored = whsfAssistantAnswers
+    .map((item) => ({
+      item,
+      score: item.keys.reduce((total, key) => normalized.includes(normalizeAssistantText(key)) ? total + key.length : total, 0)
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  if (scored[0]?.score > 0) return scored[0].item;
+
+  return {
+    title: 'WHSF support',
+    answer: 'I can help with WHSF public information including programmes, e-Classroom, certificate verification, employee/staff verification, partnerships, donations, volunteering, mobile app support and impact reporting. For a personal case, please contact WHSF directly.',
+    link: 'contact.html',
+    linkText: 'Ask WHSF support'
+  };
+}
+
+function addAssistantMessage(container, content, type = 'bot') {
+  const message = document.createElement('div');
+  message.className = `whsf-chat-message ${type}`;
+  if (typeof content === 'string') {
+    message.textContent = content;
+  } else {
+    message.append(content);
+  }
+  container.append(message);
+  container.scrollTop = container.scrollHeight;
+}
+
+function createAssistantResponse(answer) {
+  const wrapper = document.createElement('div');
+  const title = document.createElement('strong');
+  title.textContent = answer.title;
+  const text = document.createElement('p');
+  text.textContent = answer.answer;
+  const link = document.createElement('a');
+  link.href = answer.link;
+  link.textContent = answer.linkText;
+  if (answer.link.startsWith('http')) {
+    link.target = '_blank';
+    link.rel = 'noreferrer';
+  }
+  wrapper.append(title, text, link);
+  return wrapper;
+}
+
+function initWhsfAssistant() {
+  if (document.querySelector('.whsf-chatbot')) return;
+
+  const chatbot = document.createElement('aside');
+  chatbot.className = 'whsf-chatbot';
+  chatbot.setAttribute('aria-label', 'WHSF public help assistant');
+  chatbot.innerHTML = `
+    <button class="whsf-chatbot-toggle" type="button" aria-expanded="false">
+      <span aria-hidden="true">?</span><span>Ask WHSF</span>
+    </button>
+    <section class="whsf-chatbot-panel" hidden>
+      <div class="whsf-chatbot-head">
+        <div><strong>WHSF Assistant</strong><span>Public answers for visitors</span></div>
+        <button class="whsf-chatbot-close" type="button" aria-label="Close WHSF Assistant">×</button>
+      </div>
+      <div class="whsf-chatbot-messages" aria-live="polite"></div>
+      <div class="whsf-chat-quick" aria-label="Quick questions">
+        <button type="button" data-question="How do I verify a certificate?">Certificate</button>
+        <button type="button" data-question="How do I verify WHSF staff?">Staff</button>
+        <button type="button" data-question="How do I join e-Classroom?">e-Classroom</button>
+        <button type="button" data-question="How can I partner with WHSF?">Partner</button>
+        <button type="button" data-question="How can I donate?">Donate</button>
+      </div>
+      <form class="whsf-chat-form">
+        <input type="text" name="question" placeholder="Ask about WHSF..." autocomplete="off" />
+        <button type="submit">Send</button>
+      </form>
+      <p class="whsf-chat-note">This assistant gives public website guidance. For private records, payments, safeguarding or urgent issues, contact WHSF directly.</p>
+    </section>
+  `;
+
+  document.body.append(chatbot);
+
+  const toggle = chatbot.querySelector('.whsf-chatbot-toggle');
+  const panel = chatbot.querySelector('.whsf-chatbot-panel');
+  const close = chatbot.querySelector('.whsf-chatbot-close');
+  const messages = chatbot.querySelector('.whsf-chatbot-messages');
+  const form = chatbot.querySelector('.whsf-chat-form');
+  const input = chatbot.querySelector('input[name="question"]');
+
+  const openAssistant = () => {
+    panel.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    if (!messages.dataset.ready) {
+      addAssistantMessage(messages, createAssistantResponse(getAssistantAnswer('')));
+      messages.dataset.ready = 'true';
+    }
+    window.setTimeout(() => input.focus(), 100);
+  };
+
+  const closeAssistant = () => {
+    panel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
+  };
+
+  const ask = (question) => {
+    const cleanQuestion = String(question || '').trim();
+    if (!cleanQuestion) return;
+    addAssistantMessage(messages, cleanQuestion, 'user');
+    addAssistantMessage(messages, createAssistantResponse(getAssistantAnswer(cleanQuestion)));
+    input.value = '';
+  };
+
+  toggle.addEventListener('click', () => {
+    if (panel.hidden) openAssistant();
+    else closeAssistant();
+  });
+
+  close.addEventListener('click', closeAssistant);
+
+  chatbot.querySelectorAll('[data-question]').forEach((button) => {
+    button.addEventListener('click', () => {
+      openAssistant();
+      ask(button.dataset.question);
+    });
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    ask(input.value);
+  });
+}
+
+initWhsfAssistant();
