@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Verify WHSF e-Classroom certificates issued by World Humanitarian Support Foundation."
+      content="Verify WHSF e-Classroom certificates and submit employee or staff verification details for World Humanitarian Support Foundation."
     />
     <meta name="theme-color" content="#6d1024" />
     <meta property="og:title" content="Verify WHSF Certificate" />
@@ -14,7 +14,7 @@
       content="Confirm whether a WHSF e-Classroom certificate number is valid."
     />
     <meta property="og:type" content="website" />
-    <title>Verify Certificate | WHSF e-Classroom</title>
+    <title>Verify Certificate &amp; Staff | WHSF</title>
     <link rel="icon" href="assets/whsf-logo.jpg" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
@@ -35,7 +35,7 @@
 
     <div class="utility-bar">
       <div class="shell utility-inner">
-        <p>Official WHSF certificate verification</p>
+        <p>Official WHSF certificate and staff verification</p>
         <div class="utility-actions" aria-label="Accessibility controls">
           <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
           <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
@@ -76,9 +76,9 @@
         <div class="shell classroom-hero-grid">
           <div class="classroom-copy reveal">
             <p class="eyebrow">Certificate verification</p>
-            <h1 id="verify-title">Confirm a WHSF e-Classroom certificate.</h1>
+            <h1 id="verify-title">Confirm a WHSF e-Classroom certificate or staff identity.</h1>
             <p class="hero-lead">
-              Enter the certificate number exactly as shown on the certificate to confirm the learner, course and issue date from WHSF records.
+              Enter a certificate number to confirm learner records, or use the staff verification section below to submit employee details for WHSF identity review.
             </p>
           </div>
           <form class="student-login-card verify-card reveal delay-one" id="verify-certificate-form">
@@ -146,6 +146,92 @@
           </article>
         </div>
       </section>
+
+      <section class="section section-tint staff-verify-section" id="staff-verification" aria-labelledby="staff-verify-title">
+        <div class="shell staff-verify-grid">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Employee / Staff verification</p>
+            <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
+            <p>
+              Use this form to submit staff identity details for WHSF verification. For privacy and safety, WHSF may still confirm final employment status directly through official records.
+            </p>
+            <ul class="staff-verify-notes">
+              <li>Use the employee name exactly as provided by WHSF.</li>
+              <li>Enter the official employee number or staff ID.</li>
+              <li>Upload a clear picture for visual identity review.</li>
+            </ul>
+          </div>
+
+          <form class="student-login-card verify-card staff-verify-card reveal delay-one" id="staff-verification-form">
+            <label>
+              Employee name
+              <input id="employee-name" name="employee_name" type="text" placeholder="Example: Olalekan Okunola" autocomplete="name" required />
+            </label>
+            <label>
+              Employee #
+              <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-STAFF-001" autocomplete="off" required />
+            </label>
+            <label>
+              Picture
+              <input id="employee-picture" name="employee_picture" type="file" accept="image/*" required />
+            </label>
+            <label>
+              Phone #
+              <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: +1 555 000 0000" autocomplete="tel" required />
+            </label>
+            <label>
+              Gender
+              <select id="employee-gender" name="employee_gender" required>
+                <option value="">Select gender</option>
+                <option>Female</option>
+                <option>Male</option>
+                <option>Prefer not to say</option>
+              </select>
+            </label>
+            <button class="button" type="submit">Verify staff details</button>
+            <p id="staff-verify-status" role="status">Enter staff details to begin verification review.</p>
+          </form>
+        </div>
+
+        <div class="shell">
+          <article class="verify-result-card staff-verify-result" id="staff-verify-result" hidden>
+            <div class="verify-badge">Review</div>
+            <div>
+              <p class="eyebrow">Staff verification review</p>
+              <h2>Employee details received</h2>
+              <p>
+                These details are ready for WHSF staff identity review. Final confirmation should be matched against official WHSF employee records.
+              </p>
+            </div>
+            <div class="staff-picture-preview">
+              <img id="staff-picture-preview" src="" alt="Uploaded employee picture preview" />
+            </div>
+            <dl class="verify-details staff-details">
+              <div>
+                <dt>Employee name</dt>
+                <dd id="staff-result-name">—</dd>
+              </div>
+              <div>
+                <dt>Employee #</dt>
+                <dd id="staff-result-number">—</dd>
+              </div>
+              <div>
+                <dt>Phone #</dt>
+                <dd id="staff-result-phone">—</dd>
+              </div>
+              <div>
+                <dt>Gender</dt>
+                <dd id="staff-result-gender">—</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>Pending official WHSF confirmation</dd>
+              </div>
+            </dl>
+            <a class="button button-light" href="contact.html">Contact WHSF for final confirmation</a>
+          </article>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -154,7 +240,7 @@
           <img src="assets/whsf-logo.jpg" width="74" height="74" alt="WHSF emblem" />
           <div>
             <strong>World Humanitarian Support Foundation</strong>
-            <p>Certificate verification for WHSF e-Classroom learners and partners.</p>
+            <p>Certificate and staff verification for WHSF learners, partners and communities.</p>
           </div>
         </div>
         <div class="footer-links">
@@ -181,6 +267,11 @@
       const resultCard = document.querySelector('#verify-result');
       const errorCard = document.querySelector('#verify-error');
       const certificateFileLink = document.querySelector('#certificate-file-link');
+      const staffForm = document.querySelector('#staff-verification-form');
+      const staffStatus = document.querySelector('#staff-verify-status');
+      const staffResult = document.querySelector('#staff-verify-result');
+      const staffPictureInput = document.querySelector('#employee-picture');
+      const staffPicturePreview = document.querySelector('#staff-picture-preview');
 
       const setText = (selector, value) => {
         document.querySelector(selector).textContent = value || '—';
@@ -188,6 +279,10 @@
 
       const setStatus = (message) => {
         statusEl.textContent = message;
+      };
+
+      const setStaffStatus = (message) => {
+        staffStatus.textContent = message;
       };
 
       function showError(message = 'Certificate not found.') {
@@ -261,6 +356,41 @@
         input.value = initialNumber;
         verifyCertificate(initialNumber);
       }
+
+      staffPictureInput?.addEventListener('change', () => {
+        const file = staffPictureInput.files?.[0];
+        if (!file) return;
+        staffPicturePreview.src = URL.createObjectURL(file);
+        setStaffStatus('Picture selected. Complete the remaining details and submit for review.');
+      });
+
+      staffForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(staffForm);
+        const employeeName = String(formData.get('employee_name') || '').trim();
+        const employeeNumber = String(formData.get('employee_number') || '').trim();
+        const employeePhone = String(formData.get('employee_phone') || '').trim();
+        const employeeGender = String(formData.get('employee_gender') || '').trim();
+        const employeePicture = formData.get('employee_picture');
+
+        if (!employeeName || !employeeNumber || !employeePhone || !employeeGender || !(employeePicture instanceof File) || !employeePicture.size) {
+          setStaffStatus('Complete all staff verification fields, including picture.');
+          return;
+        }
+
+        setText('#staff-result-name', employeeName);
+        setText('#staff-result-number', employeeNumber);
+        setText('#staff-result-phone', employeePhone);
+        setText('#staff-result-gender', employeeGender);
+
+        if (!staffPicturePreview.src) {
+          staffPicturePreview.src = URL.createObjectURL(employeePicture);
+        }
+
+        staffResult.hidden = false;
+        setStaffStatus('Staff verification details prepared for WHSF review.');
+        staffResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     </script>
   </body>
 </html>
