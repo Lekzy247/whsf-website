@@ -764,6 +764,9 @@ p, li { text-wrap: pretty; }
 .staff-verify-notes { display: grid; gap: 10px; margin: 24px 0 0; padding: 0; list-style: none; color: var(--green-900); font-weight: 800; }
 .staff-verify-notes li { position: relative; padding-left: 28px; }
 .staff-verify-notes li::before { content: "✓"; position: absolute; left: 0; color: var(--red); font-weight: 900; }
+.staff-phone-field { display: grid; grid-template-columns: minmax(185px, .72fr) minmax(0, 1fr); gap: 12px; align-items: end; }
+.staff-phone-field label { min-width: 0; }
+.staff-phone-field select, .staff-phone-field input { width: 100%; }
 .staff-verify-result { margin-top: 34px; grid-template-columns: auto minmax(0, 1fr); }
 .staff-details { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .help-hero { position: relative; overflow: hidden; color: #fff; background: radial-gradient(circle at 18% 18%, rgba(243,205,98,.22), transparent 32%), linear-gradient(135deg, var(--green-950) 0%, var(--red) 62%, #ef7b54 100%); }
@@ -1119,6 +1122,7 @@ p, li { text-wrap: pretty; }
   .verify-badge { width: 86px; height: 86px; }
   .verify-details { grid-template-columns: 1fr; }
   .staff-verify-section { padding-top: 72px; }
+  .staff-phone-field { grid-template-columns: 1fr; gap: 0; }
   .help-hero-grid { min-height: auto; padding: 68px 0; }
   .help-status-card, .virtual-number-panel, .help-request-form { padding: 24px 20px; }
   .support-line-grid, .help-faq-grid { grid-template-columns: 1fr; }
