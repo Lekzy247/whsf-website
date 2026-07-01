@@ -153,12 +153,11 @@
             <p class="eyebrow">Employee / Staff verification</p>
             <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
             <p>
-              Use this form to confirm WHSF staff identity details. Employee name and phone number are required. Employee number is optional, but if entered it must match WHSF records.
+              Use this form to confirm WHSF staff identity details. Employee name and phone number are required.
             </p>
             <ul class="staff-verify-notes">
               <li>Use the employee name exactly as provided by WHSF.</li>
               <li>Select the country code first, then enter the staff phone number.</li>
-              <li>Employee number may be used for stronger confirmation when available.</li>
             </ul>
           </div>
 
@@ -166,10 +165,6 @@
             <label>
               Employee name
               <input id="employee-name" name="employee_name" type="text" placeholder="Example: Olalekan Okunola" autocomplete="name" required />
-            </label>
-            <label>
-              Employee # <span class="optional-label">Optional</span>
-              <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-001" pattern="WHSF-[0-9]{3}" title="Use the format WHSF-001 when available" autocomplete="off" />
             </label>
             <div class="staff-phone-field">
               <div class="staff-phone-control">
@@ -671,17 +666,13 @@
         verifyCertificate(initialNumber);
       }
 
-      employeeNumberInput?.addEventListener('blur', () => {
-        employeeNumberInput.value = formatEmployeeNumber(employeeNumberInput.value);
-      });
       initCountryPicker();
 
       staffForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(staffForm);
         const employeeName = String(formData.get('employee_name') || '').trim();
-        const employeeNumber = formatEmployeeNumber(formData.get('employee_number'));
-        employeeNumberInput.value = employeeNumber;
+        const employeeNumber = '';
         const employeeCountryCode = String(formData.get('employee_country_code') || '').trim();
         const employeePhoneLocal = String(formData.get('employee_phone') || '').trim();
         const employeePhone = buildEmployeePhone(employeeCountryCode, employeePhoneLocal);
