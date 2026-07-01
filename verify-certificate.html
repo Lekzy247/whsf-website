@@ -153,12 +153,12 @@
             <p class="eyebrow">Employee / Staff verification</p>
             <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
             <p>
-              Use this form to confirm WHSF staff identity details. Employee name and phone number are required. Employee number and gender are optional, but if entered they must match WHSF records.
+              Use this form to confirm WHSF staff identity details. Employee name and phone number are required. Employee number is optional, but if entered it must match WHSF records.
             </p>
             <ul class="staff-verify-notes">
               <li>Use the employee name exactly as provided by WHSF.</li>
               <li>Select the country code first, then enter the staff phone number.</li>
-              <li>Employee number and gender may be used for stronger confirmation when available.</li>
+              <li>Employee number may be used for stronger confirmation when available.</li>
             </ul>
           </div>
 
@@ -378,15 +378,6 @@
                 <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: 424-396-9671" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code" autocomplete="tel-national" required />
               </label>
             </div>
-            <label>
-              Gender <span class="optional-label">Optional</span>
-              <select id="employee-gender" name="employee_gender">
-                <option value="">Select gender if known</option>
-                <option>Female</option>
-                <option>Male</option>
-                <option>Prefer not to say</option>
-              </select>
-            </label>
             <button class="button" type="submit">Verify staff details</button>
             <p id="staff-verify-status" role="status">Enter staff details to begin verification review.</p>
           </form>
@@ -414,10 +405,6 @@
               <div>
                 <dt>Phone #</dt>
                 <dd id="staff-result-phone">—</dd>
-              </div>
-              <div>
-                <dt>Gender</dt>
-                <dd id="staff-result-gender">—</dd>
               </div>
               <div>
                 <dt>Status</dt>
@@ -500,6 +487,28 @@
         return `${code} ${phone}`.trim();
       }
 
+      function addCountryFlags() {
+        const flagMap = {
+          '+1': '🇺🇸', '+1-242': '🇧🇸', '+1-246': '🇧🇧', '+1-268': '🇦🇬', '+1-473': '🇬🇩', '+1-758': '🇱🇨', '+1-767': '🇩🇲', '+1-784': '🇻🇨', '+1-809': '🇩🇴', '+1-868': '🇹🇹', '+1-869': '🇰🇳', '+1-876': '🇯🇲',
+          '+7': '🇰🇿', '+20': '🇪🇬', '+27': '🇿🇦', '+30': '🇬🇷', '+31': '🇳🇱', '+32': '🇧🇪', '+33': '🇫🇷', '+34': '🇪🇸', '+36': '🇭🇺', '+39': '🇮🇹', '+40': '🇷🇴', '+41': '🇨🇭', '+43': '🇦🇹', '+44': '🇬🇧', '+45': '🇩🇰', '+46': '🇸🇪', '+47': '🇳🇴', '+48': '🇵🇱', '+49': '🇩🇪',
+          '+51': '🇵🇪', '+52': '🇲🇽', '+53': '🇨🇺', '+54': '🇦🇷', '+55': '🇧🇷', '+56': '🇨🇱', '+57': '🇨🇴', '+58': '🇻🇪', '+60': '🇲🇾', '+61': '🇦🇺', '+63': '🇵🇭', '+64': '🇳🇿', '+65': '🇸🇬', '+66': '🇹🇭',
+          '+81': '🇯🇵', '+82': '🇰🇷', '+84': '🇻🇳', '+86': '🇨🇳', '+90': '🇹🇷', '+91': '🇮🇳', '+92': '🇵🇰', '+93': '🇦🇫', '+94': '🇱🇰', '+95': '🇲🇲', '+98': '🇮🇷',
+          '+211': '🇸🇸', '+212': '🇲🇦', '+213': '🇩🇿', '+216': '🇹🇳', '+218': '🇱🇾', '+220': '🇬🇲', '+221': '🇸🇳', '+222': '🇲🇷', '+223': '🇲🇱', '+224': '🇬🇳', '+225': '🇨🇮', '+226': '🇧🇫', '+227': '🇳🇪', '+228': '🇹🇬', '+229': '🇧🇯', '+230': '🇲🇺', '+231': '🇱🇷', '+232': '🇸🇱', '+233': '🇬🇭', '+234': '🇳🇬', '+235': '🇹🇩', '+236': '🇨🇫', '+237': '🇨🇲', '+238': '🇨🇻', '+239': '🇸🇹', '+240': '🇬🇶', '+241': '🇬🇦', '+242': '🇨🇬', '+243': '🇨🇩', '+244': '🇦🇴', '+245': '🇬🇼', '+248': '🇸🇨', '+249': '🇸🇩', '+250': '🇷🇼', '+251': '🇪🇹', '+252': '🇸🇴', '+253': '🇩🇯', '+254': '🇰🇪', '+255': '🇹🇿', '+256': '🇺🇬', '+257': '🇧🇮', '+258': '🇲🇿', '+260': '🇿🇲', '+261': '🇲🇬', '+263': '🇿🇼', '+264': '🇳🇦', '+265': '🇲🇼', '+266': '🇱🇸', '+267': '🇧🇼', '+268': '🇸🇿', '+269': '🇰🇲',
+          '+351': '🇵🇹', '+352': '🇱🇺', '+353': '🇮🇪', '+354': '🇮🇸', '+355': '🇦🇱', '+356': '🇲🇹', '+357': '🇨🇾', '+358': '🇫🇮', '+359': '🇧🇬', '+370': '🇱🇹', '+371': '🇱🇻', '+372': '🇪🇪', '+373': '🇲🇩', '+374': '🇦🇲', '+375': '🇧🇾', '+376': '🇦🇩', '+377': '🇲🇨', '+378': '🇸🇲', '+379': '🇻🇦', '+380': '🇺🇦', '+381': '🇷🇸', '+382': '🇲🇪', '+385': '🇭🇷', '+386': '🇸🇮', '+387': '🇧🇦', '+389': '🇲🇰',
+          '+420': '🇨🇿', '+421': '🇸🇰', '+423': '🇱🇮', '+501': '🇧🇿', '+502': '🇬🇹', '+503': '🇸🇻', '+504': '🇭🇳', '+505': '🇳🇮', '+506': '🇨🇷', '+507': '🇵🇦', '+509': '🇭🇹', '+591': '🇧🇴', '+592': '🇬🇾', '+593': '🇪🇨', '+595': '🇵🇾', '+597': '🇸🇷', '+598': '🇺🇾',
+          '+670': '🇹🇱', '+673': '🇧🇳', '+674': '🇳🇷', '+675': '🇵🇬', '+676': '🇹🇴', '+677': '🇸🇧', '+678': '🇻🇺', '+679': '🇫🇯', '+680': '🇵🇼', '+685': '🇼🇸', '+686': '🇰🇮', '+691': '🇫🇲', '+692': '🇲🇭',
+          '+850': '🇰🇵', '+852': '🇭🇰', '+853': '🇲🇴', '+855': '🇰🇭', '+856': '🇱🇦', '+880': '🇧🇩', '+886': '🇹🇼',
+          '+960': '🇲🇻', '+961': '🇱🇧', '+962': '🇯🇴', '+963': '🇸🇾', '+964': '🇮🇶', '+965': '🇰🇼', '+966': '🇸🇦', '+967': '🇾🇪', '+968': '🇴🇲', '+970': '🇵🇸', '+971': '🇦🇪', '+972': '🇮🇱', '+973': '🇧🇭', '+974': '🇶🇦', '+975': '🇧🇹', '+976': '🇲🇳', '+977': '🇳🇵', '+992': '🇹🇯', '+993': '🇹🇲', '+994': '🇦🇿', '+995': '🇬🇪', '+996': '🇰🇬', '+998': '🇺🇿'
+        };
+
+        document.querySelectorAll('#employee-country-code option').forEach((option) => {
+          const flag = flagMap[option.value];
+          if (flag && !option.textContent.trim().startsWith(flag)) {
+            option.textContent = `${flag} ${option.textContent}`;
+          }
+        });
+      }
+
       function showError(message = 'Certificate not found.') {
         resultCard.hidden = true;
         errorCard.hidden = false;
@@ -576,6 +585,8 @@
         employeeNumberInput.value = formatEmployeeNumber(employeeNumberInput.value);
       });
 
+      addCountryFlags();
+
       staffForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(staffForm);
@@ -585,8 +596,6 @@
         const employeeCountryCode = String(formData.get('employee_country_code') || '').trim();
         const employeePhoneLocal = String(formData.get('employee_phone') || '').trim();
         const employeePhone = buildEmployeePhone(employeeCountryCode, employeePhoneLocal);
-        const employeeGender = String(formData.get('employee_gender') || '').trim();
-
         if (!employeeName || !employeeCountryCode || !employeePhoneLocal) {
           setStaffStatus('Enter employee name, country code and phone number to verify staff details.');
           return;
@@ -608,7 +617,7 @@
           p_full_name: employeeName,
           p_employee_number: employeeNumber,
           p_phone: employeePhone,
-          p_gender: employeeGender
+          p_gender: ''
         });
 
         if (error) {
@@ -627,7 +636,6 @@
         setText('#staff-result-name', verifiedStaff.full_name);
         setText('#staff-result-number', verifiedStaff.employee_number);
         setText('#staff-result-phone', verifiedStaff.phone);
-        setText('#staff-result-gender', verifiedStaff.gender);
         setText('#staff-result-status', verifiedStaff.verification_status || 'Verified WHSF staff');
 
         staffResult.hidden = false;
