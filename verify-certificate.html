@@ -172,7 +172,7 @@
               <input id="employee-number" name="employee_number" type="text" placeholder="Example: WHSF-001" pattern="WHSF-[0-9]{3}" title="Use the format WHSF-001 when available" autocomplete="off" />
             </label>
             <div class="staff-phone-field">
-              <label>
+              <div class="staff-phone-control">
                 <span>Country code</span>
                 <select id="employee-country-code" name="employee_country_code" autocomplete="tel-country-code" required>
                   <option value="+1">🇺🇸 United States / Canada (+1)</option>
@@ -372,7 +372,7 @@
                   <option value="+967">🇾🇪 Yemen (+967)</option>
                   <option value="+260">🇿🇲 Zambia (+260)</option>
                 </select>
-              </label>
+              </div>
               <label>
                 <span>Phone #</span>
                 <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: 424-396-9671" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code" autocomplete="tel-national" required />
@@ -555,7 +555,9 @@
           item.setAttribute('role', 'option');
           item.dataset.value = option.value;
           item.innerHTML = `<img class="country-flag-img" src="${flagUrl(option.value)}" alt="" loading="lazy" /><span>${cleanLabel(option.textContent)}</span>`;
-          item.addEventListener('click', () => {
+          item.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
             select.value = option.value;
             select.dispatchEvent(new Event('change', { bubbles: true }));
             renderSelected();
@@ -565,7 +567,9 @@
           list.append(item);
         });
 
-        toggle.addEventListener('click', () => {
+        toggle.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
           list.hidden = !list.hidden;
           toggle.setAttribute('aria-expanded', String(!list.hidden));
         });
