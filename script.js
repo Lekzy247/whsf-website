@@ -1149,6 +1149,13 @@ const whsfAssistantAnswers = [
     linkText: 'Open Opportunity Calendar'
   },
   {
+    keys: ['innovation building', 'support building', 'fundraising dashboard', 'devices donated', 'corporate partners', 'construction milestones', 'building project'],
+    title: 'Innovation Support Building',
+    answer: 'The WHSF Innovation Support Building page presents a project-support dashboard concept with total project cost, funds raised, devices donated, construction milestones, corporate partners and beneficiaries.',
+    link: 'innovation-support-building.html',
+    linkText: 'Open Innovation Support Building'
+  },
+  {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-Classroom',
     answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM and accessibility technology. Learners can view lessons, submit assignments, track progress and receive certificates.',
@@ -1378,6 +1385,7 @@ function initWhsfPolicyLinks() {
     <a href="privacy-policy.html">Privacy Policy</a>
     <a href="child-safeguarding-policy.html">Child Safeguarding Policy</a>
     <a href="opportunities.html">Opportunity Calendar</a>
+    <a href="innovation-support-building.html">Innovation Building</a>
   `;
 
   const backToTop = footerBottom.querySelector('a[href="#top"]');
