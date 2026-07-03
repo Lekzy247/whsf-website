@@ -79,6 +79,62 @@ const observer = new IntersectionObserver(
 
 document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
 
+const metricNumbers = [...document.querySelectorAll('.tech-impact-metrics strong[data-count-target]')];
+
+function animateMetricNumber(element) {
+  const target = Number(element.dataset.countTarget);
+  if (!target || element.dataset.counted === 'true') return;
+
+  element.dataset.counted = 'true';
+  const suffix = element.dataset.countSuffix || '';
+  const finalText = `${target.toLocaleString()}${suffix}`;
+  const duration = 1500;
+  const startTime = performance.now();
+
+  function formatNumber(value) {
+    return `${Math.round(value).toLocaleString()}${suffix}`;
+  }
+
+  function tick(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    element.textContent = formatNumber(target * eased);
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      element.textContent = finalText;
+    }
+  }
+
+  element.textContent = formatNumber(0);
+  requestAnimationFrame(tick);
+}
+
+if (metricNumbers.length) {
+  const metricObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateMetricNumber(entry.target);
+          metricObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  metricNumbers.forEach((number) => metricObserver.observe(number));
+
+  setTimeout(() => {
+    metricNumbers.forEach((number) => {
+      const rect = number.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        animateMetricNumber(number);
+      }
+    });
+  }, 700);
+}
+
 const pathOptions = document.querySelectorAll('.path-option');
 const pathLabel = document.querySelector('#path-result-label');
 const pathTitle = document.querySelector('#path-result-title');
