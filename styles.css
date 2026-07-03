@@ -3376,6 +3376,27 @@ body {
     display: none;
   }
 }
+
+/* Homepage hero refinement */
+.tech-impact-hero .tech-hero-media {
+  transform: translateY(-26px);
+}
+.tech-hero-media .home-verification-actions {
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 980px) {
+  .tech-impact-hero .tech-hero-media {
+    transform: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .tech-hero-media .home-verification-actions {
+    margin-top: 2px;
+  }
+}
 .whsf-consent-banner { position: fixed; right: 18px; bottom: 18px; left: 18px; z-index: 120; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 22px; border: 1px solid rgba(109,16,36,.18); border-radius: 24px; background: rgba(255,255,255,.97); box-shadow: 0 28px 85px rgba(59,7,17,.26); backdrop-filter: blur(14px); }
 .whsf-consent-banner[hidden], .whsf-consent-modal[hidden] { display: none; }
 .whsf-consent-copy span, .whsf-consent-dialog-head span { display: inline-flex; margin-bottom: 7px; color: var(--red); font-size: .72rem; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
