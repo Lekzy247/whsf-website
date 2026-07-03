@@ -1156,6 +1156,13 @@ const whsfAssistantAnswers = [
     linkText: 'Open Innovation Support Building'
   },
   {
+    keys: ['student projects', 'students building', 'smart waste', 'recycling', 'iot', 'smart village', 'digital health', 'disaster management', 'ai education'],
+    title: 'Student Innovation Projects',
+    answer: 'WHSF Student Innovation Projects include smart waste and recycling technology, IoT innovation, AI for education, digital health, disaster management and smart village technology. Students can build apps, sensors, AI tools, monitoring systems and humanitarian coordination solutions.',
+    link: 'student-projects.html',
+    linkText: 'Open Student Projects'
+  },
+  {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-Classroom',
     answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM and accessibility technology. Learners can view lessons, submit assignments, track progress and receive certificates.',
@@ -1386,6 +1393,7 @@ function initWhsfPolicyLinks() {
     <a href="child-safeguarding-policy.html">Child Safeguarding Policy</a>
     <a href="opportunities.html">Opportunity Calendar</a>
     <a href="innovation-support-building.html">Innovation Building</a>
+    <a href="student-projects.html">Student Projects</a>
   `;
 
   const backToTop = footerBottom.querySelector('a[href="#top"]');

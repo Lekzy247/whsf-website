@@ -2681,17 +2681,157 @@ body {
   color: var(--muted);
 }
 
+.student-projects-hero {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(circle at 80% 16%, rgba(229,185,87,.24), transparent 25rem),
+    radial-gradient(circle at 12% 86%, rgba(255,255,255,.1), transparent 20rem),
+    linear-gradient(135deg, #3b0711 0%, #5a0f1d 52%, #8f1f24 100%);
+}
+.student-projects-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .22;
+  background-image:
+    radial-gradient(rgba(255,255,255,.16) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size: 86px 86px, 46px 46px, 46px 46px;
+}
+.student-projects-hero-grid {
+  position: relative;
+  z-index: 1;
+  min-height: 620px;
+  padding: 94px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 430px;
+  gap: 62px;
+  align-items: center;
+}
+.student-projects-hero h1,
+.student-projects-card h2 { color: #fff; }
+.student-projects-hero .hero-lead { color: #fff4f6; }
+.student-projects-hero .eyebrow { color: #f7d37a; }
+.student-projects-card {
+  padding: 34px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: calc(var(--radius) + 10px);
+  background: rgba(255,255,255,.12);
+  box-shadow: 0 30px 90px rgba(0,0,0,.26);
+  backdrop-filter: blur(16px);
+}
+.student-projects-card span {
+  display: inline-flex;
+  margin-bottom: 16px;
+  color: #f7d37a;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.student-projects-card p { color: #fff4f6; }
+.student-projects-section { background: #fffdfa; }
+.student-project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.student-project-grid article {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 24px;
+  border: 1px solid rgba(143,31,36,.13);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 14px 38px rgba(59,7,17,.07);
+}
+.student-project-grid article > span {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--red-dark);
+  font-weight: 900;
+}
+.student-project-grid h3 {
+  color: var(--red-dark);
+  font-size: 1.25rem;
+}
+.student-project-grid p {
+  color: var(--muted);
+}
+.student-project-grid ul {
+  margin: auto 0 0;
+  padding: 16px 0 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  border-top: 1px solid rgba(143,31,36,.1);
+}
+.student-project-grid li {
+  color: var(--ink);
+  font-size: .92rem;
+  font-weight: 800;
+}
+.student-project-grid li::before {
+  content: "•";
+  margin-right: 8px;
+  color: var(--red);
+}
+.student-project-outcomes-section {
+  color: #fff;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(229,185,87,.18), transparent 26rem),
+    linear-gradient(135deg, #3b0711, #6d1024);
+}
+.student-project-outcomes-grid {
+  display: grid;
+  grid-template-columns: .85fr 1.15fr;
+  gap: 48px;
+  align-items: center;
+}
+.student-project-outcomes-section h2,
+.student-project-outcomes-section .section-heading p { color: #fff; }
+.student-project-outcomes-section .eyebrow { color: #f7d37a; }
+.student-outcome-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.student-outcome-list article {
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 22px;
+  background: rgba(255,255,255,.08);
+}
+.student-outcome-list strong { color: #fff; }
+.student-outcome-list p {
+  margin: 8px 0 0;
+  color: #fff4f6;
+  font-size: .92rem;
+}
+
 @media (max-width: 1180px) {
   .opportunity-grid { grid-template-columns: repeat(2, 1fr); }
   .opportunity-hero-grid,
   .opportunity-deadline-grid,
   .automation-flow-grid,
   .building-hero-grid,
-  .building-milestone-grid {
+  .building-milestone-grid,
+  .student-projects-hero-grid,
+  .student-project-outcomes-grid {
     grid-template-columns: 1fr;
   }
   .building-metric-grid,
-  .building-support-grid { grid-template-columns: repeat(2, 1fr); }
+  .building-support-grid,
+  .student-project-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 760px) {
@@ -2705,10 +2845,13 @@ body {
   .building-metric-grid,
   .building-milestones,
   .building-support-grid,
-  .building-progress-panel {
+  .building-progress-panel,
+  .student-project-grid,
+  .student-outcome-list {
     grid-template-columns: 1fr;
   }
-  .building-hero-grid {
+  .building-hero-grid,
+  .student-projects-hero-grid {
     min-height: auto;
     padding: 68px 0;
   }
