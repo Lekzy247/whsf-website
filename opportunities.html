@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="WHSF Global Tech & UN Opportunity Calendar for conferences, ECOSOC events, women in tech, youth, AI, cybersecurity, STEM, SDG and nonprofit technology opportunities."
+    />
+    <meta name="theme-color" content="#6d1024" />
+    <meta property="og:title" content="Global Tech & UN Opportunity Calendar | WHSF" />
+    <meta
+      property="og:description"
+      content="A WHSF automation hub for trusted global conferences, UN/ECOSOC events, speaking opportunities, grants, travel support and weekly alerts."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.worldhsfoundation.org/opportunities.html" />
+    <title>Global Tech & UN Opportunity Calendar | WHSF</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="WHSF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Advancing dignity, inclusion and sustainable development</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>World Humanitarian Support Foundation</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a>
+          <a href="programs.html">Programs</a>
+          <a href="innovation.html">Innovation</a>
+          <a href="mobile-app.html">Mobile App</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="impact-dashboard.html">Impact</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="opportunity-hero" aria-labelledby="opportunity-title">
+        <div class="shell opportunity-hero-grid">
+          <div class="reveal">
+            <p class="eyebrow">Conference &amp; Opportunity Automation Hub</p>
+            <h1 id="opportunity-title">Global Tech &amp; UN Opportunity Calendar</h1>
+            <p class="hero-lead">
+              A WHSF monitoring hub for global technology conferences, UN/ECOSOC events,
+              women-in-tech programmes, youth opportunities, digital inclusion forums,
+              speaking calls, grant deadlines and travel-support alerts.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-light" href="#opportunity-calendar">View opportunities</a>
+              <a class="button button-secondary" href="#automation-flow">Automation flow</a>
+            </div>
+          </div>
+          <aside class="opportunity-command-card reveal delay-one" aria-label="Automation summary">
+            <span>Automation-ready</span>
+            <h2>Weekly source scan → AI filter → WHSF calendar → staff alerts</h2>
+            <p>
+              Designed for n8n or Zapier, Supabase or Airtable, Google Calendar,
+              Brevo or Mailchimp and AI relevance scoring.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section opportunity-calendar-section" id="opportunity-calendar">
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Smart opportunity tracker</p>
+            <h2>Find events relevant to WHSF</h2>
+            <p>
+              Filter by region, participation type and WHSF relevance. This first version is
+              website-ready; the next phase can connect live source monitoring and staff email alerts.
+            </p>
+          </div>
+
+          <div class="opportunity-filter-panel" aria-label="Opportunity filters">
+            <button class="active" type="button" data-opportunity-filter="all">All</button>
+            <button type="button" data-opportunity-filter="un">UN/ECOSOC</button>
+            <button type="button" data-opportunity-filter="tech">Tech conferences</button>
+            <button type="button" data-opportunity-filter="ai">AI &amp; digital inclusion</button>
+            <button type="button" data-opportunity-filter="youth">Youth / women focused</button>
+            <button type="button" data-opportunity-filter="virtual">Free / virtual</button>
+            <button type="button" data-opportunity-filter="speaking">Speaking opportunity</button>
+            <button type="button" data-opportunity-filter="grant">Grant / travel support</button>
+          </div>
+
+          <div class="opportunity-grid" aria-live="polite">
+            <article class="opportunity-card" data-opportunity-tags="un youth speaking grant">
+              <div class="opportunity-card-top">
+                <span>UN/ECOSOC</span>
+                <strong>Featured</strong>
+              </div>
+              <h3>ECOSOC Youth Forum</h3>
+              <dl>
+                <div><dt>Date</dt><dd>14–16 April 2026</dd></div>
+                <div><dt>Location</dt><dd>UNHQ, New York</dd></div>
+                <div><dt>Deadline</dt><dd>Monitor for registration and side-event calls</dd></div>
+              </dl>
+              <p>Relevant for WHSF youth, girls in ICT, TechWomen, SDG and digital inclusion engagement.</p>
+              <div class="opportunity-tags"><span>Youth</span><span>UN</span><span>NGO</span></div>
+              <a class="arrow-link" href="https://ecosoc.un.org/en/events" target="_blank" rel="noreferrer">Open source <span>→</span></a>
+            </article>
+
+            <article class="opportunity-card" data-opportunity-tags="un tech ai speaking">
+              <div class="opportunity-card-top">
+                <span>UN/ECOSOC</span>
+                <strong>STI</strong>
+              </div>
+              <h3>Multi-stakeholder Forum on Science, Technology and Innovation for the SDGs</h3>
+              <dl>
+                <div><dt>Date</dt><dd>6–7 May 2026</dd></div>
+                <div><dt>Location</dt><dd>UNHQ, New York</dd></div>
+                <div><dt>Deadline</dt><dd>Monitor for stakeholder participation</dd></div>
+              </dl>
+              <p>Strong fit for WHSF’s AI, robotics, STEM, digital inclusion and technology-for-humanity work.</p>
+              <div class="opportunity-tags"><span>STEM</span><span>SDG</span><span>Tech</span></div>
+              <a class="arrow-link" href="https://sdgs.un.org/events" target="_blank" rel="noreferrer">Open source <span>→</span></a>
+            </article>
+
+            <article class="opportunity-card" data-opportunity-tags="un grant speaking">
+              <div class="opportunity-card-top">
+                <span>UN/ECOSOC</span>
+                <strong>SDG</strong>
+              </div>
+              <h3>High-level Political Forum on Sustainable Development</h3>
+              <dl>
+                <div><dt>Date</dt><dd>6–10 July 2026</dd></div>
+                <div><dt>Location</dt><dd>UNHQ, New York</dd></div>
+                <div><dt>Deadline</dt><dd>Monitor major groups, side events and NGO calls</dd></div>
+              </dl>
+              <p>Useful for WHSF’s SDG reporting, ECOSOC engagement, youth education and climate-tech positioning.</p>
+              <div class="opportunity-tags"><span>SDG</span><span>NGO</span><span>UN</span></div>
+              <a class="arrow-link" href="https://ecosoc.un.org/en/events" target="_blank" rel="noreferrer">Open source <span>→</span></a>
+            </article>
+
+            <article class="opportunity-card" data-opportunity-tags="un">
+              <div class="opportunity-card-top">
+                <span>UN/ECOSOC</span>
+                <strong>Council</strong>
+              </div>
+              <h3>ECOSOC Management Segment</h3>
+              <dl>
+                <div><dt>Date</dt><dd>21–22 July 2026</dd></div>
+                <div><dt>Location</dt><dd>UNHQ, New York</dd></div>
+                <div><dt>Deadline</dt><dd>Monitor ECOSOC participation updates</dd></div>
+              </dl>
+              <p>Important for WHSF’s ECOSOC awareness and monitoring of council actions affecting SDG work.</p>
+              <div class="opportunity-tags"><span>ECOSOC</span><span>Governance</span></div>
+              <a class="arrow-link" href="https://ecosoc.un.org/en/events" target="_blank" rel="noreferrer">Open source <span>→</span></a>
+            </article>
+
+            <article class="opportunity-card" data-opportunity-tags="ai tech virtual speaking">
+              <div class="opportunity-card-top">
+                <span>AI</span>
+                <strong>Global</strong>
+              </div>
+              <h3>ITU AI for Good Events</h3>
+              <dl>
+                <div><dt>Date</dt><dd>Ongoing global events</dd></div>
+                <div><dt>Location</dt><dd>Virtual and in-person</dd></div>
+                <div><dt>Deadline</dt><dd>Monitor calls, workshops and summit deadlines</dd></div>
+              </dl>
+              <p>Relevant for WHSF AI, robotics, disability technology, digital inclusion and responsible innovation.</p>
+              <div class="opportunity-tags"><span>AI</span><span>Digital inclusion</span><span>Virtual</span></div>
+              <a class="arrow-link" href="https://aiforgood.itu.int/events/" target="_blank" rel="noreferrer">Open source <span>→</span></a>
+            </article>
+
+            <article class="opportunity-card" data-opportunity-tags="tech youth speaking grant">
+              <div class="opportunity-card-top">
+                <span>Women in Tech</span>
+                <strong>Global</strong>
+              </div>
+              <h3>Women in Tech Global Events</h3>
+              <dl>
+                <div><dt>Date</dt><dd>Ongoing</dd></div>
+                <div><dt>Location</dt><dd>Global regions</dd></div>
+                <div><dt>Deadline</dt><dd>Monitor scholarships, awards and speaker calls</dd></div>
+              </dl>
+              <p>Useful for WHSF TechWomen, ICT Girls Club, mentorship and young women career pathways.</p>
+              <div class="opportunity-tags"><span>Women</span><span>Mentorship</span><span>Career</span></div>
+              <a class="arrow-link" href="https://www.women-in-tech.org/events" target="_blank" rel="noreferrer">Open source <span>→</span></a>
+            </article>
+
+            <article class="opportunity-card" data-opportunity-tags="tech ai youth virtual">
+              <div class="opportunity-card-top">
+                <span>Innovation</span>
+                <strong>Hackathons</strong>
+              </div>
+              <h3>Devpost Hackathons &amp; Challenges</h3>
+              <dl>
+                <div><dt>Date</dt><dd>Rolling opportunities</dd></div>
+                <div><dt>Location</dt><dd>Online and global</dd></div>
+                <div><dt>Deadline</dt><dd>Track challenge close dates</dd></div>
+              </dl>
+              <p>Good for WHSF student innovation, STEM challenge pathways and portfolio-building opportunities.</p>
+              <div class="opportunity-tags"><span>Hackathon</span><span>Youth</span><span>Virtual</span></div>
+              <a class="arrow-link" href="https://devpost.com/hackathons" target="_blank" rel="noreferrer">Open source <span>→</span></a>
+            </article>
+
+            <article class="opportunity-card" data-opportunity-tags="tech ai speaking">
+              <div class="opportunity-card-top">
+                <span>Industry</span>
+                <strong>Nonprofit tech</strong>
+              </div>
+              <h3>Google, Microsoft, AWS &amp; Cisco Nonprofit / AI Events</h3>
+              <dl>
+                <div><dt>Date</dt><dd>Rolling webinars and conferences</dd></div>
+                <div><dt>Location</dt><dd>USA, Europe, Canada, Asia and virtual</dd></div>
+                <div><dt>Deadline</dt><dd>Monitor registration and grant windows</dd></div>
+              </dl>
+              <p>Relevant for WHSF cloud, AI, cybersecurity, nonprofit technology and digital transformation capacity.</p>
+              <div class="opportunity-tags"><span>Cloud</span><span>Cybersecurity</span><span>Nonprofit</span></div>
+              <a class="arrow-link" href="#source-monitoring">View monitored sources <span>→</span></a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section opportunity-deadlines-section" id="deadlines">
+        <div class="shell opportunity-deadline-grid">
+          <div class="section-heading">
+            <p class="eyebrow">Application deadlines</p>
+            <h2>What WHSF should watch closely</h2>
+            <p>
+              The automation should prioritize deadlines that create visibility, funding,
+              travel, speaking or partnership opportunities for WHSF.
+            </p>
+          </div>
+          <div class="deadline-list">
+            <article><span>1</span><div><strong>Registration deadline</strong><p>Alert staff 30, 14 and 3 days before registration closes.</p></div></article>
+            <article><span>2</span><div><strong>Call for speakers</strong><p>Flag AI, STEM, digital inclusion, girls education, nonprofit tech and SDG speaking calls.</p></div></article>
+            <article><span>3</span><div><strong>Grant or travel support</strong><p>Prioritize events offering scholarships, sponsored attendance or NGO travel support.</p></div></article>
+            <article><span>4</span><div><strong>UN/ECOSOC updates</strong><p>Notify WHSF when new UN, ECOSOC, HLPF, SDG, youth or civil-society updates appear.</p></div></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section source-monitoring-section" id="source-monitoring">
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Trusted sources to monitor</p>
+            <h2>Official first, then technology ecosystem</h2>
+            <p>Start with official UN and ECOSOC calendars, then expand to trusted women-in-tech, innovation and industry sources.</p>
+          </div>
+          <div class="source-grid">
+            <a href="https://ecosoc.un.org/en/events" target="_blank" rel="noreferrer"><strong>ECOSOC Events Calendar</strong><span>UN/ECOSOC events, HLPF and council meetings</span></a>
+            <a href="https://webtv.un.org/en" target="_blank" rel="noreferrer"><strong>UN Web TV</strong><span>Official UN livestreams and recorded sessions</span></a>
+            <a href="https://sdgs.un.org/events" target="_blank" rel="noreferrer"><strong>UN DESA SDG Events</strong><span>SDG, STI, training and sustainable development events</span></a>
+            <a href="https://www.unwomen.org/en/news-stories/events" target="_blank" rel="noreferrer"><strong>UN Women Events</strong><span>Gender equality, women and girls opportunities</span></a>
+            <a href="https://aiforgood.itu.int/events/" target="_blank" rel="noreferrer"><strong>ITU AI for Good</strong><span>AI, innovation and technology for sustainable development</span></a>
+            <a href="https://www.women-in-tech.org/events" target="_blank" rel="noreferrer"><strong>Women in Tech Global</strong><span>Women-in-tech events, awards and community opportunities</span></a>
+            <a href="https://www.eventbrite.com/" target="_blank" rel="noreferrer"><strong>Eventbrite</strong><span>Local and global technology, nonprofit and youth events</span></a>
+            <a href="https://devpost.com/hackathons" target="_blank" rel="noreferrer"><strong>Devpost</strong><span>Hackathons, innovation challenges and student competitions</span></a>
+            <a href="https://www.ieee.org/conferences/index.html" target="_blank" rel="noreferrer"><strong>IEEE Events</strong><span>Engineering, AI, cybersecurity and STEM conferences</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section automation-flow-section" id="automation-flow">
+        <div class="shell automation-flow-grid">
+          <div class="section-heading">
+            <p class="eyebrow">Recommended automation flow</p>
+            <h2>Event source → AI filter → website calendar → email alert</h2>
+            <p>
+              This workflow can run weekly, with urgent reminders when deadlines are near.
+              WHSF can start with manual review, then connect n8n or Zapier when ready.
+            </p>
+          </div>
+          <div class="automation-steps">
+            <article><span>01</span><strong>Collect</strong><p>n8n or Zapier checks official UN, ECOSOC, SDG, AI, women-in-tech and technology event sources weekly.</p></article>
+            <article><span>02</span><strong>Filter</strong><p>AI scans for “AI”, “digital inclusion”, “youth”, “women”, “STEM”, “NGO”, “SDG”, “ECOSOC” and “United Nations”.</p></article>
+            <article><span>03</span><strong>Store</strong><p>Supabase or Airtable stores title, date, location, region, registration link, deadline and WHSF relevance score.</p></article>
+            <article><span>04</span><strong>Publish</strong><p>Approved events appear on the website calendar and optionally sync to a WHSF Google Calendar.</p></article>
+            <article><span>05</span><strong>Alert</strong><p>Brevo or Mailchimp sends weekly staff updates and urgent deadline reminders.</p></article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
+          <div>
+            <strong>World Humanitarian<br />Support Foundation</strong>
+            <p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="index.html#about">About Us</a><a href="index.html#gallery">Gallery</a><a href="programs.html">Programs</a><a href="innovation.html">Innovation</a><a href="mobile-app.html">Mobile App</a><a href="e-classroom.html">e-Classroom</a><a href="impact-dashboard.html">Impact</a><a href="opportunities.html">Opportunities</a><a href="index.html#partners">Partners</a></div>
+          <div><strong>Connect</strong><a href="index.html#more">Get involved</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+        <div class="footer-award" aria-label="WHSF recognition">
+          <img src="assets/home/london-data-center-award-2025.png" alt="2025 London Data Center World Award Winner" />
+          <span>2025 London Data Center World Award Winner</span>
+        </div>
+      </div>
+      <div class="shell social-links" aria-label="WHSF social media">
+        <a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>

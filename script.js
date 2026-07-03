@@ -1142,6 +1142,13 @@ const whsfAssistantAnswers = [
     linkText: 'Read Safeguarding Policy'
   },
   {
+    keys: ['conference', 'opportunity', 'calendar', 'events', 'ecosoc events', 'un events', 'women in tech events', 'grant', 'travel support', 'speaking opportunity'],
+    title: 'Conference & Opportunity Automation Hub',
+    answer: 'WHSF’s Global Tech & UN Opportunity Calendar tracks relevant UN/ECOSOC events, technology conferences, AI and digital inclusion events, youth and women-in-tech opportunities, deadlines, speaking calls and grant or travel-support opportunities.',
+    link: 'opportunities.html',
+    linkText: 'Open Opportunity Calendar'
+  },
+  {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-Classroom',
     answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM and accessibility technology. Learners can view lessons, submit assignments, track progress and receive certificates.',
@@ -1370,6 +1377,7 @@ function initWhsfPolicyLinks() {
   policyLinks.innerHTML = `
     <a href="privacy-policy.html">Privacy Policy</a>
     <a href="child-safeguarding-policy.html">Child Safeguarding Policy</a>
+    <a href="opportunities.html">Opportunity Calendar</a>
   `;
 
   const backToTop = footerBottom.querySelector('a[href="#top"]');
@@ -1378,6 +1386,25 @@ function initWhsfPolicyLinks() {
 }
 
 initWhsfPolicyLinks();
+
+function initOpportunityHub() {
+  const filters = document.querySelectorAll('[data-opportunity-filter]');
+  const cards = document.querySelectorAll('[data-opportunity-tags]');
+  if (!filters.length || !cards.length) return;
+
+  filters.forEach((filter) => {
+    filter.addEventListener('click', () => {
+      const value = filter.dataset.opportunityFilter;
+      filters.forEach((button) => button.classList.toggle('active', button === filter));
+      cards.forEach((card) => {
+        const tags = String(card.dataset.opportunityTags || '').split(/\s+/);
+        card.hidden = value !== 'all' && !tags.includes(value);
+      });
+    });
+  });
+}
+
+initOpportunityHub();
 
 const WHSF_CONSENT_KEY = 'whsf_cookie_consent_v1';
 
