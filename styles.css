@@ -3397,6 +3397,72 @@ body {
     margin-top: 2px;
   }
 }
+
+/* Homepage top gallery feature */
+.home-top-gallery-section {
+  padding: 0 0 34px;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(247,211,122,.18), transparent 26%),
+    linear-gradient(135deg, #fff8f5 0%, #fff 48%, #f7ecec 100%);
+}
+
+.home-top-gallery-section > .shell {
+  width: min(100%, 1720px);
+  max-width: none;
+  padding-right: clamp(12px, 2vw, 28px);
+  padding-left: clamp(12px, 2vw, 28px);
+}
+
+.home-top-gallery-section .impact-header {
+  max-width: 1180px;
+  margin: 0 auto 16px;
+  padding-top: 18px;
+}
+
+.home-top-gallery-section .gallery-slider {
+  border-radius: 30px;
+  box-shadow: 0 34px 100px rgba(59,7,17,.18);
+}
+
+.home-top-gallery-section .gallery-stage {
+  min-height: clamp(560px, 72vh, 820px);
+}
+
+.home-top-gallery-section .gallery-main-link {
+  height: clamp(560px, 72vh, 820px);
+}
+
+.home-top-gallery-section + .tech-impact-hero {
+  margin-top: 0;
+}
+
+@media (max-width: 760px) {
+  .home-top-gallery-section {
+    padding-bottom: 22px;
+  }
+
+  .home-top-gallery-section > .shell {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .home-top-gallery-section .impact-header {
+    padding: 14px 6px 0;
+    margin-bottom: 10px;
+  }
+
+  .home-top-gallery-section .gallery-slider {
+    border-radius: 22px;
+  }
+
+  .home-top-gallery-section .gallery-stage {
+    min-height: 440px;
+  }
+
+  .home-top-gallery-section .gallery-main-link {
+    height: 440px;
+  }
+}
 .whsf-consent-banner { position: fixed; right: 18px; bottom: 18px; left: 18px; z-index: 120; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 22px; border: 1px solid rgba(109,16,36,.18); border-radius: 24px; background: rgba(255,255,255,.97); box-shadow: 0 28px 85px rgba(59,7,17,.26); backdrop-filter: blur(14px); }
 .whsf-consent-banner[hidden], .whsf-consent-modal[hidden] { display: none; }
 .whsf-consent-copy span, .whsf-consent-dialog-head span { display: inline-flex; margin-bottom: 7px; color: var(--red); font-size: .72rem; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }

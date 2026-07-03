@@ -18,6 +18,15 @@ navigation?.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => setMenu(false));
 });
 
+const homepageMain = document.querySelector('main#main');
+const homepageHero = document.querySelector('.tech-impact-hero');
+const homepageGallery = document.querySelector('#gallery.gallery-section');
+
+if (homepageMain && homepageHero && homepageGallery) {
+  homepageGallery.classList.add('home-top-gallery-section');
+  homepageMain.insertBefore(homepageGallery, homepageHero);
+}
+
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') setMenu(false);
 });
