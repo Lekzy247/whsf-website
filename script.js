@@ -1123,9 +1123,23 @@ const whsfAssistantAnswers = [
   {
     keys: ['employee', 'staff', 'staff verification', 'employee verification', 'identity', 'gender', 'employee number'],
     title: 'Employee / Staff verification',
-    answer: 'Use Employee / Staff verification to confirm WHSF staff identity. Employee name and phone number with country code are required. Employee number and gender are optional, but if entered they must match WHSF records.',
+    answer: 'Use Employee / Staff verification to confirm WHSF staff identity. Employee name and phone number with country code are required. The portal checks the submitted details against WHSF records and shows whether the person is verified.',
     link: 'verify-certificate.html#staff-verification',
     linkText: 'Open staff verification'
+  },
+  {
+    keys: ['privacy', 'privacy policy', 'data', 'cookies', 'cookie', 'personal information', 'data processing'],
+    title: 'Privacy Policy',
+    answer: 'WHSF has a Privacy Policy explaining how the website, e-Classroom, mobile app, donations, certificate verification, staff verification and contact services handle information. You can also manage cookie preferences from Privacy settings in the footer.',
+    link: 'privacy-policy.html',
+    linkText: 'Read Privacy Policy'
+  },
+  {
+    keys: ['safeguarding', 'child protection', 'child safety', 'abuse', 'report concern', 'protection policy'],
+    title: 'Child Safeguarding Policy',
+    answer: 'WHSF has a Child Safeguarding Policy for children, girls, students, young women, vulnerable people, staff, volunteers and partners. If someone is in immediate danger, contact local emergency services first, then notify WHSF.',
+    link: 'child-safeguarding-policy.html',
+    linkText: 'Read Safeguarding Policy'
   },
   {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
@@ -1345,6 +1359,25 @@ function initWhsfAssistant() {
 }
 
 initWhsfAssistant();
+
+function initWhsfPolicyLinks() {
+  const footerBottom = document.querySelector('.footer-bottom');
+  if (!footerBottom || footerBottom.querySelector('.footer-policy-links')) return;
+
+  const policyLinks = document.createElement('nav');
+  policyLinks.className = 'footer-policy-links';
+  policyLinks.setAttribute('aria-label', 'Website policies');
+  policyLinks.innerHTML = `
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="child-safeguarding-policy.html">Child Safeguarding Policy</a>
+  `;
+
+  const backToTop = footerBottom.querySelector('a[href="#top"]');
+  if (backToTop) footerBottom.insertBefore(policyLinks, backToTop);
+  else footerBottom.append(policyLinks);
+}
+
+initWhsfPolicyLinks();
 
 const WHSF_CONSENT_KEY = 'whsf_cookie_consent_v1';
 

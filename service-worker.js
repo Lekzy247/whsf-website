@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v68';
+const WHSF_CACHE_NAME = 'whsf-pwa-v69';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -9,6 +9,8 @@ const WHSF_CORE_ASSETS = [
   '/programs.html',
   '/innovation.html',
   '/contact.html',
+  '/privacy-policy.html',
+  '/child-safeguarding-policy.html',
   '/e-classroom.html',
   '/impact-dashboard.html',
   '/verify-certificate.html',
