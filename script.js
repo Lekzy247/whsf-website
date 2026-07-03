@@ -1345,3 +1345,155 @@ function initWhsfAssistant() {
 }
 
 initWhsfAssistant();
+
+const WHSF_CONSENT_KEY = 'whsf_cookie_consent_v1';
+
+function initWhsfCookieConsent() {
+  if (document.querySelector('.whsf-consent-banner')) return;
+
+  const defaultConsent = {
+    necessary: true,
+    analytics: false,
+    external: false,
+    social: false,
+    updatedAt: ''
+  };
+
+  const readConsent = () => {
+    try {
+      return { ...defaultConsent, ...JSON.parse(localStorage.getItem(WHSF_CONSENT_KEY) || '{}') };
+    } catch {
+      return defaultConsent;
+    }
+  };
+
+  const saveConsent = (preferences) => {
+    const nextConsent = { ...defaultConsent, ...preferences, updatedAt: new Date().toISOString() };
+    localStorage.setItem(WHSF_CONSENT_KEY, JSON.stringify(nextConsent));
+    document.documentElement.dataset.whsfConsent = 'saved';
+    return nextConsent;
+  };
+
+  const footerBottom = document.querySelector('.footer-bottom');
+  if (footerBottom && !footerBottom.querySelector('[data-open-consent]')) {
+    const privacyLink = document.createElement('button');
+    privacyLink.type = 'button';
+    privacyLink.className = 'footer-privacy-link';
+    privacyLink.dataset.openConsent = 'true';
+    privacyLink.textContent = 'Privacy settings';
+    footerBottom.append(privacyLink);
+  }
+
+  const banner = document.createElement('section');
+  banner.className = 'whsf-consent-banner';
+  banner.setAttribute('aria-label', 'Cookie and data processing consent');
+  banner.hidden = Boolean(localStorage.getItem(WHSF_CONSENT_KEY));
+  banner.innerHTML = `
+    <div class="whsf-consent-copy">
+      <span>Privacy choices</span>
+      <h2>Consent to Cookies & Data Processing</h2>
+      <p>
+        WHSF uses necessary website functions and may use similar technologies to improve access, integrate content such as videos or external services, understand website performance and support secure public services such as e-Classroom, certificate verification, staff verification, donations and contact forms. You can accept all, reject non-essential processing or manage your preferences. Your choice is voluntary and can be changed using “Privacy settings” at the bottom of the website.
+      </p>
+    </div>
+    <div class="whsf-consent-actions">
+      <button class="button button-small" type="button" data-consent-accept>Accept</button>
+      <button class="button button-small button-secondary" type="button" data-consent-reject>Reject all</button>
+      <button class="text-button" type="button" data-consent-manage>Manage preferences</button>
+    </div>
+  `;
+
+  const modal = document.createElement('section');
+  modal.className = 'whsf-consent-modal';
+  modal.setAttribute('aria-label', 'Manage privacy preferences');
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="whsf-consent-dialog" role="dialog" aria-modal="true" aria-labelledby="whsf-consent-title">
+      <div class="whsf-consent-dialog-head">
+        <div>
+          <span>WHSF privacy settings</span>
+          <h2 id="whsf-consent-title">Manage preferences</h2>
+        </div>
+        <button type="button" class="whsf-consent-close" aria-label="Close privacy settings" data-consent-close>×</button>
+      </div>
+      <form class="whsf-consent-form">
+        <label>
+          <input type="checkbox" checked disabled />
+          <span><strong>Necessary</strong><small>Required for core website navigation, security, form display and saved privacy choice.</small></span>
+        </label>
+        <label>
+          <input type="checkbox" name="analytics" />
+          <span><strong>Analytics</strong><small>Helps WHSF understand page performance and improve public services.</small></span>
+        </label>
+        <label>
+          <input type="checkbox" name="external" />
+          <span><strong>External content</strong><small>Allows embedded content and services such as videos, maps, learning tools and donation links.</small></span>
+        </label>
+        <label>
+          <input type="checkbox" name="social" />
+          <span><strong>Social media</strong><small>Supports social media integration and public sharing features when used.</small></span>
+        </label>
+        <div class="whsf-consent-dialog-actions">
+          <button class="button" type="submit">Save preferences</button>
+          <button class="button button-secondary" type="button" data-consent-modal-reject>Reject all</button>
+        </div>
+      </form>
+    </div>
+  `;
+
+  document.body.append(banner, modal);
+
+  const openPreferences = () => {
+    const consent = readConsent();
+    modal.querySelector('[name="analytics"]').checked = Boolean(consent.analytics);
+    modal.querySelector('[name="external"]').checked = Boolean(consent.external);
+    modal.querySelector('[name="social"]').checked = Boolean(consent.social);
+    modal.hidden = false;
+  };
+
+  const closePreferences = () => {
+    modal.hidden = true;
+  };
+
+  const hideBanner = () => {
+    banner.hidden = true;
+  };
+
+  banner.querySelector('[data-consent-accept]').addEventListener('click', () => {
+    saveConsent({ analytics: true, external: true, social: true });
+    hideBanner();
+  });
+
+  banner.querySelector('[data-consent-reject]').addEventListener('click', () => {
+    saveConsent({ analytics: false, external: false, social: false });
+    hideBanner();
+  });
+
+  banner.querySelector('[data-consent-manage]').addEventListener('click', openPreferences);
+
+  modal.querySelector('[data-consent-close]').addEventListener('click', closePreferences);
+
+  modal.querySelector('[data-consent-modal-reject]').addEventListener('click', () => {
+    saveConsent({ analytics: false, external: false, social: false });
+    hideBanner();
+    closePreferences();
+  });
+
+  modal.querySelector('.whsf-consent-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    saveConsent({
+      analytics: data.has('analytics'),
+      external: data.has('external'),
+      social: data.has('social')
+    });
+    hideBanner();
+    closePreferences();
+  });
+
+  document.querySelectorAll('[data-open-consent]').forEach((button) => {
+    button.addEventListener('click', openPreferences);
+  });
+}
+
+initWhsfCookieConsent();
