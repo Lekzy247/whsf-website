@@ -1256,6 +1256,13 @@ const whsfAssistantAnswers = [
     linkText: 'Contact WHSF'
   },
   {
+    keys: ['ai assistant', 'ai assistant suite', 'grant finder', 'scholarship finder', 'tech opportunity monitor', 'agriculture assistant', 'health verifier', 'scam detection', 'tech news curator', 'whatsapp assistant', 'translation'],
+    title: 'WHSF AI Assistant Suite',
+    answer: 'The WHSF AI Assistant Suite concept includes an AI Grant & Scholarship Finder, AI Tech Opportunity Monitor, AI Agriculture Knowledge Assistant, AI Health Information Verifier, AI Scam Detection Center, AI Tech News Curator, WhatsApp information assistant and multilingual translation for local communities.',
+    link: 'innovation.html#ai-assistant-suite',
+    linkText: 'View AI Assistant Suite'
+  },
+  {
     keys: ['program', 'programme', 'programs', 'girls in ict', 'techwomen', 'robotics', 'drone', 'stem', 'cybersecurity', 'ai'],
     title: 'Technology programmes',
     answer: 'WHSF programmes include Girls in ICT Club, TechWomen, robotics, drone technology, AI and digital skills, cybersecurity, STEM, climate-smart technology and practical pathways for girls and young women.',
