@@ -1594,38 +1594,78 @@ function initAiAssistantActions() {
   const buttons = document.querySelectorAll('[data-ai-action]');
   if (!response || !buttons.length) return;
 
+  const aiTimestamp = () => new Date().toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  });
+
   const actions = {
     grant: {
       title: 'AI Grant & Scholarship Finder',
-      message: 'WHSF can use this assistant to help students and young women discover trusted scholarships, grants, fellowships, STEM competitions, internships and study-abroad opportunities. The public action is simple: submit an opportunity question, then WHSF reviews and shares verified next steps.'
+      status: 'Opportunity scan prepared',
+      message: 'I would search trusted scholarship, grant, fellowship, internship, STEM competition and study-abroad sources, then filter results for girls, young women, ICT Girls Club, TechWomen and WHSF learners.',
+      update: 'Recommended checks: official university pages, government scholarship portals, UN/UNESCO education opportunities, STEM competition organizers, fellowship pages and verified foundation websites.',
+      next: 'Use only official application links, check deadlines, confirm eligibility and avoid any opportunity asking for unofficial WhatsApp payments.',
+      chips: ['Scholarships', 'Grants', 'Fellowships', 'Internships', 'STEM competitions']
     },
     tech: {
       title: 'AI Tech Opportunity Monitor',
-      message: 'This assistant can monitor women-in-tech events, hackathons, AI training, cybersecurity bootcamps, cloud learning, digital inclusion events and youth technology opportunities, then highlight the ones most relevant to WHSF learners and volunteers.'
+      status: 'Tech opportunity monitor ready',
+      message: 'I would track hackathons, technology conferences, women-in-tech programmes, AI training, cloud events, cybersecurity bootcamps and digital inclusion opportunities.',
+      update: 'Relevant sources include IEEE events, Women in Tech Global, ITU AI for Good, Devpost, Eventbrite, Microsoft, Google, AWS, Cisco and verified nonprofit technology event pages.',
+      next: 'Prioritize free or virtual events, youth/women-focused programmes, speaking opportunities and opportunities with travel or grant support.',
+      chips: ['Hackathons', 'AI training', 'Cybersecurity', 'Cloud events', 'Digital inclusion']
     },
     agriculture: {
       title: 'AI Agriculture Knowledge Assistant',
-      message: 'This assistant can provide plain-language climate-smart agriculture guidance, help explain verified farming information, and support rural learners with practical knowledge while encouraging users to check local experts for location-specific decisions.'
+      status: 'Agriculture guide generated',
+      message: 'I would provide plain-language climate-smart agriculture guidance using verified agriculture, weather-awareness, farm-safety and crop-information resources.',
+      update: 'Useful checks include local agriculture extension services, FAO resources, climate-smart agriculture guidance, verified weather agencies and university agriculture publications.',
+      next: 'For farm decisions, confirm local soil, weather and crop conditions with a qualified local agriculture expert before acting.',
+      chips: ['Crop guidance', 'Farm safety', 'Weather awareness', 'Climate-smart agriculture', 'Rural learning']
     },
     health: {
       title: 'AI Health Information Verifier',
-      message: 'This assistant can help communities understand health information more safely by pointing people to trusted sources, explaining prevention guidance in simple language, and reminding users that medical decisions must be handled by qualified health professionals.'
+      status: 'Health information safety check',
+      message: 'I would help explain health information safely by pointing to trusted public-health sources and separating general awareness from medical decision-making.',
+      update: 'Trusted references should include ministries of health, WHO, UNICEF, CDC-style public-health guidance, licensed hospitals and qualified medical professionals.',
+      next: 'This tool does not diagnose or prescribe. For symptoms, treatment, pregnancy, child health or emergencies, consult a qualified health professional immediately.',
+      chips: ['Public health', 'Prevention', 'Child health', 'Nutrition awareness', 'Medical referral']
     },
     scam: {
       title: 'AI Scam Detection Center',
-      message: 'This assistant can help identify suspicious scholarships, fake jobs, fake certificates, phishing links, fraudulent WhatsApp messages, fake donation requests and impersonation attempts. It supports WHSF cyber-safety education and public fraud awareness.'
+      status: 'Suspicious message review ready',
+      message: 'I would check suspicious scholarships, fake certificates, phishing links, false job offers, crypto scams, donation fraud, fake WHSF pages and manipulated media for warning signs.',
+      update: 'Red flags include payment requests, pressure to act fast, unofficial WhatsApp-only communication, mismatched domains, copied logos, fake staff names and requests for banking or identity details.',
+      next: 'Do not pay or share personal information. Verify through official WHSF website links and report suspected fraud to the platform and appropriate local authorities.',
+      chips: ['Scholarship scams', 'Fake jobs', 'Phishing', 'Donation fraud', 'Impersonation']
     },
     news: {
       title: 'AI Tech News Curator',
-      message: 'This assistant can summarize useful technology updates in AI, robotics, cybersecurity, drones, cloud, data centers and digital inclusion so learners and programme teams can stay informed without being overwhelmed.'
+      status: 'Technology update digest ready',
+      message: 'I would summarize useful technology news in AI, robotics, drones, cybersecurity, cloud, data centers and digital inclusion for WHSF learners and staff.',
+      update: 'The digest should focus on learning value: what changed, why it matters, beginner-friendly explanation and how WHSF learners can apply it.',
+      next: 'Use this for weekly learning updates, e-Classroom discussion prompts, programme content and mentor briefing notes.',
+      chips: ['AI news', 'Robotics', 'Drones', 'Cybersecurity', 'Cloud']
     },
     whatsapp: {
       title: 'WhatsApp Information Assistant',
-      message: 'This assistant can support mobile-first communities by answering common public questions through WhatsApp-style guidance, such as how to verify a scholarship, where to start learning cybersecurity, or how to report suspicious messages.'
+      status: 'WhatsApp support flow prepared',
+      message: 'I would guide users through short mobile-friendly answers such as “Is this scholarship real?”, “Where can I learn cybersecurity?” or “How do I report a suspicious message?”',
+      update: 'The safest first version can use approved WHSF answers, fraud warnings, certificate/staff verification links, e-Classroom links and simple escalation guidance.',
+      next: 'When connected later, WhatsApp Business or an approved messaging provider can deliver these answers without exposing private personal numbers.',
+      chips: ['Mobile support', 'Low bandwidth', 'Verified answers', 'Fraud warning', 'Learning guidance']
     },
     translation: {
       title: 'Multilingual AI Translation',
-      message: 'This assistant can help WHSF translate simple programme guidance into local languages such as Yoruba, Hausa, Igbo and Pidgin English, making public information easier for families and rural communities to understand.'
+      status: 'Community translation guidance ready',
+      message: 'I would simplify WHSF programme, safety and learning messages into accessible English and prepare translation support for Yoruba, Hausa, Igbo and Pidgin English.',
+      update: 'Best use cases include parent messages, rural outreach, learner instructions, safety notices, opportunity summaries and digital-literacy guidance.',
+      next: 'Important health, legal, safeguarding or official notices should still be reviewed by a fluent human speaker before publication.',
+      chips: ['Yoruba', 'Hausa', 'Igbo', 'Pidgin English', 'Plain language']
     }
   };
 
@@ -1634,9 +1674,20 @@ function initAiAssistantActions() {
       const action = actions[button.dataset.aiAction];
       if (!action) return;
       response.innerHTML = `
+        <div class="ai-response-topline">
+          <span>Live AI guidance preview</span>
+          <time>${aiTimestamp()}</time>
+        </div>
         <strong>${action.title}</strong>
         <p>${action.message}</p>
-        <a class="arrow-link" href="contact.html">Request AI programme support <span>→</span></a>
+        <div class="ai-response-detail">
+          <article><b>Status update</b><span>${action.status}</span></article>
+          <article><b>Trusted-source direction</b><span>${action.update}</span></article>
+          <article><b>Recommended next step</b><span>${action.next}</span></article>
+        </div>
+        <div class="ai-response-tags" aria-label="Relevant AI assistant tags">
+          ${action.chips.map((chip) => `<span>${chip}</span>`).join('')}
+        </div>
       `;
       response.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
