@@ -940,7 +940,7 @@ p, li { text-wrap: pretty; }
   transition: transform .24s ease, box-shadow .24s ease;
 }
 .course-card::before {
-  content: "<WHSF.course />";
+  content: attr(data-code);
   position: absolute;
   top: 0;
   right: 0;
