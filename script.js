@@ -18,6 +18,70 @@ navigation?.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => setMenu(false));
 });
 
+const whsfSocialLinks = [
+  {
+    name: 'Facebook',
+    href: 'https://www.facebook.com/worldhsfoundation',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.3 8.9V7.4c0-.7.5-.9.9-.9h2.1V3h-3c-3.3 0-4.1 2.1-4.1 4.1v1.8H7.8v3.8h2.4V21h4.1v-8.3H17l.4-3.8h-3.1Z"/></svg>'
+  },
+  {
+    name: 'Instagram',
+    href: 'https://www.instagram.com/worldhsfoundation',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm4.5 3.4a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2Zm0 2a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2Zm5-2.3a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg>'
+  },
+  {
+    name: 'YouTube',
+    href: 'https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2s-.2-1.5-.9-2.1c-.9-.9-1.8-.9-2.3-.9C15.2 4 12 4 12 4h-.1s-3.2 0-6.4.2c-.5 0-1.5 0-2.3.9-.7.6-.9 2.1-.9 2.1S2 9 2 10.8v1.7c0 1.8.3 3.6.3 3.6s.2 1.5.9 2.1c.9.9 2 .8 2.5.9 1.8.2 6.3.3 6.3.3s3.2 0 6.4-.2c.5 0 1.5 0 2.3-.9.7-.6.9-2.1.9-2.1s.3-1.8.3-3.6v-1.7c0-1.9-.3-3.7-.3-3.7ZM10 14.6V8.3l5.7 3.2-5.7 3.1Z"/></svg>'
+  },
+  {
+    name: 'LinkedIn',
+    href: 'http://linkedin.com/company/worldhsfoundation',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.8 21H3.1V9h3.7v12ZM5 7.4A2.1 2.1 0 1 1 5 3a2.1 2.1 0 0 1 0 4.4ZM21 21h-3.7v-5.9c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1v6H9.4V9h3.5v1.6h.1c.5-.9 1.7-1.9 3.5-1.9 3.8 0 4.5 2.5 4.5 5.7V21Z"/></svg>'
+  }
+];
+
+function initHeaderSocialLinks() {
+  const navWrap = document.querySelector('.nav-wrap');
+  if (!navWrap || navWrap.querySelector('.header-social-links')) return;
+
+  document.querySelectorAll('.primary-nav a[href="mobile-app.html"]').forEach((link) => {
+    link.href = 'innovation.html#whsf-mobile-app';
+    link.textContent = 'App';
+  });
+
+  const socialNav = document.createElement('nav');
+  socialNav.className = 'header-social-links';
+  socialNav.setAttribute('aria-label', 'WHSF social media');
+  socialNav.innerHTML = whsfSocialLinks.map((item) => `
+    <a href="${item.href}" target="_blank" rel="noreferrer" aria-label="${item.name}">
+      ${item.icon}
+    </a>
+  `).join('');
+
+  const menuToggle = navWrap.querySelector('.menu-toggle');
+  if (menuToggle) navWrap.insertBefore(socialNav, menuToggle);
+  else navWrap.append(socialNav);
+}
+
+initHeaderSocialLinks();
+
+function initFooterSocialLogos() {
+  document.querySelectorAll('.social-links').forEach((container) => {
+    if (container.dataset.logoReady === 'true') return;
+    container.dataset.logoReady = 'true';
+    container.querySelectorAll('a').forEach((link) => {
+      const text = link.textContent.trim().toLowerCase();
+      const social = whsfSocialLinks.find((item) => item.name.toLowerCase() === text);
+      if (!social) return;
+      link.setAttribute('aria-label', social.name);
+      link.innerHTML = `${social.icon}<span>${social.name}</span>`;
+    });
+  });
+}
+
+initFooterSocialLogos();
+
 const homepageMain = document.querySelector('main#main');
 const homepageHero = document.querySelector('.tech-impact-hero');
 const homepageGallery = document.querySelector('#gallery.gallery-section');
@@ -1301,8 +1365,8 @@ const whsfAssistantAnswers = [
     keys: ['mobile app', 'app', 'volunteer hub', 'donor hub', 'member dashboard', 'chat', 'community'],
     title: 'WHSF Mobile App',
     answer: 'The WHSF Mobile App portal helps donors, volunteers, partners, students and members stay connected with impact updates, collaboration chat, volunteer tasks, donor information, member dashboards and announcements.',
-    link: 'mobile-app.html',
-    linkText: 'Open mobile app portal'
+    link: 'innovation.html#whsf-mobile-app',
+    linkText: 'View mobile app under Innovation'
   },
   {
     keys: ['impact', 'metrics', 'report', 'dashboard', 'sdg', 'data', 'statistics'],
@@ -1480,6 +1544,62 @@ function initWhsfAssistant() {
 }
 
 initWhsfAssistant();
+
+function initAiAssistantActions() {
+  const response = document.querySelector('#ai-action-response');
+  const buttons = document.querySelectorAll('[data-ai-action]');
+  if (!response || !buttons.length) return;
+
+  const actions = {
+    grant: {
+      title: 'AI Grant & Scholarship Finder',
+      message: 'WHSF can use this assistant to help students and young women discover trusted scholarships, grants, fellowships, STEM competitions, internships and study-abroad opportunities. The public action is simple: submit an opportunity question, then WHSF reviews and shares verified next steps.'
+    },
+    tech: {
+      title: 'AI Tech Opportunity Monitor',
+      message: 'This assistant can monitor women-in-tech events, hackathons, AI training, cybersecurity bootcamps, cloud learning, digital inclusion events and youth technology opportunities, then highlight the ones most relevant to WHSF learners and volunteers.'
+    },
+    agriculture: {
+      title: 'AI Agriculture Knowledge Assistant',
+      message: 'This assistant can provide plain-language climate-smart agriculture guidance, help explain verified farming information, and support rural learners with practical knowledge while encouraging users to check local experts for location-specific decisions.'
+    },
+    health: {
+      title: 'AI Health Information Verifier',
+      message: 'This assistant can help communities understand health information more safely by pointing people to trusted sources, explaining prevention guidance in simple language, and reminding users that medical decisions must be handled by qualified health professionals.'
+    },
+    scam: {
+      title: 'AI Scam Detection Center',
+      message: 'This assistant can help identify suspicious scholarships, fake jobs, fake certificates, phishing links, fraudulent WhatsApp messages, fake donation requests and impersonation attempts. It supports WHSF cyber-safety education and public fraud awareness.'
+    },
+    news: {
+      title: 'AI Tech News Curator',
+      message: 'This assistant can summarize useful technology updates in AI, robotics, cybersecurity, drones, cloud, data centers and digital inclusion so learners and programme teams can stay informed without being overwhelmed.'
+    },
+    whatsapp: {
+      title: 'WhatsApp Information Assistant',
+      message: 'This assistant can support mobile-first communities by answering common public questions through WhatsApp-style guidance, such as how to verify a scholarship, where to start learning cybersecurity, or how to report suspicious messages.'
+    },
+    translation: {
+      title: 'Multilingual AI Translation',
+      message: 'This assistant can help WHSF translate simple programme guidance into local languages such as Yoruba, Hausa, Igbo and Pidgin English, making public information easier for families and rural communities to understand.'
+    }
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const action = actions[button.dataset.aiAction];
+      if (!action) return;
+      response.innerHTML = `
+        <strong>${action.title}</strong>
+        <p>${action.message}</p>
+        <a class="arrow-link" href="contact.html">Request AI programme support <span>→</span></a>
+      `;
+      response.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  });
+}
+
+initAiAssistantActions();
 
 function initWhsfPolicyLinks() {
   const footerBottom = document.querySelector('.footer-bottom');
