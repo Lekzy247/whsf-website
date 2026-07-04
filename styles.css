@@ -950,10 +950,11 @@ p, li { text-wrap: pretty; }
   background:
     radial-gradient(circle at 92% 18%, rgba(229,185,87,.22), transparent 24%),
     linear-gradient(135deg, #3b0711 0%, #6d1024 62%, #8f1f24 100%);
-  font-family: Consolas, "Courier New", monospace;
-  font-size: .78rem;
-  font-weight: 900;
-  letter-spacing: .04em;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: .82rem;
+  font-weight: 950;
+  letter-spacing: .075em;
+  text-transform: uppercase;
 }
 .course-card::after {
   content: "";
