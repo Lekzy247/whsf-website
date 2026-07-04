@@ -153,19 +153,25 @@
             <p class="eyebrow">Employee / Staff verification</p>
             <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
             <p>
-              Use this form to confirm WHSF staff identity details. Employee name and phone number are required.
+              Use this form to confirm WHSF staff identity details. First name, last name and phone number are required.
             </p>
             <ul class="staff-verify-notes">
-              <li>Use the employee name exactly as provided by WHSF.</li>
+              <li>Enter the employee first name and last name exactly as provided by WHSF.</li>
               <li>Select the country code first, then enter the staff phone number.</li>
             </ul>
           </div>
 
           <form class="student-login-card verify-card staff-verify-card reveal delay-one" id="staff-verification-form">
-            <label>
-              Employee name
-              <input id="employee-name" name="employee_name" type="text" placeholder="Example: Olalekan Okunola" autocomplete="name" required />
-            </label>
+            <div class="staff-name-grid">
+              <label>
+                First name
+                <input id="employee-first-name" name="employee_first_name" type="text" placeholder="Example: Olalekan" autocomplete="given-name" required />
+              </label>
+              <label>
+                Last name
+                <input id="employee-last-name" name="employee_last_name" type="text" placeholder="Example: Okunola" autocomplete="family-name" required />
+              </label>
+            </div>
             <div class="staff-phone-field">
               <div class="staff-phone-control">
                 <span>Country code</span>
@@ -370,7 +376,7 @@
               </div>
               <label>
                 <span>Phone #</span>
-                <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: 424-396-9671" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code" autocomplete="tel-national" required />
+                <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: (424)-(396)-(9671)" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code, for example (424)-(396)-(9671)" autocomplete="tel-national" required />
               </label>
             </div>
             <button class="button" type="submit">Verify staff details</button>
@@ -463,6 +469,22 @@
       const setStaffStatus = (message) => {
         staffStatus.textContent = message;
       };
+
+      function normalizeStaffName(value) {
+        return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+      }
+
+      const knownWhsfStaffNames = new Set([
+        'olalekan okunola',
+        'oluwaseun okunola',
+        'donald lalude',
+        'segun adekeye',
+        'abayomi okunola',
+        'funmilayo esho',
+        'toluwanimi okunola'
+      ]);
+
+      const phoneMismatchMessage = 'Name found, but the phone number did not match WHSF staff records. Please select the correct country code and enter the phone number in this format: +234 - Country code + (xxx)-(xxx)-(xxxx). Example: select +234 and enter (803)-(574)-(0987).';
 
       function formatEmployeeNumber(value) {
         const cleaned = String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -671,19 +693,22 @@
       staffForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(staffForm);
-        const employeeName = String(formData.get('employee_name') || '').trim();
+        const employeeFirstName = String(formData.get('employee_first_name') || '').trim();
+        const employeeLastName = String(formData.get('employee_last_name') || '').trim();
+        const employeeName = `${employeeFirstName} ${employeeLastName}`.trim().replace(/\s+/g, ' ');
+        const employeeNameFound = knownWhsfStaffNames.has(normalizeStaffName(employeeName));
         const employeeNumber = '';
         const employeeCountryCode = String(formData.get('employee_country_code') || '').trim();
         const employeePhoneLocal = String(formData.get('employee_phone') || '').trim();
         const employeePhone = buildEmployeePhone(employeeCountryCode, employeePhoneLocal);
-        if (!employeeName || !employeeCountryCode || !employeePhoneLocal) {
-          setStaffStatus('Enter employee name, country code and phone number to verify staff details.');
+        if (!employeeFirstName || !employeeLastName || !employeeCountryCode || !employeePhoneLocal) {
+          setStaffStatus('Enter first name, last name, country code and phone number to verify staff details.');
           return;
         }
 
         if (!hasCountryCode(employeePhone)) {
-          setStaffStatus('Select a valid country code and enter the phone number, for example +1 424-396-9671 or +234 8035740987.');
-          alert('Select a valid country code and enter the phone number.');
+          setStaffStatus('Select a valid country code and enter the phone number in this format: +234 - Country code + (xxx)-(xxx)-(xxxx). Example: select +234 and enter (803)-(574)-(0987).');
+          alert('Select a valid country code and enter the phone number in this format: +234 - Country code + (xxx)-(xxx)-(xxxx).');
           return;
         }
 
@@ -707,12 +732,23 @@
         }
 
         if (!data?.length) {
+          if (employeeNameFound) {
+            setStaffStatus(phoneMismatchMessage);
+            alert(phoneMismatchMessage);
+            return;
+          }
           setStaffStatus('This person is not a staff of WHSF.');
           alert('This person is not a staff of WHSF.');
           return;
         }
 
         const verifiedStaff = data[0];
+        if ((verifiedStaff.verification_status || '').toLowerCase().includes('phone')) {
+          setStaffStatus(phoneMismatchMessage);
+          alert(phoneMismatchMessage);
+          return;
+        }
+
         setText('#staff-result-name', verifiedStaff.full_name);
         setText('#staff-result-number', verifiedStaff.employee_number);
         setText('#staff-result-phone', verifiedStaff.phone);

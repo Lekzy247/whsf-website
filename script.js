@@ -1320,9 +1320,9 @@ const whsfAssistantAnswers = [
     linkText: 'Open certificate verification'
   },
   {
-    keys: ['employee', 'staff', 'staff verification', 'employee verification', 'identity', 'gender', 'employee number'],
+    keys: ['employee', 'staff', 'staff verification', 'employee verification', 'identity', 'phone number'],
     title: 'Employee / Staff verification',
-    answer: 'Use Employee / Staff verification to confirm WHSF staff identity. Employee name and phone number with country code are required. The portal checks the submitted details against WHSF records and shows whether the person is verified.',
+    answer: 'Use Employee / Staff verification to confirm WHSF staff identity. First name, last name and phone number with country code are required. The portal checks the submitted details against WHSF records and shows whether the person is verified.',
     link: 'verify-certificate.html#staff-verification',
     linkText: 'Open staff verification'
   },
