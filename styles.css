@@ -887,15 +887,6 @@ p, li { text-wrap: pretty; }
 .cloud-lms-panel span { display: inline-flex; margin-bottom: 16px; color: #ffe0af; font-size: .76rem; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
 .cloud-lms-panel strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: clamp(2.2rem, 4vw, 3.6rem); line-height: 1; }
 .cloud-lms-panel p { position: relative; margin-top: 18px; color: rgba(255,255,255,.84); }
-.lms-feature-grid { position: relative; margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.lms-feature-card { min-height: 245px; padding: 28px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease; }
-.lms-feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-.lms-feature-card span { display: inline-flex; margin-bottom: 18px; color: var(--red); font-family: "Playfair Display", Georgia, serif; font-size: 1.9rem; font-weight: 800; }
-.lms-feature-card h3 { margin-bottom: 10px; font-size: 1.18rem; }
-.lms-feature-card p { color: var(--muted); }
-.lms-usecase-strip { margin-top: 24px; padding: 22px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
-.lms-usecase-strip strong { margin-right: 4px; color: var(--ink); }
-.lms-usecase-strip span { padding: 8px 11px; border-radius: 999px; color: var(--red); background: #fff1ed; font-size: .76rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
 .skills-passport-section { position: relative; overflow: hidden; background: radial-gradient(circle at 15% 10%, rgba(229,185,87,.24), transparent 30%), linear-gradient(180deg, #fff 0%, #fff5f2 100%); }
 .skills-passport-section::before { content: ""; position: absolute; inset: 36px auto auto -120px; width: 260px; height: 260px; border-radius: 50%; background: rgba(201,54,53,.08); pointer-events: none; }
 .skills-passport-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 430px; gap: 44px; align-items: center; }
@@ -918,70 +909,6 @@ p, li { text-wrap: pretty; }
 .passport-card-stats strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 1.8rem; line-height: 1; }
 .passport-card-stats span { display: block; margin-top: 8px; color: rgba(255,255,255,.78); font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .passport-card-note { position: relative; margin: 24px 0 0; color: rgba(255,255,255,.82); }
-.foundational-course-heading {
-  position: relative;
-  margin-top: 42px;
-}
-.foundational-course-heading .eyebrow {
-  margin-bottom: 10px;
-}
-.foundational-course-heading h3 {
-  max-width: 760px;
-  margin: 0;
-  color: var(--red-dark);
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(1.65rem, 3vw, 2.35rem);
-}
-.skill-badge-grid { position: relative; margin-top: 34px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.skill-badge {
-  position: relative;
-  min-height: 215px;
-  overflow: hidden;
-  padding: 76px 22px 22px;
-  display: grid;
-  gap: 14px;
-  border: 1px solid rgba(201,54,53,.13);
-  border-radius: var(--radius);
-  color: inherit;
-  text-decoration: none;
-  background: linear-gradient(180deg, #fff 0%, #fff9f9 100%);
-  box-shadow: 0 12px 34px rgba(45,18,18,.06);
-  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
-}
-.skill-badge::before {
-  content: attr(data-code);
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  min-height: 58px;
-  padding: 17px 18px;
-  color: #ffe0af;
-  background:
-    radial-gradient(circle at 92% 18%, rgba(229,185,87,.22), transparent 24%),
-    linear-gradient(135deg, #3b0711 0%, #6d1024 62%, #8f1f24 100%);
-  font-size: .76rem;
-  font-weight: 950;
-  letter-spacing: .075em;
-  line-height: 1.25;
-  text-transform: uppercase;
-}
-.skill-badge::after {
-  content: "";
-  position: absolute;
-  top: 22px;
-  right: 18px;
-  width: 36px;
-  height: 9px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #e5b957 0 22%, rgba(255,255,255,.45) 22% 46%, rgba(255,255,255,.25) 46% 70%, rgba(255,255,255,.12) 70%);
-}
-.skill-badge:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-.skill-badge:focus-visible { outline: 4px solid rgba(201,54,53,.28); outline-offset: 4px; }
-.skill-badge > span { width: 46px; height: 46px; display: inline-grid; place-items: center; border-radius: 16px; background: #fff1ed; font-size: 1.35rem; }
-.skill-badge strong { display: block; color: var(--ink); font-size: 1rem; }
-.skill-badge small { display: block; margin-top: 6px; color: var(--muted); font-weight: 700; line-height: 1.45; }
-.skill-badge em { align-self: end; justify-self: start; padding: 7px 10px; border-radius: 999px; color: var(--green-900); background: #e8f4ef; font-size: .68rem; font-style: normal; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .classroom-courses { background: #fffaf8; }
 .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .course-card {
@@ -1390,8 +1317,6 @@ p, li { text-wrap: pretty; }
 @media (max-width: 1020px) {
   .classroom-hero-grid, .classroom-auth-grid, .cloud-lms-hero, .skills-passport-grid, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card, .impact-dashboard-grid, .impact-insight-grid, .impact-report-card, .techbridge-global-hero-grid, .mobile-app-hero-grid, .mobile-portal-grid, .production-checklist-card, .mobile-admin-hero-grid, .mobile-admin-layout, .staff-verify-grid { grid-template-columns: 1fr; }
   .course-grid { grid-template-columns: 1fr 1fr; }
-  .lms-feature-grid { grid-template-columns: repeat(2, 1fr); }
-  .skill-badge-grid { grid-template-columns: repeat(2, 1fr); }
   .admin-summary { grid-template-columns: repeat(2, 1fr); }
   .admin-form { grid-template-columns: 1fr 1fr; }
   .verify-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1454,11 +1379,10 @@ p, li { text-wrap: pretty; }
   .learner-dashboard-panel { padding: 20px 16px; }
   .dashboard-progress-wrap { grid-template-columns: 1fr; }
   .dashboard-actions-row .button { width: 100%; justify-content: center; }
-  .cloud-lms-panel, .lms-feature-card, .lms-usecase-strip { padding: 24px 20px; }
-  .lms-feature-grid { grid-template-columns: 1fr; }
+  .cloud-lms-panel { padding: 24px 20px; }
   .skills-passport-card { padding: 24px 20px; }
   .passport-card-top { align-items: flex-start; }
-  .passport-card-stats, .skill-badge-grid { grid-template-columns: 1fr; }
+  .passport-card-stats { grid-template-columns: 1fr; }
   .passport-flow a, .passport-flow span { width: 100%; justify-content: center; text-align: center; }
   .course-grid { grid-template-columns: 1fr; }
   .admin-hero-grid { min-height: auto; padding: 68px 0; }
