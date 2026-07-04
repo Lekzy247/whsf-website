@@ -1602,6 +1602,43 @@ function initAiAssistantActions() {
     minute: '2-digit'
   });
 
+  const markdownToSafeHtml = (value) => escapeHtml(value || '')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n{2,}/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+
+  const renderAiResponse = (action, options = {}) => {
+    const {
+      live = false,
+      loading = false,
+      error = '',
+      answer = ''
+    } = options;
+
+    const statusLabel = loading ? 'Searching trusted sources' : (live ? 'Live AI search result' : 'Live AI guidance preview');
+    const statusText = error || action.status;
+    const trustedText = answer ? 'Live AI search completed using current web information and trusted-source guidance.' : action.update;
+    const nextText = answer ? 'Review the links and official sources before applying, sharing, donating or acting on any information.' : action.next;
+
+    response.innerHTML = `
+      <div class="ai-response-topline">
+        <span>${statusLabel}</span>
+        <time>${aiTimestamp()}</time>
+      </div>
+      <strong>${action.title}</strong>
+      ${loading ? '<p class="ai-loading-note">Searching live opportunity and information sources now…</p>' : ''}
+      ${answer ? `<div class="ai-live-answer"><p>${markdownToSafeHtml(answer)}</p></div>` : `<p>${action.message}</p>`}
+      <div class="ai-response-detail">
+        <article><b>Status update</b><span>${escapeHtml(statusText)}</span></article>
+        <article><b>Trusted-source direction</b><span>${escapeHtml(trustedText)}</span></article>
+        <article><b>Recommended next step</b><span>${escapeHtml(nextText)}</span></article>
+      </div>
+      <div class="ai-response-tags" aria-label="Relevant AI assistant tags">
+        ${action.chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('')}
+      </div>
+    `;
+  };
+
   const actions = {
     grant: {
       title: 'AI Grant & Scholarship Finder',
@@ -1670,26 +1707,36 @@ function initAiAssistantActions() {
   };
 
   buttons.forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const action = actions[button.dataset.aiAction];
       if (!action) return;
-      response.innerHTML = `
-        <div class="ai-response-topline">
-          <span>Live AI guidance preview</span>
-          <time>${aiTimestamp()}</time>
-        </div>
-        <strong>${action.title}</strong>
-        <p>${action.message}</p>
-        <div class="ai-response-detail">
-          <article><b>Status update</b><span>${action.status}</span></article>
-          <article><b>Trusted-source direction</b><span>${action.update}</span></article>
-          <article><b>Recommended next step</b><span>${action.next}</span></article>
-        </div>
-        <div class="ai-response-tags" aria-label="Relevant AI assistant tags">
-          ${action.chips.map((chip) => `<span>${chip}</span>`).join('')}
-        </div>
-      `;
+      renderAiResponse(action, { loading: true });
       response.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      try {
+        const apiResponse = await fetch('/api/ai-assistant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: button.dataset.aiAction })
+        });
+        const data = await apiResponse.json().catch(() => ({}));
+
+        if (!apiResponse.ok) {
+          renderAiResponse(action, {
+            error: data.error || 'Live AI search is not available right now. Showing WHSF guidance preview instead.'
+          });
+          return;
+        }
+
+        renderAiResponse(action, {
+          live: true,
+          answer: data.answer || ''
+        });
+      } catch {
+        renderAiResponse(action, {
+          error: 'Live AI search could not connect right now. Showing WHSF guidance preview instead.'
+        });
+      }
     });
   });
 }
