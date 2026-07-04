@@ -455,7 +455,7 @@ factcheckForm?.addEventListener('submit', (event) => {
     `Topic: ${data.get('topic')}\n` +
     `Source link: ${data.get('source') || 'Not provided'}\n\n` +
     `Claim or question:\n${data.get('claim')}\n\n` +
-    `Requested action: Please review this claim and provide digital trust guidance.`
+    `Requested action: Please review this claim for possible misinformation, disinformation, fake news, hate speech or public-interest risk. If it relates to elections or democratic processes, please handle it as a non-partisan civic-information review and provide digital trust guidance.`
   );
 
   if (factcheckStatus) factcheckStatus.textContent = 'Opening your email application. Please review and send the prepared fact-check request to WHSF.';
@@ -1251,9 +1251,9 @@ const whsfAssistantAnswers = [
     linkText: 'Open Student Projects'
   },
   {
-    keys: ['fact check', 'fact-checking', 'misinformation', 'fake news', 'digital trust', 'verify claim', 'scam', 'media literacy'],
+    keys: ['fact check', 'fact-checking', 'misinformation', 'disinformation', 'fake news', 'hate speech', 'digital trust', 'verify claim', 'scam', 'media literacy', 'election', 'democratic process', 'public interest'],
     title: 'Fact-Checking Platform',
-    answer: 'The WHSF Fact-Checking Platform supports digital trust, media literacy, misinformation awareness and safe online behaviour. Visitors can submit claims, suspicious links, scams, fake opportunities or verification concerns for review guidance.',
+    answer: 'The WHSF Fact-Checking Platform supports digital trust, media literacy and public-interest verification. It helps communities counter misinformation, disinformation, fake news and hate speech, especially where elections, democratic processes, public services, scams or civic participation are affected.',
     link: 'fact-checking.html',
     linkText: 'Open Fact-Checking Platform'
   },

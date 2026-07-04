@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="WHSF Fact-Checking Platform for digital trust, media literacy, misinformation awareness and responsible technology education." />
+    <meta name="description" content="WHSF Fact-Checking Platform for digital trust, media literacy, misinformation, disinformation, fake news, hate speech and public-interest information." />
     <meta name="theme-color" content="#6d1024" />
     <title>Fact-Checking Platform | WHSF</title>
     <link rel="icon" href="assets/whsf-logo.jpg" />
@@ -59,22 +59,45 @@
             <p class="eyebrow">WHSF Digital Trust</p>
             <h1 id="factcheck-title">Fact-Checking Platform for safer digital communities.</h1>
             <p class="hero-lead">
-              WHSF helps students, volunteers, partners and communities identify misinformation,
-              verify claims, understand digital evidence and build confidence in responsible online behaviour.
+              WHSF uses supported digital platforms and responsible technology to help students,
+              volunteers, partners and communities counter misinformation, disinformation, fake news
+              and hate speech, especially where public-interest information, elections and democratic
+              participation are affected.
             </p>
             <div class="innovation-actions">
               <a class="button button-light" href="#submit-claim">Submit a claim</a>
               <a class="button button-light" href="#media-literacy">Explore media literacy</a>
-              <span>Digital literacy • Public trust • Responsible AI</span>
+              <span>Digital literacy • Public trust • Elections integrity • Responsible AI</span>
             </div>
           </div>
           <div class="factcheck-command-card reveal delay-one">
             <span>Trust workflow</span>
             <h2>Claim → Evidence → Review → Guidance</h2>
             <p>
-              The platform is designed to support public education. It does not replace legal,
-              medical or emergency advice. Sensitive cases are routed to WHSF support or safeguarding channels.
+              The platform is designed for civic education, public-interest verification and safer
+              online participation. It is non-partisan and does not replace legal, medical, electoral
+              authority or emergency advice. Sensitive cases are routed to WHSF support or safeguarding channels.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section factcheck-section" id="public-interest">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Public-interest protection</p>
+            <h2>Countering harmful information while protecting civic trust.</h2>
+            <p>
+              WHSF’s approach focuses on education, verification and harm reduction. The platform can
+              support communities before, during and after elections by helping people check claims,
+              understand sources and avoid spreading harmful or false information.
+            </p>
+          </div>
+          <div class="factcheck-topic-grid">
+            <article><span>🗳️</span><h3>Elections & democratic processes</h3><p>Review claims about voting, civic participation, public institutions, candidates, policies, deadlines and democratic processes using non-partisan source checks.</p></article>
+            <article><span>⚠️</span><h3>Disinformation & fake news</h3><p>Identify coordinated falsehoods, fabricated stories, manipulated media, misleading screenshots and recycled claims that may confuse or harm communities.</p></article>
+            <article><span>🧭</span><h3>Public-interest information</h3><p>Prioritize information affecting education, health, safety, humanitarian response, public services, opportunities and community welfare.</p></article>
+            <article><span>🤝</span><h3>Hate speech awareness</h3><p>Support safe reporting and education around hateful, dehumanizing or violence-inciting content while protecting dignity and inclusion.</p></article>
           </div>
         </div>
       </section>
@@ -84,12 +107,12 @@
           <div class="section-heading centered reveal">
             <p class="eyebrow">How it works</p>
             <h2>A simple verification pathway for students and communities.</h2>
-            <p>WHSF can use this platform to teach practical fact-checking habits while building a trusted public help point.</p>
+            <p>WHSF can use this platform to teach practical fact-checking habits while building a trusted public help point for civic and community information.</p>
           </div>
           <div class="factcheck-step-grid">
             <article class="reveal"><span>01</span><h3>Submit claim</h3><p>A visitor shares a claim, link, screenshot description, social media post or question that needs verification guidance.</p></article>
-            <article class="reveal delay-one"><span>02</span><h3>AI-assisted triage</h3><p>The platform categorizes the topic, checks for harmful content, suggests source types and prepares a review checklist.</p></article>
-            <article class="reveal delay-two"><span>03</span><h3>Human review</h3><p>WHSF reviewers compare credible sources, official statements, date context, image clues and possible misinformation patterns.</p></article>
+            <article class="reveal delay-one"><span>02</span><h3>AI-assisted triage</h3><p>The platform categorizes the topic, flags potential hate speech or public-interest risk, suggests source types and prepares a review checklist.</p></article>
+            <article class="reveal delay-two"><span>03</span><h3>Human review</h3><p>WHSF reviewers compare credible sources, official statements, electoral or public authority information, date context, image clues and misinformation patterns.</p></article>
             <article class="reveal"><span>04</span><h3>Public guidance</h3><p>The outcome explains what is known, what is uncertain, what sources were reviewed and how the public can verify similar claims.</p></article>
           </div>
         </div>
@@ -102,9 +125,12 @@
             <h2>Ask WHSF to review a claim or digital information risk.</h2>
             <p>
               This early version prepares an email enquiry for WHSF. Later it can connect to Supabase,
-              Airtable or a case-management dashboard for claim tracking, reviewer assignment and status updates.
+              Airtable or a case-management dashboard for claim tracking, reviewer assignment, source logs,
+              risk level, response status and public-interest reporting.
             </p>
             <ul class="factcheck-list">
+              <li>Election, civic participation or democratic-process misinformation</li>
+              <li>Hate speech, incitement, harmful rumours or identity-based attacks</li>
               <li>Social media rumours affecting students, women, children or communities</li>
               <li>Scholarship, job, conference or donation scams</li>
               <li>False health, safety, education or technology claims</li>
@@ -115,7 +141,7 @@
             <label>Claim or question<textarea name="claim" rows="5" required placeholder="Paste or describe the claim you want WHSF to review."></textarea></label>
             <div class="field-row">
               <label>Source link <span class="optional-label">optional</span><input name="source" type="url" placeholder="https://..." /></label>
-              <label>Topic<select name="topic" required><option value="">Select topic</option><option>Education</option><option>Scholarship / job opportunity</option><option>Health or safety</option><option>Technology / AI</option><option>Donation / charity</option><option>WHSF verification</option><option>Other</option></select></label>
+              <label>Topic<select name="topic" required><option value="">Select topic</option><option>Elections / democratic process</option><option>Public-interest information</option><option>Hate speech / harmful content</option><option>Misinformation / fake news</option><option>Education</option><option>Scholarship / job opportunity</option><option>Health or safety</option><option>Technology / AI</option><option>Donation / charity</option><option>WHSF verification</option><option>Other</option></select></label>
             </div>
             <div class="field-row">
               <label>Your name<input name="name" autocomplete="name" required /></label>
@@ -132,12 +158,29 @@
           <div class="section-heading centered reveal">
             <p class="eyebrow">Media literacy</p>
             <h2>Skills learners can use every day.</h2>
+            <p>WHSF helps learners build habits that reduce harmful sharing and strengthen democratic, educational and community trust.</p>
           </div>
           <div class="factcheck-topic-grid">
             <article><span>🔎</span><h3>Source checking</h3><p>Teach students to identify original sources, official pages, fake accounts, misleading headlines and recycled content.</p></article>
             <article><span>🖼️</span><h3>Image and video clues</h3><p>Use reverse image search habits, date checks, location clues and deepfake awareness to reduce harmful sharing.</p></article>
             <article><span>🤖</span><h3>Responsible AI use</h3><p>Help learners understand AI hallucinations, prompt safety, citation habits and when human verification matters.</p></article>
-            <article><span>🛡️</span><h3>Scam awareness</h3><p>Protect communities from fake jobs, fake scholarships, phishing links, donation fraud and impersonation.</p></article>
+            <article><span>🛡️</span><h3>Scam and hate-speech awareness</h3><p>Protect communities from fake jobs, fake scholarships, phishing links, donation fraud, impersonation and harmful hateful narratives.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section factcheck-section" id="platform-technologies">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Supported platforms and technologies</p>
+            <h2>Technology stack for responsible fact-checking.</h2>
+            <p>The production version can combine human review with safe, auditable technology workflows.</p>
+          </div>
+          <div class="factcheck-step-grid">
+            <article><span>AI</span><h3>AI triage and summarization</h3><p>Use AI to classify claims, summarize submissions, detect risk themes and suggest verification questions for human reviewers.</p></article>
+            <article><span>DB</span><h3>Secure case database</h3><p>Use Supabase or Airtable to store claims, evidence, review notes, status, topic, risk level and response history.</p></article>
+            <article><span>WEB</span><h3>Public claim portal</h3><p>Provide safe forms for community members to submit suspicious posts, links, election rumours, scams or hate-speech concerns.</p></article>
+            <article><span>EDU</span><h3>Learning resources</h3><p>Connect fact-checking lessons to WHSF e-Classroom, youth digital literacy, cybersecurity and responsible AI education.</p></article>
           </div>
         </div>
       </section>
@@ -147,13 +190,13 @@
           <div class="section-heading reveal">
             <p class="eyebrow">Production roadmap</p>
             <h2>How WHSF can grow this into a full platform.</h2>
-            <p>The first version can be educational and email-based. The next version can become a secure verification and case-management system.</p>
+            <p>The first version can be educational and email-based. The next version can become a secure verification and case-management system for public-interest claims.</p>
           </div>
           <div class="factcheck-roadmap-list">
-            <article><strong>Database</strong><span>Store claims, sources, review notes, reviewer status and public outcomes in Supabase.</span></article>
-            <article><strong>Reviewer dashboard</strong><span>Assign claims to WHSF staff, volunteers, media literacy mentors or safeguarding reviewers.</span></article>
-            <article><strong>AI assistant</strong><span>Summarize claims, detect risk category, recommend source checks and draft plain-language guidance.</span></article>
-            <article><strong>Public archive</strong><span>Publish safe, non-sensitive fact-check summaries for education and community awareness.</span></article>
+            <article><strong>Database</strong><span>Store claims, source links, evidence notes, risk category, reviewer status and public outcomes in Supabase.</span></article>
+            <article><strong>Reviewer dashboard</strong><span>Assign claims to WHSF staff, volunteers, media literacy mentors, election-information reviewers or safeguarding reviewers.</span></article>
+            <article><strong>AI assistant</strong><span>Summarize claims, detect misinformation, disinformation, fake news or hate-speech risk and draft plain-language guidance for review.</span></article>
+            <article><strong>Public archive</strong><span>Publish safe, non-sensitive fact-check summaries for education, democratic participation and community awareness.</span></article>
           </div>
         </div>
       </section>
