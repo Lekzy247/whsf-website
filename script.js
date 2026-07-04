@@ -18,6 +18,40 @@ navigation?.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => setMenu(false));
 });
 
+function initClassroomMenuDropdown() {
+  const toggle = document.querySelector('[data-classroom-menu-toggle]');
+  const panel = document.querySelector('[data-classroom-menu-panel]');
+  if (!toggle || !panel) return;
+
+  const setOpen = (open) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+    toggle.classList.toggle('is-open', open);
+  };
+
+  toggle.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  panel.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      setOpen(false);
+      setMenu(false);
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!toggle.closest('.nav-dropdown')?.contains(event.target)) setOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setOpen(false);
+  });
+}
+
+initClassroomMenuDropdown();
+
 const whsfSocialLinks = [
   {
     name: 'Facebook',
@@ -384,10 +418,15 @@ const messageField = document.querySelector('#contact-form textarea[name="messag
 const contactGuidance = document.querySelector('#contact-guidance');
 
 const fraudAwarenessMessage = 'Fraud awareness: Scammers have misused the WHSF name, logo and images to create fraudulent Facebook pages and WhatsApp groups. WHSF is not offering financial promotions. Please report suspicious activity to your local authorities.';
-const fraudConcernPattern = /(fraud|scam|fake|whatsapp|facebook|promotion|financial|employee|number|impersonat|telegram|investment|grant|cash|money|payment)/i;
+const fraudConcernPattern = /(fraud|scam|fake|whatsapp|facebook|promotion|employee|number|impersonat|telegram|investment|cash grant|payment request|financial promotion)/i;
+const publicFinancialAidPattern = /(financial assistance|financial help|money assistance|cash assistance|medical bill|medical bills|hospital bill|hospital bills|school fees|school fee|tuition assistance|pay my fees|pay fees|rent assistance|personal aid|individual aid|send me money|help me with money|need money)/i;
 
 function isFraudConcern(interest, message) {
   return interest === 'Fraud / Scam report' || fraudConcernPattern.test(`${interest} ${message}`);
+}
+
+function isPublicFinancialAidRequest(interest, message) {
+  return interest === 'General enquiry' && publicFinancialAidPattern.test(message);
 }
 
 const contactGuidanceContent = {
@@ -462,18 +501,28 @@ form?.addEventListener('submit', (event) => {
   const phone = String(data.get('phone') || '').trim();
   const interest = String(data.get('interest') || 'General enquiry');
   const message = String(data.get('message') || '');
-  const fraudConcern = isFraudConcern(interest, message);
-  const subject = encodeURIComponent(fraudConcern ? 'WHSF fraud/scam report' : `WHSF enquiry: ${interest}`);
+  const financialAidRequest = isPublicFinancialAidRequest(interest, message);
+  const fraudConcern = !financialAidRequest && isFraudConcern(interest, message);
+  const subject = encodeURIComponent(
+    fraudConcern ? 'WHSF fraud/scam report' :
+    financialAidRequest ? 'WHSF enquiry: financial assistance information' :
+    `WHSF enquiry: ${interest}`
+  );
   const fraudAutoReply = fraudConcern
     ? `FRAUD / SCAM AWARENESS AUTO-REPLY\n\nThank you for contacting WHSF. Based on your enquiry, please be aware:\n\n${fraudAwarenessMessage}\n\nWHSF is not offering financial promotions, investment payments, WhatsApp cash grants, Facebook promotions or unofficial aid through personal numbers. If someone is using a WhatsApp number, fake Facebook page, fake employee name or fake phone number to request money or promise benefits, it does not come from WHSF.\n\nPlease do not send money or share personal, banking or identity information. Report the matter to your local authorities, the platform involved, and your bank or mobile-money provider if any payment details were shared.\n\n---\n\n`
     : '';
+  const financialAidAutoReply = financialAidRequest
+    ? `PUBLIC ASSISTANCE NOTICE\n\nThank you for contacting World Humanitarian Support Foundation. WHSF is committed to helping communities through technology education, digital inclusion, e-Classroom learning, skills development, mentorship, innovation programmes and community capacity building.\n\nPlease note that WHSF does not provide direct financial assistance to the public for personal bills, medical bills, school fees, rent, cash requests or individual emergency payments. Our support model focuses on expanding access to learning, technology skills, digital tools, verified certificates, youth empowerment, women-in-technology pathways and community development programmes.\n\nIf you need urgent medical, welfare, school-fee or emergency financial support, please contact appropriate local government agencies, registered social services, verified community charities, hospitals, schools, faith/community support organisations or emergency authorities in your area.\n\nYou are welcome to explore WHSF e-Classroom, technology programmes, digital literacy opportunities and public learning resources through our official website.\n\n---\n\n`
+    : '';
   const body = encodeURIComponent(
-    `${fraudAutoReply}Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`
+    `${fraudAutoReply}${financialAidAutoReply}Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`
   );
 
   if (formStatus) {
     formStatus.textContent = fraudConcern
       ? 'Fraud awareness: WHSF is not offering financial promotions. Do not send money or personal information. Please report suspicious activity to the appropriate authorities. Opening your email application now.'
+      : financialAidRequest
+      ? 'WHSF does not provide direct financial assistance for personal bills, medical bills or school fees. WHSF supports the public through technology education, digital inclusion and learning programmes. Opening your email application now.'
       : 'Opening your email application. Please review and send the prepared message to WHSF.';
   }
   window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;

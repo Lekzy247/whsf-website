@@ -61,10 +61,17 @@
 
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
           <a href="index.html#top">Home</a>
-          <a href="#courses">Courses</a>
-          <a href="#cloud-lms">Cloud LMS</a>
-          <a href="#skills-passport">Skills Passport</a>
-          <a href="#student-login">Student Portal</a>
+          <div class="nav-dropdown classroom-nav-dropdown">
+            <button type="button" class="nav-dropdown-toggle" data-classroom-menu-toggle aria-expanded="false">
+              e-Classroom Menu <span aria-hidden="true">⌄</span>
+            </button>
+            <div class="nav-dropdown-panel" data-classroom-menu-panel hidden>
+              <a href="#courses">Courses</a>
+              <a href="#cloud-lms">Cloud LMS</a>
+              <a href="#skills-passport">Skills Passport</a>
+              <a href="#student-login">Student Portal</a>
+            </div>
+          </div>
           <a href="verify-certificate.html">Verify Certificate</a>
           <a href="impact-dashboard.html">Impact</a>
           <a href="e-classroom-admin.html">Teacher/Admin</a>
@@ -134,7 +141,7 @@
             </label>
             <label>
               Password
-              <input name="password" type="password" placeholder="Enter password" autocomplete="current-password" required />
+              <input name="password" type="password" placeholder="Enter password" autocomplete="current-password" minlength="8" required />
             </label>
             <div class="auth-actions">
               <button class="button" type="submit">Student sign in</button>
@@ -342,27 +349,6 @@
         </div>
       </section>
 
-      <section class="section classroom-features">
-        <div class="shell classroom-feature-grid">
-          <article class="feature-note reveal">
-            <p class="eyebrow">Accessibility by design</p>
-            <h2>Built for learners with different abilities and devices.</h2>
-            <p>
-              The e-Classroom should include voice-to-text assignments, text-to-speech lessons, captions, large text, high contrast, keyboard navigation, screen-reader support and mobile-first design.
-            </p>
-          </article>
-          <article class="feature-note reveal delay-one">
-            <p class="eyebrow">Learning experience</p>
-            <h2>Growing a trusted digital classroom for WHSF learners.</h2>
-            <ol>
-              <li>Support learners with clear course pathways, progress tracking and practical assignments.</li>
-              <li>Equip teachers and coordinators to manage lessons, submissions, certificates and learner records.</li>
-              <li>Issue verifiable digital certificates with QR-code validation for partners, schools and employers.</li>
-              <li>Expand WHSF training with videos, resources, mentorship and inclusive accessibility tools.</li>
-            </ol>
-          </article>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -418,19 +404,33 @@
       async function upsertStudentProfile(user, fullName = '') {
         if (!user?.email) return null;
         const profileName = fullName || user.user_metadata?.full_name || user.email.split('@')[0];
-        const { data, error } = await whsfSupabase.from('eclassroom_student_profiles').upsert(
-          {
-            auth_user_id: user.id,
-            full_name: profileName,
-            email: user.email,
-            learner_group: 'ict_girls_club',
-            role: 'student'
-          },
-          { onConflict: 'auth_user_id' }
-        ).select().single();
+        const profilePayload = {
+          auth_user_id: user.id,
+          full_name: profileName,
+          email: user.email,
+          learner_group: 'ict_girls_club',
+          role: 'student'
+        };
+
+        const { data: existingProfile, error: lookupError } = await whsfSupabase
+          .from('eclassroom_student_profiles')
+          .select('*')
+          .eq('auth_user_id', user.id)
+          .maybeSingle();
+
+        if (lookupError) {
+          setAuthMessage(`Profile check failed: ${lookupError.message}`);
+          return null;
+        }
+
+        const profileRequest = existingProfile
+          ? whsfSupabase.from('eclassroom_student_profiles').update(profilePayload).eq('auth_user_id', user.id).select().single()
+          : whsfSupabase.from('eclassroom_student_profiles').insert(profilePayload).select().single();
+
+        const { data, error } = await profileRequest;
 
         if (error) {
-          setAuthMessage(error.message);
+          setAuthMessage(`Account signed in, but learner profile could not be saved: ${error.message}. Please ask WHSF admin to confirm the student profile policy is enabled.`);
           return null;
         }
 
@@ -627,10 +627,18 @@
         const email = String(formData.get('email') || '').trim();
         const password = String(formData.get('password') || '');
 
+        if (!email || !password || password.length < 8) {
+          setAuthMessage('Please enter your email and a password of at least 8 characters.');
+          return;
+        }
+
         setAuthMessage('Signing in…');
         whsfSupabase.auth.signInWithPassword({ email, password }).then(async ({ data, error }) => {
           if (error) {
-            setAuthMessage(error.message);
+            const friendlyError = /email not confirmed/i.test(error.message)
+              ? 'Your account exists, but the email has not been confirmed yet. Please check your email inbox, confirm the WHSF e-Classroom account, then sign in again.'
+              : error.message;
+            setAuthMessage(friendlyError);
             return;
           }
           await upsertStudentProfile(data.user);
@@ -650,6 +658,11 @@
           return;
         }
 
+        if (password.length < 8) {
+          setAuthMessage('Please use a password of at least 8 characters for the student account.');
+          return;
+        }
+
         setAuthMessage('Creating student account…');
         const { data, error } = await whsfSupabase.auth.signUp({
           email,
@@ -661,7 +674,10 @@
         });
 
         if (error) {
-          setAuthMessage(error.message);
+          const friendlyError = /already registered|already been registered|user already/i.test(error.message)
+            ? 'This email may already have a WHSF e-Classroom account. Please use Student sign in, or reset the password from Supabase email if needed.'
+            : error.message;
+          setAuthMessage(friendlyError);
           return;
         }
 
@@ -672,7 +688,7 @@
           return;
         }
 
-        setAuthMessage('Account created. Please check your email to confirm your WHSF e-Classroom account, then sign in.');
+        setAuthMessage('Account created. Please check your email inbox and confirm your WHSF e-Classroom account, then return here and sign in.');
       });
 
       studentSignoutButton?.addEventListener('click', async (event) => {
