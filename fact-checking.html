@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="WHSF Fact-Checking Platform for digital trust, media literacy, misinformation awareness and responsible technology education." />
+    <meta name="theme-color" content="#6d1024" />
+    <title>Fact-Checking Platform | WHSF</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="WHSF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Advancing dignity, inclusion and sustainable development</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+        </button>
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a>
+          <a href="programs.html">Programs</a>
+          <a href="innovation.html">Innovation</a>
+          <a href="mobile-app.html">Mobile App</a>
+          <a href="e-classroom.html">e-Classroom</a>
+          <a href="impact-dashboard.html">Impact</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="factcheck-hero" aria-labelledby="factcheck-title">
+        <div class="shell factcheck-hero-grid">
+          <div class="reveal">
+            <p class="eyebrow">WHSF Digital Trust</p>
+            <h1 id="factcheck-title">Fact-Checking Platform for safer digital communities.</h1>
+            <p class="hero-lead">
+              WHSF helps students, volunteers, partners and communities identify misinformation,
+              verify claims, understand digital evidence and build confidence in responsible online behaviour.
+            </p>
+            <div class="innovation-actions">
+              <a class="button button-light" href="#submit-claim">Submit a claim</a>
+              <a class="button button-light" href="#media-literacy">Explore media literacy</a>
+              <span>Digital literacy • Public trust • Responsible AI</span>
+            </div>
+          </div>
+          <div class="factcheck-command-card reveal delay-one">
+            <span>Trust workflow</span>
+            <h2>Claim → Evidence → Review → Guidance</h2>
+            <p>
+              The platform is designed to support public education. It does not replace legal,
+              medical or emergency advice. Sensitive cases are routed to WHSF support or safeguarding channels.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section factcheck-section" id="how-it-works">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">How it works</p>
+            <h2>A simple verification pathway for students and communities.</h2>
+            <p>WHSF can use this platform to teach practical fact-checking habits while building a trusted public help point.</p>
+          </div>
+          <div class="factcheck-step-grid">
+            <article class="reveal"><span>01</span><h3>Submit claim</h3><p>A visitor shares a claim, link, screenshot description, social media post or question that needs verification guidance.</p></article>
+            <article class="reveal delay-one"><span>02</span><h3>AI-assisted triage</h3><p>The platform categorizes the topic, checks for harmful content, suggests source types and prepares a review checklist.</p></article>
+            <article class="reveal delay-two"><span>03</span><h3>Human review</h3><p>WHSF reviewers compare credible sources, official statements, date context, image clues and possible misinformation patterns.</p></article>
+            <article class="reveal"><span>04</span><h3>Public guidance</h3><p>The outcome explains what is known, what is uncertain, what sources were reviewed and how the public can verify similar claims.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section factcheck-submit-section" id="submit-claim">
+        <div class="shell factcheck-submit-grid">
+          <div class="reveal">
+            <p class="eyebrow">Submit for review</p>
+            <h2>Ask WHSF to review a claim or digital information risk.</h2>
+            <p>
+              This early version prepares an email enquiry for WHSF. Later it can connect to Supabase,
+              Airtable or a case-management dashboard for claim tracking, reviewer assignment and status updates.
+            </p>
+            <ul class="factcheck-list">
+              <li>Social media rumours affecting students, women, children or communities</li>
+              <li>Scholarship, job, conference or donation scams</li>
+              <li>False health, safety, education or technology claims</li>
+              <li>Fake certificates, fake WHSF pages or suspicious staff claims</li>
+            </ul>
+          </div>
+          <form class="factcheck-form reveal delay-one" id="factcheck-form">
+            <label>Claim or question<textarea name="claim" rows="5" required placeholder="Paste or describe the claim you want WHSF to review."></textarea></label>
+            <div class="field-row">
+              <label>Source link <span class="optional-label">optional</span><input name="source" type="url" placeholder="https://..." /></label>
+              <label>Topic<select name="topic" required><option value="">Select topic</option><option>Education</option><option>Scholarship / job opportunity</option><option>Health or safety</option><option>Technology / AI</option><option>Donation / charity</option><option>WHSF verification</option><option>Other</option></select></label>
+            </div>
+            <div class="field-row">
+              <label>Your name<input name="name" autocomplete="name" required /></label>
+              <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+            </div>
+            <button class="button" type="submit">Send fact-check request</button>
+            <p class="form-status" id="factcheck-status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section factcheck-section" id="media-literacy">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Media literacy</p>
+            <h2>Skills learners can use every day.</h2>
+          </div>
+          <div class="factcheck-topic-grid">
+            <article><span>🔎</span><h3>Source checking</h3><p>Teach students to identify original sources, official pages, fake accounts, misleading headlines and recycled content.</p></article>
+            <article><span>🖼️</span><h3>Image and video clues</h3><p>Use reverse image search habits, date checks, location clues and deepfake awareness to reduce harmful sharing.</p></article>
+            <article><span>🤖</span><h3>Responsible AI use</h3><p>Help learners understand AI hallucinations, prompt safety, citation habits and when human verification matters.</p></article>
+            <article><span>🛡️</span><h3>Scam awareness</h3><p>Protect communities from fake jobs, fake scholarships, phishing links, donation fraud and impersonation.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section factcheck-roadmap-section">
+        <div class="shell factcheck-roadmap-grid">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Production roadmap</p>
+            <h2>How WHSF can grow this into a full platform.</h2>
+            <p>The first version can be educational and email-based. The next version can become a secure verification and case-management system.</p>
+          </div>
+          <div class="factcheck-roadmap-list">
+            <article><strong>Database</strong><span>Store claims, sources, review notes, reviewer status and public outcomes in Supabase.</span></article>
+            <article><strong>Reviewer dashboard</strong><span>Assign claims to WHSF staff, volunteers, media literacy mentors or safeguarding reviewers.</span></article>
+            <article><strong>AI assistant</strong><span>Summarize claims, detect risk category, recommend source checks and draft plain-language guidance.</span></article>
+            <article><strong>Public archive</strong><span>Publish safe, non-sensitive fact-check summaries for education and community awareness.</span></article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand"><img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" /><div><strong>World Humanitarian<br />Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p></div></div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="index.html#about">About Us</a><a href="index.html#gallery">Gallery</a><a href="programs.html">Programs</a><a href="innovation.html">Innovation</a><a href="mobile-app.html">Mobile App</a><a href="e-classroom.html">e-Classroom</a><a href="impact-dashboard.html">Impact</a><a href="index.html#partners">Partners</a></div>
+          <div><strong>Connect</strong><a href="index.html#more">Get involved</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+        <div class="footer-award" aria-label="WHSF recognition"><img src="assets/home/london-data-center-award-2025.png" alt="2025 London Data Center World Award Winner" /><span>2025 London Data Center World Award Winner</span></div>
+      </div>
+      <div class="shell social-links" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a></div>
+      <div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </body>
+</html>

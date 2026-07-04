@@ -439,6 +439,29 @@ techbridgeDonationForm?.addEventListener('submit', (event) => {
   window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
 });
 
+const factcheckForm = document.querySelector('#factcheck-form');
+const factcheckStatus = document.querySelector('#factcheck-status');
+
+factcheckForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!factcheckForm.reportValidity()) return;
+
+  const data = new FormData(factcheckForm);
+  const subject = encodeURIComponent(`WHSF fact-check request: ${data.get('topic')}`);
+  const body = encodeURIComponent(
+    `WHSF Fact-Checking Platform Request\n\n` +
+    `Name: ${data.get('name')}\n` +
+    `Email: ${data.get('email')}\n` +
+    `Topic: ${data.get('topic')}\n` +
+    `Source link: ${data.get('source') || 'Not provided'}\n\n` +
+    `Claim or question:\n${data.get('claim')}\n\n` +
+    `Requested action: Please review this claim and provide digital trust guidance.`
+  );
+
+  if (factcheckStatus) factcheckStatus.textContent = 'Opening your email application. Please review and send the prepared fact-check request to WHSF.';
+  window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
+});
+
 const yearElement = document.querySelector('#year');
 if (yearElement) yearElement.textContent = new Date().getFullYear();
 
@@ -1228,6 +1251,13 @@ const whsfAssistantAnswers = [
     linkText: 'Open Student Projects'
   },
   {
+    keys: ['fact check', 'fact-checking', 'misinformation', 'fake news', 'digital trust', 'verify claim', 'scam', 'media literacy'],
+    title: 'Fact-Checking Platform',
+    answer: 'The WHSF Fact-Checking Platform supports digital trust, media literacy, misinformation awareness and safe online behaviour. Visitors can submit claims, suspicious links, scams, fake opportunities or verification concerns for review guidance.',
+    link: 'fact-checking.html',
+    linkText: 'Open Fact-Checking Platform'
+  },
+  {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-Classroom',
     answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM and accessibility technology. Learners can view lessons, submit assignments, track progress and receive certificates.',
@@ -1459,6 +1489,7 @@ function initWhsfPolicyLinks() {
     <a href="opportunities.html">Opportunity Calendar</a>
     <a href="innovation-support-building.html">Innovation Building</a>
     <a href="student-projects.html">Student Projects</a>
+    <a href="fact-checking.html">Fact-Checking</a>
   `;
 
   const backToTop = footerBottom.querySelector('a[href="#top"]');

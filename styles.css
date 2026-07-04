@@ -2858,6 +2858,148 @@ body {
 .student-project-video-section {
   background: linear-gradient(180deg, #fff7f4 0%, #fffdfa 100%);
 }
+
+/* WHSF Fact-Checking Platform */
+.factcheck-hero {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(circle at 16% 16%, rgba(247,211,122,.24), transparent 32%),
+    radial-gradient(circle at 88% 12%, rgba(255,255,255,.12), transparent 28%),
+    linear-gradient(135deg, #2b070f 0%, var(--red-dark) 48%, #130408 100%);
+}
+.factcheck-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .16;
+  background-image:
+    linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px);
+  background-size: 54px 54px;
+}
+.factcheck-hero-grid {
+  position: relative;
+  z-index: 1;
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 58px;
+  align-items: center;
+}
+.factcheck-hero h1,
+.factcheck-command-card h2 { color: #fff; }
+.factcheck-hero .hero-lead { color: #fff4f6; }
+.factcheck-hero .eyebrow { color: #f7d37a; }
+.factcheck-command-card {
+  padding: 34px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: calc(var(--radius) + 10px);
+  background: rgba(255,255,255,.1);
+  box-shadow: 0 32px 90px rgba(0,0,0,.22);
+  backdrop-filter: blur(16px);
+}
+.factcheck-command-card span {
+  display: inline-flex;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #3b0711;
+  background: #f7d37a;
+  font-size: .72rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.factcheck-command-card p { color: #fff4f6; }
+.factcheck-section,
+.factcheck-submit-section { background: #fffdfa; }
+.factcheck-step-grid,
+.factcheck-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.factcheck-step-grid article,
+.factcheck-topic-grid article,
+.factcheck-form,
+.factcheck-roadmap-list article {
+  padding: 26px;
+  border: 1px solid rgba(143,31,36,.13);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: 0 16px 42px rgba(95,20,24,.07);
+}
+.factcheck-step-grid span,
+.factcheck-topic-grid span {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  color: #fff;
+  background: var(--red-dark);
+  font-weight: 950;
+}
+.factcheck-step-grid h3,
+.factcheck-topic-grid h3,
+.factcheck-roadmap-list strong { color: var(--red-dark); }
+.factcheck-step-grid p,
+.factcheck-topic-grid p,
+.factcheck-submit-grid p,
+.factcheck-roadmap-list span,
+.factcheck-list li { color: var(--muted); }
+.factcheck-submit-grid {
+  display: grid;
+  grid-template-columns: .85fr 1.15fr;
+  gap: 42px;
+  align-items: start;
+}
+.factcheck-list {
+  margin: 22px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+.factcheck-list li {
+  padding: 12px 14px;
+  border: 1px solid rgba(143,31,36,.12);
+  border-radius: 14px;
+  background: #fff7f4;
+  font-weight: 800;
+}
+.factcheck-form { display: grid; gap: 16px; }
+.factcheck-roadmap-section {
+  color: #fff;
+  background:
+    radial-gradient(circle at 16% 16%, rgba(247,211,122,.18), transparent 32%),
+    linear-gradient(135deg, #22050a, var(--red-dark));
+}
+.factcheck-roadmap-grid {
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: 34px;
+  align-items: start;
+}
+.factcheck-roadmap-section h2,
+.factcheck-roadmap-section .section-heading p { color: #fff; }
+.factcheck-roadmap-section .eyebrow { color: #f7d37a; }
+.factcheck-roadmap-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.factcheck-roadmap-list article {
+  background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+}
+.factcheck-roadmap-list strong { display: block; color: #ffe0af; }
+.factcheck-roadmap-list span { display: block; margin-top: 8px; color: #fff4f6; }
 .student-video-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3087,13 +3229,19 @@ body {
   .building-hero-grid,
   .building-milestone-grid,
   .student-projects-hero-grid,
-  .student-project-outcomes-grid {
+  .student-project-outcomes-grid,
+  .factcheck-hero-grid,
+  .factcheck-submit-grid,
+  .factcheck-roadmap-grid {
     grid-template-columns: 1fr;
   }
   .building-metric-grid,
   .building-support-grid,
   .student-project-grid,
-  .student-video-grid { grid-template-columns: repeat(2, 1fr); }
+  .student-video-grid,
+  .factcheck-step-grid,
+  .factcheck-topic-grid,
+  .factcheck-roadmap-list { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 760px) {
@@ -3110,11 +3258,15 @@ body {
   .building-progress-panel,
   .student-project-grid,
   .student-video-grid,
-  .student-outcome-list {
+  .student-outcome-list,
+  .factcheck-step-grid,
+  .factcheck-topic-grid,
+  .factcheck-roadmap-list {
     grid-template-columns: 1fr;
   }
   .building-hero-grid,
-  .student-projects-hero-grid {
+  .student-projects-hero-grid,
+  .factcheck-hero-grid {
     min-height: auto;
     padding: 68px 0;
   }
