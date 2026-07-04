@@ -439,29 +439,6 @@ techbridgeDonationForm?.addEventListener('submit', (event) => {
   window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
 });
 
-const factcheckForm = document.querySelector('#factcheck-form');
-const factcheckStatus = document.querySelector('#factcheck-status');
-
-factcheckForm?.addEventListener('submit', (event) => {
-  event.preventDefault();
-  if (!factcheckForm.reportValidity()) return;
-
-  const data = new FormData(factcheckForm);
-  const subject = encodeURIComponent(`WHSF Verify request: ${data.get('topic')}`);
-  const body = encodeURIComponent(
-    `WHSF Verify Request\n\n` +
-    `Name: ${data.get('name')}\n` +
-    `Email: ${data.get('email')}\n` +
-    `Topic: ${data.get('topic')}\n` +
-    `Source link: ${data.get('source') || 'Not provided'}\n\n` +
-    `Claim or question:\n${data.get('claim')}\n\n` +
-    `Requested action: Please review this claim for possible misinformation, scam risk, fake opportunity, fake certificate, misleading technology claim, agricultural misinformation, health misinformation, cyber fraud, manipulated media or humanitarian-aid fraud. Please provide non-political digital trust guidance.`
-  );
-
-  if (factcheckStatus) factcheckStatus.textContent = 'Opening your email application. Please review and send the prepared fact-check request to WHSF.';
-  window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
-});
-
 const yearElement = document.querySelector('#year');
 if (yearElement) yearElement.textContent = new Date().getFullYear();
 
@@ -1251,13 +1228,6 @@ const whsfAssistantAnswers = [
     linkText: 'Open Student Projects'
   },
   {
-    keys: ['fact check', 'fact-checking', 'whsf verify', 'misinformation', 'fake news', 'digital trust', 'verify claim', 'scam', 'media literacy', 'fake scholarship', 'fake certificate', 'fake job', 'ai myth', 'deepfake', 'agriculture scam', 'health misinformation', 'donation scam'],
-    title: 'WHSF Verify',
-    answer: 'WHSF Verify is a non-political fact-checking and digital literacy platform for education, AI and technology, agriculture, health, child online safety, cybersecurity and humanitarian aid verification. It helps young people, educators, farmers and communities identify scams, false opportunities, fake certificates, manipulated media and misleading claims.',
-    link: 'fact-checking.html',
-    linkText: 'Open WHSF Verify'
-  },
-  {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-Classroom',
     answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM and accessibility technology. Learners can view lessons, submit assignments, track progress and receive certificates.',
@@ -1489,7 +1459,6 @@ function initWhsfPolicyLinks() {
     <a href="opportunities.html">Opportunity Calendar</a>
     <a href="innovation-support-building.html">Innovation Building</a>
     <a href="student-projects.html">Student Projects</a>
-    <a href="fact-checking.html">Fact-Checking</a>
   `;
 
   const backToTop = footerBottom.querySelector('a[href="#top"]');
