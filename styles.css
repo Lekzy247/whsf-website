@@ -918,8 +918,64 @@ p, li { text-wrap: pretty; }
 .passport-card-stats strong { display: block; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 1.8rem; line-height: 1; }
 .passport-card-stats span { display: block; margin-top: 8px; color: rgba(255,255,255,.78); font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .passport-card-note { position: relative; margin: 24px 0 0; color: rgba(255,255,255,.82); }
+.foundational-course-heading {
+  position: relative;
+  margin-top: 42px;
+}
+.foundational-course-heading .eyebrow {
+  margin-bottom: 10px;
+}
+.foundational-course-heading h3 {
+  max-width: 760px;
+  margin: 0;
+  color: var(--red-dark);
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+}
 .skill-badge-grid { position: relative; margin-top: 34px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.skill-badge { min-height: 150px; padding: 22px; display: grid; gap: 14px; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); color: inherit; text-decoration: none; background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease; }
+.skill-badge {
+  position: relative;
+  min-height: 215px;
+  overflow: hidden;
+  padding: 76px 22px 22px;
+  display: grid;
+  gap: 14px;
+  border: 1px solid rgba(201,54,53,.13);
+  border-radius: var(--radius);
+  color: inherit;
+  text-decoration: none;
+  background: linear-gradient(180deg, #fff 0%, #fff9f9 100%);
+  box-shadow: 0 12px 34px rgba(45,18,18,.06);
+  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+}
+.skill-badge::before {
+  content: attr(data-code);
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  min-height: 58px;
+  padding: 17px 18px;
+  color: #ffe0af;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(229,185,87,.22), transparent 24%),
+    linear-gradient(135deg, #3b0711 0%, #6d1024 62%, #8f1f24 100%);
+  font-size: .76rem;
+  font-weight: 950;
+  letter-spacing: .075em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.skill-badge::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  right: 18px;
+  width: 36px;
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e5b957 0 22%, rgba(255,255,255,.45) 22% 46%, rgba(255,255,255,.25) 46% 70%, rgba(255,255,255,.12) 70%);
+}
 .skill-badge:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
 .skill-badge:focus-visible { outline: 4px solid rgba(201,54,53,.28); outline-offset: 4px; }
 .skill-badge > span { width: 46px; height: 46px; display: inline-grid; place-items: center; border-radius: 16px; background: #fff1ed; font-size: 1.35rem; }
