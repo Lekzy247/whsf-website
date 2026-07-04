@@ -319,6 +319,13 @@ const interestSelect = document.querySelector('#contact-form select[name="intere
 const messageField = document.querySelector('#contact-form textarea[name="message"]');
 const contactGuidance = document.querySelector('#contact-guidance');
 
+const fraudAwarenessMessage = 'Fraud awareness: Scammers have misused the WHSF name, logo and images to create fraudulent Facebook pages and WhatsApp groups. WHSF is not offering financial promotions. Please report suspicious activity to your local authorities.';
+const fraudConcernPattern = /(fraud|scam|fake|whatsapp|facebook|promotion|financial|employee|number|impersonat|telegram|investment|grant|cash|money|payment)/i;
+
+function isFraudConcern(interest, message) {
+  return interest === 'Fraud / Scam report' || fraudConcernPattern.test(`${interest} ${message}`);
+}
+
 const contactGuidanceContent = {
   Partnership: {
     guidance: 'Tell WHSF what kind of partnership, sponsorship or collaboration you want to explore.',
@@ -360,6 +367,10 @@ const contactGuidanceContent = {
     guidance: 'Tell WHSF about your tourism, hospitality, sustainability or accessibility technology interest.',
     placeholder: 'Share your organisation, location, sustainability or accessibility goal, and what support you need.'
   },
+  'Fraud / Scam report': {
+    guidance: `${fraudAwarenessMessage} If someone contacts you through WhatsApp, Facebook, a fake employee profile or a suspicious number requesting money or promising financial promotion, treat it as a scam and report it to the appropriate authorities.`,
+    placeholder: 'Share the suspicious WhatsApp number, Facebook page link, fake employee name, phone number, promotion message or screenshot description. Do not send money or share personal or financial information.'
+  },
   'General enquiry': {
     guidance: 'Tell WHSF what you need and the right team will review it.',
     placeholder: 'Share your question, location and the best way for WHSF to respond.'
@@ -385,12 +396,22 @@ form?.addEventListener('submit', (event) => {
   const data = new FormData(form);
   const name = `${data.get('firstName')} ${data.get('lastName')}`.trim();
   const phone = String(data.get('phone') || '').trim();
-  const subject = encodeURIComponent(`WHSF enquiry: ${data.get('interest')}`);
+  const interest = String(data.get('interest') || 'General enquiry');
+  const message = String(data.get('message') || '');
+  const fraudConcern = isFraudConcern(interest, message);
+  const subject = encodeURIComponent(fraudConcern ? 'WHSF fraud/scam report' : `WHSF enquiry: ${interest}`);
+  const fraudAutoReply = fraudConcern
+    ? `FRAUD / SCAM AWARENESS AUTO-REPLY\n\nThank you for contacting WHSF. Based on your enquiry, please be aware:\n\n${fraudAwarenessMessage}\n\nWHSF is not offering financial promotions, investment payments, WhatsApp cash grants, Facebook promotions or unofficial aid through personal numbers. If someone is using a WhatsApp number, fake Facebook page, fake employee name or fake phone number to request money or promise benefits, it does not come from WHSF.\n\nPlease do not send money or share personal, banking or identity information. Report the matter to your local authorities, the platform involved, and your bank or mobile-money provider if any payment details were shared.\n\n---\n\n`
+    : '';
   const body = encodeURIComponent(
-    `Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${data.get('interest')}\n\nMessage:\n${data.get('message')}`
+    `${fraudAutoReply}Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`
   );
 
-  if (formStatus) formStatus.textContent = 'Opening your email application. Please review and send the prepared message to WHSF.';
+  if (formStatus) {
+    formStatus.textContent = fraudConcern
+      ? 'Fraud awareness: WHSF is not offering financial promotions. Do not send money or personal information. Please report suspicious activity to the appropriate authorities. Opening your email application now.'
+      : 'Opening your email application. Please review and send the prepared message to WHSF.';
+  }
   window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
 });
 
@@ -1240,6 +1261,13 @@ const whsfAssistantAnswers = [
     answer: 'Authorized WHSF staff can manage courses, students, lessons, assignments and certificates through the e-Classroom admin dashboard. Admin or teacher access must be approved by WHSF.',
     link: 'e-classroom-admin.html',
     linkText: 'Open admin dashboard'
+  },
+  {
+    keys: ['fraud', 'scam', 'fake', 'fake whatsapp', 'whatsapp scam', 'fake facebook', 'facebook page', 'fake employee', 'fake number', 'financial promotion', 'promotion', 'impersonation', 'investment scam'],
+    title: 'Fraud awareness',
+    answer: 'Scammers have misused the WHSF name, logo and images to create fraudulent Facebook pages and WhatsApp groups. WHSF is not offering financial promotions, investment payments, WhatsApp cash grants, Facebook promotions or unofficial aid through personal numbers. If someone is using a WhatsApp number, fake Facebook page, fake employee name or fake number to request money or promise benefits, it does not come from WHSF. Do not send money or personal information. Report suspicious activity to your local authorities and to the platform involved.',
+    link: 'contact.html',
+    linkText: 'Report suspicious activity'
   },
   {
     keys: ['donate', 'donation', 'paypal', 'support', 'sponsor', 'give'],
