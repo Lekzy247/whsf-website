@@ -447,15 +447,15 @@ factcheckForm?.addEventListener('submit', (event) => {
   if (!factcheckForm.reportValidity()) return;
 
   const data = new FormData(factcheckForm);
-  const subject = encodeURIComponent(`WHSF fact-check request: ${data.get('topic')}`);
+  const subject = encodeURIComponent(`WHSF Verify request: ${data.get('topic')}`);
   const body = encodeURIComponent(
-    `WHSF Fact-Checking Platform Request\n\n` +
+    `WHSF Verify Request\n\n` +
     `Name: ${data.get('name')}\n` +
     `Email: ${data.get('email')}\n` +
     `Topic: ${data.get('topic')}\n` +
     `Source link: ${data.get('source') || 'Not provided'}\n\n` +
     `Claim or question:\n${data.get('claim')}\n\n` +
-    `Requested action: Please review this claim for possible misinformation, disinformation, fake news, hate speech or public-interest risk. If it relates to elections or democratic processes, please handle it as a non-partisan civic-information review and provide digital trust guidance.`
+    `Requested action: Please review this claim for possible misinformation, scam risk, fake opportunity, fake certificate, misleading technology claim, agricultural misinformation, health misinformation, cyber fraud, manipulated media or humanitarian-aid fraud. Please provide non-political digital trust guidance.`
   );
 
   if (factcheckStatus) factcheckStatus.textContent = 'Opening your email application. Please review and send the prepared fact-check request to WHSF.';
@@ -1251,11 +1251,11 @@ const whsfAssistantAnswers = [
     linkText: 'Open Student Projects'
   },
   {
-    keys: ['fact check', 'fact-checking', 'misinformation', 'disinformation', 'fake news', 'hate speech', 'digital trust', 'verify claim', 'scam', 'media literacy', 'election', 'democratic process', 'public interest'],
-    title: 'Fact-Checking Platform',
-    answer: 'The WHSF Fact-Checking Platform supports digital trust, media literacy and public-interest verification. It helps communities counter misinformation, disinformation, fake news and hate speech, especially where elections, democratic processes, public services, scams or civic participation are affected.',
+    keys: ['fact check', 'fact-checking', 'whsf verify', 'misinformation', 'fake news', 'digital trust', 'verify claim', 'scam', 'media literacy', 'fake scholarship', 'fake certificate', 'fake job', 'ai myth', 'deepfake', 'agriculture scam', 'health misinformation', 'donation scam'],
+    title: 'WHSF Verify',
+    answer: 'WHSF Verify is a non-political fact-checking and digital literacy platform for education, AI and technology, agriculture, health, child online safety, cybersecurity and humanitarian aid verification. It helps young people, educators, farmers and communities identify scams, false opportunities, fake certificates, manipulated media and misleading claims.',
     link: 'fact-checking.html',
-    linkText: 'Open Fact-Checking Platform'
+    linkText: 'Open WHSF Verify'
   },
   {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
