@@ -79,11 +79,6 @@ function initHeaderSocialLinks() {
   const navWrap = document.querySelector('.nav-wrap');
   if (!navWrap || navWrap.querySelector('.header-social-links')) return;
 
-  document.querySelectorAll('.primary-nav a[href="mobile-app.html"]').forEach((link) => {
-    link.href = 'innovation.html#whsf-mobile-app';
-    link.textContent = 'App';
-  });
-
   const socialNav = document.createElement('nav');
   socialNav.className = 'header-social-links';
   socialNav.setAttribute('aria-label', 'WHSF social media');
@@ -1414,7 +1409,7 @@ const whsfAssistantAnswers = [
     keys: ['mobile app', 'app', 'volunteer hub', 'donor hub', 'member dashboard', 'chat', 'community'],
     title: 'WHSF Mobile App',
     answer: 'The WHSF Mobile App portal helps donors, volunteers, partners, students and members stay connected with impact updates, collaboration chat, volunteer tasks, donor information, member dashboards and announcements.',
-    link: 'innovation.html#whsf-mobile-app',
+    link: 'mobile-app.html',
     linkText: 'View mobile app under Innovation'
   },
   {
