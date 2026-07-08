@@ -239,6 +239,38 @@
       const cleanFileName = (value = '') => value.replace(/[^a-z0-9-]+/gi, '-').replace(/(^-|-$)/g, '').toLowerCase();
       const verifyCertificateUrl = (certificateNumber) => `https://www.worldhsfoundation.org/verify-certificate?number=${encodeURIComponent(certificateNumber)}`;
 
+      async function checkCertificateEligibility(studentId, courseId) {
+        const student = students.find((item) => item.id === studentId);
+        if (!student?.identity_photo_data_url) {
+          return { ok: false, message: 'Certificate cannot be issued yet. The learner must capture an identity photo first.' };
+        }
+
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_enrollments')
+          .select('id,status,progress_percent,final_quiz_score,final_quiz_passed_at')
+          .eq('student_id', studentId)
+          .eq('course_id', courseId)
+          .maybeSingle();
+
+        if (error) {
+          return { ok: false, message: `${error.message}. Run the identity and quiz SQL upgrade in Supabase, then try again.` };
+        }
+
+        if (!data) {
+          return { ok: false, message: 'Certificate cannot be issued yet. The learner is not enrolled in this course.' };
+        }
+
+        if (Number(data.progress_percent || 0) < 100 || data.status !== 'completed') {
+          return { ok: false, message: 'Certificate cannot be issued yet. The learner must complete all course lessons first.' };
+        }
+
+        if (!data.final_quiz_passed_at && Number(data.final_quiz_score || 0) < 80) {
+          return { ok: false, message: 'Certificate cannot be issued yet. The learner must pass the final quiz with at least 80%.' };
+        }
+
+        return { ok: true, message: 'Learner is eligible for certificate issuance.' };
+      }
+
       function loadImageDataUrl(src) {
         return new Promise((resolve) => {
           const image = new Image();
@@ -671,6 +703,12 @@
 
         if (!studentId || !courseId || !certificateNumber) {
           showCertificateStatus('Select a student and course. The certificate number will be generated automatically.');
+          return;
+        }
+
+        const eligibility = await checkCertificateEligibility(studentId, courseId);
+        if (!eligibility.ok) {
+          showCertificateStatus(eligibility.message);
           return;
         }
 

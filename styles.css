@@ -1416,6 +1416,64 @@ p, li { text-wrap: pretty; }
 .learner-progress-card p { color: #f0ccd4; }
 .progress-meter { overflow: hidden; height: 18px; border-radius: 999px; background: rgba(255,255,255,.18); }
 .progress-meter span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f3dfac, #fff); transition: width .3s ease; }
+.learner-identity-section { padding-top: 48px; padding-bottom: 48px; background: #fffaf8; }
+.learner-identity-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 34px;
+  align-items: center;
+  padding: 34px;
+  border: 1px solid rgba(109,16,36,.14);
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(59,7,17,.08);
+}
+.learner-identity-card[hidden] { display: none; }
+.identity-copy h2 { font-size: clamp(1.75rem, 3vw, 2.55rem); }
+.identity-copy p { color: var(--muted); font-weight: 720; line-height: 1.65; }
+.identity-status { margin-top: 14px; padding: 12px 14px; border-radius: 14px; color: var(--red-dark); background: #fff3f0; font-weight: 900; }
+.identity-actions { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.identity-frame {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 10px solid #fff;
+  border-radius: 32px;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, #6d1024, #e5b957, #2f5f4f) border-box;
+  box-shadow: 0 20px 42px rgba(59,7,17,.16);
+}
+.identity-frame video,
+.identity-frame img { width: 100%; height: 100%; object-fit: cover; }
+.identity-placeholder { display: grid; place-items: center; gap: 8px; padding: 24px; color: var(--red-dark); text-align: center; }
+.identity-placeholder span { font-size: 3rem; }
+.identity-placeholder strong { font-size: 1.15rem; }
+.identity-placeholder small { color: var(--muted); font-weight: 800; }
+.final-quiz-section { background: #fff; }
+.final-quiz-card {
+  padding: 34px;
+  border: 1px solid rgba(109,16,36,.14);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top right, rgba(229,185,87,.16), transparent 22rem),
+    linear-gradient(180deg, #fff 0%, #fff8f8 100%);
+  box-shadow: 0 18px 44px rgba(59,7,17,.08);
+}
+.final-quiz-card[hidden] { display: none; }
+.final-quiz-form { display: grid; gap: 18px; }
+.quiz-question { margin: 0; padding: 20px; border: 1px solid rgba(109,16,36,.13); border-radius: 20px; background: #fff; }
+.quiz-question legend { padding: 0 8px; color: var(--ink); font-weight: 950; }
+.quiz-question label { margin-top: 12px; display: flex; gap: 10px; align-items: flex-start; color: var(--muted); font-weight: 800; }
+.quiz-question input { margin-top: 4px; accent-color: var(--red); }
+.quiz-status { margin-top: 14px; color: var(--red-dark); font-weight: 950; }
+.quiz-passed-card { padding: 22px; border: 1px solid rgba(47,95,79,.18); border-radius: 20px; background: #f4fbf7; }
+.quiz-passed-card strong { display: block; color: var(--green-800); font-size: 1.2rem; }
+.quiz-passed-card p { margin-top: 8px; color: var(--muted); font-weight: 800; }
 .learner-list { display: grid; gap: 18px; }
 .learner-item, .learner-empty { padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; border: 1px solid rgba(201,54,53,.13); border-radius: var(--radius); background: #fff; box-shadow: 0 12px 34px rgba(45,18,18,.06); }
 .learner-empty { display: block; color: var(--muted); font-weight: 800; text-align: center; }
@@ -1742,7 +1800,7 @@ p, li { text-wrap: pretty; }
 .mini-action.danger { color: #fff; background: var(--red); }
 
 @media (max-width: 1020px) {
-  .classroom-hero-grid, .classroom-auth-grid, .cloud-lms-hero, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card, .impact-dashboard-grid, .impact-insight-grid, .impact-report-card, .techbridge-global-hero-grid, .mobile-app-hero-grid, .mobile-portal-grid, .production-checklist-card, .mobile-admin-hero-grid, .mobile-admin-layout, .staff-verify-grid { grid-template-columns: 1fr; }
+  .classroom-hero-grid, .classroom-auth-grid, .cloud-lms-hero, .classroom-feature-grid, .admin-hero-grid, .course-learner-grid, .learner-progress-card, .learner-identity-card, .impact-dashboard-grid, .impact-insight-grid, .impact-report-card, .techbridge-global-hero-grid, .mobile-app-hero-grid, .mobile-portal-grid, .production-checklist-card, .mobile-admin-hero-grid, .mobile-admin-layout, .staff-verify-grid { grid-template-columns: 1fr; }
   .course-grid { grid-template-columns: 1fr 1fr; }
   .admin-summary { grid-template-columns: repeat(2, 1fr); }
   .admin-form { grid-template-columns: 1fr 1fr; }
@@ -3957,6 +4015,18 @@ body {
 }
 
 @media (max-width: 720px) {
+  .learner-identity-card,
+  .final-quiz-card {
+    padding: 24px 18px;
+    border-radius: 24px;
+  }
+  .identity-frame {
+    width: min(100%, 290px);
+    border-radius: 26px;
+  }
+  .quiz-question {
+    padding: 18px 14px;
+  }
   .policy-hero-grid {
     min-height: auto;
     padding: 68px 0;

@@ -107,6 +107,35 @@
         </div>
       </section>
 
+      <section class="section learner-identity-section">
+        <div class="shell learner-identity-card" id="learner-identity-card" hidden>
+          <div class="identity-copy">
+            <p class="eyebrow">Learner identity verification</p>
+            <h2>Confirm the learner before course completion.</h2>
+            <p>
+              WHSF uses a student photo captured from a phone or laptop camera to reduce impersonation
+              and support trusted certificates. The photo is linked to the signed-in learner profile.
+            </p>
+            <p class="identity-status" id="identity-status">Sign in to capture your learner identity photo.</p>
+            <div class="identity-actions">
+              <button class="button" id="start-camera-button" type="button">Open camera</button>
+              <button class="button button-light" id="capture-identity-button" type="button" hidden>Capture photo</button>
+              <button class="text-button" id="retake-identity-button" type="button" hidden>Retake photo</button>
+            </div>
+          </div>
+          <div class="identity-frame" aria-label="Learner identity photo capture frame">
+            <video id="identity-video" autoplay playsinline muted hidden></video>
+            <canvas id="identity-canvas" width="420" height="420" hidden></canvas>
+            <img id="identity-preview" alt="Captured learner identity preview" hidden />
+            <div class="identity-placeholder" id="identity-placeholder">
+              <span>📷</span>
+              <strong>Photo frame</strong>
+              <small>Use a clear face photo with good lighting.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="lessons">
         <div class="shell section-heading centered reveal">
           <p class="eyebrow">Lessons</p>
@@ -115,6 +144,18 @@
         </div>
         <div class="shell learner-list" id="lessons-list">
           <article class="learner-empty">Lessons will appear here after your teacher adds them.</article>
+        </div>
+      </section>
+
+      <section class="section final-quiz-section" id="final-quiz">
+        <div class="shell final-quiz-card" id="final-quiz-card" hidden>
+          <div class="section-heading centered">
+            <p class="eyebrow">Final class quiz</p>
+            <h2>Score 80% or higher to complete the course.</h2>
+            <p>Before the final lesson can be marked complete, each learner must pass this multiple-choice quiz.</p>
+          </div>
+          <form class="final-quiz-form" id="final-quiz-form"></form>
+          <p class="quiz-status" id="final-quiz-status" role="status"></p>
         </div>
       </section>
 
@@ -179,6 +220,18 @@
       const lessonsList = document.querySelector('#lessons-list');
       const assignmentsList = document.querySelector('#assignments-list');
       const certificatesList = document.querySelector('#certificates-list');
+      const identityCard = document.querySelector('#learner-identity-card');
+      const identityVideo = document.querySelector('#identity-video');
+      const identityCanvas = document.querySelector('#identity-canvas');
+      const identityPreview = document.querySelector('#identity-preview');
+      const identityPlaceholder = document.querySelector('#identity-placeholder');
+      const identityStatus = document.querySelector('#identity-status');
+      const startCameraButton = document.querySelector('#start-camera-button');
+      const captureIdentityButton = document.querySelector('#capture-identity-button');
+      const retakeIdentityButton = document.querySelector('#retake-identity-button');
+      const finalQuizCard = document.querySelector('#final-quiz-card');
+      const finalQuizForm = document.querySelector('#final-quiz-form');
+      const finalQuizStatus = document.querySelector('#final-quiz-status');
 
       let course = null;
       let session = null;
@@ -187,6 +240,8 @@
       let lessons = [];
       let completedLessonIds = new Set();
       let openedLessonIds = new Set();
+      let identityStream = null;
+      let finalQuizPassed = false;
 
       const localAiCourseCatalog = {
         'ai-for-agriculture': {
@@ -271,6 +326,116 @@
         courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
         if (signoutButton) signoutButton.hidden = !isSignedIn;
       };
+      const hasIdentityPhoto = () => Boolean(profile?.identity_photo_data_url);
+
+      function stopIdentityCamera() {
+        if (identityStream) {
+          identityStream.getTracks().forEach((track) => track.stop());
+          identityStream = null;
+        }
+        if (identityVideo) {
+          identityVideo.srcObject = null;
+          identityVideo.hidden = true;
+        }
+        if (captureIdentityButton) captureIdentityButton.hidden = true;
+      }
+
+      function updateIdentityUi() {
+        if (!identityCard) return;
+        const signedIn = Boolean(session?.user && profile);
+        identityCard.hidden = !signedIn;
+        if (!signedIn) {
+          stopIdentityCamera();
+          return;
+        }
+
+        const photoUrl = profile?.identity_photo_data_url || '';
+        if (photoUrl) {
+          identityPreview.src = photoUrl;
+          identityPreview.hidden = false;
+          identityPlaceholder.hidden = true;
+          if (identityStatus) {
+            const capturedDate = profile.identity_verified_at ? new Date(profile.identity_verified_at).toLocaleString() : 'saved';
+            identityStatus.textContent = `Identity photo captured and ${capturedDate}.`;
+          }
+          if (retakeIdentityButton) retakeIdentityButton.hidden = false;
+          if (startCameraButton) startCameraButton.textContent = 'Update photo';
+        } else {
+          identityPreview.hidden = true;
+          identityPlaceholder.hidden = false;
+          if (identityStatus) identityStatus.textContent = 'Capture a clear learner face photo before enrolling or completing this course.';
+          if (retakeIdentityButton) retakeIdentityButton.hidden = true;
+          if (startCameraButton) startCameraButton.textContent = 'Open camera';
+        }
+      }
+
+      async function startIdentityCamera() {
+        if (!session?.user || !profile) {
+          setStatus('Please sign in before capturing your identity photo.');
+          return;
+        }
+        if (!navigator.mediaDevices?.getUserMedia) {
+          setStatus('Camera access is not available in this browser. Try Chrome, Edge or Safari on a device with a camera.');
+          if (identityStatus) identityStatus.textContent = 'Camera access is not available in this browser.';
+          return;
+        }
+
+        try {
+          stopIdentityCamera();
+          identityStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 720 } },
+            audio: false
+          });
+          identityVideo.srcObject = identityStream;
+          identityVideo.hidden = false;
+          identityPreview.hidden = true;
+          identityPlaceholder.hidden = true;
+          captureIdentityButton.hidden = false;
+          if (identityStatus) identityStatus.textContent = 'Position your face inside the frame, then capture the photo.';
+          setStatus('Camera opened for learner identity capture.');
+        } catch (error) {
+          setStatus('Camera permission was not granted. Please allow camera access and try again.');
+          if (identityStatus) identityStatus.textContent = error.message || 'Camera permission was not granted.';
+        }
+      }
+
+      async function captureIdentityPhoto() {
+        if (!identityStream || !identityVideo?.videoWidth) {
+          setStatus('Open the camera before capturing the identity photo.');
+          return;
+        }
+
+        const context = identityCanvas.getContext('2d');
+        const size = 420;
+        identityCanvas.width = size;
+        identityCanvas.height = size;
+        const sourceSize = Math.min(identityVideo.videoWidth, identityVideo.videoHeight);
+        const sx = (identityVideo.videoWidth - sourceSize) / 2;
+        const sy = (identityVideo.videoHeight - sourceSize) / 2;
+        context.drawImage(identityVideo, sx, sy, sourceSize, sourceSize, 0, 0, size, size);
+        const photoDataUrl = identityCanvas.toDataURL('image/jpeg', 0.78);
+
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_student_profiles')
+          .update({
+            identity_photo_data_url: photoDataUrl,
+            identity_verified_at: new Date().toISOString()
+          })
+          .eq('id', profile.id)
+          .select()
+          .single();
+
+        if (error) {
+          setStatus(`${error.message}. Run the identity verification SQL file in Supabase, then try again.`);
+          if (identityStatus) identityStatus.textContent = 'Identity photo could not be saved. Supabase may need the new identity columns.';
+          return;
+        }
+
+        profile = data;
+        stopIdentityCamera();
+        updateIdentityUi();
+        setStatus('Learner identity photo saved successfully.');
+      }
 
       function showCourseSignInBox(message = 'Signed out successfully. You can sign in again below.') {
         session = null;
@@ -278,7 +443,11 @@
         enrollment = null;
         completedLessonIds = new Set();
         openedLessonIds = new Set();
+        finalQuizPassed = false;
+        stopIdentityCamera();
         setCourseSignedIn(false);
+        updateIdentityUi();
+        renderFinalQuiz();
         courseLoginForm?.reset();
         progressCard.hidden = true;
         enrollButton.hidden = true;
@@ -292,6 +461,107 @@
         .join('');
       const cleanFileName = (value = '') => String(value).replace(/[^a-z0-9-]+/gi, '-').replace(/(^-|-$)/g, '').toLowerCase();
       const verifyCertificateUrl = (certificateNumber) => `https://www.worldhsfoundation.org/verify-certificate?number=${encodeURIComponent(certificateNumber)}`;
+      const finalQuizQuestions = [
+        {
+          question: 'What should a WHSF learner do before using technology to solve a community problem?',
+          options: ['Understand the problem and the people affected', 'Copy any solution from the internet', 'Ignore safety and privacy', 'Only focus on certificates'],
+          answer: 0
+        },
+        {
+          question: 'Which action supports responsible use of Artificial Intelligence?',
+          options: ['Share private data freely', 'Verify information and use AI ethically', 'Use AI to mislead people', 'Avoid human review'],
+          answer: 1
+        },
+        {
+          question: 'Why does WHSF require identity photo capture for e-Classroom learners?',
+          options: ['To make learning harder', 'To reduce impersonation and support trusted certificates', 'To replace teachers', 'To publish student photos publicly'],
+          answer: 1
+        },
+        {
+          question: 'What is the safest response when a lesson includes health, safety or emergency information?',
+          options: ['Treat AI output as medical diagnosis', 'Ignore qualified professionals', 'Use trusted sources and refer serious decisions to professionals', 'Forward all messages without checking'],
+          answer: 2
+        },
+        {
+          question: 'What score is required to pass the WHSF final class quiz?',
+          options: ['40%', '60%', '70%', '80%'],
+          answer: 3
+        }
+      ];
+
+      function renderFinalQuiz() {
+        if (!finalQuizCard || !finalQuizForm) return;
+        const canShow = Boolean(enrollment && course && !course.isLocalCourse);
+        finalQuizCard.hidden = !canShow;
+        if (!canShow) return;
+
+        finalQuizPassed = Boolean(enrollment.final_quiz_passed_at || Number(enrollment.final_quiz_score || 0) >= 80);
+        if (finalQuizPassed) {
+          finalQuizForm.innerHTML = `
+            <article class="quiz-passed-card">
+              <strong>Final quiz passed</strong>
+              <p>You scored ${Number(enrollment.final_quiz_score || 80)}%. You may complete the final lesson and qualify for certificate review.</p>
+            </article>
+          `;
+          if (finalQuizStatus) finalQuizStatus.textContent = 'Final quiz requirement completed.';
+          return;
+        }
+
+        finalQuizForm.innerHTML = finalQuizQuestions.map((item, questionIndex) => `
+          <fieldset class="quiz-question">
+            <legend>${questionIndex + 1}. ${escapeHtml(item.question)}</legend>
+            ${item.options.map((option, optionIndex) => `
+              <label>
+                <input type="radio" name="question_${questionIndex}" value="${optionIndex}" required />
+                <span>${escapeHtml(option)}</span>
+              </label>
+            `).join('')}
+          </fieldset>
+        `).join('') + '<button class="button" type="submit">Submit final quiz</button>';
+        if (finalQuizStatus) finalQuizStatus.textContent = 'Pass mark: 80%. You can retake the quiz if needed.';
+      }
+
+      async function submitFinalQuiz(form) {
+        if (!enrollment) {
+          setStatus('Enroll before taking the final quiz.');
+          return;
+        }
+
+        const formData = new FormData(form);
+        let correct = 0;
+        finalQuizQuestions.forEach((item, index) => {
+          if (Number(formData.get(`question_${index}`)) === item.answer) correct += 1;
+        });
+        const score = Math.round((correct / finalQuizQuestions.length) * 100);
+        const passed = score >= 80;
+
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_enrollments')
+          .update({
+            final_quiz_score: score,
+            final_quiz_passed_at: passed ? new Date().toISOString() : null
+          })
+          .eq('id', enrollment.id)
+          .select()
+          .single();
+
+        if (error) {
+          setStatus(`${error.message}. Run the identity and quiz SQL file in Supabase, then try again.`);
+          if (finalQuizStatus) finalQuizStatus.textContent = 'Quiz result could not be saved. Supabase may need the new quiz columns.';
+          return;
+        }
+
+        enrollment = data;
+        finalQuizPassed = passed;
+        if (passed) {
+          setStatus(`Final quiz passed with ${score}%. You can now complete the final lesson.`);
+          renderFinalQuiz();
+          renderLessons();
+        } else {
+          setStatus(`You scored ${score}%. Please review the lessons and retake the quiz. Pass mark is 80%.`);
+          if (finalQuizStatus) finalQuizStatus.textContent = `Score: ${score}%. Please try again.`;
+        }
+      }
 
       function loadImageDataUrl(src) {
         return new Promise((resolve) => {
@@ -579,6 +849,8 @@
           enrollment = null;
           enrollButton.hidden = true;
           progressCard.hidden = true;
+          finalQuizPassed = false;
+          renderFinalQuiz();
           setStatus('Preview course loaded. WHSF can connect enrollment and certificates for this track in Supabase when ready.');
           return;
         }
@@ -595,8 +867,10 @@
         }
 
         enrollment = data;
+        finalQuizPassed = Boolean(enrollment?.final_quiz_passed_at || Number(enrollment?.final_quiz_score || 0) >= 80);
         enrollButton.hidden = Boolean(enrollment);
         progressCard.hidden = !enrollment;
+        renderFinalQuiz();
         if (enrollment) await loadProgress();
       }
 
@@ -610,6 +884,12 @@
           return;
         }
         await ensureProfile(session.user);
+        updateIdentityUi();
+        if (!hasIdentityPhoto()) {
+          setStatus('Capture your learner identity photo before enrolling in this course.');
+          identityCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
         const { data, error } = await whsfSupabase
           .from('eclassroom_enrollments')
           .insert({ student_id: profile.id, course_id: course.id })
@@ -622,8 +902,10 @@
         }
 
         enrollment = data;
+        finalQuizPassed = Boolean(enrollment.final_quiz_passed_at || Number(enrollment.final_quiz_score || 0) >= 80);
         enrollButton.hidden = true;
         progressCard.hidden = false;
+        renderFinalQuiz();
         setStatus('Enrolled successfully.');
         await loadProgress();
       }
@@ -672,6 +954,7 @@
 
         completedLessonIds = new Set((data || []).filter((row) => row.is_completed).map((row) => String(row.lesson_id)));
         updateProgressUi();
+        renderFinalQuiz();
         renderLessons();
         await loadCertificates();
       }
@@ -681,7 +964,9 @@
         const complete = completedLessonIds.size;
         const percent = total ? Math.round((complete / total) * 100) : 0;
         progressHeading.textContent = `${percent}% complete`;
-        progressSummary.textContent = `${complete} of ${total} lessons completed.`;
+        progressSummary.textContent = finalQuizPassed
+          ? `${complete} of ${total} lessons completed. Final quiz passed.`
+          : `${complete} of ${total} lessons completed. Final quiz requires 80% before course completion.`;
         progressBar.style.width = `${percent}%`;
         if (enrollment && enrollment.progress_percent !== percent) {
           whsfSupabase.from('eclassroom_enrollments').update({
@@ -738,6 +1023,12 @@
           return;
         }
 
+        if (!hasIdentityPhoto()) {
+          setStatus('Capture your learner identity photo before completing lessons. This helps WHSF reduce impersonation and protect certificate integrity.');
+          identityCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
         const lessonIndex = lessons.findIndex((lesson) => String(lesson.id) === String(lessonId));
         if (lessonIndex === -1) {
           setStatus('Lesson not found. Please refresh the page and try again.');
@@ -757,6 +1048,14 @@
 
         if (!openedLessonIds.has(String(lessonId))) {
           setStatus('Open and review the lesson lecture before marking it complete.');
+          return;
+        }
+
+        const isFinalLesson = lessonIndex === lessons.length - 1;
+        if (isFinalLesson && !finalQuizPassed) {
+          setStatus('Complete the final class quiz with at least 80% before marking the final lesson complete.');
+          renderFinalQuiz();
+          finalQuizCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
           return;
         }
 
@@ -956,6 +1255,7 @@
         session = data.session;
         profile = await ensureProfile(data.user);
         setCourseSignedIn(true);
+        updateIdentityUi();
         setStatus(`Signed in as ${data.user.email}.`);
         await loadEnrollment();
         await loadAssignments();
@@ -975,6 +1275,13 @@
       });
 
       enrollButton?.addEventListener('click', enroll);
+      startCameraButton?.addEventListener('click', startIdentityCamera);
+      captureIdentityButton?.addEventListener('click', captureIdentityPhoto);
+      retakeIdentityButton?.addEventListener('click', startIdentityCamera);
+      finalQuizForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        submitFinalQuiz(event.currentTarget);
+      });
 
       document.addEventListener('click', (event) => {
         const openLessonButton = event.target.closest('[data-open-lesson]');
@@ -1007,9 +1314,11 @@
         if (session?.user) {
           setCourseSignedIn(true);
           profile = await ensureProfile(session.user);
+          updateIdentityUi();
           setStatus(`Signed in as ${session.user.email}.`);
         } else {
           setCourseSignedIn(false);
+          updateIdentityUi();
         }
         await loadCourse();
         if (profile) await loadEnrollment();
