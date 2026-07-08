@@ -795,6 +795,32 @@ p, li { text-wrap: pretty; }
   background: #6d1024;
   border-color: #6d1024;
 }
+.home-top-gallery-section .gallery-hero-actions {
+  margin: 0;
+  padding: 18px clamp(16px, 5vw, 80px) 22px;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(247,211,122,.16), transparent 28rem),
+    linear-gradient(135deg, #240507 0%, #3b0711 56%, #5a0f1d 100%);
+}
+.home-top-gallery-section .gallery-hero-actions .button {
+  min-width: 180px;
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.22);
+}
+.home-top-gallery-section .gallery-hero-actions .button:first-child,
+.home-top-gallery-section .gallery-hero-actions .button-light {
+  color: #3b0711;
+  background: #f7d37a;
+  border-color: #f7d37a;
+}
+.home-top-gallery-section .gallery-hero-actions .button:hover {
+  color: #3b0711;
+  background: #fff;
+  border-color: #fff;
+  transform: translateY(-2px);
+}
 
 .flagship-programs-section {
   position: relative;
