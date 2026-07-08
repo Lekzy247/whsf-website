@@ -112,12 +112,11 @@ function initFooterSocialLogos() {
 initFooterSocialLogos();
 
 const homepageMain = document.querySelector('main#main');
-const homepageHero = document.querySelector('.tech-impact-hero');
 const homepageGallery = document.querySelector('#gallery.gallery-section');
 
-if (homepageMain && homepageHero && homepageGallery) {
+if (homepageMain && homepageGallery) {
   homepageGallery.classList.add('home-top-gallery-section');
-  homepageMain.insertBefore(homepageGallery, homepageHero);
+  homepageMain.insertBefore(homepageGallery, homepageMain.firstElementChild);
 }
 
 document.addEventListener('keydown', (event) => {
@@ -365,7 +364,7 @@ function showGallerySlide(index) {
     galleryMainImage.src = src;
     galleryMainImage.alt = alt || title || 'WHSF gallery image';
     if (galleryMainLink) galleryMainLink.href = src;
-    if (galleryCounter) galleryCounter.textContent = `${galleryIndex + 1} / ${galleryThumbs.length}`;
+    if (galleryCounter) galleryCounter.textContent = `Technology for humanity · ${galleryIndex + 1} / ${galleryThumbs.length}`;
     if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
     if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
     galleryMainImage.style.opacity = '1';
