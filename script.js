@@ -1358,7 +1358,7 @@ const whsfAssistantAnswers = [
   {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-Classroom',
-    answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM and accessibility technology. Learners can view lessons, submit assignments, track progress and receive certificates.',
+    answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM, accessibility technology, AI for Agriculture, AI for Healthcare, Girls in AI Africa, AI Rapid Response and AI Media & Information Communication. Learners can view lessons, submit assignments, track progress and receive certificates.',
     link: 'e-classroom.html',
     linkText: 'Open e-Classroom'
   },

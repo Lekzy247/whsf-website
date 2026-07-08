@@ -188,6 +188,84 @@
       let completedLessonIds = new Set();
       let openedLessonIds = new Set();
 
+      const localAiCourseCatalog = {
+        'ai-for-agriculture': {
+          id: 'local-ai-for-agriculture',
+          title: 'AI for Agriculture',
+          category: 'AI Agriculture',
+          summary: 'Learn how AI can support crop disease detection, soil analysis, weather intelligence, pest monitoring, market-price information and smart irrigation guidance.',
+          level: 'Beginner',
+          duration_weeks: 6,
+          delivery_mode: 'Animated + project-based',
+          lessons: [
+            ['AI in farming communities', 'What AI can and cannot do for farmers.\n\nLearn how simple data, phones, cameras and weather information can support better farming decisions when reviewed responsibly with local knowledge.'],
+            ['Crop disease and pest monitoring', 'How image recognition can support early crop disease and pest alerts.\n\nClass activity: list three signs a farmer might photograph before asking for help.'],
+            ['Weather and smart irrigation', 'How weather intelligence and soil information can guide water use.\n\nClass activity: design a simple smart irrigation checklist for a school garden.']
+          ],
+          assignment: 'Design an AI-supported farming idea that helps a local farmer make safer decisions about crops, water, pests or market prices.'
+        },
+        'ai-for-healthcare': {
+          id: 'local-ai-for-healthcare',
+          title: 'AI for Healthcare',
+          category: 'AI Health',
+          summary: 'Explore telemedicine support, maternal health assistants, medical translation tools, symptom-triage guidance, healthcare worker training and medical education chatbots.',
+          level: 'Beginner',
+          duration_weeks: 6,
+          delivery_mode: 'Animated + guided practice',
+          lessons: [
+            ['Safe AI for health education', 'AI can support health education, translation and awareness, but it must not replace qualified medical professionals.\n\nLearn when to use AI for guidance and when to refer to a clinic, nurse or doctor.'],
+            ['Telemedicine and maternal health support', 'Explore how digital tools can remind families about appointments, explain health information and support maternal health education.'],
+            ['Medical translation and chatbots', 'Learn how multilingual health chatbots can simplify information while requiring human review for safety and accuracy.']
+          ],
+          assignment: 'Create a safe health-information chatbot script that explains one health topic and clearly tells users to consult qualified professionals.'
+        },
+        'girls-in-ai-africa': {
+          id: 'local-girls-in-ai-africa',
+          title: 'Girls in AI Africa',
+          category: 'Girls in AI',
+          summary: 'Build AI confidence through bootcamps, robotics, coding, cloud computing, cybersecurity, innovation competitions, mentorship and scholarship pathways.',
+          level: 'Foundation',
+          duration_weeks: 8,
+          delivery_mode: 'Bootcamp',
+          lessons: [
+            ['Seeing yourself in AI', 'Girls and young women can become builders, researchers, designers, founders and leaders in AI.\n\nMeet career paths in AI, robotics, data, cloud and cybersecurity.'],
+            ['AI bootcamp foundations', 'Learn prompt basics, responsible AI, simple coding logic and teamwork for innovation projects.'],
+            ['Mentorship, scholarships and competitions', 'Learn how to find legitimate opportunities, prepare applications and avoid fake scholarships or competitions.']
+          ],
+          assignment: 'Prepare a one-page AI innovation idea that solves a problem in your school, community or family.'
+        },
+        'ai-rapid-response': {
+          id: 'local-ai-rapid-response',
+          title: 'AI Rapid Response',
+          category: 'Response',
+          summary: 'Use AI responsibly for emergency communication, community coordination, disaster information, urgent support workflows and rapid decision support.',
+          level: 'Intermediate',
+          duration_weeks: 4,
+          delivery_mode: 'Scenario lab',
+          lessons: [
+            ['Rapid response basics', 'Learn how information, timing and trust affect emergency communication.\n\nAI can help summarize reports, draft alerts and organize tasks, but people must verify facts.'],
+            ['Community coordination workflows', 'Design simple workflows for volunteers, teachers, health workers and community leaders during urgent situations.'],
+            ['Responsible AI under pressure', 'Learn risk checks for misinformation, privacy, safeguarding and sensitive personal data in rapid response.']
+          ],
+          assignment: 'Create a responsible AI rapid-response checklist for a school, community hub or local volunteer team.'
+        },
+        'ai-media-information-communication': {
+          id: 'local-ai-media-information-communication',
+          title: 'AI Media & Information Communication',
+          category: 'Media AI',
+          summary: 'Use AI for media literacy, public-interest communication, misinformation awareness, safe storytelling, content creation, translation and community education.',
+          level: 'Foundation',
+          duration_weeks: 5,
+          delivery_mode: 'Studio workshop',
+          lessons: [
+            ['AI and public communication', 'Learn how AI can help write clear public messages, translate content and prepare education materials.'],
+            ['Misinformation and safe storytelling', 'Understand how to check claims, avoid harmful rumors and communicate with dignity.'],
+            ['Community media studio', 'Create simple scripts, posters, voiceovers and captions for public-interest learning.']
+          ],
+          assignment: 'Create a short public-interest message that uses AI responsibly and includes a source-checking note.'
+        }
+      };
+
       const setStatus = (message) => { statusEl.textContent = message; };
       const setCourseSignedIn = (isSignedIn) => {
         courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
@@ -433,6 +511,20 @@
           .maybeSingle();
 
         if (error || !data) {
+          const localCourse = localAiCourseCatalog[courseSlug];
+          if (localCourse) {
+            course = { ...localCourse, isLocalCourse: true };
+            document.title = `${course.title} | WHSF e-Classroom`;
+            document.querySelector('#course-category').textContent = course.category;
+            document.querySelector('#course-title').textContent = course.title;
+            document.querySelector('#course-summary').textContent = `${course.summary} ${course.level} • ${course.duration_weeks} weeks • ${course.delivery_mode}`;
+            enrollButton.hidden = true;
+            progressCard.hidden = true;
+            setStatus('Preview course loaded. WHSF can connect this track to Supabase enrollment when ready.');
+            await loadLessons();
+            await loadAssignments();
+            return;
+          }
           document.querySelector('#course-title').textContent = 'Course not found';
           document.querySelector('#course-summary').textContent = 'Please return to the e-Classroom and choose another course.';
           setStatus(error?.message || 'Course not found.');
@@ -483,6 +575,13 @@
 
       async function loadEnrollment() {
         if (!profile || !course) return;
+        if (course.isLocalCourse) {
+          enrollment = null;
+          enrollButton.hidden = true;
+          progressCard.hidden = true;
+          setStatus('Preview course loaded. WHSF can connect enrollment and certificates for this track in Supabase when ready.');
+          return;
+        }
         const { data, error } = await whsfSupabase
           .from('eclassroom_enrollments')
           .select('*')
@@ -502,6 +601,10 @@
       }
 
       async function enroll() {
+        if (course?.isLocalCourse) {
+          setStatus('This preview course is available for learning review. Enrollment will be enabled after WHSF adds it to the live course database.');
+          return;
+        }
         if (!session?.user) {
           setStatus('Please sign in first.');
           return;
@@ -527,6 +630,19 @@
 
       async function loadLessons() {
         if (!course) return;
+        if (course.isLocalCourse) {
+          lessons = (course.lessons || []).map((lesson, index) => ({
+            id: `${course.id}-lesson-${index + 1}`,
+            lesson_type: 'Animated classroom',
+            lesson_order: index + 1,
+            estimated_minutes: 35,
+            title: lesson[0],
+            content: lesson[1],
+            resource_url: ''
+          }));
+          renderLessons();
+          return;
+        }
         const { data, error } = await whsfSupabase
           .from('eclassroom_lessons')
           .select('*')
@@ -664,6 +780,22 @@
 
       async function loadAssignments() {
         if (!course) return;
+        if (course.isLocalCourse) {
+          assignmentsList.innerHTML = `
+            <article class="learner-item assignment-item">
+              <div>
+                <span>Preview assignment • Max score 100</span>
+                <h3>${escapeHtml(course.title)} capstone activity</h3>
+                <p>${escapeHtml(course.assignment || 'Create a practical project idea based on this WHSF AI course.')}</p>
+              </div>
+              <form class="assignment-form">
+                <textarea name="response_text" rows="4" placeholder="Write your project idea or classroom response here." disabled></textarea>
+                <button class="button" type="button" disabled>Submit after enrollment setup</button>
+              </form>
+            </article>
+          `;
+          return;
+        }
         const { data, error } = await whsfSupabase
           .from('eclassroom_assignments')
           .select('*')
@@ -756,6 +888,10 @@
 
       async function loadCertificates() {
         if (!profile || !course) return;
+        if (course.isLocalCourse) {
+          certificatesList.innerHTML = '<article class="learner-empty">Certificates will be available after this preview course is connected to WHSF’s live e-Classroom records.</article>';
+          return;
+        }
         const { data, error } = await whsfSupabase
           .from('eclassroom_certificates')
           .select('*')
