@@ -1433,6 +1433,7 @@ p, li { text-wrap: pretty; }
 .identity-copy p { color: var(--muted); font-weight: 720; line-height: 1.65; }
 .identity-status { margin-top: 14px; padding: 12px 14px; border-radius: 14px; color: var(--red-dark); background: #fff3f0; font-weight: 900; }
 .identity-actions { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.identity-upload-button { cursor: pointer; }
 .identity-frame {
   position: relative;
   width: min(100%, 340px);

@@ -120,6 +120,8 @@
             <div class="identity-actions">
               <button class="button" id="start-camera-button" type="button">Open camera</button>
               <button class="button button-light" id="capture-identity-button" type="button" hidden>Capture photo</button>
+              <label class="button button-light identity-upload-button" for="identity-upload-input">Upload selfie instead</label>
+              <input id="identity-upload-input" type="file" accept="image/*" capture="user" hidden />
               <button class="text-button" id="retake-identity-button" type="button" hidden>Retake photo</button>
             </div>
           </div>
@@ -229,6 +231,7 @@
       const startCameraButton = document.querySelector('#start-camera-button');
       const captureIdentityButton = document.querySelector('#capture-identity-button');
       const retakeIdentityButton = document.querySelector('#retake-identity-button');
+      const identityUploadInput = document.querySelector('#identity-upload-input');
       const finalQuizCard = document.querySelector('#final-quiz-card');
       const finalQuizForm = document.querySelector('#final-quiz-form');
       const finalQuizStatus = document.querySelector('#final-quiz-status');
@@ -369,6 +372,30 @@
         }
       }
 
+      async function saveIdentityPhoto(photoDataUrl) {
+        const { data, error } = await whsfSupabase
+          .from('eclassroom_student_profiles')
+          .update({
+            identity_photo_data_url: photoDataUrl,
+            identity_verified_at: new Date().toISOString()
+          })
+          .eq('id', profile.id)
+          .select()
+          .single();
+
+        if (error) {
+          setStatus(`${error.message}. Run the identity verification SQL file in Supabase, then try again.`);
+          if (identityStatus) identityStatus.textContent = 'Identity photo could not be saved. Supabase may need the new identity columns.';
+          return false;
+        }
+
+        profile = data;
+        stopIdentityCamera();
+        updateIdentityUi();
+        setStatus('Learner identity photo saved successfully.');
+        return true;
+      }
+
       async function startIdentityCamera() {
         if (!session?.user || !profile) {
           setStatus('Please sign in before capturing your identity photo.');
@@ -394,8 +421,12 @@
           if (identityStatus) identityStatus.textContent = 'Position your face inside the frame, then capture the photo.';
           setStatus('Camera opened for learner identity capture.');
         } catch (error) {
-          setStatus('Camera permission was not granted. Please allow camera access and try again.');
-          if (identityStatus) identityStatus.textContent = error.message || 'Camera permission was not granted.';
+          const isLocalFile = window.location.protocol === 'file:';
+          const message = isLocalFile
+            ? 'Camera cannot open from a local file preview. Use the live HTTPS website or upload a selfie instead.'
+            : 'Camera permission was denied or blocked. Allow camera access in your browser site settings, refresh the page, or upload a selfie instead.';
+          setStatus(message);
+          if (identityStatus) identityStatus.textContent = message;
         }
       }
 
@@ -414,27 +445,36 @@
         const sy = (identityVideo.videoHeight - sourceSize) / 2;
         context.drawImage(identityVideo, sx, sy, sourceSize, sourceSize, 0, 0, size, size);
         const photoDataUrl = identityCanvas.toDataURL('image/jpeg', 0.78);
+        await saveIdentityPhoto(photoDataUrl);
+      }
 
-        const { data, error } = await whsfSupabase
-          .from('eclassroom_student_profiles')
-          .update({
-            identity_photo_data_url: photoDataUrl,
-            identity_verified_at: new Date().toISOString()
-          })
-          .eq('id', profile.id)
-          .select()
-          .single();
-
-        if (error) {
-          setStatus(`${error.message}. Run the identity verification SQL file in Supabase, then try again.`);
-          if (identityStatus) identityStatus.textContent = 'Identity photo could not be saved. Supabase may need the new identity columns.';
+      async function handleIdentityUpload(event) {
+        if (!session?.user || !profile) {
+          setStatus('Please sign in before uploading your identity photo.');
           return;
         }
+        const file = event.target.files?.[0];
+        if (!file) return;
 
-        profile = data;
-        stopIdentityCamera();
-        updateIdentityUi();
-        setStatus('Learner identity photo saved successfully.');
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const image = new Image();
+          image.onload = async () => {
+            const size = 420;
+            identityCanvas.width = size;
+            identityCanvas.height = size;
+            const context = identityCanvas.getContext('2d');
+            const sourceSize = Math.min(image.naturalWidth, image.naturalHeight);
+            const sx = (image.naturalWidth - sourceSize) / 2;
+            const sy = (image.naturalHeight - sourceSize) / 2;
+            context.drawImage(image, sx, sy, sourceSize, sourceSize, 0, 0, size, size);
+            await saveIdentityPhoto(identityCanvas.toDataURL('image/jpeg', 0.78));
+          };
+          image.onerror = () => setStatus('The selected image could not be read. Please choose a clear face photo.');
+          image.src = String(reader.result || '');
+        };
+        reader.onerror = () => setStatus('The selected image could not be loaded. Please try another photo.');
+        reader.readAsDataURL(file);
       }
 
       function showCourseSignInBox(message = 'Signed out successfully. You can sign in again below.') {
@@ -1278,6 +1318,7 @@
       startCameraButton?.addEventListener('click', startIdentityCamera);
       captureIdentityButton?.addEventListener('click', captureIdentityPhoto);
       retakeIdentityButton?.addEventListener('click', startIdentityCamera);
+      identityUploadInput?.addEventListener('change', handleIdentityUpload);
       finalQuizForm?.addEventListener('submit', (event) => {
         event.preventDefault();
         submitFinalQuiz(event.currentTarget);
