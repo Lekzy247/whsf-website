@@ -347,6 +347,8 @@ const galleryPrev = document.querySelector('.gallery-prev');
 const galleryNext = document.querySelector('.gallery-next');
 let galleryIndex = 0;
 let galleryTimer;
+let galleryRequestId = 0;
+let galleryIsLoading = false;
 const galleryImageCache = new Map();
 
 function preloadGalleryImage(src) {
@@ -364,22 +366,27 @@ function preloadGalleryImage(src) {
 
 async function showGallerySlide(index) {
   if (!galleryThumbs.length || !galleryMainImage) return;
-  galleryIndex = (index + galleryThumbs.length) % galleryThumbs.length;
-  const selected = galleryThumbs[galleryIndex];
+  const requestId = ++galleryRequestId;
+  const nextIndex = (index + galleryThumbs.length) % galleryThumbs.length;
+  const selected = galleryThumbs[nextIndex];
   const { src, title, description, alt } = selected.dataset;
 
-  galleryThumbs.forEach((thumb, thumbIndex) => {
-    thumb.classList.toggle('active', thumbIndex === galleryIndex);
-    thumb.setAttribute('aria-pressed', String(thumbIndex === galleryIndex));
-  });
-
+  galleryIsLoading = true;
   galleryMainImage.style.opacity = '0.35';
   const loaded = await preloadGalleryImage(src);
+  if (requestId !== galleryRequestId) return;
+  galleryIsLoading = false;
   if (!loaded) {
     galleryMainImage.style.opacity = '1';
     console.warn('WHSF gallery image could not be loaded:', src);
     return;
   }
+
+  galleryIndex = nextIndex;
+  galleryThumbs.forEach((thumb, thumbIndex) => {
+    thumb.classList.toggle('active', thumbIndex === galleryIndex);
+    thumb.setAttribute('aria-pressed', String(thumbIndex === galleryIndex));
+  });
 
   galleryMainImage.src = src;
   galleryMainImage.alt = alt || title || 'WHSF gallery image';
@@ -393,7 +400,9 @@ async function showGallerySlide(index) {
 function startGalleryAutoplay() {
   if (!galleryThumbs.length) return;
   window.clearInterval(galleryTimer);
-  galleryTimer = window.setInterval(() => showGallerySlide(galleryIndex + 1), 6500);
+  galleryTimer = window.setInterval(() => {
+    if (!galleryIsLoading) showGallerySlide(galleryIndex + 1);
+  }, 8500);
 }
 
 galleryThumbs.forEach((thumb, index) => {
@@ -421,7 +430,7 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'ArrowLeft') showGallerySlide(galleryIndex - 1);
   if (event.key === 'ArrowRight') showGallerySlide(galleryIndex + 1);
 });
-galleryThumbs.slice(0, 4).forEach((thumb) => preloadGalleryImage(thumb.dataset.src));
+galleryThumbs.forEach((thumb) => preloadGalleryImage(thumb.dataset.src));
 showGallerySlide(0);
 startGalleryAutoplay();
 
