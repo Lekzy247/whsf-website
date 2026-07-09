@@ -347,8 +347,6 @@ const galleryPrev = document.querySelector('.gallery-prev');
 const galleryNext = document.querySelector('.gallery-next');
 let galleryIndex = 0;
 let galleryTimer;
-let galleryRequestId = 0;
-let galleryIsLoading = false;
 const galleryImageCache = new Map();
 
 function preloadGalleryImage(src) {
@@ -364,45 +362,33 @@ function preloadGalleryImage(src) {
   return promise;
 }
 
-async function showGallerySlide(index) {
+function showGallerySlide(index) {
   if (!galleryThumbs.length || !galleryMainImage) return;
-  const requestId = ++galleryRequestId;
-  const nextIndex = (index + galleryThumbs.length) % galleryThumbs.length;
-  const selected = galleryThumbs[nextIndex];
+  galleryIndex = (index + galleryThumbs.length) % galleryThumbs.length;
+  const selected = galleryThumbs[galleryIndex];
   const { src, title, description, alt } = selected.dataset;
 
-  galleryIsLoading = true;
-  galleryMainImage.style.opacity = '0.35';
-  const loaded = await preloadGalleryImage(src);
-  if (requestId !== galleryRequestId) return;
-  galleryIsLoading = false;
-  if (!loaded) {
-    galleryMainImage.style.opacity = '1';
-    console.warn('WHSF gallery image could not be loaded:', src);
-    return;
-  }
-
-  galleryIndex = nextIndex;
   galleryThumbs.forEach((thumb, thumbIndex) => {
     thumb.classList.toggle('active', thumbIndex === galleryIndex);
     thumb.setAttribute('aria-pressed', String(thumbIndex === galleryIndex));
   });
 
+  galleryMainImage.style.opacity = '0.35';
   galleryMainImage.src = src;
   galleryMainImage.alt = alt || title || 'WHSF gallery image';
   if (galleryMainLink) galleryMainLink.href = src;
   if (galleryCounter) galleryCounter.textContent = `Technology for humanity · ${galleryIndex + 1} / ${galleryThumbs.length}`;
   if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
   if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
-  galleryMainImage.style.opacity = '1';
+  window.setTimeout(() => {
+    galleryMainImage.style.opacity = '1';
+  }, 80);
 }
 
 function startGalleryAutoplay() {
   if (!galleryThumbs.length) return;
   window.clearInterval(galleryTimer);
-  galleryTimer = window.setInterval(() => {
-    if (!galleryIsLoading) showGallerySlide(galleryIndex + 1);
-  }, 8500);
+  galleryTimer = window.setInterval(() => showGallerySlide(galleryIndex + 1), 3000);
 }
 
 galleryThumbs.forEach((thumb, index) => {
