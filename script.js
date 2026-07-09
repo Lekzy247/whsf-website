@@ -347,8 +347,22 @@ const galleryPrev = document.querySelector('.gallery-prev');
 const galleryNext = document.querySelector('.gallery-next');
 let galleryIndex = 0;
 let galleryTimer;
+const galleryImageCache = new Map();
 
-function showGallerySlide(index) {
+function preloadGalleryImage(src) {
+  if (!src) return Promise.resolve(false);
+  if (galleryImageCache.has(src)) return galleryImageCache.get(src);
+  const promise = new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(true);
+    image.onerror = () => resolve(false);
+    image.src = src;
+  });
+  galleryImageCache.set(src, promise);
+  return promise;
+}
+
+async function showGallerySlide(index) {
   if (!galleryThumbs.length || !galleryMainImage) return;
   galleryIndex = (index + galleryThumbs.length) % galleryThumbs.length;
   const selected = galleryThumbs[galleryIndex];
@@ -359,16 +373,21 @@ function showGallerySlide(index) {
     thumb.setAttribute('aria-pressed', String(thumbIndex === galleryIndex));
   });
 
-  galleryMainImage.style.opacity = '0';
-  window.setTimeout(() => {
-    galleryMainImage.src = src;
-    galleryMainImage.alt = alt || title || 'WHSF gallery image';
-    if (galleryMainLink) galleryMainLink.href = src;
-    if (galleryCounter) galleryCounter.textContent = `Technology for humanity · ${galleryIndex + 1} / ${galleryThumbs.length}`;
-    if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
-    if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
+  galleryMainImage.style.opacity = '0.35';
+  const loaded = await preloadGalleryImage(src);
+  if (!loaded) {
     galleryMainImage.style.opacity = '1';
-  }, 120);
+    console.warn('WHSF gallery image could not be loaded:', src);
+    return;
+  }
+
+  galleryMainImage.src = src;
+  galleryMainImage.alt = alt || title || 'WHSF gallery image';
+  if (galleryMainLink) galleryMainLink.href = src;
+  if (galleryCounter) galleryCounter.textContent = `Technology for humanity · ${galleryIndex + 1} / ${galleryThumbs.length}`;
+  if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
+  if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
+  galleryMainImage.style.opacity = '1';
 }
 
 function startGalleryAutoplay() {
@@ -402,6 +421,7 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'ArrowLeft') showGallerySlide(galleryIndex - 1);
   if (event.key === 'ArrowRight') showGallerySlide(galleryIndex + 1);
 });
+galleryThumbs.slice(0, 4).forEach((thumb) => preloadGalleryImage(thumb.dataset.src));
 showGallerySlide(0);
 startGalleryAutoplay();
 

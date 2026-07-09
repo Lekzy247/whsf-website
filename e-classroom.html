@@ -241,7 +241,6 @@
           <article class="course-card reveal" data-code="GREEN TECH & CLIMATE INNOVATION" data-cartoon="🌍"><span>Recommended</span><h3>Green Tech & Climate Innovation</h3><p>Connect sustainability, smart agriculture, clean energy ideas and climate-smart community projects.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=green-tech-climate-innovation">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="AI FOR AGRICULTURE" data-cartoon="🌱"><span>AI Agriculture</span><h3>AI for Agriculture</h3><p>Develop practical tools for crop disease detection, soil analysis, weather intelligence, pest monitoring, market prices and smart irrigation guidance.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-for-agriculture">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="AI FOR HEALTHCARE" data-cartoon="🩺"><span>AI Health</span><h3>AI for Healthcare</h3><p>Create solutions for telemedicine support, maternal health assistants, medical translation, symptom-triage guidance, health worker training and medical education chatbots.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-for-healthcare">Open course <span>→</span></a></article>
-          <article class="course-card reveal" data-code="GIRLS IN AI AFRICA" data-cartoon="👩🏾‍💻"><span>Girls in AI</span><h3>Girls in AI Africa</h3><p>Expand Girls in ICT through AI bootcamps, robotics, coding, cloud computing, cybersecurity, innovation competitions, mentorship and scholarships.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=girls-in-ai-africa">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="AI RAPID RESPONSE" data-cartoon="⚡"><span>Response</span><h3>AI Rapid Response</h3><p>Train learners to use AI responsibly for emergency communication, community coordination, disaster information, urgent support workflows and rapid decision support.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-rapid-response">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="AI MEDIA & INFORMATION COMMUNICATION" data-cartoon="📡"><span>Media AI</span><h3>AI Media & Information Communication</h3><p>Use AI for media literacy, public-interest communication, misinformation awareness, safe storytelling, content creation, translation and community education.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-media-information-communication">Open course <span>→</span></a></article>
         </div>
@@ -292,10 +291,10 @@
       const localAiCourseTracks = [
         { title: 'AI for Agriculture', slug: 'ai-for-agriculture', category: 'AI Agriculture', summary: 'Develop practical tools for crop disease detection, soil analysis, weather intelligence, pest monitoring, market prices and smart irrigation guidance.', level: 'Beginner', duration_weeks: 6, delivery_mode: 'Animated + project-based' },
         { title: 'AI for Healthcare', slug: 'ai-for-healthcare', category: 'AI Health', summary: 'Create solutions for telemedicine support, maternal health assistants, medical translation, symptom-triage guidance, health worker training and medical education chatbots.', level: 'Beginner', duration_weeks: 6, delivery_mode: 'Animated + guided practice' },
-        { title: 'Girls in AI Africa', slug: 'girls-in-ai-africa', category: 'Girls in AI', summary: 'Expand Girls in ICT through AI bootcamps, robotics, coding, cloud computing, cybersecurity, innovation competitions, mentorship and scholarships.', level: 'Foundation', duration_weeks: 8, delivery_mode: 'Bootcamp' },
         { title: 'AI Rapid Response', slug: 'ai-rapid-response', category: 'Response', summary: 'Train learners to use AI responsibly for emergency communication, community coordination, disaster information, urgent support workflows and rapid decision support.', level: 'Intermediate', duration_weeks: 4, delivery_mode: 'Scenario lab' },
         { title: 'AI Media & Information Communication', slug: 'ai-media-information-communication', category: 'Media AI', summary: 'Use AI for media literacy, public-interest communication, misinformation awareness, safe storytelling, content creation, translation and community education.', level: 'Foundation', duration_weeks: 5, delivery_mode: 'Studio workshop' }
       ];
+      const hiddenCourseSlugs = new Set(['girls-in-ai-africa']);
 
       function getCourseCartoon(course) {
         const text = `${course?.slug || ''} ${course?.title || ''} ${course?.category || ''}`.toLowerCase();
@@ -533,10 +532,11 @@
           return;
         }
 
-        const existingSlugs = new Set((data || []).map((course) => course.slug));
+        const visibleCourses = (data || []).filter((course) => !hiddenCourseSlugs.has(course.slug));
+        const existingSlugs = new Set(visibleCourses.map((course) => course.slug));
         const mergedCourses = [
-          ...(data || []),
-          ...localAiCourseTracks.filter((course) => !existingSlugs.has(course.slug))
+          ...visibleCourses,
+          ...localAiCourseTracks.filter((course) => !existingSlugs.has(course.slug) && !hiddenCourseSlugs.has(course.slug))
         ];
 
         courseGrid.innerHTML = mergedCourses
