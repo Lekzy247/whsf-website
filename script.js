@@ -366,7 +366,7 @@ function showGallerySlide(index) {
   if (!galleryThumbs.length || !galleryMainImage) return;
   galleryIndex = (index + galleryThumbs.length) % galleryThumbs.length;
   const selected = galleryThumbs[galleryIndex];
-  const { src, title, description, alt } = selected.dataset;
+  const { src, fallback, title, description, alt } = selected.dataset;
 
   galleryThumbs.forEach((thumb, thumbIndex) => {
     thumb.classList.toggle('active', thumbIndex === galleryIndex);
@@ -374,15 +374,25 @@ function showGallerySlide(index) {
   });
 
   galleryMainImage.style.opacity = '0.35';
+  galleryMainImage.removeAttribute('data-using-fallback');
+  galleryMainImage.onerror = () => {
+    if (fallback && !galleryMainImage.dataset.usingFallback) {
+      galleryMainImage.dataset.usingFallback = 'true';
+      galleryMainImage.src = fallback;
+      if (galleryMainLink) galleryMainLink.href = fallback;
+      return;
+    }
+    galleryMainImage.style.opacity = '1';
+  };
+  galleryMainImage.onload = () => {
+    galleryMainImage.style.opacity = '1';
+  };
   galleryMainImage.src = src;
   galleryMainImage.alt = alt || title || 'WHSF gallery image';
   if (galleryMainLink) galleryMainLink.href = src;
   if (galleryCounter) galleryCounter.textContent = `Technology for humanity · ${galleryIndex + 1} / ${galleryThumbs.length}`;
   if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
   if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
-  window.setTimeout(() => {
-    galleryMainImage.style.opacity = '1';
-  }, 80);
 }
 
 function startGalleryAutoplay() {
@@ -416,7 +426,10 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'ArrowLeft') showGallerySlide(galleryIndex - 1);
   if (event.key === 'ArrowRight') showGallerySlide(galleryIndex + 1);
 });
-galleryThumbs.forEach((thumb) => preloadGalleryImage(thumb.dataset.src));
+galleryThumbs.forEach((thumb) => {
+  preloadGalleryImage(thumb.dataset.src);
+  preloadGalleryImage(thumb.dataset.fallback);
+});
 showGallerySlide(0);
 startGalleryAutoplay();
 

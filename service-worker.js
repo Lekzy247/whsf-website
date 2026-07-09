@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v113';
+const WHSF_CACHE_NAME = 'whsf-pwa-v114';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -21,17 +21,7 @@ const WHSF_CORE_ASSETS = [
   '/script.js',
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
-  '/assets/whsf-logo.jpg',
-  '/assets/home/lapalabras-drone-learning.jpg',
-  '/assets/home/girls-in-ai-africa.jpg',
-  '/assets/programs/ict-girls-club-certificates.jpg',
-  '/assets/gallery/computer-lab-learning-01.jpg',
-  '/assets/home/ai-and-robotics.jpg',
-  '/assets/home/data-cloud-infrastructure-skills.jpg',
-  '/assets/home/ai-for-agriculture.jpg',
-  '/assets/home/stem-education-underserved.jpg',
-  '/assets/gallery/project-24.jpg',
-  '/assets/gallery/project-10.jpg'
+  '/assets/whsf-logo.jpg'
 ];
 
 self.addEventListener('install', (event) => {
