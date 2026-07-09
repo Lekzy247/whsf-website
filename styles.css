@@ -1182,9 +1182,67 @@ p, li { text-wrap: pretty; }
 .student-login-card p { margin: 16px 0 0; color: var(--muted); font-size: .88rem; }
 .auth-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .auth-secondary { border: 1px solid rgba(201,54,53,.22); }
+.social-login-panel {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(143,31,36,.12);
+}
+.social-login-panel > span {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.social-login-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.social-login-button {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  padding: 11px 14px;
+  border: 1px solid rgba(143,31,36,.14);
+  border-radius: 16px;
+  color: var(--ink);
+  background: #fff;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(95,20,24,.06);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.social-login-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(143,31,36,.28);
+  box-shadow: 0 18px 38px rgba(95,20,24,.11);
+  background: #fffaf8;
+}
+.social-login-button svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+.social-login-button strong {
+  font-size: .92rem;
+  font-weight: 900;
+}
+.social-facebook svg,
+.social-linkedin svg {
+  fill: currentColor;
+}
+.social-facebook { color: #1877f2; }
+.social-google { color: #2f3640; }
+.social-linkedin { color: #0a66c2; }
 .student-login-card.is-signed-in label,
 .student-login-card.is-signed-in .auth-actions button[type="submit"],
-.student-login-card.is-signed-in #student-signup-button { display: none; }
+.student-login-card.is-signed-in #student-signup-button,
+.student-login-card.is-signed-in .social-login-panel { display: none; }
 .student-login-card.is-signed-in .auth-actions { margin-top: 16px; justify-content: flex-start; }
 .student-login-card.is-signed-in #student-signout-button,
 .student-login-card.is-signed-in #course-signout-button { display: inline-flex; }
