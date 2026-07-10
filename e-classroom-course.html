@@ -59,6 +59,7 @@
           <a href="contact.html">Contact &amp; Support</a>
           <a href="e-classroom-admin.html">Teacher/Admin</a>
         </nav>
+        <button class="course-top-signout" id="course-top-signout-button" type="button" hidden>Sign out</button>
       </div>
     </header>
 
@@ -223,6 +224,7 @@
       const statusEl = document.querySelector('#course-status');
       const courseLoginForm = document.querySelector('#course-login-form');
       const signoutButton = document.querySelector('#course-signout-button');
+      const topSignoutButton = document.querySelector('#course-top-signout-button');
       const enrollButton = document.querySelector('#enroll-button');
       const progressCard = document.querySelector('#learner-progress-card');
       const progressHeading = document.querySelector('#progress-heading');
@@ -398,7 +400,9 @@
       const setStatus = (message) => { statusEl.textContent = message; };
       const setCourseSignedIn = (isSignedIn) => {
         courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
-        if (signoutButton) signoutButton.hidden = !isSignedIn;
+        if (courseLoginForm) courseLoginForm.hidden = Boolean(isSignedIn);
+        if (signoutButton) signoutButton.hidden = true;
+        if (topSignoutButton) topSignoutButton.hidden = !isSignedIn;
         renderCourseVideoModules();
       };
       const hasIdentityPhoto = () => Boolean(profile?.identity_photo_data_url);
@@ -1495,18 +1499,22 @@
         await loadAssignments();
       });
 
-      signoutButton?.addEventListener('click', async (event) => {
+      async function handleCourseSignout(event) {
         event.preventDefault();
-        signoutButton.disabled = true;
+        const button = event.currentTarget;
+        button.disabled = true;
         setStatus('Signing out…');
         const { error } = await whsfSupabase.auth.signOut();
-        signoutButton.disabled = false;
+        button.disabled = false;
         if (error) {
           setStatus(error.message);
           return;
         }
         showCourseSignInBox();
-      });
+      }
+
+      signoutButton?.addEventListener('click', handleCourseSignout);
+      topSignoutButton?.addEventListener('click', handleCourseSignout);
 
       enrollButton?.addEventListener('click', enroll);
       startCameraButton?.addEventListener('click', startIdentityCamera);

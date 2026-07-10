@@ -1547,8 +1547,8 @@ p, li { text-wrap: pretty; }
 }
 .futuretech-academy-grid {
   display: grid;
-  grid-template-columns: minmax(0, .86fr) minmax(440px, 1fr);
-  gap: clamp(32px, 5vw, 76px);
+  grid-template-columns: minmax(300px, .72fr) minmax(520px, 1.28fr);
+  gap: clamp(24px, 4vw, 58px);
   align-items: center;
 }
 .futuretech-copy h1 {
@@ -1556,7 +1556,7 @@ p, li { text-wrap: pretty; }
   margin: 0;
   color: #08243a;
   font-family: "DM Sans", Arial, sans-serif;
-  font-size: clamp(3.2rem, 7vw, 5.8rem);
+  font-size: clamp(2.8rem, 5.8vw, 5rem);
   font-weight: 400;
   letter-spacing: -.06em;
   line-height: 1.02;
@@ -1567,16 +1567,16 @@ p, li { text-wrap: pretty; }
   letter-spacing: -.055em;
 }
 .futuretech-copy p {
-  max-width: 780px;
+  max-width: 680px;
   margin: 32px 0 0;
   color: #08243a;
-  font-size: clamp(1.35rem, 2.3vw, 2.35rem);
+  font-size: clamp(1.12rem, 1.75vw, 1.72rem);
   font-weight: 400;
-  line-height: 1.28;
+  line-height: 1.45;
 }
 .futuretech-academy-portal .hero-actions {
-  margin-top: 58px;
-  gap: 34px;
+  margin-top: 42px;
+  gap: 24px;
 }
 .futuretech-academy-portal .button {
   min-width: min(100%, 312px);
@@ -1591,9 +1591,13 @@ p, li { text-wrap: pretty; }
   color: #08a6a8;
   background: rgba(255,255,255,.84);
 }
+.futuretech-academy-portal .academy-register-button {
+  background: linear-gradient(135deg, #6d1024, #a9253f);
+  box-shadow: 0 18px 40px rgba(109, 16, 36, .18);
+}
 .futuretech-video-panel {
   position: relative;
-  min-height: clamp(360px, 42vw, 590px);
+  min-height: clamp(430px, 48vw, 680px);
   filter: grayscale(1) contrast(.9) brightness(1.08);
 }
 .futuretech-video-panel iframe {
@@ -1789,6 +1793,24 @@ p, li { text-wrap: pretty; }
   justify-content: center;
   min-height: 56px;
 }
+.course-top-signout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #6d1024, #a9253f);
+  font: inherit;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(109, 16, 36, .16);
+}
+.course-top-signout[hidden] {
+  display: none;
+}
 .academy-login-status {
   min-height: 42px;
   margin: 18px 0 0;
@@ -1979,7 +2001,7 @@ p, li { text-wrap: pretty; }
     width: max-content;
   }
   .futuretech-video-panel {
-    min-height: 280px;
+    min-height: 340px;
   }
   .classroom-access-card,
   .academy-login-shell {
@@ -2000,6 +2022,10 @@ p, li { text-wrap: pretty; }
   }
   .academy-login-actions {
     grid-template-columns: 1fr;
+  }
+  .course-top-signout {
+    width: 100%;
+    margin-top: 12px;
   }
   .course-video-grid {
     grid-template-columns: 1fr;

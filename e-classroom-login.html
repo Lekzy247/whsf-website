@@ -44,8 +44,13 @@
           <div class="academy-login-card-head">
             <span>Student Login</span>
             <h2>Login / SignUp</h2>
-            <p>Use your WHSF username/email and password.</p>
+            <p id="academy-login-helper">Use your WHSF username/email and password.</p>
           </div>
+
+          <label class="academy-signup-name-field" hidden>
+            Full name
+            <input name="fullName" type="text" placeholder="Enter your full name" autocomplete="name" />
+          </label>
 
           <label>
             Username / Email
@@ -58,8 +63,8 @@
           </label>
 
           <div class="academy-login-actions">
-            <button class="button" type="submit">Login</button>
-            <button class="button button-light" id="academy-signup-button" type="button">SignUp</button>
+            <button class="button" id="academy-login-submit" type="submit">Login</button>
+            <button class="button button-light" id="academy-signup-button" type="button">Register</button>
           </div>
 
           <p class="academy-login-status" id="academy-login-status" role="status">
@@ -77,17 +82,39 @@
 
       const loginForm = document.querySelector('#academy-login-form');
       const signupButton = document.querySelector('#academy-signup-button');
+      const submitButton = document.querySelector('#academy-login-submit');
+      const signupNameField = document.querySelector('.academy-signup-name-field');
+      const fullNameInput = document.querySelector('input[name="fullName"]');
+      const loginHelper = document.querySelector('#academy-login-helper');
       const loginStatus = document.querySelector('#academy-login-status');
       const params = new URLSearchParams(window.location.search);
       const redirectTarget = params.get('redirect') || 'e-classroom.html';
+      let signupMode = params.get('mode') === 'signup';
 
       function setLoginStatus(message) {
         if (loginStatus) loginStatus.textContent = message;
       }
 
-      async function upsertStudentProfile(user) {
+      function setSignupMode(isSignup) {
+        signupMode = Boolean(isSignup);
+        if (signupNameField) signupNameField.hidden = !signupMode;
+        if (fullNameInput) fullNameInput.required = signupMode;
+        if (submitButton) submitButton.textContent = signupMode ? 'Create account' : 'Login';
+        if (signupButton) signupButton.textContent = signupMode ? 'Back to login' : 'Register';
+        if (loginHelper) {
+          loginHelper.textContent = signupMode
+            ? 'Create your WHSF e-Classroom account. Email confirmation is required before course access.'
+            : 'Use your WHSF username/email and password.';
+        }
+        setLoginStatus(signupMode
+          ? 'Enter your full name, email and password. After registration, check your email to activate the account before login.'
+          : 'Enter your WHSF e-Classroom username/email and password to continue.'
+        );
+      }
+
+      async function upsertStudentProfile(user, suppliedName = '') {
         if (!user?.email) return null;
-        const fullName = user.user_metadata?.full_name || user.email.split('@')[0];
+        const fullName = suppliedName || user.user_metadata?.full_name || user.email.split('@')[0];
         const profilePayload = {
           auth_user_id: user.id,
           full_name: fullName,
@@ -127,11 +154,45 @@
       loginForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(loginForm);
+        const fullName = String(formData.get('fullName') || '').trim();
         const email = String(formData.get('email') || '').trim();
         const password = String(formData.get('password') || '');
 
         if (!email || !password || password.length < 8) {
           setLoginStatus('Please enter your username/email and a password of at least 8 characters.');
+          return;
+        }
+
+        if (signupMode) {
+          if (!fullName) {
+            setLoginStatus('Please enter your full name to create a WHSF e-Classroom account.');
+            return;
+          }
+
+          setLoginStatus('Creating student account…');
+          const { data, error } = await whsfSupabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: fullName },
+              emailRedirectTo: new URL('e-classroom-login.html', window.location.href).href
+            }
+          });
+
+          if (error) {
+            const friendlyError = /already registered|already been registered|user already/i.test(error.message)
+              ? 'This email may already have a WHSF e-Classroom account. Please return to Login and use the same username/email and password.'
+              : error.message;
+            setLoginStatus(friendlyError);
+            return;
+          }
+
+          if (data.session) {
+            await whsfSupabase.auth.signOut();
+          }
+
+          setSignupMode(false);
+          setLoginStatus('Account created. Please check your email inbox, activate your WHSF e-Classroom account, then return here to login.');
           return;
         }
 
@@ -150,47 +211,11 @@
         goToClassroom();
       });
 
-      signupButton?.addEventListener('click', async () => {
-        const formData = new FormData(loginForm);
-        const email = String(formData.get('email') || '').trim();
-        const password = String(formData.get('password') || '');
-
-        if (!email || !password || password.length < 8) {
-          setLoginStatus('Enter username/email and a password of at least 8 characters to create an account.');
-          return;
-        }
-
-        setLoginStatus('Creating student account…');
-        const { data, error } = await whsfSupabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: { full_name: email.split('@')[0] },
-            emailRedirectTo: `${window.location.origin}${window.location.pathname}`
-          }
-        });
-
-        if (error) {
-          const friendlyError = /already registered|already been registered|user already/i.test(error.message)
-            ? 'This email may already have a WHSF e-Classroom account. Please use Login with the same username/email and password.'
-            : error.message;
-          setLoginStatus(friendlyError);
-          return;
-        }
-
-        if (data.session && data.user) {
-          await upsertStudentProfile(data.user);
-          setLoginStatus('Account created. Opening WHSF e-Classroom…');
-          goToClassroom();
-          return;
-        }
-
-        setLoginStatus('Account created. Please check your email inbox and confirm your WHSF e-Classroom account, then return here to login.');
+      signupButton?.addEventListener('click', () => {
+        setSignupMode(!signupMode);
       });
 
-      if (params.get('mode') === 'signup') {
-        setLoginStatus('Create your WHSF e-Classroom account with username/email and password.');
-      }
+      setSignupMode(signupMode);
     </script>
   </body>
 </html>
