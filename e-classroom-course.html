@@ -110,8 +110,8 @@
       <section class="section course-video-section" id="video-modules" hidden>
         <div class="shell section-heading centered reveal">
           <p class="eyebrow">Video classroom</p>
-          <h2>AI &amp; Integration video modules.</h2>
-          <p>Start with the course intro, follow Modules 1–4 in order, then complete the final recap and project guide.</p>
+          <h2>Robotic and Automation Training Video Modules.</h2>
+          <p>Watch each lesson, complete the learning activities, pass the final quiz and submit your robotics project for review.</p>
         </div>
         <div class="shell course-video-catalog" id="course-video-catalog"></div>
       </section>
@@ -173,8 +173,8 @@
       <section class="section classroom-courses" id="assignments">
         <div class="shell section-heading centered reveal">
           <p class="eyebrow">Assignments</p>
-          <h2>Submit your work.</h2>
-          <p>Use the assignment form to send written responses or links to your project work.</p>
+          <h2>Submit your Robotic Project.</h2>
+          <p>Use the assignment form to submit your design notes, project link, photos, code, reflection or final robotics and automation project evidence.</p>
         </div>
         <div class="shell learner-list" id="assignments-list">
           <article class="learner-empty">Assignments will appear here after your teacher adds them.</article>
@@ -320,13 +320,25 @@
         }
       };
 
+      const roboticsAutomationCourseDisplay = {
+        title: 'Robotics and Automation',
+        category: 'Robotics Training',
+        summary: 'Build confidence with sensors, motors, simple machines, robotics logic and automation projects. Beginner • 6 weeks • hybrid'
+      };
+
+      const aiIntegrationCourseDisplay = {
+        title: 'AI & Integration',
+        category: 'Artificial Intelligence',
+        summary: 'Explore AI literacy, prompts, responsible AI, automation workflows and practical tools for learning and work. Beginner • 5 weeks • online'
+      };
+
       const aiIntegrationVideoModules = [
         {
           label: 'Course Intro',
           title: 'Robotics & Automation: Full Course Trailer',
           summary: 'A short orientation for the complete robotics and automation learning pathway.',
           videos: [
-            ['Course overview', 'Robotics & Automation_ The Full Course Trailer', 'https://www.youtube.com/embed/xCJGSorVoJs']
+            ['Course overview', 'Robotics & Automation_ The Full Course Trailer', 'https://www.youtube-nocookie.com/embed/xCJGSorVoJs?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
           ]
         },
         {
@@ -334,10 +346,10 @@
           title: 'Foundations and Simple Machines',
           summary: 'Learners begin with simple machines, design foundations and final assembly thinking.',
           videos: [
-            ['Module 1 Intro', 'Robotics & Automation_ Module 1 Intro', 'https://www.youtube.com/embed/q-hviTHeHe0'],
-            ['Lesson 1', 'Simple Machines', 'https://www.youtube.com/embed/XscZPa571WU'],
-            ['Lesson 2', 'Designing Foundations', 'https://www.youtube.com/embed/yiHakwqag1o'],
-            ['Lesson 3', 'Final Assembly', 'https://www.youtube.com/embed/Eeidi4BkPU0']
+            ['Module 1 Intro', 'Robotics & Automation_ Module 1 Intro', 'https://www.youtube-nocookie.com/embed/q-hviTHeHe0?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 1', 'Simple Machines', 'https://www.youtube-nocookie.com/embed/XscZPa571WU?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'Designing Foundations', 'https://www.youtube-nocookie.com/embed/yiHakwqag1o?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 3', 'Final Assembly', 'https://www.youtube-nocookie.com/embed/Eeidi4BkPU0?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
           ]
         },
         {
@@ -345,10 +357,10 @@
           title: 'Sensors and Measurement',
           summary: 'Learners explore sensor fundamentals, analog sensing and distance measurement.',
           videos: [
-            ['Module 2 Intro', 'Sensors', 'https://www.youtube.com/embed/TqY0uoEarw8'],
-            ['Lesson 1', 'Sensor Fundamentals', 'https://www.youtube.com/embed/Jyr7USN6094'],
-            ['Lesson 2', 'Analog Sensing', 'https://www.youtube.com/embed/TfhUAxkRdeQ'],
-            ['Lesson 3', 'Measuring Distance', 'https://www.youtube.com/embed/70tH6GZ7InY']
+            ['Module 2 Intro', 'Sensors', 'https://www.youtube-nocookie.com/embed/TqY0uoEarw8?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 1', 'Sensor Fundamentals', 'https://www.youtube-nocookie.com/embed/Jyr7USN6094?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'Analog Sensing', 'https://www.youtube-nocookie.com/embed/TfhUAxkRdeQ?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 3', 'Measuring Distance', 'https://www.youtube-nocookie.com/embed/70tH6GZ7InY?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
           ]
         },
         {
@@ -356,10 +368,10 @@
           title: 'Motors and Movement',
           summary: 'Learners study DC motors, servo motors and how motors integrate into automation systems.',
           videos: [
-            ['Module 3 Intro', 'Motors', 'https://www.youtube.com/embed/tPsurDw_-Qc'],
-            ['Lesson 1', 'DC Motors', 'https://www.youtube.com/embed/0VcES8Vu3ZI'],
-            ['Lesson 2', 'Servo Motors', 'https://www.youtube.com/embed/i9aYQAq0WTg'],
-            ['Lesson 3', 'Motor Integration', 'https://www.youtube.com/embed/0WVoww6gz9U']
+            ['Module 3 Intro', 'Motors', 'https://www.youtube-nocookie.com/embed/tPsurDw_-Qc?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 1', 'DC Motors', 'https://www.youtube-nocookie.com/embed/0VcES8Vu3ZI?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'Servo Motors', 'https://www.youtube-nocookie.com/embed/i9aYQAq0WTg?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 3', 'Motor Integration', 'https://www.youtube-nocookie.com/embed/0WVoww6gz9U?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
           ]
         },
         {
@@ -367,10 +379,10 @@
           title: 'Logic and System Integration',
           summary: 'Learners connect decision logic, loops, iteration and system integration for complete automation projects.',
           videos: [
-            ['Module 4 Intro', 'Logic', 'https://www.youtube.com/embed/SaeBR2rf8dI'],
-            ['Lesson 1', 'Decision Logic', 'https://www.youtube.com/embed/jG4solKIG3k'],
-            ['Lesson 2', 'Loops & Iteration', 'https://www.youtube.com/embed/WykWxFphf8U'],
-            ['Lesson 3', 'System Integration', 'https://www.youtube.com/embed/-mmXP_3Yja0']
+            ['Module 4 Intro', 'Logic', 'https://www.youtube-nocookie.com/embed/SaeBR2rf8dI?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 1', 'Decision Logic', 'https://www.youtube-nocookie.com/embed/jG4solKIG3k?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'Loops & Iteration', 'https://www.youtube-nocookie.com/embed/WykWxFphf8U?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 3', 'System Integration', 'https://www.youtube-nocookie.com/embed/-mmXP_3Yja0?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
           ]
         },
         {
@@ -378,7 +390,7 @@
           title: 'Robotics & Automation: Final Project Guide',
           summary: 'A final recap that prepares learners to plan, present and complete their robotics and automation project.',
           videos: [
-            ['Final recap', 'Robotics & Automation_ Final Project Guide', 'https://www.youtube.com/embed/AQgE-ChFq7o']
+            ['Final recap', 'Robotics & Automation_ Final Project Guide', 'https://www.youtube-nocookie.com/embed/AQgE-ChFq7o?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
           ]
         }
       ];
@@ -387,6 +399,7 @@
       const setCourseSignedIn = (isSignedIn) => {
         courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
         if (signoutButton) signoutButton.hidden = !isSignedIn;
+        renderCourseVideoModules();
       };
       const hasIdentityPhoto = () => Boolean(profile?.identity_photo_data_url);
 
@@ -560,7 +573,7 @@
         .join('');
       const cleanFileName = (value = '') => String(value).replace(/[^a-z0-9-]+/gi, '-').replace(/(^-|-$)/g, '').toLowerCase();
       const verifyCertificateUrl = (certificateNumber) => `https://www.worldhsfoundation.org/verify-certificate?number=${encodeURIComponent(certificateNumber)}`;
-      const finalQuizQuestions = [
+      const defaultFinalQuizQuestions = [
         {
           question: 'What should a WHSF learner do before using technology to solve a community problem?',
           options: ['Understand the problem and the people affected', 'Copy any solution from the internet', 'Ignore safety and privacy', 'Only focus on certificates'],
@@ -588,6 +601,61 @@
         }
       ];
 
+      const roboticsFinalQuizQuestions = [
+        {
+          question: 'What is the main purpose of learning simple machines in robotics?',
+          options: ['To avoid building prototypes', 'To understand how force, motion and mechanical advantage help robots move', 'To replace all sensors', 'To make every robot wireless'],
+          answer: 1
+        },
+        {
+          question: 'Why should a learner create a design foundation before final assembly?',
+          options: ['It helps plan structure, stability and how parts will connect', 'It removes the need for testing', 'It makes sensors unnecessary', 'It guarantees the robot will never fail'],
+          answer: 0
+        },
+        {
+          question: 'What does a sensor help a robot or automation system do?',
+          options: ['Ignore the environment', 'Detect information such as distance, light, touch or movement', 'Store certificates', 'Replace all programming logic'],
+          answer: 1
+        },
+        {
+          question: 'What is analog sensing commonly used for?',
+          options: ['Reading values that can change gradually', 'Deleting project data', 'Making a robot invisible', 'Preventing measurement'],
+          answer: 0
+        },
+        {
+          question: 'Why is distance measurement important in robotics?',
+          options: ['It helps robots detect obstacles and make safer movement decisions', 'It only changes the robot color', 'It removes the need for motors', 'It is only used for certificates'],
+          answer: 0
+        },
+        {
+          question: 'What is a DC motor generally used for in a robotics project?',
+          options: ['Producing continuous rotational movement', 'Taking photos', 'Writing lesson notes', 'Measuring temperature only'],
+          answer: 0
+        },
+        {
+          question: 'What makes a servo motor useful in robotics?',
+          options: ['It can move to controlled positions or angles', 'It cannot be controlled', 'It is only for sound', 'It replaces every sensor'],
+          answer: 0
+        },
+        {
+          question: 'What does decision logic allow a robot to do?',
+          options: ['Follow conditions such as if something happens, then take an action', 'Avoid all instructions', 'Stop using sensors', 'Run without power'],
+          answer: 0
+        },
+        {
+          question: 'Why are loops and iteration useful in automation?',
+          options: ['They repeat actions or checks without writing the same instruction many times', 'They prevent testing', 'They delete sensor readings', 'They only work in final certificates'],
+          answer: 0
+        },
+        {
+          question: 'What does system integration mean in a robotics final project?',
+          options: ['Combining structure, sensors, motors and logic so the full system works together', 'Submitting only a title', 'Using one part without testing', 'Removing the final project guide'],
+          answer: 0
+        }
+      ];
+
+      const getFinalQuizQuestions = () => courseSlug === 'ai-integration' ? roboticsFinalQuizQuestions : defaultFinalQuizQuestions;
+
       function renderFinalQuiz() {
         if (!finalQuizCard || !finalQuizForm) return;
         const canShow = Boolean(enrollment && course && !course.isLocalCourse);
@@ -606,7 +674,8 @@
           return;
         }
 
-        finalQuizForm.innerHTML = finalQuizQuestions.map((item, questionIndex) => `
+        const quizQuestions = getFinalQuizQuestions();
+        finalQuizForm.innerHTML = quizQuestions.map((item, questionIndex) => `
           <fieldset class="quiz-question">
             <legend>${questionIndex + 1}. ${escapeHtml(item.question)}</legend>
             ${item.options.map((option, optionIndex) => `
@@ -628,10 +697,11 @@
 
         const formData = new FormData(form);
         let correct = 0;
-        finalQuizQuestions.forEach((item, index) => {
+        const quizQuestions = getFinalQuizQuestions();
+        quizQuestions.forEach((item, index) => {
           if (Number(formData.get(`question_${index}`)) === item.answer) correct += 1;
         });
-        const score = Math.round((correct / finalQuizQuestions.length) * 100);
+        const score = Math.round((correct / quizQuestions.length) * 100);
         const passed = score >= 80;
 
         const { data, error } = await whsfSupabase
@@ -881,6 +951,18 @@
         }
 
         videoModulesSection.hidden = false;
+        if (!session?.user) {
+          courseVideoCatalog.innerHTML = `
+            <article class="course-video-locked-card">
+              <span>Protected video classroom</span>
+              <h3>Login or create a WHSF e-Classroom account to watch the Robotics and Automation training videos.</h3>
+              <p>Video lessons are locked so WHSF can protect course content, track learner progress and issue trusted certificates after completion.</p>
+              <a class="button" href="#top">Login / SignUp</a>
+            </article>
+          `;
+          return;
+        }
+
         courseVideoCatalog.innerHTML = aiIntegrationVideoModules.map((module) => `
           <article class="course-video-module">
             <div class="course-video-module-head">
@@ -891,22 +973,43 @@
             <div class="course-video-grid">
               ${module.videos.map((video) => `
                 <div class="course-video-card">
-                  <iframe
-                    src="${escapeHtml(video[2])}"
-                    title="${escapeHtml(video[1])}"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen>
-                  </iframe>
+                  <div class="course-video-frame" oncontextmenu="return false">
+                    <iframe
+                      src="${escapeHtml(video[2])}"
+                      title="${escapeHtml(video[1])}"
+                      loading="lazy"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen>
+                    </iframe>
+                  </div>
                   <div>
                     <span>${escapeHtml(video[0])}</span>
                     <strong>${escapeHtml(video[1])}</strong>
+                    <small>Protected WHSF training video • captions can be controlled from the YouTube player.</small>
                   </div>
                 </div>
               `).join('')}
             </div>
           </article>
         `).join('');
+      }
+
+      function applyCourseDisplay() {
+        const display = courseSlug === 'ai-integration'
+          ? roboticsAutomationCourseDisplay
+          : courseSlug === 'robotics-automation'
+            ? aiIntegrationCourseDisplay
+          : {
+              title: course.title,
+              category: course.category,
+              summary: `${course.summary} ${course.level} • ${course.duration_weeks} weeks • ${course.delivery_mode}`
+            };
+
+        document.title = `${display.title} | WHSF e-Classroom`;
+        document.querySelector('#course-category').textContent = display.category;
+        document.querySelector('#course-title').textContent = display.title;
+        document.querySelector('#course-summary').textContent = display.summary;
       }
 
       async function loadCourse() {
@@ -921,10 +1024,7 @@
           const localCourse = localAiCourseCatalog[courseSlug];
           if (localCourse) {
             course = { ...localCourse, isLocalCourse: true };
-            document.title = `${course.title} | WHSF e-Classroom`;
-            document.querySelector('#course-category').textContent = course.category;
-            document.querySelector('#course-title').textContent = course.title;
-            document.querySelector('#course-summary').textContent = `${course.summary} ${course.level} • ${course.duration_weeks} weeks • ${course.delivery_mode}`;
+            applyCourseDisplay();
             enrollButton.hidden = true;
             progressCard.hidden = true;
             setStatus('Preview course loaded. WHSF can connect this track to Supabase enrollment when ready.');
@@ -939,10 +1039,7 @@
         }
 
         course = data;
-        document.title = `${course.title} | WHSF e-Classroom`;
-        document.querySelector('#course-category').textContent = course.category;
-        document.querySelector('#course-title').textContent = course.title;
-        document.querySelector('#course-summary').textContent = `${course.summary} ${course.level} • ${course.duration_weeks} weeks • ${course.delivery_mode}`;
+        applyCourseDisplay();
         await loadLessons();
         await loadAssignments();
       }

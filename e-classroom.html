@@ -80,22 +80,30 @@
 
     <main id="main">
       <section class="futuretech-academy-portal" aria-labelledby="futuretech-title">
+        <div class="futuretech-auth-top">
+          <a href="#student-login">Login / SignUp</a>
+        </div>
         <div class="shell futuretech-academy-grid">
           <div class="futuretech-copy reveal">
-            <p class="eyebrow">WHSF FutureTech Academy</p>
-            <h1 id="futuretech-title">A practical learning gateway for AI, robotics, digital skills and responsible technology.</h1>
+            <h1 id="futuretech-title">Welcome to <strong>WHSF FutureTech Academy</strong></h1>
             <p>
-              FutureTech Academy brings WHSF technology courses, learner progress, projects, identity verification and certificates into one professional learning experience for students, teachers, volunteers and community innovators.
+              Practical online and hybrid technology training in robotics, artificial intelligence,
+              digital inclusion, cybersecurity, STEM and responsible innovation.
             </p>
             <div class="hero-actions">
-              <a class="button" href="#courses">Explore course tracks</a>
-              <a class="button button-light" href="#student-login">Student login</a>
+              <a class="button" href="#student-login">Register</a>
+              <a class="button button-light" href="#student-login">Login</a>
             </div>
           </div>
-          <div class="futuretech-video-placeholder reveal delay-one" aria-label="FutureTech Academy video update space">
-            <span>Video update space</span>
-            <strong>Future Academy intro video</strong>
-            <p>Embed a WHSF welcome video, course orientation, partner message or student success story here when ready.</p>
+          <div class="futuretech-video-panel reveal delay-one" aria-label="WHSF FutureTech Academy welcome video">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/_4tNgtUyFNM?rel=0&modestbranding=1&playsinline=1"
+              title="WHSF FutureTech Academy welcome video"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
           </div>
         </div>
       </section>
@@ -195,7 +203,7 @@
             <p id="learner-session-summary">Sign in to see your enrolled courses, progress, assignments and certificates.</p>
           </div>
           <div class="learner-dashboard-actions">
-            <a class="button button-light" href="#courses">Choose a course</a>
+              <a class="button button-light" href="#courses">Choose a course</a>
             <a class="button button-light" href="verify-certificate.html">Verify certificate</a>
           </div>
 
@@ -249,7 +257,7 @@
               WHSF LearnCloud brings online training, course creation, lesson delivery, assessments, progress tracking, certificates and learner support into one professional learning management system—without students or coordinators worrying about hosting.
             </p>
             <div class="cloud-lms-actions">
-              <a class="button" href="#courses">Explore training tracks</a>
+              <a class="button" href="#student-login">Sign in to view tracks</a>
               <a class="button button-light" href="e-classroom-admin.html">Teacher/Admin dashboard</a>
             </div>
           </div>
@@ -263,12 +271,21 @@
 
       </section>
 
-      <section class="section classroom-courses" id="courses">
+      <section class="section protected-course-notice" id="protected-course-notice">
+        <div class="shell protected-course-card">
+          <p class="eyebrow">Protected course catalogue</p>
+          <h2>Sign in or create a WHSF e-Classroom account to view courses.</h2>
+          <p>Courses, video lessons and learning pathways are only visible to signed-in learners so WHSF can protect training content, track progress and issue trusted certificates.</p>
+          <a class="button" href="#student-login">Login / SignUp</a>
+        </div>
+      </section>
+
+      <section class="section classroom-courses" id="courses" hidden>
         <div class="shell course-grid" id="course-grid">
-          <article class="course-card reveal" data-code="ROBOTICS & AUTOMATION" data-cartoon="🤖"><span>Robotics</span><h3>Robotics & Automation</h3><p>Build confidence with sensors, motors, simple machines, robotics logic and automation projects.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=robotics-automation">Open course <span>→</span></a></article>
+          <article class="course-card reveal" data-code="ARTIFICIAL INTELLIGENCE" data-cartoon="🧠"><span>Artificial Intelligence</span><h3>AI &amp; Integration</h3><p>Explore AI literacy, prompts, responsible AI, automation workflows and practical tools for learning and work.</p><small>Beginner • 5 weeks • online</small><a class="arrow-link course-open-link" href="e-classroom-course.html?course=robotics-automation">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="DIGITAL SAFETY & CYBERSECURITY" data-cartoon="🛡️"><span>Cybersecurity</span><h3>Digital Safety & Cybersecurity</h3><p>Learn safe internet use, privacy, phishing prevention, cyber hygiene and beginner security concepts.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=digital-safety-cybersecurity">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="DRONE TECHNOLOGY" data-cartoon="🛸"><span>Drone Tech</span><h3>Drone Technology</h3><p>Introduce drone safety, mapping, community use cases, STEM exploration and responsible drone operations.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=drone-technology">Open course <span>→</span></a></article>
-          <article class="course-card reveal" data-code="ROBOTICS AND AUTOMATION TRAINING" data-cartoon="🤖"><span>Robotics Video Track</span><h3>Robotics and Automation Training</h3><p>Learn simple machines, design foundations, sensors, motors, decision logic, loops and system integration through structured video modules and a final robotics project.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-integration">Open course <span>→</span></a></article>
+          <article class="course-card reveal" data-code="ROBOTICS & AUTOMATION" data-cartoon="🤖"><span>Robotics</span><h3>Robotics &amp; Automation</h3><p>Build confidence with sensors, motors, simple machines, robotics logic and automation projects.</p><small>Beginner • 6 weeks • hybrid</small><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-integration">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="DISABILITY TECHNOLOGY" data-cartoon="♿"><span>Accessibility</span><h3>Disability Technology</h3><p>Teach assistive tools including voice-to-text, text-to-speech, screen readers, captions and inclusive design.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=disability-technology">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="DATA CENTER MANAGEMENT" data-cartoon="🏢"><span>Infrastructure</span><h3>Data Center Management</h3><p>Introduce cloud, servers, networking, uptime, energy efficiency, security and data centre career pathways.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=data-center-management">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="PROJECT MANAGEMENT" data-cartoon="📋"><span>Leadership</span><h3>Project Management</h3><p>Train learners to plan projects, manage teams, track milestones, report impact and present solutions.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=project-management">Open course <span>→</span></a></article>
@@ -315,6 +332,8 @@
       const learnerSessionSummary = document.querySelector('#learner-session-summary');
       const studentSignupButton = document.querySelector('#student-signup-button');
       const studentSignoutButton = document.querySelector('#student-signout-button');
+      const coursesSection = document.querySelector('#courses');
+      const protectedCourseNotice = document.querySelector('#protected-course-notice');
       const courseGrid = document.querySelector('#course-grid');
       const learnerEnrolledCount = document.querySelector('#learner-enrolled-count');
       const learnerAverageProgress = document.querySelector('#learner-average-progress');
@@ -361,6 +380,36 @@
         studentForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
         if (studentSignoutButton) studentSignoutButton.hidden = !isSignedIn;
         if (studentSignupButton) studentSignupButton.hidden = Boolean(isSignedIn);
+        if (coursesSection) coursesSection.hidden = !isSignedIn;
+        if (protectedCourseNotice) protectedCourseNotice.hidden = Boolean(isSignedIn);
+      }
+
+      function normalizeCourseForDisplay(course = {}) {
+        if (course.slug === 'ai-integration') {
+          return {
+            ...course,
+            title: 'Robotics & Automation',
+            category: 'Robotics',
+            summary: 'Build confidence with sensors, motors, simple machines, robotics logic and automation projects.',
+            level: 'Beginner',
+            duration_weeks: 6,
+            delivery_mode: 'hybrid'
+          };
+        }
+
+        if (course.slug === 'robotics-automation') {
+          return {
+            ...course,
+            title: 'AI & Integration',
+            category: 'Artificial Intelligence',
+            summary: 'Explore AI literacy, prompts, responsible AI, automation workflows and practical tools for learning and work.',
+            level: 'Beginner',
+            duration_weeks: 5,
+            delivery_mode: 'online'
+          };
+        }
+
+        return course;
       }
 
       async function upsertStudentProfile(user, fullName = '') {
@@ -462,7 +511,7 @@
         }
 
         const enrollments = enrollmentsResult.data || [];
-        const courses = coursesResult.data || [];
+        const courses = (coursesResult.data || []).map(normalizeCourseForDisplay);
         const submissions = submissionsResult.data || [];
         const assignments = assignmentsResult.data || [];
         const certificates = certificatesResult.data || [];
@@ -570,7 +619,7 @@
           return;
         }
 
-        const visibleCourses = (data || []).filter((course) => !hiddenCourseSlugs.has(course.slug));
+        const visibleCourses = (data || []).filter((course) => !hiddenCourseSlugs.has(course.slug)).map(normalizeCourseForDisplay);
         const existingSlugs = new Set(visibleCourses.map((course) => course.slug));
         const mergedCourses = [
           ...visibleCourses,
