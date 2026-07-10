@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Login or create a WHSF FutureTech Academy e-Classroom account."
+    />
+    <meta name="theme-color" content="#6d1024" />
+    <title>Login | WHSF FutureTech Academy</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="academy-login-body">
+    <main class="academy-login-page" id="main">
+      <a class="academy-login-back" href="e-classroom.html">← Back to e-Classroom</a>
+
+      <section class="academy-login-shell" aria-labelledby="academy-login-title">
+        <div class="academy-login-copy">
+          <img src="assets/whsf-logo.jpg" width="76" height="76" alt="WHSF emblem" />
+          <p class="eyebrow">WHSF FutureTech Academy</p>
+          <h1 id="academy-login-title">Welcome to your protected learning space.</h1>
+          <p>
+            Login or create an account to access WHSF courses, video lessons, learner progress,
+            assignments, certificates and practical technology training.
+          </p>
+          <div class="academy-login-highlights" aria-label="WHSF learning account benefits">
+            <article><span>01</span><strong>Protected courses</strong><small>Training content unlocks after student authentication.</small></article>
+            <article><span>02</span><strong>Tracked progress</strong><small>Lessons, quiz results and assignments are saved securely.</small></article>
+            <article><span>03</span><strong>Verified certificates</strong><small>Completion records support certificate review and validation.</small></article>
+          </div>
+        </div>
+
+        <form class="academy-login-card" id="academy-login-form">
+          <div class="academy-login-card-head">
+            <span>Student Login</span>
+            <h2>Login / SignUp</h2>
+            <p>Use your WHSF username/email and password.</p>
+          </div>
+
+          <label>
+            Username / Email
+            <input name="email" type="email" placeholder="student@example.com" autocomplete="email" required />
+          </label>
+
+          <label>
+            Password
+            <input name="password" type="password" placeholder="Enter password" autocomplete="current-password" minlength="8" required />
+          </label>
+
+          <div class="academy-login-actions">
+            <button class="button" type="submit">Login</button>
+            <button class="button button-light" id="academy-signup-button" type="button">SignUp</button>
+          </div>
+
+          <p class="academy-login-status" id="academy-login-status" role="status">
+            Enter your WHSF e-Classroom username/email and password to continue.
+          </p>
+        </form>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+      const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+      const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
+
+      const loginForm = document.querySelector('#academy-login-form');
+      const signupButton = document.querySelector('#academy-signup-button');
+      const loginStatus = document.querySelector('#academy-login-status');
+      const params = new URLSearchParams(window.location.search);
+      const redirectTarget = params.get('redirect') || 'e-classroom.html';
+
+      function setLoginStatus(message) {
+        if (loginStatus) loginStatus.textContent = message;
+      }
+
+      async function upsertStudentProfile(user) {
+        if (!user?.email) return null;
+        const fullName = user.user_metadata?.full_name || user.email.split('@')[0];
+        const profilePayload = {
+          auth_user_id: user.id,
+          full_name: fullName,
+          email: user.email,
+          learner_group: 'ict_girls_club',
+          role: 'student'
+        };
+
+        const { data: existingProfile, error: lookupError } = await whsfSupabase
+          .from('eclassroom_student_profiles')
+          .select('*')
+          .eq('auth_user_id', user.id)
+          .maybeSingle();
+
+        if (lookupError) {
+          setLoginStatus(`Signed in, but profile check failed: ${lookupError.message}`);
+          return null;
+        }
+
+        const request = existingProfile
+          ? whsfSupabase.from('eclassroom_student_profiles').update(profilePayload).eq('auth_user_id', user.id).select().single()
+          : whsfSupabase.from('eclassroom_student_profiles').insert(profilePayload).select().single();
+
+        const { data, error } = await request;
+        if (error) {
+          setLoginStatus(`Account authenticated, but learner profile could not be saved: ${error.message}`);
+          return null;
+        }
+
+        return data;
+      }
+
+      function goToClassroom() {
+        window.location.href = redirectTarget;
+      }
+
+      loginForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(loginForm);
+        const email = String(formData.get('email') || '').trim();
+        const password = String(formData.get('password') || '');
+
+        if (!email || !password || password.length < 8) {
+          setLoginStatus('Please enter your username/email and a password of at least 8 characters.');
+          return;
+        }
+
+        setLoginStatus('Signing in…');
+        const { data, error } = await whsfSupabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          const friendlyError = /email not confirmed/i.test(error.message)
+            ? 'Your account exists, but the email has not been confirmed yet. Please check your email inbox, confirm the WHSF e-Classroom account, then sign in again.'
+            : error.message;
+          setLoginStatus(friendlyError);
+          return;
+        }
+
+        await upsertStudentProfile(data.user);
+        setLoginStatus('Login successful. Opening WHSF e-Classroom…');
+        goToClassroom();
+      });
+
+      signupButton?.addEventListener('click', async () => {
+        const formData = new FormData(loginForm);
+        const email = String(formData.get('email') || '').trim();
+        const password = String(formData.get('password') || '');
+
+        if (!email || !password || password.length < 8) {
+          setLoginStatus('Enter username/email and a password of at least 8 characters to create an account.');
+          return;
+        }
+
+        setLoginStatus('Creating student account…');
+        const { data, error } = await whsfSupabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: email.split('@')[0] },
+            emailRedirectTo: `${window.location.origin}${window.location.pathname}`
+          }
+        });
+
+        if (error) {
+          const friendlyError = /already registered|already been registered|user already/i.test(error.message)
+            ? 'This email may already have a WHSF e-Classroom account. Please use Login with the same username/email and password.'
+            : error.message;
+          setLoginStatus(friendlyError);
+          return;
+        }
+
+        if (data.session && data.user) {
+          await upsertStudentProfile(data.user);
+          setLoginStatus('Account created. Opening WHSF e-Classroom…');
+          goToClassroom();
+          return;
+        }
+
+        setLoginStatus('Account created. Please check your email inbox and confirm your WHSF e-Classroom account, then return here to login.');
+      });
+
+      if (params.get('mode') === 'signup') {
+        setLoginStatus('Create your WHSF e-Classroom account with username/email and password.');
+      }
+    </script>
+  </body>
+</html>

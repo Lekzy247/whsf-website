@@ -1631,6 +1631,172 @@ p, li { text-wrap: pretty; }
   font-weight: 780;
   line-height: 1.7;
 }
+.classroom-access-card {
+  padding: 34px;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(8,36,58,.1);
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(8,36,58,.08);
+}
+.classroom-access-card .section-heading {
+  max-width: 720px;
+}
+.classroom-access-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.academy-login-body {
+  min-height: 100vh;
+  margin: 0;
+  background: #f6fafc;
+}
+.academy-login-page {
+  min-height: 100vh;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: clamp(28px, 5vw, 70px);
+  color: #08243a;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.94) 48%, rgba(255,255,255,.68) 100%),
+    radial-gradient(circle at 86% 24%, rgba(8,191,165,.16), transparent 24rem),
+    radial-gradient(circle at 15% 86%, rgba(109,16,36,.11), transparent 22rem),
+    #f6fafc;
+}
+.academy-login-back {
+  position: absolute;
+  top: 28px;
+  left: clamp(22px, 4vw, 64px);
+  color: #008f98;
+  font-weight: 950;
+}
+.academy-login-shell {
+  width: min(1180px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: clamp(28px, 6vw, 76px);
+  align-items: center;
+}
+.academy-login-copy img {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 12px 32px rgba(8,36,58,.12);
+}
+.academy-login-copy h1 {
+  max-width: 720px;
+  margin: 18px 0 0;
+  color: #08243a;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: clamp(3rem, 6vw, 5.7rem);
+  font-weight: 400;
+  letter-spacing: -.065em;
+  line-height: 1.02;
+}
+.academy-login-copy p {
+  max-width: 720px;
+  margin: 24px 0 0;
+  color: #08243a;
+  font-size: clamp(1.24rem, 2vw, 1.85rem);
+  line-height: 1.36;
+}
+.academy-login-highlights {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.academy-login-highlights article {
+  padding: 18px;
+  border: 1px solid rgba(8,36,58,.09);
+  border-radius: 20px;
+  background: rgba(255,255,255,.74);
+  box-shadow: 0 12px 30px rgba(8,36,58,.06);
+}
+.academy-login-highlights span {
+  display: inline-flex;
+  margin-bottom: 10px;
+  color: #08a6a8;
+  font-weight: 950;
+}
+.academy-login-highlights strong {
+  display: block;
+  color: #08243a;
+  font-size: .96rem;
+}
+.academy-login-highlights small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-weight: 780;
+  line-height: 1.45;
+}
+.academy-login-card {
+  padding: 34px;
+  border: 1px solid rgba(8,36,58,.1);
+  border-radius: 28px;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 28px 80px rgba(8,36,58,.12);
+}
+.academy-login-card-head span {
+  color: #08a6a8;
+  font-size: .75rem;
+  font-weight: 950;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.academy-login-card-head h2 {
+  margin: 8px 0 8px;
+  color: #08243a;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+}
+.academy-login-card-head p {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-weight: 800;
+}
+.academy-login-card label {
+  display: block;
+  margin-bottom: 17px;
+  color: #08243a;
+  font-size: .88rem;
+  font-weight: 900;
+}
+.academy-login-card input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 15px 16px;
+  border: 1px solid rgba(8,36,58,.15);
+  border-radius: 12px;
+  background: #fff;
+  color: #08243a;
+  font: inherit;
+}
+.academy-login-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 22px;
+}
+.academy-login-actions .button {
+  justify-content: center;
+  min-height: 56px;
+}
+.academy-login-status {
+  min-height: 42px;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 800;
+  line-height: 1.55;
+}
 .final-quiz-section { background: #fff; }
 .final-quiz-card {
   padding: 34px;
@@ -1814,6 +1980,26 @@ p, li { text-wrap: pretty; }
   }
   .futuretech-video-panel {
     min-height: 280px;
+  }
+  .classroom-access-card,
+  .academy-login-shell {
+    grid-template-columns: 1fr;
+  }
+  .classroom-access-card {
+    display: grid;
+  }
+  .classroom-access-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+  .academy-login-highlights {
+    grid-template-columns: 1fr;
+  }
+  .academy-login-card {
+    padding: 26px 20px;
+  }
+  .academy-login-actions {
+    grid-template-columns: 1fr;
   }
   .course-video-grid {
     grid-template-columns: 1fr;
