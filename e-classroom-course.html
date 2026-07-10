@@ -209,6 +209,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const courseSlug = params.get('course') || 'robotics-automation';
+      const normalizedCourseSlug = String(courseSlug || '').trim().toLowerCase();
       const courseReturnPath = `e-classroom-course.html?course=${encodeURIComponent(courseSlug)}`;
       const courseLoginPath = `e-classroom-login.html?redirect=${encodeURIComponent(courseReturnPath)}`;
       const statusEl = document.querySelector('#course-status');
@@ -388,7 +389,97 @@
         }
       ];
 
+      const aiAgricultureVideoModules = [
+        {
+          label: 'Course Overview',
+          title: 'AI for Agriculture: Course Overview',
+          summary: 'A clear introduction to how AI can support farmers, learners and communities through practical agriculture technology.',
+          videos: [
+            ['Course overview', 'AI for Agriculture Course Overview', 'https://www.youtube-nocookie.com/embed/h7nkWUpgaIE?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
+          ]
+        },
+        {
+          label: 'Module 1',
+          title: 'AI Foundations for Smart Agriculture',
+          summary: 'Learners begin with the role of AI in farming, climate-smart decisions and simple data-driven agriculture ideas.',
+          videos: [
+            ['Module 1 Intro', 'AI for Agriculture Module 1', 'https://www.youtube-nocookie.com/embed/y7E5L16Vego?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'AI for Agriculture Module 1 Lesson 2', 'https://www.youtube-nocookie.com/embed/5OJ3PmHGS3w?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
+          ]
+        },
+        {
+          label: 'Module 2',
+          title: 'Crop Intelligence and Farm Data',
+          summary: 'Learners explore how AI can support crop monitoring, field observations and better farm decision-making.',
+          videos: [
+            ['Module 2 Intro', 'AI for Agriculture Module 2 Intro', 'https://www.youtube-nocookie.com/embed/llgriJuzMog?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 1', 'AI for Agriculture Module 2 Lesson 1', 'https://www.youtube-nocookie.com/embed/r90_IneyLvE?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'AI for Agriculture Module 2 Lesson 2', 'https://www.youtube-nocookie.com/embed/4BzXQkU5eNY?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
+          ]
+        },
+        {
+          label: 'Module 3',
+          title: 'Weather, Pests and Field Awareness',
+          summary: 'Learners connect AI-supported weather awareness, pest monitoring and local farm safety practices.',
+          videos: [
+            ['Module 3 Intro', 'AI for Agriculture Module 3 Intro', 'https://www.youtube-nocookie.com/embed/uNj2YOnkNVc?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 1', 'AI for Agriculture Module 3 Lesson 1', 'https://www.youtube-nocookie.com/embed/IAkBTFEI7P0?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'AI for Agriculture Module 3 Lesson 2', 'https://www.youtube-nocookie.com/embed/Sk8Boak58f8?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
+          ]
+        },
+        {
+          label: 'Module 4',
+          title: 'Smart Irrigation and Community Solutions',
+          summary: 'Learners study how AI can support smart irrigation, practical farmer guidance and community agriculture projects.',
+          videos: [
+            ['Module 4 Intro', 'AI for Agriculture Module 4 Intro', 'https://www.youtube-nocookie.com/embed/aAnV6r-4EAQ?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 1', 'AI for Agriculture Module 4 Lesson 1', 'https://www.youtube-nocookie.com/embed/Bl0dc1LAXeo?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1'],
+            ['Lesson 2', 'AI for Agriculture Module 4 Lesson 2', 'https://www.youtube-nocookie.com/embed/Zp03A4tBj_w?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
+          ]
+        },
+        {
+          label: 'Final Project Guide',
+          title: 'AI for Agriculture: Final Project Guide',
+          summary: 'A final guide to help learners design and present an AI-supported agriculture project for community impact.',
+          videos: [
+            ['Final project', 'AI for Agriculture Final Project Guide', 'https://www.youtube-nocookie.com/embed/CNB6ScM--ME?rel=0&modestbranding=1&playsinline=1&cc_load_policy=0&disablekb=1']
+          ]
+        }
+      ];
+
       const setStatus = (message) => { statusEl.textContent = message; };
+      const videoCourseCatalogs = {
+        'ai-integration': {
+          modules: aiIntegrationVideoModules,
+          heading: 'Robotic and Automation Training Video Modules.',
+          intro: 'Watch each lesson, complete the learning activities, pass the final quiz and submit your robotics project for review.',
+          lockedTitle: 'Login or create a WHSF e-Classroom account to watch the Robotics and Automation training videos.'
+        },
+        'ai-for-agriculture': {
+          modules: aiAgricultureVideoModules,
+          heading: 'AI for Agriculture Training Video Modules.',
+          intro: 'Watch each lesson, complete the learning activities, pass the final quiz and submit your AI agriculture project for review.',
+          lockedTitle: 'Login or create a WHSF e-Classroom account to watch the AI for Agriculture training videos.'
+        }
+      };
+
+      function getActiveVideoCourse() {
+        if (normalizedCourseSlug === 'ai-for-agriculture') {
+          return videoCourseCatalogs['ai-for-agriculture'];
+        }
+        if (normalizedCourseSlug === 'ai-integration') {
+          return videoCourseCatalogs['ai-integration'];
+        }
+        const lookupText = `${normalizedCourseSlug || ''} ${course?.slug || ''} ${course?.title || ''} ${course?.category || ''}`.toLowerCase();
+        if (lookupText.includes('ai-for-agriculture') || lookupText.includes('ai for agriculture') || lookupText.includes('ai agriculture') || (lookupText.includes('agriculture') && lookupText.includes('ai'))) {
+          return videoCourseCatalogs['ai-for-agriculture'];
+        }
+        if (lookupText.includes('ai-integration') || lookupText.includes('robotics') || lookupText.includes('automation')) {
+          return videoCourseCatalogs['ai-integration'];
+        }
+        return null;
+      }
+
       const setCourseSignedIn = (isSignedIn) => {
         courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
         if (courseLoginForm) courseLoginForm.hidden = true;
@@ -940,18 +1031,24 @@
 
       function renderCourseVideoModules() {
         if (!videoModulesSection || !courseVideoCatalog) return;
-        if (courseSlug !== 'ai-integration') {
+        const videoCourse = getActiveVideoCourse();
+        if (!videoCourse) {
           videoModulesSection.hidden = true;
           courseVideoCatalog.innerHTML = '';
           return;
         }
 
         videoModulesSection.hidden = false;
+        const sectionHeading = videoModulesSection.querySelector('.section-heading h2');
+        const sectionIntro = videoModulesSection.querySelector('.section-heading p:last-child');
+        if (sectionHeading) sectionHeading.textContent = videoCourse.heading;
+        if (sectionIntro) sectionIntro.textContent = videoCourse.intro;
+
         if (!session?.user) {
           courseVideoCatalog.innerHTML = `
             <article class="course-video-locked-card">
               <span>Protected video classroom</span>
-              <h3>Login or create a WHSF e-Classroom account to watch the Robotics and Automation training videos.</h3>
+              <h3>${escapeHtml(videoCourse.lockedTitle)}</h3>
               <p>Video lessons are locked so WHSF can protect course content, track learner progress and issue trusted certificates after completion.</p>
               <a class="button" href="${escapeHtml(courseLoginPath)}">Login / SignUp</a>
             </article>
@@ -959,7 +1056,7 @@
           return;
         }
 
-        courseVideoCatalog.innerHTML = aiIntegrationVideoModules.map((module) => `
+        courseVideoCatalog.innerHTML = videoCourse.modules.map((module) => `
           <article class="course-video-module">
             <div class="course-video-module-head">
               <span>${escapeHtml(module.label)}</span>
@@ -1036,6 +1133,7 @@
 
         course = data;
         applyCourseDisplay();
+        renderCourseVideoModules();
         await loadLessons();
         await loadAssignments();
       }
