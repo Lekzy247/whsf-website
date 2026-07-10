@@ -67,11 +67,14 @@
             </button>
             <div class="nav-dropdown-panel" data-classroom-menu-panel hidden>
               <a href="#courses">Courses</a>
-              <a href="#cloud-lms">Cloud LMS</a>
-              <a href="e-classroom-login.html">Login / SignUp</a>
+              <a href="e-classroom-login.html" data-auth-login>Login / SignUp</a>
+              <a href="e-classroom-admin.html">Teacher/Admin</a>
+              <a href="verify-certificate.html">Verify Certificate</a>
+              <a href="impact-dashboard.html">Impact Dashboard</a>
+              <a href="contact.html">Contact &amp; Support</a>
             </div>
           </div>
-          <a href="e-classroom-login.html">Login / SignUp</a>
+          <a href="e-classroom-login.html" data-auth-login>Login / SignUp</a>
           <a href="verify-certificate.html">Verify Certificate</a>
           <a href="impact-dashboard.html">Impact</a>
           <a href="e-classroom-admin.html">Teacher/Admin</a>
@@ -82,7 +85,8 @@
     <main id="main">
       <section class="futuretech-academy-portal" aria-labelledby="futuretech-title">
         <div class="futuretech-auth-top">
-          <a href="e-classroom-login.html">Login / SignUp</a>
+          <a href="e-classroom-login.html" data-auth-login>Login / SignUp</a>
+          <button class="course-top-signout" type="button" data-auth-signout hidden>Sign out</button>
         </div>
         <div class="shell futuretech-academy-grid">
           <div class="futuretech-copy reveal">
@@ -92,8 +96,8 @@
               digital inclusion, cybersecurity, STEM and responsible innovation.
             </p>
             <div class="hero-actions">
-              <a class="button academy-register-button" href="e-classroom-login.html?mode=signup">Register</a>
-              <a class="button button-light" href="e-classroom-login.html">Login</a>
+              <a class="button academy-register-button" href="e-classroom-login.html?mode=signup" data-auth-login>Register</a>
+              <a class="button button-light" href="e-classroom-login.html" data-auth-login>Login</a>
             </div>
           </div>
           <div class="futuretech-video-panel reveal delay-one" aria-label="WHSF FutureTech Academy welcome video">
@@ -157,6 +161,8 @@
 
       const coursesSection = document.querySelector('#courses');
       const courseGrid = document.querySelector('#course-grid');
+      const authLoginLinks = document.querySelectorAll('[data-auth-login]');
+      const authSignoutButtons = document.querySelectorAll('[data-auth-signout]');
 
       const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
 
@@ -189,7 +195,19 @@
 
       function setCourseVisibility(isSignedIn) {
         if (coursesSection) coursesSection.hidden = !isSignedIn;
+        authLoginLinks.forEach((item) => { item.hidden = Boolean(isSignedIn); });
+        authSignoutButtons.forEach((button) => { button.hidden = !isSignedIn; });
       }
+
+      authSignoutButtons.forEach((button) => {
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          await whsfSupabase.auth.signOut();
+          button.disabled = false;
+          setCourseVisibility(false);
+          window.location.href = 'e-classroom-login.html';
+        });
+      });
 
       function normalizeCourseForDisplay(course = {}) {
         if (course.slug === 'ai-integration') {

@@ -19,34 +19,48 @@ navigation?.querySelectorAll('a').forEach((link) => {
 });
 
 function initClassroomMenuDropdown() {
-  const toggle = document.querySelector('[data-classroom-menu-toggle]');
-  const panel = document.querySelector('[data-classroom-menu-panel]');
-  if (!toggle || !panel) return;
+  const toggles = document.querySelectorAll('[data-classroom-menu-toggle]');
+  if (!toggles.length) return;
 
-  const setOpen = (open) => {
-    toggle.setAttribute('aria-expanded', String(open));
-    panel.hidden = !open;
-    toggle.classList.toggle('is-open', open);
+  const closeAll = () => {
+    toggles.forEach((toggle) => {
+      const dropdown = toggle.closest('.nav-dropdown');
+      const panel = dropdown?.querySelector('[data-classroom-menu-panel]');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.classList.remove('is-open');
+      if (panel) panel.hidden = true;
+    });
   };
 
-  toggle.addEventListener('click', (event) => {
-    event.stopPropagation();
-    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
-  });
+  toggles.forEach((toggle) => {
+    const dropdown = toggle.closest('.nav-dropdown');
+    const panel = dropdown?.querySelector('[data-classroom-menu-panel]');
+    if (!panel) return;
 
-  panel.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      setOpen(false);
-      setMenu(false);
+    toggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const shouldOpen = toggle.getAttribute('aria-expanded') !== 'true';
+      closeAll();
+      toggle.setAttribute('aria-expanded', String(shouldOpen));
+      toggle.classList.toggle('is-open', shouldOpen);
+      panel.hidden = !shouldOpen;
+    });
+
+    panel.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        closeAll();
+        setMenu(false);
+      });
     });
   });
 
   document.addEventListener('click', (event) => {
-    if (!toggle.closest('.nav-dropdown')?.contains(event.target)) setOpen(false);
+    if (!event.target.closest('[data-classroom-menu-toggle], [data-classroom-menu-panel]')) closeAll();
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') setOpen(false);
+    if (event.key === 'Escape') closeAll();
   });
 }
 

@@ -63,7 +63,7 @@
       </div>
     </header>
 
-    <main id="main">
+    <main id="main" hidden>
       <section class="course-learner-hero" aria-labelledby="course-title">
         <div class="shell course-learner-grid">
           <div class="classroom-copy reveal">
@@ -76,7 +76,7 @@
             </div>
           </div>
 
-          <form class="student-login-card reveal delay-one" id="course-login-form">
+          <form class="student-login-card reveal delay-one" id="course-login-form" hidden>
             <p class="eyebrow">Student access</p>
             <label>
               Email
@@ -221,7 +221,10 @@
 
       const params = new URLSearchParams(window.location.search);
       const courseSlug = params.get('course') || 'robotics-automation';
+      const courseReturnPath = `e-classroom-course.html?course=${encodeURIComponent(courseSlug)}`;
+      const courseLoginPath = `e-classroom-login.html?redirect=${encodeURIComponent(courseReturnPath)}`;
       const statusEl = document.querySelector('#course-status');
+      const mainContent = document.querySelector('#main');
       const courseLoginForm = document.querySelector('#course-login-form');
       const signoutButton = document.querySelector('#course-signout-button');
       const topSignoutButton = document.querySelector('#course-top-signout-button');
@@ -400,7 +403,7 @@
       const setStatus = (message) => { statusEl.textContent = message; };
       const setCourseSignedIn = (isSignedIn) => {
         courseLoginForm?.classList.toggle('is-signed-in', Boolean(isSignedIn));
-        if (courseLoginForm) courseLoginForm.hidden = Boolean(isSignedIn);
+        if (courseLoginForm) courseLoginForm.hidden = true;
         if (signoutButton) signoutButton.hidden = true;
         if (topSignoutButton) topSignoutButton.hidden = !isSignedIn;
         renderCourseVideoModules();
@@ -569,6 +572,7 @@
         enrollButton.hidden = true;
         setStatus(message);
         renderLessons();
+        window.location.href = courseLoginPath;
       }
       const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
       const formatLessonContent = (value = '') => String(value || 'Your teacher will add lesson notes or video resources here.')
@@ -961,7 +965,7 @@
               <span>Protected video classroom</span>
               <h3>Login or create a WHSF e-Classroom account to watch the Robotics and Automation training videos.</h3>
               <p>Video lessons are locked so WHSF can protect course content, track learner progress and issue trusted certificates after completion.</p>
-              <a class="button" href="e-classroom-login.html?redirect=e-classroom-course.html%3Fcourse%3Dai-integration">Login / SignUp</a>
+              <a class="button" href="${escapeHtml(courseLoginPath)}">Login / SignUp</a>
             </article>
           `;
           return;
@@ -1555,6 +1559,7 @@
       whsfSupabase.auth.getSession().then(async ({ data }) => {
         session = data.session;
         if (session?.user) {
+          if (mainContent) mainContent.hidden = false;
           setCourseSignedIn(true);
           profile = await ensureProfile(session.user);
           updateIdentityUi();
@@ -1562,6 +1567,9 @@
         } else {
           setCourseSignedIn(false);
           updateIdentityUi();
+          if (mainContent) mainContent.hidden = true;
+          window.location.href = courseLoginPath;
+          return;
         }
         await loadCourse();
         if (profile) await loadEnrollment();
