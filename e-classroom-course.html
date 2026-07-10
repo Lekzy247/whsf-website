@@ -107,6 +107,15 @@
         </div>
       </section>
 
+      <section class="section course-video-section" id="video-modules" hidden>
+        <div class="shell section-heading centered reveal">
+          <p class="eyebrow">Video classroom</p>
+          <h2>AI &amp; Integration video modules.</h2>
+          <p>Start with the course intro, follow Modules 1–4 in order, then complete the final recap and project guide.</p>
+        </div>
+        <div class="shell course-video-catalog" id="course-video-catalog"></div>
+      </section>
+
       <section class="section learner-identity-section">
         <div class="shell learner-identity-card" id="learner-identity-card" hidden>
           <div class="identity-copy">
@@ -222,6 +231,8 @@
       const lessonsList = document.querySelector('#lessons-list');
       const assignmentsList = document.querySelector('#assignments-list');
       const certificatesList = document.querySelector('#certificates-list');
+      const videoModulesSection = document.querySelector('#video-modules');
+      const courseVideoCatalog = document.querySelector('#course-video-catalog');
       const identityCard = document.querySelector('#learner-identity-card');
       const identityVideo = document.querySelector('#identity-video');
       const identityCanvas = document.querySelector('#identity-canvas');
@@ -308,6 +319,69 @@
           assignment: 'Create a short public-interest message that uses AI responsibly and includes a source-checking note.'
         }
       };
+
+      const aiIntegrationVideoModules = [
+        {
+          label: 'Course Intro',
+          title: 'Robotics & Automation: Full Course Trailer',
+          summary: 'A short orientation for the complete robotics and automation learning pathway.',
+          videos: [
+            ['Course overview', 'Robotics & Automation_ The Full Course Trailer', 'https://www.youtube.com/embed/xCJGSorVoJs']
+          ]
+        },
+        {
+          label: 'Module 1',
+          title: 'Foundations and Simple Machines',
+          summary: 'Learners begin with simple machines, design foundations and final assembly thinking.',
+          videos: [
+            ['Module 1 Intro', 'Robotics & Automation_ Module 1 Intro', 'https://www.youtube.com/embed/q-hviTHeHe0'],
+            ['Lesson 1', 'Simple Machines', 'https://www.youtube.com/embed/XscZPa571WU'],
+            ['Lesson 2', 'Designing Foundations', 'https://www.youtube.com/embed/yiHakwqag1o'],
+            ['Lesson 3', 'Final Assembly', 'https://www.youtube.com/embed/Eeidi4BkPU0']
+          ]
+        },
+        {
+          label: 'Module 2',
+          title: 'Sensors and Measurement',
+          summary: 'Learners explore sensor fundamentals, analog sensing and distance measurement.',
+          videos: [
+            ['Module 2 Intro', 'Sensors', 'https://www.youtube.com/embed/TqY0uoEarw8'],
+            ['Lesson 1', 'Sensor Fundamentals', 'https://www.youtube.com/embed/Jyr7USN6094'],
+            ['Lesson 2', 'Analog Sensing', 'https://www.youtube.com/embed/TfhUAxkRdeQ'],
+            ['Lesson 3', 'Measuring Distance', 'https://www.youtube.com/embed/70tH6GZ7InY']
+          ]
+        },
+        {
+          label: 'Module 3',
+          title: 'Motors and Movement',
+          summary: 'Learners study DC motors, servo motors and how motors integrate into automation systems.',
+          videos: [
+            ['Module 3 Intro', 'Motors', 'https://www.youtube.com/embed/tPsurDw_-Qc'],
+            ['Lesson 1', 'DC Motors', 'https://www.youtube.com/embed/0VcES8Vu3ZI'],
+            ['Lesson 2', 'Servo Motors', 'https://www.youtube.com/embed/i9aYQAq0WTg'],
+            ['Lesson 3', 'Motor Integration', 'https://www.youtube.com/embed/0WVoww6gz9U']
+          ]
+        },
+        {
+          label: 'Module 4',
+          title: 'Logic and System Integration',
+          summary: 'Learners connect decision logic, loops, iteration and system integration for complete automation projects.',
+          videos: [
+            ['Module 4 Intro', 'Logic', 'https://www.youtube.com/embed/SaeBR2rf8dI'],
+            ['Lesson 1', 'Decision Logic', 'https://www.youtube.com/embed/jG4solKIG3k'],
+            ['Lesson 2', 'Loops & Iteration', 'https://www.youtube.com/embed/WykWxFphf8U'],
+            ['Lesson 3', 'System Integration', 'https://www.youtube.com/embed/-mmXP_3Yja0']
+          ]
+        },
+        {
+          label: 'Final Course Summary',
+          title: 'Robotics & Automation: Final Project Guide',
+          summary: 'A final recap that prepares learners to plan, present and complete their robotics and automation project.',
+          videos: [
+            ['Final recap', 'Robotics & Automation_ Final Project Guide', 'https://www.youtube.com/embed/AQgE-ChFq7o']
+          ]
+        }
+      ];
 
       const setStatus = (message) => { statusEl.textContent = message; };
       const setCourseSignedIn = (isSignedIn) => {
@@ -798,7 +872,45 @@
         doc.text('Chairman CEO / President', width - 178, height - 124, { align: 'center' });
       }
 
+      function renderCourseVideoModules() {
+        if (!videoModulesSection || !courseVideoCatalog) return;
+        if (courseSlug !== 'ai-integration') {
+          videoModulesSection.hidden = true;
+          courseVideoCatalog.innerHTML = '';
+          return;
+        }
+
+        videoModulesSection.hidden = false;
+        courseVideoCatalog.innerHTML = aiIntegrationVideoModules.map((module) => `
+          <article class="course-video-module">
+            <div class="course-video-module-head">
+              <span>${escapeHtml(module.label)}</span>
+              <h3>${escapeHtml(module.title)}</h3>
+              <p>${escapeHtml(module.summary)}</p>
+            </div>
+            <div class="course-video-grid">
+              ${module.videos.map((video) => `
+                <div class="course-video-card">
+                  <iframe
+                    src="${escapeHtml(video[2])}"
+                    title="${escapeHtml(video[1])}"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                  </iframe>
+                  <div>
+                    <span>${escapeHtml(video[0])}</span>
+                    <strong>${escapeHtml(video[1])}</strong>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </article>
+        `).join('');
+      }
+
       async function loadCourse() {
+        renderCourseVideoModules();
         const { data, error } = await whsfSupabase
           .from('eclassroom_courses')
           .select('*')
