@@ -52,7 +52,6 @@
 
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
           <a href="e-classroom.html">e-Classroom</a>
-          <a href="#lessons">Lessons</a>
           <a href="#assignments">Assignments</a>
           <a href="#certificates">Certificates</a>
           <a href="verify-certificate.html">Verify Certificate</a>
@@ -72,7 +71,7 @@
             <p class="hero-lead" id="course-summary">Please wait while we prepare your learning space.</p>
             <div class="hero-actions">
               <button class="button" id="enroll-button" type="button" hidden>Enroll in this course</button>
-              <a class="button button-light" href="#lessons">View lessons</a>
+              <a class="button button-light" href="#video-modules">View training videos</a>
             </div>
           </div>
 
@@ -148,17 +147,6 @@
         </div>
       </section>
 
-      <section class="section" id="lessons">
-        <div class="shell section-heading centered reveal">
-          <p class="eyebrow">Lessons</p>
-          <h2>Learn step by step.</h2>
-          <p>Open each lesson, read the content and mark it complete when you are done.</p>
-        </div>
-        <div class="shell learner-list" id="lessons-list">
-          <article class="learner-empty">Lessons will appear here after your teacher adds them.</article>
-        </div>
-      </section>
-
       <section class="section final-quiz-section" id="final-quiz">
         <div class="shell final-quiz-card" id="final-quiz-card" hidden>
           <div class="section-heading centered">
@@ -201,7 +189,7 @@
           <div><strong>World Humanitarian Support Foundation</strong><p>Course learning space for e-Classroom students.</p></div>
         </div>
         <div class="footer-links">
-          <div><strong>Classroom</strong><a href="e-classroom.html">All courses</a><a href="#lessons">Lessons</a><a href="#assignments">Assignments</a></div>
+          <div><strong>Classroom</strong><a href="e-classroom.html">All courses</a><a href="#video-modules">Training videos</a><a href="#assignments">Assignments</a></div>
           <div><strong>Connect</strong><a href="contact.html">Contact</a><a href="e-classroom-admin.html">Teacher/Admin</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
         </div>
       </div>
@@ -1220,43 +1208,7 @@
       }
 
       function renderLessons() {
-        if (!lessons.length) {
-          lessonsList.innerHTML = '<article class="learner-empty">Lessons will appear here after your teacher adds them.</article>';
-          return;
-        }
-
-        lessonsList.innerHTML = lessons.map((lesson, index) => {
-          const lessonKey = String(lesson.id);
-          const complete = completedLessonIds.has(lessonKey);
-          const opened = openedLessonIds.has(lessonKey);
-          const previousLesson = lessons[index - 1];
-          const locked = Boolean(enrollment && !complete && previousLesson && !completedLessonIds.has(String(previousLesson.id)));
-          const buttonDisabled = !enrollment || complete || locked || !opened;
-          const buttonLabel = complete ? 'Completed' : locked ? 'Complete previous lesson first' : opened ? 'Mark complete' : 'Open lesson first';
-          const lessonIntro = String(lesson.content || 'Your teacher will add lesson notes or video resources here.').split(/\n{2,}/)[0];
-          const lectureContent = formatLessonContent(lesson.content);
-          return `
-            <article class="learner-item">
-              <div>
-                <span>${escapeHtml(lesson.lesson_type)} • Lesson ${lesson.lesson_order} • ${Number(lesson.estimated_minutes || 30)} min</span>
-                <h3>${escapeHtml(lesson.title)}</h3>
-                <p>${escapeHtml(lessonIntro)}</p>
-                <div class="lesson-resource-row">
-                  ${lesson.resource_url ? `<a class="arrow-link" href="${escapeHtml(lesson.resource_url)}" target="_blank" rel="noreferrer">Download resource →</a>` : ''}
-                </div>
-                <button class="text-button lesson-open-button" type="button" data-open-lesson="${lesson.id}">
-                  ${opened ? 'Review classroom lecture' : 'Open full classroom lecture'}
-                </button>
-                ${opened ? `<div class="lesson-lecture-panel" id="lesson-${lessonKey}">${lectureContent}<p><strong>Class activity:</strong> Write one practical idea, example or question from this lesson before you mark it complete.</p></div>` : ''}
-                ${locked ? '<small class="lesson-lock-note">This lesson unlocks after the previous lesson is completed.</small>' : ''}
-                ${!opened && !locked && !complete ? '<small class="lesson-lock-note">Open and review the full lesson lecture before marking complete.</small>' : ''}
-              </div>
-              <button class="button ${complete || locked ? 'button-light auth-secondary' : ''}" type="button" data-complete-lesson="${lesson.id}" ${buttonDisabled ? 'disabled' : ''}>
-                ${buttonLabel}
-              </button>
-            </article>
-          `;
-        }).join('');
+        if (lessonsList) lessonsList.innerHTML = '';
       }
 
       async function completeLesson(lessonId) {
