@@ -356,6 +356,7 @@ const galleryMainLink = document.querySelector('.gallery-main-link');
 const galleryCounter = document.querySelector('#gallery-counter');
 const galleryTitle = document.querySelector('#gallery-title');
 const galleryDescription = document.querySelector('#gallery-description');
+const galleryScrollText = document.querySelector('#gallery-scroll-text');
 const galleryThumbs = [...document.querySelectorAll('.gallery-thumb')];
 const galleryPrev = document.querySelector('.gallery-prev');
 const galleryNext = document.querySelector('.gallery-next');
@@ -381,7 +382,7 @@ async function showGallerySlide(index) {
   galleryIndex = (index + galleryThumbs.length) % galleryThumbs.length;
   const requestedIndex = galleryIndex;
   const selected = galleryThumbs[galleryIndex];
-  const { src, fallback, title, description, alt } = selected.dataset;
+  const { src, fallback, title, description, alt, scroll } = selected.dataset;
 
   galleryThumbs.forEach((thumb, thumbIndex) => {
     thumb.classList.toggle('active', thumbIndex === galleryIndex);
@@ -414,6 +415,9 @@ async function showGallerySlide(index) {
   if (galleryCounter) galleryCounter.textContent = `Technology for humanity · ${galleryIndex + 1} / ${galleryThumbs.length}`;
   if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
   if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
+  if (galleryScrollText) {
+    galleryScrollText.textContent = scroll || 'AI for Good • Digital inclusion • STEM education • Responsible technology • Sustainable development';
+  }
 }
 
 function startGalleryAutoplay() {
@@ -1976,3 +1980,120 @@ function initWhsfCookieConsent() {
 }
 
 initWhsfCookieConsent();
+
+const WHSF_NEWSLETTER_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+const WHSF_NEWSLETTER_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+
+function initWhsfBlogLinks() {
+  const primaryNav = document.querySelector('.primary-nav');
+  if (primaryNav && !primaryNav.querySelector('a[href="blog.html"]')) {
+    const contactLink = primaryNav.querySelector('a[href="contact.html"]');
+    const blogLink = document.createElement('a');
+    blogLink.href = 'blog.html';
+    blogLink.textContent = 'Blog';
+    if (contactLink) {
+      primaryNav.insertBefore(blogLink, contactLink);
+    } else {
+      primaryNav.appendChild(blogLink);
+    }
+  }
+
+  document.querySelectorAll('.footer-links > div').forEach((column) => {
+    const heading = column.querySelector('strong');
+    if (heading && heading.textContent.trim().toLowerCase() === 'explore' && !column.querySelector('a[href="blog.html"]')) {
+      const link = document.createElement('a');
+      link.href = 'blog.html';
+      link.textContent = 'Blog';
+      column.appendChild(link);
+    }
+  });
+}
+
+function initWhsfNewsletterSubscribe() {
+  const footer = document.querySelector('.site-footer');
+  if (!footer || footer.querySelector('[data-whsf-newsletter]')) return;
+
+  const newsletter = document.createElement('div');
+  newsletter.className = 'shell footer-newsletter';
+  newsletter.setAttribute('data-whsf-newsletter', 'true');
+  newsletter.innerHTML = `
+    <div class="footer-newsletter-copy">
+      <span>WHSF newsletter</span>
+      <h2>Stay connected to technology, learning and opportunity updates.</h2>
+      <p>Subscribe for WHSF e-Classroom news, STEM opportunities, AI and digital inclusion updates, safe online learning guidance and community impact stories. New subscriptions are reviewed by WHSF before communication is sent.</p>
+    </div>
+    <form class="footer-newsletter-form" data-whsf-newsletter-form>
+      <label>
+        <span>First name</span>
+        <input type="text" name="first_name" autocomplete="given-name" placeholder="Your first name" />
+      </label>
+      <label>
+        <span>Email address</span>
+        <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+      </label>
+      <label>
+        <span>Country</span>
+        <input type="text" name="country" autocomplete="country-name" placeholder="Country" />
+      </label>
+      <button class="button" type="submit">Subscribe</button>
+      <p class="newsletter-status" data-whsf-newsletter-status aria-live="polite"></p>
+    </form>
+  `;
+
+  const socialLinks = footer.querySelector('.social-links');
+  const footerBottom = footer.querySelector('.footer-bottom');
+  footer.insertBefore(newsletter, socialLinks || footerBottom || null);
+
+  const form = newsletter.querySelector('[data-whsf-newsletter-form]');
+  const status = newsletter.querySelector('[data-whsf-newsletter-status]');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const firstName = String(data.get('first_name') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const country = String(data.get('country') || '').trim();
+
+    if (!email) {
+      status.textContent = 'Please enter your email address.';
+      status.className = 'newsletter-status is-error';
+      return;
+    }
+
+    status.textContent = 'Submitting your newsletter request...';
+    status.className = 'newsletter-status';
+
+    try {
+      const response = await fetch(`${WHSF_NEWSLETTER_SUPABASE_URL}/rest/v1/rpc/whsf_newsletter_subscribe`, {
+        method: 'POST',
+        headers: {
+          apikey: WHSF_NEWSLETTER_SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${WHSF_NEWSLETTER_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          p_first_name: firstName,
+          p_last_name: '',
+          p_email: email,
+          p_country: country,
+          p_phone_number: ''
+        })
+      });
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.ok === false) {
+        throw new Error(payload.message || 'The newsletter request could not be saved yet.');
+      }
+
+      status.textContent = payload.message || 'Thank you. Your WHSF newsletter request has been received for administrator review.';
+      status.className = 'newsletter-status is-success';
+      form.reset();
+    } catch (error) {
+      status.textContent = `${error.message} If the database step has not been completed yet, run the newsletter SQL in Supabase and try again.`;
+      status.className = 'newsletter-status is-error';
+    }
+  });
+}
+
+initWhsfBlogLinks();
+initWhsfNewsletterSubscribe();
