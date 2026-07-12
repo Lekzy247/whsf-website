@@ -395,6 +395,19 @@ let galleryIndex = 0;
 let galleryTimer;
 const galleryImageCache = new Map();
 
+if (galleryMainLink) {
+  galleryMainLink.removeAttribute('href');
+  galleryMainLink.removeAttribute('target');
+  galleryMainLink.removeAttribute('rel');
+  galleryMainLink.addEventListener('click', (event) => event.preventDefault());
+  galleryMainLink.addEventListener('contextmenu', (event) => event.preventDefault());
+}
+
+if (galleryMainImage) {
+  galleryMainImage.draggable = false;
+  galleryMainImage.addEventListener('contextmenu', (event) => event.preventDefault());
+}
+
 function preloadGalleryImage(src) {
   if (!src) return Promise.resolve(false);
   if (galleryImageCache.has(src)) return galleryImageCache.get(src);
@@ -430,12 +443,10 @@ async function showGallerySlide(index) {
   const fallbackWorks = !srcWorks && fallback ? await preloadGalleryImage(fallback) : false;
   if (requestedIndex !== galleryIndex) return;
   const imageSrc = srcWorks ? src : fallbackWorks ? fallback : src;
-  const linkSrc = imageSrc || src || fallback || '#';
   galleryMainImage.onerror = () => {
     if (fallback && !galleryMainImage.dataset.usingFallback) {
       galleryMainImage.dataset.usingFallback = 'true';
       galleryMainImage.src = fallback;
-      if (galleryMainLink) galleryMainLink.href = fallback;
       return;
     }
     galleryMainImage.style.opacity = '1';
@@ -445,7 +456,7 @@ async function showGallerySlide(index) {
   };
   galleryMainImage.src = imageSrc;
   galleryMainImage.alt = alt || title || 'WHSF gallery image';
-  if (galleryMainLink) galleryMainLink.href = linkSrc;
+  if (galleryMainLink) galleryMainLink.setAttribute('aria-label', galleryMainImage.alt);
   if (galleryCounter) galleryCounter.textContent = `Technology for humanity · ${galleryIndex + 1} / ${galleryThumbs.length}`;
   if (galleryTitle) galleryTitle.textContent = title || 'WHSF gallery highlight';
   if (galleryDescription) galleryDescription.textContent = description || 'A WHSF programme moment.';
