@@ -76,6 +76,7 @@
 
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
           <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
           <a href="programs.html">Programs</a>
           <a href="innovation.html">Innovation</a>
           <a href="e-classroom.html">e-Classroom</a>
@@ -98,15 +99,6 @@
 
       <section class="section flagship-programs-section" id="flagship-programs">
         <div class="shell">
-          <div class="section-heading centered reveal">
-            <p class="eyebrow">Flagship programs</p>
-            <h2>Recognizable, long-term technology initiatives for Africa.</h2>
-            <p>
-              WHSF is focusing its work into clear flagship initiatives that can be measured,
-              strengthened and scaled across communities, schools and partner institutions.
-            </p>
-          </div>
-
           <div class="flagship-program-grid">
             <article class="reveal">
               <span>01</span>
@@ -221,7 +213,7 @@
         </div>
       </section>
 
-      <section class="section section-about" id="about">
+      <section class="section section-about" id="about" hidden>
         <div class="shell split-layout">
           <div class="section-heading reveal">
             <p class="eyebrow">Who we are</p>
@@ -399,9 +391,12 @@
                 <img id="gallery-main-image" src="assets/home/lapalabras-drone-learning.jpg" alt="WHSF learners observing drone technology training" />
               </a>
               <div class="gallery-caption">
-                <span id="gallery-counter">Technology for humanity · 1 / 10</span>
+                <span id="gallery-counter">Technology for humanity · 1 / 15</span>
                 <strong id="gallery-title">We impact lives through technology.</strong>
                 <p id="gallery-description">Empowering underserved communities across Africa through Artificial Intelligence, digital inclusion, STEM education, and responsible technology for sustainable development.</p>
+                <div class="gallery-text-scroller" aria-label="WHSF technology focus areas">
+                  <em id="gallery-scroll-text">AI for Good • Digital inclusion • STEM education • Responsible technology • Sustainable development</em>
+                </div>
               </div>
             </div>
 
@@ -414,16 +409,21 @@
             </div>
 
             <div class="gallery-thumbs" aria-label="Gallery thumbnails">
-              <button class="gallery-thumb active" type="button" data-src="assets/home/lapalabras-drone-learning.jpg" data-fallback="assets/gallery/drone-demonstration-01.jpg" data-title="We impact lives through technology." data-description="Empowering underserved communities across Africa through Artificial Intelligence, digital inclusion, STEM education, and responsible technology for sustainable development." data-alt="WHSF learners observing drone technology training"><img src="assets/home/lapalabras-drone-learning.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/home/girls-in-ai-africa.jpg" data-fallback="assets/gallery/project-24.jpg" data-title="Girls in AI Africa" data-description="Expanding Girls in ICT into AI bootcamps, robotics, coding, cloud computing, cybersecurity, innovation competitions, mentorship and scholarships." data-alt="Girls in AI Africa learners working together on computers"><img src="assets/home/girls-in-ai-africa.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/programs/ict-girls-club-certificates.jpg" data-fallback="assets/gallery/project-24.jpg" data-title="Digital inclusion that reaches girls" data-description="WHSF creates safe learning spaces where girls gain digital confidence, recognition and pathways into technology education." data-alt="Girls in ICT Club learners celebrating certificates with WHSF"><img src="assets/programs/ict-girls-club-certificates.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/gallery/computer-lab-learning-01.jpg" data-fallback="assets/gallery/project-12.jpg" data-title="Community digital learning hubs" data-description="Computer labs and practical digital literacy help learners access modern tools, mentorship and future-ready skills." data-alt="Girls learning in a computer lab during a WHSF programme"><img src="assets/gallery/computer-lab-learning-01.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/home/ai-and-robotics-web.jpg" data-fallback="assets/gallery/project-10.jpg" data-title="AI and robotics for good" data-description="WHSF promotes responsible AI, robotics and emerging technology as tools for learning, creativity, innovation and career readiness." data-alt="WHSF learners experiencing AI and robotics technology"><img src="assets/home/ai-and-robotics-web.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/home/data-cloud-infrastructure-skills.jpg" data-fallback="assets/gallery/project-11.jpg" data-title="Data, cloud and infrastructure skills" data-description="TechWomen learners are introduced to cloud, data center management, digital infrastructure and technology career pathways." data-alt="Women learning data cloud and infrastructure skills"><img src="assets/home/data-cloud-infrastructure-skills.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/home/ai-for-agriculture-web.jpg" data-fallback="assets/home/ai-for-agriculture.jpg" data-title="AI for agriculture" data-description="Climate-smart technology supports crop knowledge, weather awareness, farm safety, smart irrigation and community resilience." data-alt="AI agriculture tablet technology in a farm"><img src="assets/home/ai-for-agriculture-web.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/home/stem-education-underserved.jpg" data-fallback="assets/gallery/classroom-outreach-ict.jpg" data-title="STEM education for underserved communities" data-description="WHSF brings practical STEM awareness, digital literacy and responsible technology learning into schools and communities." data-alt="WHSF STEM education and practical technology learning"><img src="assets/home/stem-education-underserved.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-24.jpg" data-fallback="assets/gallery/project-01.jpg" data-title="Women, youth and community empowerment" data-description="Technology becomes powerful when it supports entrepreneurship, mentorship, networking, jobs and community-led development." data-alt="WHSF girls in ICT activity during a community programme"><img src="assets/gallery/project-24.jpg" alt="" loading="lazy" /></button>
-              <button class="gallery-thumb" type="button" data-src="assets/gallery/project-10.jpg" data-fallback="assets/gallery/project-11.jpg" data-title="WHSF Innovation Center" data-description="A physical and virtual hub for AI labs, robotics, STEM classrooms, makerspaces, startup support and community technology access." data-alt="WHSF STEM and technology activity"><img src="assets/gallery/project-10.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb active" type="button" data-tone="tech" data-src="assets/home/lapalabras-drone-learning-web.jpg" data-fallback="assets/home/lapalabras-drone-learning.jpg" data-title="We impact lives through technology." data-description="Empowering underserved communities through Artificial Intelligence, digital inclusion, STEM education, and responsible technology for sustainable development." data-alt="WHSF learners observing drone technology training"><img src="assets/home/lapalabras-drone-learning-web.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="light" data-src="assets/home/girls-in-ai-africa.jpg" data-fallback="assets/gallery/project-24.jpg" data-title="Girls in AI Africa" data-description="Expanding Girls in ICT into AI bootcamps, robotics, coding, cloud computing, cybersecurity, innovation competitions, mentorship and scholarships." data-alt="Girls in AI Africa learners working together on computers"><img src="assets/home/girls-in-ai-africa.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="wine" data-src="assets/programs/ict-girls-club-certificates.jpg" data-fallback="assets/gallery/project-24.jpg" data-title="Digital inclusion that reaches girls" data-description="WHSF creates safe learning spaces where girls gain digital confidence, recognition and pathways into technology education." data-alt="Girls in ICT Club learners celebrating certificates with WHSF"><img src="assets/programs/ict-girls-club-certificates.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="light" data-src="assets/gallery/computer-lab-learning-01.jpg" data-fallback="assets/gallery/project-12.jpg" data-title="Community digital learning hubs" data-description="Computer labs and practical digital literacy help learners access modern tools, mentorship and future-ready skills." data-alt="Girls learning in a computer lab during a WHSF programme"><img src="assets/gallery/computer-lab-learning-01.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="tech" data-src="assets/home/ai-and-robotics-web.jpg" data-fallback="assets/home/ai-and-robotics.jpg" data-title="AI and robotics for good" data-description="WHSF promotes responsible AI, robotics and emerging technology as tools for learning, creativity, innovation and career readiness." data-alt="WHSF learners experiencing AI and robotics technology"><img src="assets/home/ai-and-robotics-web.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="tech" data-src="assets/home/data-cloud-infrastructure-skills.jpg" data-fallback="assets/gallery/project-11.jpg" data-title="Data, cloud and infrastructure skills" data-description="TechWomen learners are introduced to cloud, data center management, digital infrastructure and technology career pathways." data-alt="Women learning data cloud and infrastructure skills"><img src="assets/home/data-cloud-infrastructure-skills.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="light" data-src="assets/home/ai-for-agriculture-web.jpg" data-fallback="assets/home/ai-for-agriculture.jpg" data-title="AI for agriculture" data-description="Climate-smart technology supports crop knowledge, weather awareness, farm safety, smart irrigation and community resilience." data-alt="AI agriculture tablet technology in a farm"><img src="assets/home/ai-for-agriculture-web.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="tech" data-src="assets/home/stem-education-underserved-web.jpg" data-fallback="assets/home/stem-education-underserved.jpg" data-title="STEM education for underserved communities" data-description="WHSF brings practical STEM awareness, digital literacy and responsible technology learning into schools and communities." data-alt="WHSF STEM education and practical technology learning"><img src="assets/home/stem-education-underserved-web.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="wine" data-src="assets/gallery/project-24.jpg" data-fallback="assets/gallery/project-01.jpg" data-title="Women, youth and community empowerment" data-description="Technology becomes powerful when it supports entrepreneurship, mentorship, networking, jobs and community-led development." data-alt="WHSF girls in ICT activity during a community programme"><img src="assets/gallery/project-24.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="light" data-src="assets/gallery/project-10.jpg" data-fallback="assets/gallery/project-11.jpg" data-title="WHSF Innovation Center" data-description="A physical and virtual hub for AI labs, robotics, STEM classrooms, makerspaces, startup support and community technology access." data-alt="WHSF STEM and technology activity"><img src="assets/gallery/project-10.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="community" data-src="assets/home/community-learning.jpg" data-fallback="assets/gallery/project-11.jpg" data-title="Community learning hubs" data-description="Local learning spaces connect women, girls and volunteers to digital skills, mentorship and community technology support." data-scroll="Community learning • Volunteer support • Digital access • Mentorship • Local innovation" data-alt="WHSF community learning group with volunteers and young women"><img src="assets/home/community-learning.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="light" data-src="assets/home/girls-in-ai-africa-live.jpg" data-fallback="assets/home/girls-in-ai-africa.jpg" data-title="Girls in AI Africa" data-description="Hands-on AI learning helps girls move from digital access to confidence, coding, robotics and future-ready pathways." data-scroll="AI bootcamps • Coding • Cloud skills • Cybersecurity • Mentorship • Scholarships" data-alt="Girls in AI Africa learners working with laptops and computers"><img src="assets/home/girls-in-ai-africa-live.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="tech" data-src="assets/home/stem-practical-skills.jpg" data-fallback="assets/home/stem-education-underserved.jpg" data-title="Practical STEM skills" data-description="Learners explore tools, robotics and engineering through guided activities that make technology visible, useful and achievable." data-scroll="Robotics • Automation • Engineering confidence • Problem-solving • STEM pathways" data-alt="WHSF learner gaining hands-on STEM and technical skills"><img src="assets/home/stem-practical-skills.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="wine" data-src="assets/home/ai-robotics-for-good-live.jpg" data-fallback="assets/home/ai-and-robotics-web.jpg" data-title="AI and robotics for good" data-description="WHSF introduces emerging technology through real demonstrations, teamwork and responsible innovation." data-scroll="AI for Good • Robotics • Drones • Responsible innovation • Future-ready skills" data-alt="Girls in ICT Club participants learning AI and robotics technology"><img src="assets/home/ai-robotics-for-good-live.jpg" alt="" loading="lazy" /></button>
+              <button class="gallery-thumb" type="button" data-tone="light" data-src="assets/home/tablet-community-learning.png" data-fallback="assets/gallery/project-24.jpg" data-title="Digital inclusion for families" data-description="Technology becomes powerful when families and communities can learn, connect and access trusted information together." data-scroll="Family learning • Digital literacy • Trusted information • Inclusion • Community resilience" data-alt="Women and children using a tablet for community digital learning"><img src="assets/home/tablet-community-learning.png" alt="" loading="lazy" /></button>
             </div>
           </div>
         </div>
@@ -559,7 +559,7 @@
           </div>
         </div>
         <div class="footer-links">
-          <div><strong>Explore</strong><a href="#projects">Projects</a><a href="#about">About Us</a><a href="#gallery">Gallery</a><a href="programs.html">Programs</a><a href="innovation.html">Innovation</a><a href="mobile-app.html">Mobile App</a><a href="e-classroom.html">e-Classroom</a><a href="impact-dashboard.html">Impact</a><a href="#partners">Partners</a></div>
+          <div><strong>Explore</strong><a href="#projects">Projects</a><a href="about.html">About Us</a><a href="#gallery">Gallery</a><a href="programs.html">Programs</a><a href="innovation.html">Innovation</a><a href="mobile-app.html">Mobile App</a><a href="e-classroom.html">e-Classroom</a><a href="impact-dashboard.html">Impact</a><a href="#partners">Partners</a></div>
           <div><strong>Connect</strong><a href="#more">Get involved</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
         </div>
         <div class="footer-award" aria-label="WHSF recognition">
