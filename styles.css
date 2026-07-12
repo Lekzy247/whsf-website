@@ -5228,70 +5228,66 @@ body {
 
 /* Adaptive gallery caption treatments: each slide can choose a readable tone. */
 .gallery-slider[data-gallery-tone] .gallery-caption {
-  border-color: rgba(255, 255, 255, .42);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, .86), rgba(255, 246, 244, .72)),
-    rgba(255, 255, 255, .7);
-  box-shadow: 0 24px 70px rgba(42, 7, 17, .18);
+  max-width: min(760px, calc(100% - 32px));
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: none;
 }
 
 .gallery-slider[data-gallery-tone="wine"] .gallery-caption {
-  background:
-    linear-gradient(135deg, rgba(255, 244, 244, .9), rgba(255, 230, 224, .76)),
-    rgba(255, 255, 255, .76);
+  background: transparent;
 }
 
 .gallery-slider[data-gallery-tone="tech"] .gallery-caption {
-  background:
-    linear-gradient(135deg, rgba(239, 249, 255, .9), rgba(255, 241, 246, .78)),
-    rgba(255, 255, 255, .76);
+  background: transparent;
 }
 
 .gallery-slider[data-gallery-tone="community"] .gallery-caption {
-  background:
-    linear-gradient(135deg, rgba(255, 248, 238, .9), rgba(255, 233, 226, .78)),
-    rgba(255, 255, 255, .76);
+  background: transparent;
 }
 
 .gallery-slider[data-gallery-tone="light"] .gallery-caption {
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, .92), rgba(255, 246, 240, .82)),
-    rgba(255, 255, 255, .82);
+  background: transparent;
 }
 
 .gallery-slider[data-gallery-tone] .gallery-caption span {
-  color: #8a1538;
+  color: #fff0c9;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, .68);
 }
 
 .gallery-slider[data-gallery-tone] .gallery-caption strong,
 .gallery-slider[data-gallery-tone] .gallery-caption p {
-  color: #31101a;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .55);
+  color: #fff;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, .72);
 }
 
 .gallery-slider[data-gallery-tone="tech"] .gallery-caption span,
 .gallery-slider[data-gallery-tone="tech"] .gallery-text-scroller {
-  color: #095a82;
+  color: #fff0c9;
 }
 
 .gallery-slider[data-gallery-tone="community"] .gallery-caption span,
 .gallery-slider[data-gallery-tone="community"] .gallery-text-scroller {
-  color: #a84428;
+  color: #fff0c9;
 }
 
 .gallery-slider[data-gallery-tone] .gallery-text-scroller {
-  color: #7c1830;
-  background: rgba(255, 255, 255, .72);
-  border-color: rgba(132, 25, 52, .16);
-  box-shadow: 0 10px 26px rgba(42, 7, 17, .1);
+  color: #fff;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, .72);
 }
 
 .gallery-slider[data-gallery-tone="tech"] .gallery-text-scroller {
-  color: #095a82;
+  color: #fff;
 }
 
 .gallery-slider[data-gallery-tone="community"] .gallery-text-scroller {
-  color: #a84428;
+  color: #fff;
 }
 
 @media (max-width: 980px) {
