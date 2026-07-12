@@ -98,7 +98,7 @@
         <div class="shell section-heading centered reveal">
           <p class="eyebrow">Video classroom</p>
           <h2>Robotic and Automation Training Video Modules.</h2>
-          <p>Watch each lesson, complete the learning activities, pass the final quiz and submit your robotics project for review.</p>
+          <p>Watch each lesson, complete the learning activities, pass the final quiz and submit your project for review.</p>
         </div>
         <div class="shell course-video-catalog" id="course-video-catalog"></div>
       </section>
@@ -162,8 +162,8 @@
       <section class="section classroom-courses" id="assignments">
         <div class="shell section-heading centered reveal">
           <p class="eyebrow">Assignments</p>
-          <h2>Submit your Robotic Project.</h2>
-          <p>Use the assignment form to submit your design notes, project link, photos, code, reflection or final robotics and automation project evidence.</p>
+          <h2>Submit your Project</h2>
+          <p>Use the assignment form to submit your design notes, project link, photos, code, reflection or final course project evidence.</p>
         </div>
         <div class="shell learner-list" id="assignments-list">
           <article class="learner-empty">Assignments will appear here after your teacher adds them.</article>
@@ -452,13 +452,13 @@
         'ai-integration': {
           modules: aiIntegrationVideoModules,
           heading: 'Robotic and Automation Training Video Modules.',
-          intro: 'Watch each lesson, complete the learning activities, pass the final quiz and submit your robotics project for review.',
+          intro: 'Watch each lesson, complete the learning activities, pass the final quiz and submit your project for review.',
           lockedTitle: 'Login or create a WHSF e-Classroom account to watch the Robotics and Automation training videos.'
         },
         'ai-for-agriculture': {
           modules: aiAgricultureVideoModules,
           heading: 'AI for Agriculture Training Video Modules.',
-          intro: 'Watch each lesson, complete the learning activities, pass the final quiz and submit your AI agriculture project for review.',
+          intro: 'Watch each lesson, complete the learning activities, pass the final quiz and submit your project for review.',
           lockedTitle: 'Login or create a WHSF e-Classroom account to watch the AI for Agriculture training videos.'
         }
       };
@@ -741,7 +741,64 @@
         }
       ];
 
-      const getFinalQuizQuestions = () => courseSlug === 'ai-integration' ? roboticsFinalQuizQuestions : defaultFinalQuizQuestions;
+      const aiAgricultureFinalQuizQuestions = [
+        {
+          question: 'What is the main purpose of using AI in agriculture?',
+          options: ['To replace all farmers', 'To support better farming decisions using data, local observation and human review', 'To make crops grow without soil or water', 'To remove the need for weather information'],
+          answer: 1
+        },
+        {
+          question: 'What information is most useful for AI-assisted crop disease detection?',
+          options: ['Clear crop or leaf images with notes about symptoms, location and field conditions', 'Only the farmer’s name', 'A random picture from the internet', 'The price of a mobile phone'],
+          answer: 0
+        },
+        {
+          question: 'Why is soil analysis important before giving farm advice?',
+          options: ['It helps understand nutrients, moisture and soil condition before choosing treatment', 'It makes market prices unnecessary', 'It proves every crop has the same needs', 'It replaces all local farming knowledge'],
+          answer: 0
+        },
+        {
+          question: 'How can weather intelligence help farmers?',
+          options: ['By planning planting, irrigation, harvesting and safety decisions', 'By guaranteeing rainfall every day', 'By removing pests automatically', 'By replacing seed selection'],
+          answer: 0
+        },
+        {
+          question: 'What does pest monitoring help farmers do?',
+          options: ['Ignore early warning signs', 'Detect early signs of pests before serious crop loss', 'Stop using field observations', 'Only focus on certificate completion'],
+          answer: 1
+        },
+        {
+          question: 'Why is market price awareness useful in agriculture?',
+          options: ['It helps farmers compare prices and decide when or where to sell more fairly', 'It makes crop quality irrelevant', 'It prevents farmers from selling produce', 'It only works for imported food'],
+          answer: 0
+        },
+        {
+          question: 'What is the goal of smart irrigation guidance?',
+          options: ['Use the right amount of water at the right time', 'Always flood the field', 'Stop checking soil moisture', 'Water only when a phone battery is full'],
+          answer: 0
+        },
+        {
+          question: 'What is the safest way to use AI-generated farm guidance?',
+          options: ['Follow it blindly', 'Check AI suggestions against local knowledge, qualified experts and real field conditions', 'Share private farm data with strangers', 'Ignore weather and soil information'],
+          answer: 1
+        },
+        {
+          question: 'Why should farmer and farm data be protected?',
+          options: ['Because permission, privacy and responsible data use build trust', 'Because data has no value', 'Because all farm data must be public', 'Because privacy prevents learning'],
+          answer: 0
+        },
+        {
+          question: 'What should a strong AI for Agriculture final project include?',
+          options: ['Only a project title', 'A problem, target users, needed data, AI idea, benefits, risks and human review plan', 'A copied social media post', 'A promise of guaranteed crop yield'],
+          answer: 1
+        }
+      ];
+
+      const getFinalQuizQuestions = () => {
+        if (courseSlug === 'ai-for-agriculture') return aiAgricultureFinalQuizQuestions;
+        if (courseSlug === 'ai-integration' || courseSlug === 'robotics-automation') return roboticsFinalQuizQuestions;
+        return defaultFinalQuizQuestions;
+      };
 
       function renderFinalQuiz() {
         if (!finalQuizCard || !finalQuizForm) return;

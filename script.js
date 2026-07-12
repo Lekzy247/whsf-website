@@ -66,6 +66,37 @@ function initClassroomMenuDropdown() {
 
 initClassroomMenuDropdown();
 
+function initMobileNavigationFallback() {
+  const nav = document.querySelector('#primary-navigation, .primary-nav');
+  const toggle = document.querySelector('.menu-toggle');
+
+  nav?.querySelectorAll('a[href]').forEach((link) => {
+    if (link.dataset.mobileCloseReady === 'true') return;
+    link.dataset.mobileCloseReady = 'true';
+    link.addEventListener('click', () => {
+      setMenu(false);
+      document.querySelectorAll('[data-classroom-menu-toggle]').forEach((dropdownToggle) => {
+        dropdownToggle.setAttribute('aria-expanded', 'false');
+        dropdownToggle.classList.remove('is-open');
+      });
+      document.querySelectorAll('[data-classroom-menu-panel]').forEach((panel) => {
+        panel.hidden = true;
+      });
+    });
+  });
+
+  if (toggle && nav && toggle.dataset.mobileFallbackReady !== 'true') {
+    toggle.dataset.mobileFallbackReady = 'true';
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      nav.classList.toggle('open', open);
+      document.body.classList.toggle('menu-open', open);
+    });
+  }
+}
+
+initMobileNavigationFallback();
+
 const whsfSocialLinks = [
   {
     name: 'Facebook',
@@ -382,7 +413,10 @@ async function showGallerySlide(index) {
   galleryIndex = (index + galleryThumbs.length) % galleryThumbs.length;
   const requestedIndex = galleryIndex;
   const selected = galleryThumbs[galleryIndex];
-  const { src, fallback, title, description, alt, scroll } = selected.dataset;
+  const { src, fallback, title, description, alt, scroll, tone } = selected.dataset;
+  if (gallerySlider) {
+    gallerySlider.dataset.galleryTone = tone || 'wine';
+  }
 
   galleryThumbs.forEach((thumb, thumbIndex) => {
     thumb.classList.toggle('active', thumbIndex === galleryIndex);
@@ -1984,31 +2018,6 @@ initWhsfCookieConsent();
 const WHSF_NEWSLETTER_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
 const WHSF_NEWSLETTER_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
 
-function initWhsfBlogLinks() {
-  const primaryNav = document.querySelector('.primary-nav');
-  if (primaryNav && !primaryNav.querySelector('a[href="blog.html"]')) {
-    const contactLink = primaryNav.querySelector('a[href="contact.html"]');
-    const blogLink = document.createElement('a');
-    blogLink.href = 'blog.html';
-    blogLink.textContent = 'Blog';
-    if (contactLink) {
-      primaryNav.insertBefore(blogLink, contactLink);
-    } else {
-      primaryNav.appendChild(blogLink);
-    }
-  }
-
-  document.querySelectorAll('.footer-links > div').forEach((column) => {
-    const heading = column.querySelector('strong');
-    if (heading && heading.textContent.trim().toLowerCase() === 'explore' && !column.querySelector('a[href="blog.html"]')) {
-      const link = document.createElement('a');
-      link.href = 'blog.html';
-      link.textContent = 'Blog';
-      column.appendChild(link);
-    }
-  });
-}
-
 function initWhsfNewsletterSubscribe() {
   const footer = document.querySelector('.site-footer');
   if (!footer || footer.querySelector('[data-whsf-newsletter]')) return;
@@ -2095,5 +2104,4 @@ function initWhsfNewsletterSubscribe() {
   });
 }
 
-initWhsfBlogLinks();
 initWhsfNewsletterSubscribe();
