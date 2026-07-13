@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v121';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v123';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -8,6 +8,7 @@ const WHSF_CORE_ASSETS = [
   '/mobile-app.html',
   '/mobile-app-admin.html',
   '/programs.html',
+  '/blog.html',
   '/innovation.html',
   '/contact.html',
   '/privacy-policy.html',
@@ -22,7 +23,8 @@ const WHSF_CORE_ASSETS = [
   '/script.js',
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
-  '/assets/whsf-logo.jpg'
+  '/assets/whsf-logo.jpg',
+  '/assets/about/about-us-board.webp'
 ];
 
 self.addEventListener('install', (event) => {
