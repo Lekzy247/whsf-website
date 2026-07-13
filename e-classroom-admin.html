@@ -1,14 +1,14 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="WHSF e-Classroom admin and teacher dashboard for managing courses, lessons, students, assignments and certificates."
+      content="WHSF e-learning admin and teacher dashboard for managing courses, lessons, students, assignments and certificates."
     />
     <meta name="theme-color" content="#6d1024" />
-    <title>WHSF e-Classroom Admin</title>
+    <title>WHSF e-learning Admin</title>
     <link rel="icon" href="assets/whsf-logo.jpg" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
@@ -29,7 +29,7 @@
 
     <div class="utility-bar">
       <div class="shell utility-inner">
-        <p>WHSF e-Classroom administration</p>
+        <p>WHSF e-learning administration</p>
         <div class="utility-actions" aria-label="Accessibility controls">
           <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
           <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
@@ -44,7 +44,7 @@
           <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
           <span>
             <strong>WHSF</strong>
-            <small>e-Classroom Admin</small>
+            <small>e-learning Admin</small>
           </span>
         </a>
 
@@ -54,7 +54,8 @@
         </button>
 
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-          <a href="e-classroom.html">e-Classroom</a>
+          <a href="e-classroom.html">e-learning</a>
+          <a href="blog.html">Blog</a>
           <a href="#students">Students</a>
           <a href="#courses">Courses</a>
           <a href="#lessons">Lessons</a>
@@ -203,16 +204,16 @@
       <div class="shell footer-grid">
         <div class="footer-brand">
           <img src="assets/whsf-logo.jpg" width="62" height="62" alt="WHSF emblem" />
-          <div><strong>World Humanitarian Support Foundation</strong><p>Teacher and admin dashboard for e-Classroom.</p></div>
+          <div><strong>World Humanitarian Support Foundation</strong><p>Teacher and admin dashboard for e-learning.</p></div>
         </div>
         <div class="footer-links">
           <div><strong>Classroom</strong><a href="e-classroom.html">Student classroom</a><a href="#students">Students</a><a href="#courses">Courses</a></div>
-          <div><strong>Website</strong><a href="index.html#top">Home</a><a href="contact.html">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+          <div><strong>Website</strong><a href="index.html#top">Home</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
         </div>
       </div>
       <div class="shell footer-bottom">
-        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
-        <a href="#top">Back to top ↑</a>
+        <p>Â© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top â†‘</a>
       </div>
     </footer>
 
@@ -370,7 +371,7 @@
         doc.setTextColor(177, 139, 54);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(6);
-        const microText = ' WHSF-Verified Certificate • ';
+        const microText = ' WHSF-Verified Certificate â€¢ ';
         doc.text(microText.repeat(10), width / 2, 76, { align: 'center', maxWidth: width - 160 });
         doc.text(microText.repeat(10), width / 2, height - 68, { align: 'center', maxWidth: width - 160 });
       }
@@ -403,7 +404,7 @@
         doc.setTextColor(177, 139, 54);
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(12);
-        doc.text('OFFICIAL e-CLASSROOM CERTIFICATE OF COMPLETION', width / 2, 204, { align: 'center', charSpace: 1.3 });
+        doc.text('OFFICIAL e-LEARNING CERTIFICATE OF COMPLETION', width / 2, 204, { align: 'center', charSpace: 1.3 });
 
         doc.setTextColor(24, 30, 29);
         doc.setFont('times', 'bold');
@@ -428,7 +429,7 @@
         doc.setTextColor(24, 30, 29);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(14);
-        doc.text('for successfully completing the WHSF e-Classroom course', width / 2, courseIntroY, { align: 'center' });
+        doc.text('for successfully completing the WHSF e-learning course', width / 2, courseIntroY, { align: 'center' });
 
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(20);
@@ -557,7 +558,7 @@
           setStatus(message);
         };
 
-        showCertificateStatus('Generating certificate number…');
+        showCertificateStatus('Generating certificate numberâ€¦');
         const { data, error } = await whsfSupabase
           .from('eclassroom_certificates')
           .select('certificate_number');
@@ -599,7 +600,7 @@
       adminLoginForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(adminLoginForm);
-        setStatus('Signing in…');
+        setStatus('Signing inâ€¦');
         const { data, error } = await whsfSupabase.auth.signInWithPassword({
           email: String(formData.get('email') || '').trim(),
           password: String(formData.get('password') || '')
@@ -713,7 +714,7 @@
         }
 
         submitButton.disabled = true;
-        showCertificateStatus('Issuing certificate…');
+        showCertificateStatus('Issuing certificateâ€¦');
 
         let error = null;
         for (let attempt = 0; attempt < 3; attempt += 1) {
@@ -774,7 +775,7 @@
           return;
         }
 
-        showCertificateStatus('Preparing professional certificate PDF…');
+        showCertificateStatus('Preparing professional certificate PDFâ€¦');
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
         await drawProfessionalCertificate(doc, student.full_name, course.title, certificateNumber, new Date().toISOString());

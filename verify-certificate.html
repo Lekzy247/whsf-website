@@ -1,17 +1,17 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Verify WHSF e-Classroom certificates and submit employee or staff verification details for World Humanitarian Support Foundation."
+      content="Verify WHSF e-learning certificates and submit employee or staff verification details for World Humanitarian Support Foundation."
     />
     <meta name="theme-color" content="#6d1024" />
     <meta property="og:title" content="Verify WHSF Certificate" />
     <meta
       property="og:description"
-      content="Confirm whether a WHSF e-Classroom certificate number is valid."
+      content="Confirm whether a WHSF e-learning certificate number is valid."
     />
     <meta property="og:type" content="website" />
     <title>Verify Certificate &amp; Staff | WHSF</title>
@@ -63,7 +63,7 @@
           <a href="index.html#top">Home</a>
           <a href="about.html">About Us</a>
           <a href="programs.html">Programs</a>
-          <a href="e-classroom.html">e-Classroom</a>
+          <a href="blog.html">Blog</a><a href="e-classroom.html">e-learning</a>
           <a href="impact-dashboard.html">Impact</a>
           <a href="contact.html">Contact &amp; Support</a>
           <a href="e-classroom-admin.html">Teacher/Admin</a>
@@ -76,7 +76,7 @@
         <div class="shell classroom-hero-grid">
           <div class="classroom-copy reveal">
             <p class="eyebrow">Certificate verification</p>
-            <h1 id="verify-title">Confirm a WHSF e-Classroom certificate or staff identity.</h1>
+            <h1 id="verify-title">Confirm a WHSF e-learning certificate or staff identity.</h1>
             <p class="hero-lead">
               Enter a certificate number to confirm learner records, or use the staff verification section below to submit employee details for WHSF identity review.
             </p>
@@ -111,23 +111,23 @@
             <dl class="verify-details">
               <div>
                 <dt>Certificate number</dt>
-                <dd id="result-number">—</dd>
+                <dd id="result-number">â€”</dd>
               </div>
               <div>
                 <dt>Learner</dt>
-                <dd id="result-student">—</dd>
+                <dd id="result-student">â€”</dd>
               </div>
               <div>
                 <dt>Course</dt>
-                <dd id="result-course">—</dd>
+                <dd id="result-course">â€”</dd>
               </div>
               <div>
                 <dt>Category</dt>
-                <dd id="result-category">—</dd>
+                <dd id="result-category">â€”</dd>
               </div>
               <div>
                 <dt>Issued date</dt>
-                <dd id="result-issued">—</dd>
+                <dd id="result-issued">â€”</dd>
               </div>
             </dl>
             <a class="button" id="certificate-file-link" href="#" target="_blank" rel="noreferrer" hidden>Open certificate file</a>
@@ -141,7 +141,7 @@
               <p>
                 We could not find this certificate number in WHSF records. Check the number and try again, or contact WHSF for support.
               </p>
-              <a class="arrow-link" href="contact.html">Contact WHSF <span>→</span></a>
+              <a class="arrow-link" href="contact.html">Contact WHSF <span>â†’</span></a>
             </div>
           </article>
         </div>
@@ -397,15 +397,15 @@
             <dl class="verify-details staff-details">
               <div>
                 <dt>Employee name</dt>
-                <dd id="staff-result-name">—</dd>
+                <dd id="staff-result-name">â€”</dd>
               </div>
               <div>
                 <dt>Employee #</dt>
-                <dd id="staff-result-number">—</dd>
+                <dd id="staff-result-number">â€”</dd>
               </div>
               <div>
                 <dt>Phone #</dt>
-                <dd id="staff-result-phone">—</dd>
+                <dd id="staff-result-phone">â€”</dd>
               </div>
               <div>
                 <dt>Status</dt>
@@ -433,8 +433,8 @@
         </div>
       </div>
       <div class="shell footer-bottom">
-        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
-        <a href="#top">Back to top ↑</a>
+        <p>Â© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top â†‘</a>
       </div>
     </footer>
 
@@ -459,7 +459,7 @@
       const employeePhoneInput = document.querySelector('#employee-phone');
 
       const setText = (selector, value) => {
-        document.querySelector(selector).textContent = value || '—';
+        document.querySelector(selector).textContent = value || 'â€”';
       };
 
       const setStatus = (message) => {
@@ -575,7 +575,7 @@
         const renderSelected = () => {
           const option = select.options[select.selectedIndex] || select.options[0];
           const label = shortCountryLabel(option);
-          toggle.innerHTML = `<img class="country-flag-img" src="${flagUrl(option.value)}" alt="" loading="lazy" /><span>${label}</span><strong>⌄</strong>`;
+          toggle.innerHTML = `<img class="country-flag-img" src="${flagUrl(option.value)}" alt="" loading="lazy" /><span>${label}</span><strong>âŒ„</strong>`;
         };
 
         Array.from(select.options).forEach((option) => {
@@ -651,7 +651,7 @@
           return;
         }
 
-        setStatus('Checking WHSF certificate records…');
+        setStatus('Checking WHSF certificate recordsâ€¦');
         resultCard.hidden = true;
         errorCard.hidden = true;
 
@@ -715,7 +715,7 @@
         if (employeePhoneInput) employeePhoneInput.dataset.fullPhone = employeePhone;
         if (employeeCountryCodeInput) employeeCountryCodeInput.dataset.fullPhone = employeePhone;
 
-        setStaffStatus('Checking WHSF staff records…');
+        setStaffStatus('Checking WHSF staff recordsâ€¦');
         staffResult.hidden = true;
 
         const { data, error } = await whsfSupabase.rpc('verify_whsf_staff', {
