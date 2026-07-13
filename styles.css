@@ -311,7 +311,7 @@ p, li { text-wrap: pretty; }
 .visual-programme-list article:nth-child(1) img,
 .visual-programme-list article:nth-child(4) img,
 .visual-programme-list article:nth-child(7) img { object-fit: contain; padding: 22px; }
-.visual-programme-list article:first-child img[src$="girls-agriculture-climate-smart.png"] { height: 245px; object-fit: cover !important; object-position: center center; padding: 0 !important; background: #fff; }
+.visual-programme-list article:first-child img[src$="ai-for-agriculture-web.jpg"] { height: 245px; object-fit: cover !important; object-position: center center; padding: 0 !important; background: #fff; }
 .visual-programme-list img[src$="partner-cpi.png"] { object-fit: contain; padding: 18px; background: #fff; }
 .visual-programme-list article > div { padding: 24px; display: flex; flex-direction: column; flex: 1; }
 .visual-programme-list h3 { font-size: 1.15rem; }
@@ -957,6 +957,8 @@ p, li { text-wrap: pretty; }
 .contact-section { padding: 112px 0; color: #fff; background: var(--green-950); }
 .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 100px; align-items: start; }
 .contact-copy p:not(.eyebrow) { color: #ead1d7; font-size: 1.05rem; }
+.contact-visual { margin: 28px 0 0; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 24px; background: rgba(255,255,255,.08); box-shadow: 0 24px 60px rgba(0,0,0,.24); }
+.contact-visual img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; object-position: center; }
 .contact-support-list { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px; }
 .contact-support-list span { display: inline-flex; padding: 10px 12px; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; color: #fff; background: rgba(255,255,255,.08); font-size: .8rem; font-weight: 900; }
 .address-list { margin-top: 32px; display: grid; gap: 18px; }
