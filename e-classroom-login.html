@@ -1,11 +1,11 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Login or create a WHSF FutureTech Academy e-Classroom account."
+      content="Login or create a WHSF FutureTech Academy e-learning account."
     />
     <meta name="theme-color" content="#6d1024" />
     <title>Login | WHSF FutureTech Academy</title>
@@ -22,7 +22,8 @@
   </head>
   <body class="academy-login-body">
     <main class="academy-login-page" id="main">
-      <a class="academy-login-back" href="e-classroom.html">← Back to e-Classroom</a>
+      <a class="academy-login-back" href="e-classroom.html">← Back to e-learning</a>
+      <a class="academy-login-back" href="blog.html">Open WHSF Blog</a>
 
       <section class="academy-login-shell" aria-labelledby="academy-login-title">
         <div class="academy-login-copy">
@@ -68,7 +69,7 @@
           </div>
 
           <p class="academy-login-status" id="academy-login-status" role="status">
-            Enter your WHSF e-Classroom username/email and password to continue.
+            Enter your WHSF e-learning username/email and password to continue.
           </p>
         </form>
       </section>
@@ -103,12 +104,12 @@
         if (signupButton) signupButton.textContent = signupMode ? 'Back to login' : 'Register';
         if (loginHelper) {
           loginHelper.textContent = signupMode
-            ? 'Create your WHSF e-Classroom account. Email confirmation is required before course access.'
+            ? 'Create your WHSF e-learning account. Email confirmation is required before course access.'
             : 'Use your WHSF username/email and password.';
         }
         setLoginStatus(signupMode
           ? 'Enter your full name, email and password. After registration, check your email to activate the account before login.'
-          : 'Enter your WHSF e-Classroom username/email and password to continue.'
+          : 'Enter your WHSF e-learning username/email and password to continue.'
         );
       }
 
@@ -130,7 +131,7 @@
           .maybeSingle();
 
         if (lookupError) {
-          setLoginStatus(`Signed in, but profile check failed: ${lookupError.message}`);
+        setLoginStatus('Signed in, but your learner profile could not be confirmed. Please contact WHSF support if this continues.');
           return null;
         }
 
@@ -140,7 +141,7 @@
 
         const { data, error } = await request;
         if (error) {
-          setLoginStatus(`Account authenticated, but learner profile could not be saved: ${error.message}`);
+        setLoginStatus('Your account was created, but your learner profile could not be saved. Please contact WHSF support if this continues.');
           return null;
         }
 
@@ -165,7 +166,7 @@
 
         if (signupMode) {
           if (!fullName) {
-            setLoginStatus('Please enter your full name to create a WHSF e-Classroom account.');
+            setLoginStatus('Please enter your full name to create a WHSF e-learning account.');
             return;
           }
 
@@ -181,7 +182,7 @@
 
           if (error) {
             const friendlyError = /already registered|already been registered|user already/i.test(error.message)
-              ? 'This email may already have a WHSF e-Classroom account. Please return to Login and use the same username/email and password.'
+              ? 'This email may already have a WHSF e-learning account. Please return to Login and use the same username/email and password.'
               : error.message;
             setLoginStatus(friendlyError);
             return;
@@ -192,7 +193,7 @@
           }
 
           setSignupMode(false);
-          setLoginStatus('Account created. Please check your email inbox, activate your WHSF e-Classroom account, then return here to login.');
+          setLoginStatus('Account created. Please check your email inbox, activate your WHSF e-learning account, then return here to login.');
           return;
         }
 
@@ -200,14 +201,14 @@
         const { data, error } = await whsfSupabase.auth.signInWithPassword({ email, password });
         if (error) {
           const friendlyError = /email not confirmed/i.test(error.message)
-            ? 'Your account exists, but the email has not been confirmed yet. Please check your email inbox, confirm the WHSF e-Classroom account, then sign in again.'
+            ? 'Your account exists, but the email has not been confirmed yet. Please check your email inbox, confirm the WHSF e-learning account, then sign in again.'
             : error.message;
           setLoginStatus(friendlyError);
           return;
         }
 
         await upsertStudentProfile(data.user);
-        setLoginStatus('Login successful. Opening WHSF e-Classroom…');
+        setLoginStatus('Login successful. Opening WHSF e-learning…');
         goToClassroom();
       });
 

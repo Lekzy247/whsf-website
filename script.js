@@ -1813,7 +1813,7 @@ function initAiAssistantActions() {
 
         if (!apiResponse.ok) {
           renderAiResponse(action, {
-            error: data.error || 'Live AI search is not available right now. Showing WHSF guidance preview instead.'
+          error: data.error || 'Live AI search is not available right now. Showing WHSF guidance preview instead.'
           });
           return;
         }
@@ -2112,7 +2112,7 @@ function initWhsfNewsletterSubscribe() {
       status.className = 'newsletter-status is-success';
       form.reset();
     } catch (error) {
-      status.textContent = `${error.message} If the database step has not been completed yet, run the newsletter SQL in Supabase and try again.`;
+        status.textContent = 'Newsletter signup is temporarily unavailable. Please try again later or contact WHSF support.';
       status.className = 'newsletter-status is-error';
     }
   });
