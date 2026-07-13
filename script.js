@@ -282,13 +282,13 @@ const pathSecondaryAction = document.querySelector('#path-secondary-action');
 const pathContent = {
   student: {
     label: 'Student pathway',
-    title: 'Start or continue learning with WHSF e-Classroom.',
+    title: 'Start or continue learning with WHSF e-learning.',
     copy: 'Explore technology training in robotics, cybersecurity, drone technology, AI, STEM, eHealth and accessibility technology.',
-    primaryText: 'Open e-Classroom',
+    primaryText: 'Open e-learning',
     primaryHref: 'e-classroom.html',
     secondaryText: 'Contact support',
     secondaryHref: 'contact.html',
-    interest: 'e-Classroom support'
+    interest: 'e-learning support'
   },
   volunteer: {
     label: 'Volunteer pathway',
@@ -546,8 +546,8 @@ const contactGuidanceContent = {
     guidance: 'Tell WHSF the type of support you want to provide.',
     placeholder: 'Share whether you want to donate, sponsor learners, fund equipment, support events or discuss a grant.'
   },
-  'e-Classroom support': {
-    guidance: 'Tell WHSF what e-Classroom access, course, assignment or certificate issue you need help with.',
+  'e-learning support': {
+    guidance: 'Tell WHSF what e-learning access, course, assignment or certificate issue you need help with.',
     placeholder: 'Share your student email, course name and what happened, such as login, lesson, assignment or certificate issue.'
   },
   'TechBridge / Device Donation': {
@@ -604,7 +604,7 @@ form?.addEventListener('submit', (event) => {
     ? `FRAUD / SCAM AWARENESS AUTO-REPLY\n\nThank you for contacting WHSF. Based on your enquiry, please be aware:\n\n${fraudAwarenessMessage}\n\nWHSF is not offering financial promotions, investment payments, WhatsApp cash grants, Facebook promotions or unofficial aid through personal numbers. If someone is using a WhatsApp number, fake Facebook page, fake employee name or fake phone number to request money or promise benefits, it does not come from WHSF.\n\nPlease do not send money or share personal, banking or identity information. Report the matter to your local authorities, the platform involved, and your bank or mobile-money provider if any payment details were shared.\n\n---\n\n`
     : '';
   const financialAidAutoReply = financialAidRequest
-    ? `PUBLIC ASSISTANCE NOTICE\n\nThank you for contacting World Humanitarian Support Foundation. WHSF is committed to helping communities through technology education, digital inclusion, e-Classroom learning, skills development, mentorship, innovation programmes and community capacity building.\n\nPlease note that WHSF does not provide direct financial assistance to the public for personal bills, medical bills, school fees, rent, cash requests or individual emergency payments. Our support model focuses on expanding access to learning, technology skills, digital tools, verified certificates, youth empowerment, women-in-technology pathways and community development programmes.\n\nIf you need urgent medical, welfare, school-fee or emergency financial support, please contact appropriate local government agencies, registered social services, verified community charities, hospitals, schools, faith/community support organisations or emergency authorities in your area.\n\nYou are welcome to explore WHSF e-Classroom, technology programmes, digital literacy opportunities and public learning resources through our official website.\n\n---\n\n`
+    ? `PUBLIC ASSISTANCE NOTICE\n\nThank you for contacting World Humanitarian Support Foundation. WHSF is committed to helping communities through technology education, digital inclusion, e-learning learning, skills development, mentorship, innovation programmes and community capacity building.\n\nPlease note that WHSF does not provide direct financial assistance to the public for personal bills, medical bills, school fees, rent, cash requests or individual emergency payments. Our support model focuses on expanding access to learning, technology skills, digital tools, verified certificates, youth empowerment, women-in-technology pathways and community development programmes.\n\nIf you need urgent medical, welfare, school-fee or emergency financial support, please contact appropriate local government agencies, registered social services, verified community charities, hospitals, schools, faith/community support organisations or emergency authorities in your area.\n\nYou are welcome to explore WHSF e-learning, technology programmes, digital literacy opportunities and public learning resources through our official website.\n\n---\n\n`
     : '';
   const body = encodeURIComponent(
     `${fraudAutoReply}${financialAidAutoReply}Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`
@@ -724,7 +724,7 @@ const mobileRoleContent = {
   },
   student: {
     label: 'Student',
-    summary: 'Student view is ready with e-Classroom, certificates and learning support.',
+    summary: 'Student view is ready with e-learning, certificates and learning support.',
     tab: 'member'
   },
   member: {
@@ -757,9 +757,9 @@ const chatRooms = {
   },
   students: {
     title: 'Students room',
-    description: 'Ask learning questions and receive guidance for WHSF e-Classroom.',
+    description: 'Ask learning questions and receive guidance for WHSF e-learning.',
     messages: [
-      { sender: 'Student support', text: 'Students can ask course questions and receive direction to e-Classroom resources.', time: '09:15' }
+      { sender: 'Student support', text: 'Students can ask course questions and receive direction to e-learning resources.', time: '09:15' }
     ]
   },
   partners: {
@@ -1407,7 +1407,7 @@ const whsfAssistantAnswers = [
   {
     keys: ['certificate', 'verify certificate', 'certificate verification', 'certificate number', 'pdf certificate'],
     title: 'Certificate verification',
-    answer: 'You can verify a WHSF e-Classroom certificate by entering the certificate number on the verification page. If a certificate is valid, the portal shows the learner, course, issue date and download link when available.',
+    answer: 'You can verify a WHSF e-learning certificate by entering the certificate number on the verification page. If a certificate is valid, the portal shows the learner, course, issue date and download link when available.',
     link: 'verify-certificate.html',
     linkText: 'Open certificate verification'
   },
@@ -1421,7 +1421,7 @@ const whsfAssistantAnswers = [
   {
     keys: ['privacy', 'privacy policy', 'data', 'cookies', 'cookie', 'personal information', 'data processing'],
     title: 'Privacy Policy',
-    answer: 'WHSF has a Privacy Policy explaining how the website, e-Classroom, mobile app, donations, certificate verification, staff verification and contact services handle information. You can also manage cookie preferences from Privacy settings in the footer.',
+    answer: 'WHSF has a Privacy Policy explaining how the website, e-learning, mobile app, donations, certificate verification, staff verification and contact services handle information. You can also manage cookie preferences from Privacy settings in the footer.',
     link: 'privacy-policy.html',
     linkText: 'Read Privacy Policy'
   },
@@ -1455,15 +1455,15 @@ const whsfAssistantAnswers = [
   },
   {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
-    title: 'WHSF e-Classroom',
-    answer: 'The WHSF e-Classroom supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM, accessibility technology, AI for Agriculture, AI for Healthcare, Girls in AI Africa, AI Rapid Response and AI Media & Information Communication. Learners can view lessons, submit assignments, track progress and receive certificates.',
+    title: 'WHSF e-learning',
+    answer: 'The WHSF e-learning supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM, accessibility technology, AI for Agriculture, AI for Healthcare, Girls in AI Africa, AI Rapid Response and AI Media & Information Communication. Learners can view lessons, submit assignments, track progress and receive certificates.',
     link: 'e-classroom.html',
-    linkText: 'Open e-Classroom'
+    linkText: 'Open e-learning'
   },
   {
     keys: ['admin', 'teacher', 'teacher dashboard', 'course management', 'students'],
     title: 'Teacher/Admin dashboard',
-    answer: 'Authorized WHSF staff can manage courses, students, lessons, assignments and certificates through the e-Classroom admin dashboard. Admin or teacher access must be approved by WHSF.',
+    answer: 'Authorized WHSF staff can manage courses, students, lessons, assignments and certificates through the e-learning admin dashboard. Admin or teacher access must be approved by WHSF.',
     link: 'e-classroom-admin.html',
     linkText: 'Open admin dashboard'
   },
@@ -1512,7 +1512,7 @@ const whsfAssistantAnswers = [
   {
     keys: ['contact', 'help', 'support', 'email', 'phone', 'whatsapp', 'issue'],
     title: 'Contact and support',
-    answer: 'For direct help, use the Contact & Support page. You can request programme support, e-Classroom help, certificate assistance, partnership information, donation guidance or safeguarding support.',
+    answer: 'For direct help, use the Contact & Support page. You can request programme support, e-learning help, certificate assistance, partnership information, donation guidance or safeguarding support.',
     link: 'contact.html',
     linkText: 'Open Contact & Support'
   },
@@ -1541,7 +1541,7 @@ function getAssistantAnswer(question) {
   if (!normalized) {
     return {
       title: 'How can I help?',
-      answer: 'Ask about certificates, staff verification, e-Classroom, programmes, donations, partnerships, mobile app, volunteering or WHSF impact.',
+      answer: 'Ask about certificates, staff verification, e-learning, programmes, donations, partnerships, mobile app, volunteering or WHSF impact.',
       link: 'contact.html',
       linkText: 'Contact WHSF'
     };
@@ -1558,7 +1558,7 @@ function getAssistantAnswer(question) {
 
   return {
     title: 'WHSF support',
-    answer: 'I can help with WHSF public information including programmes, e-Classroom, certificate verification, employee/staff verification, partnerships, donations, volunteering, mobile app support and impact reporting. For a personal case, please contact WHSF directly.',
+    answer: 'I can help with WHSF public information including programmes, e-learning, certificate verification, employee/staff verification, partnerships, donations, volunteering, mobile app support and impact reporting. For a personal case, please contact WHSF directly.',
     link: 'contact.html',
     linkText: 'Chat with WHSF support'
   };
@@ -1612,7 +1612,7 @@ function initWhsfAssistant() {
       <div class="whsf-chat-quick" aria-label="Quick questions">
         <button type="button" data-question="How do I verify a certificate?">Certificate</button>
         <button type="button" data-question="How do I verify WHSF staff?">Staff</button>
-        <button type="button" data-question="How do I join e-Classroom?">e-Classroom</button>
+        <button type="button" data-question="How do I join e-learning?">e-learning</button>
         <button type="button" data-question="How can I partner with WHSF?">Partner</button>
         <button type="button" data-question="How can I donate?">Donate</button>
       </div>
@@ -1775,14 +1775,14 @@ function initAiAssistantActions() {
       status: 'Technology update digest ready',
       message: 'I would summarize useful technology news in AI, robotics, drones, cybersecurity, cloud, data centers and digital inclusion for WHSF learners and staff.',
       update: 'The digest should focus on learning value: what changed, why it matters, beginner-friendly explanation and how WHSF learners can apply it.',
-      next: 'Use this for weekly learning updates, e-Classroom discussion prompts, programme content and mentor briefing notes.',
+      next: 'Use this for weekly learning updates, e-learning discussion prompts, programme content and mentor briefing notes.',
       chips: ['AI news', 'Robotics', 'Drones', 'Cybersecurity', 'Cloud']
     },
     whatsapp: {
       title: 'WhatsApp Information Assistant',
       status: 'WhatsApp support flow prepared',
       message: 'I would guide users through short mobile-friendly answers such as “Is this scholarship real?”, “Where can I learn cybersecurity?” or “How do I report a suspicious message?”',
-      update: 'The safest first version can use approved WHSF answers, fraud warnings, certificate/staff verification links, e-Classroom links and simple escalation guidance.',
+      update: 'The safest first version can use approved WHSF answers, fraud warnings, certificate/staff verification links, e-learning links and simple escalation guidance.',
       next: 'When connected later, WhatsApp Business or an approved messaging provider can deliver these answers without exposing private personal numbers.',
       chips: ['Mobile support', 'Low bandwidth', 'Verified answers', 'Fraud warning', 'Learning guidance']
     },
@@ -1921,7 +1921,7 @@ function initWhsfCookieConsent() {
       <span>Privacy choices</span>
       <h2>Consent to Cookies & Data Processing</h2>
       <p>
-        WHSF uses necessary website functions and may use similar technologies to improve access, integrate content such as videos or external services, understand website performance and support secure public services such as e-Classroom, certificate verification, staff verification, donations and contact forms. You can accept all, reject non-essential processing or manage your preferences. Your choice is voluntary and can be changed using “Privacy settings” at the bottom of the website.
+        WHSF uses necessary website functions and may use similar technologies to improve access, integrate content such as videos or external services, understand website performance and support secure public services such as e-learning, certificate verification, staff verification, donations and contact forms. You can accept all, reject non-essential processing or manage your preferences. Your choice is voluntary and can be changed using “Privacy settings” at the bottom of the website.
       </p>
     </div>
     <div class="whsf-consent-actions">
@@ -2033,6 +2033,9 @@ function initWhsfNewsletterSubscribe() {
   const footer = document.querySelector('.site-footer');
   if (!footer || footer.querySelector('[data-whsf-newsletter]')) return;
 
+  const currentPage = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  if (currentPage === 'index.html') return;
+
   const newsletter = document.createElement('div');
   newsletter.className = 'shell footer-newsletter';
   newsletter.setAttribute('data-whsf-newsletter', 'true');
@@ -2040,7 +2043,7 @@ function initWhsfNewsletterSubscribe() {
     <div class="footer-newsletter-copy">
       <span>WHSF newsletter</span>
       <h2>Stay connected to technology, learning and opportunity updates.</h2>
-      <p>Subscribe for WHSF e-Classroom news, STEM opportunities, AI and digital inclusion updates, safe online learning guidance and community impact stories. New subscriptions are reviewed by WHSF before communication is sent.</p>
+      <p>Subscribe for WHSF e-learning news, STEM opportunities, AI and digital inclusion updates, safe online learning guidance and community impact stories. New subscriptions are reviewed by WHSF before communication is sent.</p>
     </div>
     <form class="footer-newsletter-form" data-whsf-newsletter-form>
       <label>

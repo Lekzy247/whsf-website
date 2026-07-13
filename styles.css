@@ -5374,3 +5374,64 @@ body {
     background: #fff7f8;
   }
 }
+
+.about-us-visual {
+  margin: 38px auto 0;
+  overflow: hidden;
+  border: 1px solid rgba(122, 18, 48, .12);
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(59, 7, 17, .12);
+}
+
+.about-us-visual img {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.programs-innovation-cta {
+  padding-top: 40px;
+}
+
+.programs-innovation-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+  gap: 28px;
+  align-items: center;
+  padding: clamp(28px, 5vw, 52px);
+  border: 1px solid rgba(122, 18, 48, .16);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(229, 185, 87, .24), transparent 34%),
+    linear-gradient(135deg, #fff8f2 0%, #fff 42%, #fff0f4 100%);
+  box-shadow: 0 24px 80px rgba(59, 7, 17, .1);
+}
+
+.programs-innovation-panel h2 {
+  color: #3b0711;
+}
+
+.programs-innovation-panel p:not(.eyebrow) {
+  max-width: 720px;
+  color: #633142;
+}
+
+.programs-innovation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 820px) {
+  .programs-innovation-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .programs-innovation-actions {
+    justify-content: flex-start;
+  }
+}
