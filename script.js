@@ -2120,6 +2120,120 @@ function initWhsfNewsletterSubscribe() {
 
 initWhsfNewsletterSubscribe();
 
+function initSponsorImpactCalculator() {
+  const form = document.querySelector('#sponsor-impact-form');
+  const supportType = document.querySelector('#impact-support-type');
+  const supportValue = document.querySelector('#impact-support-value');
+  const valueLabel = document.querySelector('#impact-value-label');
+  const primaryResult = document.querySelector('#impact-primary-result');
+  const secondaryResult = document.querySelector('#impact-secondary-result');
+  const contextResult = document.querySelector('#impact-context-result');
+  const addButton = document.querySelector('#impact-add-to-enquiry');
+
+  if (!form || !supportType || !supportValue || !valueLabel || !primaryResult || !secondaryResult || !contextResult || !addButton) return;
+
+  const money = (amount) => new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(amount);
+
+  const plural = (count, singular, pluralLabel) => `${count} ${count === 1 ? singular : pluralLabel}`;
+
+  const supportLabels = {
+    learners: 'Learner access & certificates',
+    devices: 'Device donation',
+    classroom: 'Digital classroom',
+    bootcamp: 'AI / STEM bootcamp',
+    certificates: 'Certificate support',
+    outreach: 'Rural / community outreach'
+  };
+
+  function calculateImpact() {
+    const type = supportType.value;
+    const rawValue = Math.max(1, Number(supportValue.value || 1));
+    let primary = '';
+    let secondary = '';
+    let context = '';
+    let inputLabel = 'Amount in USD';
+    let inputDisplay = money(rawValue);
+
+    if (type === 'devices') {
+      const devices = Math.floor(rawValue);
+      const learners = devices * 3;
+      const classrooms = Math.max(1, Math.floor(devices / 20));
+      inputLabel = 'Number of devices';
+      inputDisplay = plural(devices, 'device', 'devices');
+      primary = `${plural(devices, 'device', 'devices')} can support about ${plural(learners, 'learner', 'learners')}`;
+      secondary = `A donation of ${inputDisplay} can help equip learning spaces, e-learning access points and community technology hubs.`;
+      context = `${plural(classrooms, 'classroom or hub', 'classrooms or hubs')} could receive practical device support, depending on device type and condition.`;
+    } else if (type === 'classroom') {
+      const classrooms = Math.max(1, Math.floor(rawValue / 2500));
+      const learners = classrooms * 30;
+      primary = `${plural(classrooms, 'digital classroom', 'digital classrooms')} supported`;
+      secondary = `${money(rawValue)} can help provide classroom technology access, learning tools and setup support.`;
+      context = `Estimated reach: about ${plural(learners, 'learner', 'learners')} through school, hub or partner learning spaces.`;
+    } else if (type === 'bootcamp') {
+      const bootcamps = Math.max(1, Math.floor(rawValue / 2500));
+      const learners = bootcamps * 40;
+      primary = `${plural(bootcamps, 'AI/STEM bootcamp', 'AI/STEM bootcamps')} estimated`;
+      secondary = `${money(rawValue)} can support practical training days, learning materials and facilitator coordination.`;
+      context = `Estimated reach: about ${plural(learners, 'participant', 'participants')} through WHSF technology training.`;
+    } else if (type === 'certificates') {
+      const certificates = Math.floor(rawValue / 10);
+      primary = `About ${plural(certificates, 'certificate', 'certificates')} supported`;
+      secondary = `${money(rawValue)} can help cover certificate preparation, verification and learner recognition support.`;
+      context = 'Best for sponsors who want to help learners document skills for schools, employers, partners and future opportunities.';
+    } else if (type === 'outreach') {
+      const activities = Math.max(1, Math.floor(rawValue / 1000));
+      const people = activities * 100;
+      primary = `${plural(activities, 'community outreach activity', 'community outreach activities')} estimated`;
+      secondary = `${money(rawValue)} can support planning, learning materials, local coordination and awareness activities.`;
+      context = `Estimated community reach: about ${plural(people, 'person', 'people')}, depending on location and programme model.`;
+    } else {
+      const learners = Math.floor(rawValue / 50);
+      primary = `About ${plural(learners, 'learner', 'learners')} supported`;
+      secondary = `${money(rawValue)} can support learner access, e-learning participation, materials and certificate readiness.`;
+      context = 'Best for student scholarships, ICT Girls Club learners, TechWomen participants and community learning cohorts.';
+    }
+
+    valueLabel.textContent = inputLabel;
+    primaryResult.textContent = primary;
+    secondaryResult.textContent = secondary;
+    contextResult.textContent = context;
+    addButton.dataset.impactNote = `Sponsor impact calculator selection: ${supportLabels[type]}; input: ${inputDisplay}; estimated impact: ${primary}. ${secondary}`;
+  }
+
+  form.addEventListener('submit', (event) => event.preventDefault());
+  supportType.addEventListener('change', calculateImpact);
+  supportValue.addEventListener('input', calculateImpact);
+
+  addButton.addEventListener('click', () => {
+    const messageField = document.querySelector('#partner-enquiry-form textarea[name="message"]');
+    const partnershipSelect = document.querySelector('#partner-enquiry-form select[name="partnership_type"]');
+    const enquirySection = document.querySelector('#partner-enquiry');
+    const note = addButton.dataset.impactNote || '';
+
+    if (partnershipSelect && !partnershipSelect.value) {
+      partnershipSelect.value = supportType.value === 'devices' ? 'Donate devices' : 'Sponsor learners';
+    }
+
+    if (messageField && note) {
+      const existing = messageField.value.trim();
+      messageField.value = existing ? `${existing}\n\n${note}` : note;
+      messageField.focus();
+    }
+
+    if (enquirySection) {
+      enquirySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  calculateImpact();
+}
+
+initSponsorImpactCalculator();
+
 function initPartnerSponsorEnquiryForm() {
   const form = document.querySelector('#partner-enquiry-form');
   const status = document.querySelector('#partner-enquiry-status');

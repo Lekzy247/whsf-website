@@ -189,6 +189,55 @@
         </div>
       </section>
 
+      <section class="section sponsor-impact-calculator" id="sponsor-impact-calculator">
+        <div class="shell impact-calculator-panel">
+          <div class="section-heading centered">
+            <p class="eyebrow">Sponsor impact calculator</p>
+            <h2>Estimate what your support can make possible.</h2>
+            <p>
+              Use this simple guide to explore how sponsorship, devices or programme support can translate into
+              practical learning access. WHSF will confirm final budgets and delivery details with each partner.
+            </p>
+          </div>
+          <div class="impact-calculator-grid">
+            <form class="impact-control-card" id="sponsor-impact-form">
+              <label>
+                <span>Support area</span>
+                <select id="impact-support-type" name="impact_support_type">
+                  <option value="learners">Learner access &amp; certificates</option>
+                  <option value="devices">Device donation</option>
+                  <option value="classroom">Digital classroom</option>
+                  <option value="bootcamp">AI / STEM bootcamp</option>
+                  <option value="certificates">Certificate support</option>
+                  <option value="outreach">Rural / community outreach</option>
+                </select>
+              </label>
+              <label>
+                <span id="impact-value-label">Amount in USD</span>
+                <input id="impact-support-value" name="impact_support_value" type="number" min="1" step="1" value="500" />
+              </label>
+              <p class="impact-helper">
+                These estimates are planning guides only. They help sponsors begin a clear conversation with WHSF.
+              </p>
+              <div class="impact-calculator-actions">
+                <button class="button" type="button" id="impact-add-to-enquiry">Add estimate to enquiry</button>
+                <a class="button button-secondary" href="#partner-enquiry">Open enquiry form</a>
+              </div>
+            </form>
+            <div class="impact-result-card" aria-live="polite">
+              <small>Estimated impact</small>
+              <h3 id="impact-primary-result">About 10 learners supported</h3>
+              <p id="impact-secondary-result">
+                Estimated from $500 for learner access, e-learning support and certificate readiness.
+              </p>
+              <div class="impact-context" id="impact-context-result">
+                Best for student scholarships, ICT Girls Club learners, TechWomen participants and community learning cohorts.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="device-donation">
         <div class="shell device-donation-panel">
           <div>
