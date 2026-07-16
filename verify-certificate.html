@@ -111,23 +111,23 @@
             <dl class="verify-details">
               <div>
                 <dt>Certificate number</dt>
-                <dd id="result-number">â€”</dd>
+                <dd id="result-number">—</dd>
               </div>
               <div>
                 <dt>Learner</dt>
-                <dd id="result-student">â€”</dd>
+                <dd id="result-student">—</dd>
               </div>
               <div>
                 <dt>Course</dt>
-                <dd id="result-course">â€”</dd>
+                <dd id="result-course">—</dd>
               </div>
               <div>
                 <dt>Category</dt>
-                <dd id="result-category">â€”</dd>
+                <dd id="result-category">—</dd>
               </div>
               <div>
                 <dt>Issued date</dt>
-                <dd id="result-issued">â€”</dd>
+                <dd id="result-issued">—</dd>
               </div>
             </dl>
             <a class="button" id="certificate-file-link" href="#" target="_blank" rel="noreferrer" hidden>Open certificate file</a>
@@ -141,7 +141,7 @@
               <p>
                 We could not find this certificate number in WHSF records. Check the number and try again, or contact WHSF for support.
               </p>
-              <a class="arrow-link" href="contact.html">Contact WHSF <span>â†’</span></a>
+              <a class="arrow-link" href="contact.html">Contact WHSF <span>→</span></a>
             </div>
           </article>
         </div>
@@ -397,15 +397,15 @@
             <dl class="verify-details staff-details">
               <div>
                 <dt>Employee name</dt>
-                <dd id="staff-result-name">â€”</dd>
+                <dd id="staff-result-name">—</dd>
               </div>
               <div>
                 <dt>Employee #</dt>
-                <dd id="staff-result-number">â€”</dd>
+                <dd id="staff-result-number">—</dd>
               </div>
               <div>
                 <dt>Phone #</dt>
-                <dd id="staff-result-phone">â€”</dd>
+                <dd id="staff-result-phone">—</dd>
               </div>
               <div>
                 <dt>Status</dt>
@@ -429,12 +429,12 @@
         </div>
         <div class="footer-links">
           <div><strong>Classroom</strong><a href="e-classroom.html">All courses</a><a href="e-classroom-admin.html">Teacher/Admin</a></div>
-          <div><strong>Connect</strong><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
         </div>
       </div>
       <div class="shell footer-bottom">
-        <p>Â© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
-        <a href="#top">Back to top â†‘</a>
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
       </div>
     </footer>
 
@@ -459,7 +459,7 @@
       const employeePhoneInput = document.querySelector('#employee-phone');
 
       const setText = (selector, value) => {
-        document.querySelector(selector).textContent = value || 'â€”';
+        document.querySelector(selector).textContent = value || '—';
       };
 
       const setStatus = (message) => {
@@ -575,7 +575,7 @@
         const renderSelected = () => {
           const option = select.options[select.selectedIndex] || select.options[0];
           const label = shortCountryLabel(option);
-          toggle.innerHTML = `<img class="country-flag-img" src="${flagUrl(option.value)}" alt="" loading="lazy" /><span>${label}</span><strong>âŒ„</strong>`;
+          toggle.innerHTML = `<img class="country-flag-img" src="${flagUrl(option.value)}" alt="" loading="lazy" /><span>${label}</span><strong>⌄</strong>`;
         };
 
         Array.from(select.options).forEach((option) => {
@@ -651,7 +651,7 @@
           return;
         }
 
-        setStatus('Checking WHSF certificate recordsâ€¦');
+        setStatus('Checking WHSF certificate records…');
         resultCard.hidden = true;
         errorCard.hidden = true;
 
@@ -715,7 +715,7 @@
         if (employeePhoneInput) employeePhoneInput.dataset.fullPhone = employeePhone;
         if (employeeCountryCodeInput) employeeCountryCodeInput.dataset.fullPhone = employeePhone;
 
-        setStaffStatus('Checking WHSF staff recordsâ€¦');
+        setStaffStatus('Checking WHSF staff records…');
         staffResult.hidden = true;
 
         const { data, error } = await whsfSupabase.rpc('verify_whsf_staff', {
@@ -726,8 +726,8 @@
         });
 
         if (error) {
-          setStaffStatus('Staff verification database is not ready. Run the staff verification SQL file in Supabase, then try again.');
-          alert('Staff verification database is not ready. Please run the staff verification SQL file in Supabase.');
+          setStaffStatus('Staff verification is temporarily unavailable. Please try again later or contact WHSF.');
+          alert('Staff verification is temporarily unavailable. Please try again later or contact WHSF.');
           return;
         }
 
