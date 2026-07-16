@@ -2119,3 +2119,50 @@ function initWhsfNewsletterSubscribe() {
 }
 
 initWhsfNewsletterSubscribe();
+
+function initPartnerSponsorEnquiryForm() {
+  const form = document.querySelector('#partner-enquiry-form');
+  const status = document.querySelector('#partner-enquiry-status');
+  if (!form || !status) return;
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const data = new FormData(form);
+    const support = data.getAll('support').join(', ') || 'Not specified';
+    const organization = String(data.get('organization') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const country = String(data.get('country') || '').trim();
+    const partnershipType = String(data.get('partnership_type') || '').trim();
+    const message = String(data.get('message') || '').trim();
+
+    if (!organization || !email || !country || !partnershipType || !message || !data.get('consent')) {
+      status.textContent = 'Please complete all required fields and accept the consent statement.';
+      status.className = 'form-status is-error';
+      return;
+    }
+
+    const subject = `WHSF Partner/Sponsor Enquiry - ${partnershipType}`;
+    const body = [
+      'New WHSF Partner/Sponsor Enquiry',
+      '',
+      `Organization / Name: ${organization}`,
+      `Email: ${email}`,
+      `Country: ${country}`,
+      `Partnership type: ${partnershipType}`,
+      `Estimated support: ${support}`,
+      '',
+      'Message:',
+      message,
+      '',
+      'Consent: The sender agreed that WHSF may use this information to respond to the partnership enquiry.'
+    ].join('\n');
+
+    const mailto = `mailto:info@worldhsfoundation.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    status.textContent = 'Thank you. Your enquiry is ready to send to WHSF. Please send the prepared email from your mail app.';
+    status.className = 'form-status is-success';
+    window.location.href = mailto;
+  });
+}
+
+initPartnerSponsorEnquiryForm();

@@ -60,7 +60,7 @@
               STEM learning, digital inclusion, device access and responsible technology training for underserved learners.
             </p>
             <div class="hero-actions">
-              <a class="button" href="contact.html">Start partnership discussion</a>
+              <a class="button" href="#partner-enquiry">Start partnership discussion</a>
               <a class="button button-secondary" href="#sponsorship-options">View sponsorship options</a>
               <a class="button button-light" href="#device-donation">Donate devices</a>
             </div>
@@ -163,7 +163,7 @@
               for learning, training and community technology hubs.
             </p>
             <div class="hero-actions">
-              <a class="button" href="contact.html">Discuss device donation</a>
+              <a class="button" href="#partner-enquiry">Discuss device donation</a>
               <a class="button button-secondary" href="programs.html">See WHSF programmes</a>
             </div>
           </div>
@@ -201,6 +201,78 @@
         </div>
       </section>
 
+      <section class="section section-tint" id="partner-enquiry">
+        <div class="shell partner-enquiry-grid">
+          <div class="partner-enquiry-copy">
+            <p class="eyebrow">Partner enquiry form</p>
+            <h2>Tell WHSF how you would like to support.</h2>
+            <p>
+              Use this form for sponsorship, device donation, programme partnership, mentoring, institutional
+              collaboration or grant-related enquiries. WHSF will review your message and respond with the most appropriate
+              next step.
+            </p>
+            <div class="partner-enquiry-note">
+              <strong>Good partnership starts clearly.</strong>
+              <span>
+                Please include your organization, country, type of support and any timeline or programme interest.
+              </span>
+            </div>
+          </div>
+          <form class="partner-enquiry-form" id="partner-enquiry-form">
+            <div class="form-grid two-column">
+              <label>
+                <span>Organization / Name</span>
+                <input type="text" name="organization" autocomplete="organization" required />
+              </label>
+              <label>
+                <span>Email</span>
+                <input type="email" name="email" autocomplete="email" required />
+              </label>
+            </div>
+            <div class="form-grid two-column">
+              <label>
+                <span>Country</span>
+                <input type="text" name="country" autocomplete="country-name" required />
+              </label>
+              <label>
+                <span>Partnership type</span>
+                <select name="partnership_type" required>
+                  <option value="">Select one</option>
+                  <option>Sponsor learners</option>
+                  <option>Donate devices</option>
+                  <option>Sponsor e-learning</option>
+                  <option>Support AI / STEM training</option>
+                  <option>Corporate partnership</option>
+                  <option>Grant / institutional partnership</option>
+                  <option>Mentorship or volunteer support</option>
+                </select>
+              </label>
+            </div>
+            <fieldset class="partner-support-options">
+              <legend>Estimated support</legend>
+              <label><input type="checkbox" name="support" value="Devices" /> Devices</label>
+              <label><input type="checkbox" name="support" value="Funding" /> Funding</label>
+              <label><input type="checkbox" name="support" value="Training support" /> Training support</label>
+              <label><input type="checkbox" name="support" value="Mentorship" /> Mentorship</label>
+              <label><input type="checkbox" name="support" value="Internet/connectivity" /> Internet/connectivity</label>
+              <label><input type="checkbox" name="support" value="Technical expertise" /> Technical expertise</label>
+            </fieldset>
+            <label>
+              <span>Message</span>
+              <textarea name="message" rows="6" placeholder="Briefly describe how you would like to partner with WHSF." required></textarea>
+            </label>
+            <label class="consent-line">
+              <input type="checkbox" name="consent" required />
+              <span>I agree that WHSF may use this information to respond to my partnership enquiry.</span>
+            </label>
+            <div class="partner-form-actions">
+              <button class="button" type="submit">Send partner enquiry</button>
+              <p id="partner-enquiry-status" class="form-status" aria-live="polite"></p>
+            </div>
+          </form>
+        </div>
+      </section>
+
       <section class="section sponsor-final-cta">
         <div class="shell sponsor-final-panel">
           <div>
@@ -211,7 +283,7 @@
             </p>
           </div>
           <div class="hero-actions">
-            <a class="button button-light" href="contact.html">Contact WHSF</a>
+            <a class="button button-light" href="#partner-enquiry">Contact WHSF</a>
             <a class="button button-secondary" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate securely</a>
           </div>
         </div>
