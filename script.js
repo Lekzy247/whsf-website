@@ -2248,6 +2248,8 @@ function initPartnerSponsorEnquiryForm() {
     const email = String(data.get('email') || '').trim();
     const country = String(data.get('country') || '').trim();
     const partnershipType = String(data.get('partnership_type') || '').trim();
+    const estimatedSupportDetail = String(data.get('estimated_support_detail') || '').trim() || 'Not specified';
+    const recognitionName = String(data.get('recognition_name') || '').trim() || 'Not specified';
     const message = String(data.get('message') || '').trim();
 
     if (!organization || !email || !country || !partnershipType || !message || !data.get('consent')) {
@@ -2265,6 +2267,8 @@ function initPartnerSponsorEnquiryForm() {
       `Country: ${country}`,
       `Partnership type: ${partnershipType}`,
       `Estimated support: ${support}`,
+      `Estimated support amount/device quantity: ${estimatedSupportDetail}`,
+      `Preferred recognition name: ${recognitionName}`,
       '',
       'Message:',
       message,
