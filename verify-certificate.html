@@ -759,8 +759,42 @@
         staffResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     </script>
-  </body>
-</html>
+  <script>
+    (() => {
+      const cleanStaffVerificationExamples = () => {
+        ["staff-first-name", "staff-last-name", "staff-phone-number"].forEach((id) => {
+          const field = document.getElementById(id);
+          if (field) {
+            field.setAttribute("placeholder", "");
+          }
+        });
 
+        const phoneLabel = document.querySelector('label[for="staff-phone-number"]');
+        if (phoneLabel) {
+          phoneLabel.textContent = "Phone number";
+        }
+
+        document.querySelectorAll(".field-hint, .form-hint, small").forEach((node) => {
+          const text = node.textContent.trim();
+          if (
+            text === "Example: Olalekan" ||
+            text === "Example: Okunola" ||
+            text === "Example: (424) (396) 9671" ||
+            text === "Phone # Example"
+          ) {
+            node.textContent = "";
+          }
+        });
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", cleanStaffVerificationExamples);
+      } else {
+        cleanStaffVerificationExamples();
+      }
+    })();
+  </script>
+</body>
+</html>
 
 
