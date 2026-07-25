@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">AgriLearn AI agriculture and technology illustration</title>
+  <desc id="desc">A farmer holding a mobile phone beside maize plants, with weather, learning and crop-health symbols.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8ecef"/><stop offset="1" stop-color="#f2cf8e"/></linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7aa35a"/><stop offset="1" stop-color="#345b39"/></linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="36" fill="url(#sky)"/>
+  <circle cx="1030" cy="120" r="64" fill="#f2cf8e" opacity=".85"/>
+  <path d="M0 520 C240 430 430 560 650 500 C850 445 1020 420 1200 500 V720 H0Z" fill="url(#field)"/>
+  <path d="M0 590 C240 510 470 650 720 560 C930 490 1070 530 1200 560 V720 H0Z" fill="#27482f" opacity=".75"/>
+  <g fill="none" stroke="#6d1024" stroke-width="8" stroke-linecap="round">
+    <path d="M185 520 Q150 380 185 245"/><path d="M185 345 Q115 305 82 330"/><path d="M185 405 Q255 360 290 390"/>
+    <path d="M320 540 Q290 390 320 255"/><path d="M320 355 Q250 320 220 345"/><path d="M320 430 Q390 380 430 410"/>
+  </g>
+  <g fill="#f2cf8e"><ellipse cx="177" cy="280" rx="18" ry="34"/><ellipse cx="188" cy="320" rx="18" ry="34"/><ellipse cx="312" cy="300" rx="18" ry="34"/><ellipse cx="323" cy="342" rx="18" ry="34"/></g>
+  <g transform="translate(590 150)">
+    <circle cx="120" cy="78" r="58" fill="#7a4a32"/>
+    <path d="M58 80 Q72 12 120 8 Q175 12 185 84 Q150 55 115 55 Q82 58 58 80" fill="#28151a"/>
+    <rect x="52" y="135" width="145" height="220" rx="50" fill="#6d1024"/>
+    <path d="M75 185 Q10 250 5 355" stroke="#7a4a32" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <path d="M175 188 Q245 245 260 340" stroke="#7a4a32" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <rect x="210" y="190" width="120" height="205" rx="24" fill="#171216"/>
+    <rect x="222" y="210" width="96" height="165" rx="16" fill="#fff"/>
+    <circle cx="270" cy="292" r="33" fill="#f5ecee" stroke="#6d1024" stroke-width="6"/>
+    <path d="M255 292 l12 12 22-28" fill="none" stroke="#6d1024" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M77 355 L50 540 H115 L135 380 L160 540 H225 L195 355Z" fill="#28151a"/>
+  </g>
+  <g transform="translate(900 240)">
+    <rect width="220" height="250" rx="28" fill="#fff" opacity=".94"/>
+    <circle cx="52" cy="58" r="25" fill="#f2cf8e"/>
+    <path d="M52 25v-18M52 109v-18M19 58H1M103 58H85" stroke="#6d1024" stroke-width="7" stroke-linecap="round"/>
+    <path d="M38 142 Q70 105 100 142 T162 142" fill="none" stroke="#345b39" stroke-width="9" stroke-linecap="round"/>
+    <rect x="34" y="178" width="152" height="14" rx="7" fill="#6d1024" opacity=".8"/>
+    <rect x="34" y="208" width="110" height="14" rx="7" fill="#6d1024" opacity=".45"/>
+  </g>
+  <g transform="translate(80 86)">
+    <rect width="340" height="112" rx="28" fill="#fff" opacity=".95"/>
+    <circle cx="60" cy="56" r="32" fill="#6d1024"/>
+    <text x="60" y="67" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#fff">AI</text>
+    <text x="112" y="50" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#28151a">AgriLearn AI</text>
+    <text x="112" y="78" font-family="Arial,sans-serif" font-size="18" fill="#6d1024">Learn. Scan. Grow.</text>
+  </g>
+</svg>
