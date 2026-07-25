@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AgriLearn AI is WHSF's multilingual, offline-first crop health and climate-smart agriculture platform for West African farmers and learners." />
+    <meta name="theme-color" content="#6d1024" />
+    <title>AgriLearn AI | World Humanitarian Support Foundation</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="WHSF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+    <style>
+      .agrilearn-hero-image { border-radius: 1.5rem; overflow: hidden; box-shadow: 0 1.5rem 3rem rgba(46, 22, 26, .16); }
+      .agrilearn-hero-image img { width: 100%; height: 100%; min-height: 360px; object-fit: cover; display: block; }
+      .feature-grid, .phase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+      .feature-card, .phase-card, .code-card { background: #fff; border: 1px solid rgba(109, 16, 36, .14); border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 .75rem 2rem rgba(46, 22, 26, .07); }
+      .feature-card span, .phase-card span { display: inline-flex; align-items: center; justify-content: center; min-width: 2.4rem; height: 2.4rem; padding: 0 .7rem; border-radius: 999px; background: #6d1024; color: #fff; font-weight: 700; }
+      .feature-card h3, .phase-card h3 { margin: .85rem 0 .5rem; }
+      .architecture { background: #28151a; color: #fff; border-radius: 1.5rem; padding: 2rem; }
+      .architecture-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9rem; margin-top: 1.5rem; }
+      .architecture-flow article { background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2); border-radius: 1rem; padding: 1.15rem; }
+      .architecture-flow strong { display: block; color: #f2cf8e; margin-bottom: .4rem; }
+      .code-card { overflow: hidden; padding: 0; }
+      .code-card header { padding: 1rem 1.25rem; background: #f5ecee; font-weight: 700; color: #6d1024; }
+      pre { margin: 0; padding: 1.35rem; overflow-x: auto; background: #171216; color: #f8f3f4; font: .9rem/1.65 Consolas, Monaco, monospace; white-space: pre; }
+      .language-pills { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
+      .language-pills span { border: 1px solid rgba(109,16,36,.25); border-radius: 999px; padding: .55rem .9rem; font-weight: 700; background: #fff; }
+      .status-banner { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding: 1.5rem; border-radius: 1.25rem; background: #f5ecee; }
+      @media (max-width: 850px) { .feature-grid, .phase-grid, .architecture-flow { grid-template-columns: 1fr; } .status-banner { align-items: flex-start; flex-direction: column; } }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Advancing dignity, inclusion and sustainable development</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+        </button>
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a><a href="about.html">About Us</a><a href="programs.html">Programs</a><a href="blog.html">Blog</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="agrilearn-title">
+        <div class="shell hero-grid">
+          <div class="hero-copy reveal">
+            <p class="eyebrow">WHSF Technology Innovation</p>
+            <h1 id="agrilearn-title">AgriLearn AI</h1>
+            <p class="hero-lead">An offline-first, multilingual mobile platform helping farmers and learners identify crop disease, understand weather conditions and make practical climate-smart decisions.</p>
+            <div class="hero-actions">
+              <a class="button" href="#mvp">Explore the MVP</a>
+              <a class="button button-secondary" href="contact.html">Partner with WHSF</a>
+            </div>
+          </div>
+          <figure class="agrilearn-hero-image reveal delay-one">
+            <img src="assets/programs/girls-agriculture-climate-smart.png" alt="Girls and young farmers using climate-smart agriculture technology" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="section section-tint" id="mvp">
+        <div class="shell">
+          <div class="section-heading centered reveal">
+            <p class="eyebrow">Mobile MVP</p>
+            <h2>Practical AI for agriculture across West Africa.</h2>
+            <p>AgriLearn AI is designed for low-connectivity environments and supports field learning, crop health monitoring and local-language access.</p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card reveal"><span>01</span><h3>Snap &amp; Scan</h3><p>Use the phone camera and an on-device TensorFlow Lite model to screen maize leaves for rust, blight or healthy crop conditions.</p></article>
+            <article class="feature-card reveal delay-one"><span>02</span><h3>Weather Intelligence</h3><p>Combine location-aware weather information with simple farming guidance for planting, treatment and field planning.</p></article>
+            <article class="feature-card reveal"><span>03</span><h3>Field Journal &amp; Map</h3><p>Record crop observations, treatments and field locations so farmers can build a useful history for each plot.</p></article>
+            <article class="feature-card reveal delay-one"><span>04</span><h3>Local-Language Learning</h3><p>Deliver accessible agriculture lessons and treatment information in English, Hausa, Yoruba and Igbo.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell architecture reveal">
+          <p class="eyebrow">Solution architecture</p>
+          <h2>Fast in the field. Connected when possible.</h2>
+          <div class="architecture-flow">
+            <article><strong>Flutter Mobile App</strong><span>Dashboard, camera, lessons, journal and map.</span></article>
+            <article><strong>On-device AI</strong><span>TFLite maize model supports offline crop screening.</span></article>
+            <article><strong>Cloud Services</strong><span>Firebase synchronizes records when connectivity returns.</span></article>
+            <article><strong>Context Services</strong><span>GPS and weather data improve local recommendations.</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tint">
+        <div class="shell">
+          <div class="section-heading centered reveal"><p class="eyebrow">Delivery roadmap</p><h2>Five phases from foundation to deployment.</h2></div>
+          <div class="phase-grid">
+            <article class="phase-card"><span>1</span><h3>Repository Structure</h3><p>Create the Flutter application with dedicated assets, models, screens and services folders.</p></article>
+            <article class="phase-card"><span>2</span><h3>Dependencies</h3><p>Add libraries for TFLite, camera access, Google Maps, Firebase, GPS and localization.</p></article>
+            <article class="phase-card"><span>3</span><h3>Core AI Service</h3><p>Load the maize model locally, preprocess images, run inference and map results to crop-health labels.</p></article>
+            <article class="phase-card"><span>4</span><h3>Localization</h3><p>Create translation resources and a language toggle for English, Hausa, Yoruba and Igbo.</p></article>
+            <article class="phase-card"><span>5</span><h3>Build &amp; Release</h3><p>Connect Firebase and weather secrets, validate the application and publish through the WHSF GitHub workflow.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="section-heading reveal"><p class="eyebrow">Flutter foundation</p><h2>Repository structure</h2><p>A clean structure keeps the AI engine, data models, screens and integrations maintainable as the platform grows.</p></div>
+          <div class="code-card reveal"><header>agrilearn_ai/</header><pre><code>/agrilearn_ai
+  /assets
+    /models         &lt;-- maize_model.tflite
+    /l10n           &lt;-- Language ARB files
+    /images         &lt;-- Pre-scan checklist icons
+  /lib
+    /models         &lt;-- Crop, JournalEntry
+    /screens        &lt;-- Dashboard, Camera, Learning, Map
+    /services       &lt;-- AI, Firebase, Weather
+    main.dart       &lt;-- App entry point
+  pubspec.yaml</code></pre></div>
+        </div>
+      </section>
+
+      <section class="section section-tint">
+        <div class="shell">
+          <div class="section-heading reveal"><p class="eyebrow">Dependency management</p><h2>Core Flutter packages</h2></div>
+          <div class="code-card reveal"><header>pubspec.yaml</header><pre><code>name: agrilearn_ai
+description: AI for Agriculture for WHSF West Africa.
+
+dependencies:
+  flutter:
+    sdk: flutter
+  tflite_flutter: ^0.10.1
+  camera: ^0.10.5
+  google_maps_flutter: ^2.5.0
+  firebase_core: ^2.24.2
+  cloud_firestore: ^4.14.0
+  geolocator: ^10.1.0
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.1</code></pre></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="section-heading reveal"><p class="eyebrow">On-device intelligence</p><h2>Core AI service</h2><p>The first release loads a local maize model and establishes the Snap &amp; Scan inference workflow.</p></div>
+          <div class="code-card reveal"><header>lib/services/ai_service.dart</header><pre><code>import 'package:tflite_flutter/tflite_flutter.dart';
+import 'dart:io';
+
+class AIService {
+  Interpreter? _interpreter;
+
+  Future&lt;void&gt; loadModel() async {
+    try {
+      _interpreter = await Interpreter.fromAsset(
+        'assets/models/maize_model.tflite',
+      );
+      print('WHSF AI Model Loaded Successfully.');
+    } catch (e) {
+      print('Error loading model: $e');
+    }
+  }
+
+  Future&lt;String&gt; predictDisease(File imageFile) async {
+    // Convert image to a (1, 224, 224, 3) tensor.
+    // Run the interpreter and map output to Rust, Blight or Healthy.
+    return 'Maize Rust Detected';
+  }
+}</code></pre></div>
+        </div>
+      </section>
+
+      <section class="section section-tint">
+        <div class="shell hero-grid">
+          <div class="reveal">
+            <p class="eyebrow">Inclusive learning</p><h2>Built for local-language access.</h2>
+            <p class="lead">The platform will make core actions, crop-health information and learning content easier to understand for farmers and young learners.</p>
+            <div class="language-pills" aria-label="Supported languages"><span>English</span><span>Hausa</span><span>Yoruba</span><span>Igbo</span></div>
+          </div>
+          <div class="code-card reveal delay-one"><header>lib/l10n/app_en.arb</header><pre><code>{
+  "scanButton": "Quick Scan",
+  "weatherTitle": "Weather Intelligence",
+  "healthStatus": "Crop Health",
+  "maize": "Maize",
+  "treatmentTitle": "Treatment Info"
+}</code></pre></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell status-banner reveal">
+          <div><p class="eyebrow">Programme status</p><h2>AgriLearn AI is in MVP development.</h2><p>WHSF welcomes agricultural institutions, AI researchers, funders, educators and field partners interested in responsible deployment and pilot programmes.</p></div>
+          <div class="hero-actions"><a class="button" href="contact.html">Discuss a partnership</a><a class="button button-secondary" href="programs.html">Back to Programs</a></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand"><img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" /><div><strong>World Humanitarian<br />Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p></div></div>
+        <div class="footer-links"><div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="about.html">About Us</a><a href="programs.html">Programs</a><a href="agrilearn-ai.html">AgriLearn AI</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a></div><div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div></div>
+        <div class="footer-award" aria-label="WHSF recognition"><img src="assets/whsf-logo.jpg" alt="World Humanitarian Support Foundation logo" /><span>2025 London Data Center World Award Winner</span></div>
+      </div>
+      <div class="shell social-links" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a></div>
+      <div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </body>
+</html>
