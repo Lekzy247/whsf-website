@@ -1,0 +1,51 @@
+{
+  "version": "v1",
+  "status": "contracts-only",
+  "basePath": "/api/agrilearn/v1",
+  "authentication": {
+    "login": "POST /auth/login",
+    "register": "POST /auth/register",
+    "refresh": "POST /auth/refresh",
+    "profile": "GET /users/me"
+  },
+  "farms": {
+    "list": "GET /farms",
+    "create": "POST /farms",
+    "read": "GET /farms/{farmId}",
+    "update": "PATCH /farms/{farmId}",
+    "fields": "GET/POST /farms/{farmId}/fields"
+  },
+  "cropDoctor": {
+    "diagnose": "POST /diagnoses",
+    "read": "GET /diagnoses/{diagnosisId}",
+    "history": "GET /diagnoses",
+    "expertReview": "POST /diagnoses/{diagnosisId}/review"
+  },
+  "weather": {
+    "forecast": "GET /weather/forecast",
+    "risk": "GET /weather/risk",
+    "irrigation": "GET /weather/irrigation-window"
+  },
+  "alerts": {
+    "list": "GET /alerts",
+    "subscribe": "POST /alerts/subscriptions",
+    "acknowledge": "POST /alerts/{alertId}/acknowledge"
+  },
+  "advisory": {
+    "generate": "POST /advisories",
+    "history": "GET /advisories",
+    "approve": "POST /advisories/{advisoryId}/approve"
+  },
+  "audit": {
+    "events": "GET /audit/events"
+  },
+  "requiredControls": [
+    "OAuth 2.0 or OIDC",
+    "role-based access control",
+    "encrypted object storage",
+    "consent and retention records",
+    "rate limiting",
+    "audit logging",
+    "regional data residency review"
+  ]
+}

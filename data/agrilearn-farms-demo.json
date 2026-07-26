@@ -1,0 +1,26 @@
+[
+  {
+    "id": "demo-farm-001",
+    "name": "Green Valley Demonstration Farm",
+    "owner": "Demo Farmer",
+    "country": "Nigeria",
+    "state": "Oyo",
+    "district": "Ibadan",
+    "area": 12,
+    "unit": "hectares",
+    "soilType": "Loamy",
+    "status": "active"
+  },
+  {
+    "id": "demo-farm-002",
+    "name": "WHSF Learning Plot",
+    "owner": "Demo Farmer",
+    "country": "Nigeria",
+    "state": "Ogun",
+    "district": "Abeokuta",
+    "area": 4.5,
+    "unit": "hectares",
+    "soilType": "Sandy loam",
+    "status": "active"
+  }
+]

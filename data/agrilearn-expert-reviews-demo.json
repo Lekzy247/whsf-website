@@ -1,0 +1,32 @@
+[
+  {
+    "id": "review-001",
+    "crop": "Cassava",
+    "finding": "Possible cassava mosaic symptoms",
+    "confidence": 0.74,
+    "region": "Oyo, Nigeria",
+    "status": "Needs expert review",
+    "submitted": "2026-07-25",
+    "priority": "high"
+  },
+  {
+    "id": "review-002",
+    "crop": "Tomato",
+    "finding": "Possible fungal leaf spot",
+    "confidence": 0.68,
+    "region": "Ogun, Nigeria",
+    "status": "Needs more images",
+    "submitted": "2026-07-25",
+    "priority": "moderate"
+  },
+  {
+    "id": "review-003",
+    "crop": "Maize",
+    "finding": "Possible nitrogen stress",
+    "confidence": 0.61,
+    "region": "Oyo, Nigeria",
+    "status": "Pending soil data",
+    "submitted": "2026-07-24",
+    "priority": "moderate"
+  }
+]

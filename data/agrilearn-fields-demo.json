@@ -1,0 +1,41 @@
+[
+  {
+    "id": "field-a",
+    "farmId": "demo-farm-001",
+    "name": "Field A",
+    "crop": "Cassava",
+    "area": 6,
+    "unit": "hectares",
+    "plantingDate": "2026-04-15",
+    "growthStage": "Vegetative",
+    "health": "Watch",
+    "lat": 7.3775,
+    "lng": 3.947
+  },
+  {
+    "id": "field-b",
+    "farmId": "demo-farm-001",
+    "name": "Field B",
+    "crop": "Maize",
+    "area": 6,
+    "unit": "hectares",
+    "plantingDate": "2026-05-05",
+    "growthStage": "Flowering",
+    "health": "Stable",
+    "lat": 7.3821,
+    "lng": 3.9514
+  },
+  {
+    "id": "field-c",
+    "farmId": "demo-farm-002",
+    "name": "Learning Plot",
+    "crop": "Tomato",
+    "area": 4.5,
+    "unit": "hectares",
+    "plantingDate": "2026-06-01",
+    "growthStage": "Fruiting",
+    "health": "Alert",
+    "lat": 7.1475,
+    "lng": 3.3619
+  }
+]

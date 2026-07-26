@@ -1,0 +1,51 @@
+[
+  {
+    "id": "farmer",
+    "name": "Farmer",
+    "permissions": [
+      "manage own farms",
+      "manage fields and crops",
+      "submit crop scans",
+      "view weather and alerts",
+      "save advisory plans"
+    ]
+  },
+  {
+    "id": "agronomist",
+    "name": "Agronomist",
+    "permissions": [
+      "review diagnoses",
+      "correct classifications",
+      "approve guidance",
+      "escalate urgent cases"
+    ]
+  },
+  {
+    "id": "admin",
+    "name": "Administrator",
+    "permissions": [
+      "manage crops and content",
+      "manage users and roles",
+      "configure integrations",
+      "view audit logs"
+    ]
+  },
+  {
+    "id": "government",
+    "name": "Government or NGO",
+    "permissions": [
+      "view aggregated regional insights",
+      "monitor alerts and extension activity",
+      "export approved reports"
+    ]
+  },
+  {
+    "id": "researcher",
+    "name": "Researcher",
+    "permissions": [
+      "access approved anonymized datasets",
+      "evaluate models",
+      "submit research findings"
+    ]
+  }
+]
