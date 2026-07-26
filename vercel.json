@@ -8,6 +8,21 @@
       "permanent": true
     },
     {
+      "source": "/agrilearn/login",
+      "destination": "/agrilearn-app.html",
+      "permanent": false
+    },
+    {
+      "source": "/agrilearn/register",
+      "destination": "/agrilearn-app.html",
+      "permanent": false
+    },
+    {
+      "source": "/agrilearn/dashboard",
+      "destination": "/agrilearn-app.html",
+      "permanent": false
+    },
+    {
       "source": "/agrilearn-impact.html",
       "destination": "/agrilearn-impact",
       "permanent": true
@@ -51,7 +66,7 @@
   "rewrites": [
     {
       "source": "/agrilearn",
-      "destination": "/agrilearn/index.html"
+      "destination": "/agrilearn-ai.html"
     },
     {
       "source": "/agrilearn-impact",
