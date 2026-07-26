@@ -65,6 +65,14 @@
   ],
   "rewrites": [
     {
+      "source": "/agrilearn-ai",
+      "destination": "https://whsf-agrilearn.vercel.app/agrilearn-ai"
+    },
+    {
+      "source": "/agrilearn-ai/:path*",
+      "destination": "https://whsf-agrilearn.vercel.app/agrilearn-ai/:path*"
+    },
+    {
       "source": "/agrilearn",
       "destination": "/agrilearn-ai.html"
     },
