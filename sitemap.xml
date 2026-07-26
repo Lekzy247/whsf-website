@@ -31,4 +31,9 @@
     <priority>0.8</priority>
   </url>
   <url><loc>https://www.worldhsfoundation.org/agrilearn-impact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.worldhsfoundation.org/agrilearn-crops</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.worldhsfoundation.org/agrilearn-architecture</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.worldhsfoundation.org/agrilearn-roadmap</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.worldhsfoundation.org/agrilearn-research</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.worldhsfoundation.org/agrilearn-partners</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>

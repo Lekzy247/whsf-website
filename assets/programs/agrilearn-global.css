@@ -1,0 +1,21 @@
+
+:root{--ag-green:#176b45;--ag-dark:#0b3d2a;--ag-lime:#dff3cf;--ag-sand:#fff8e9;--ag-blue:#eaf5ff;--ag-border:#d9e5dc}
+.global-hero{padding:5rem 0;background:linear-gradient(135deg,#edf9ef,#fff8e9)}
+.global-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem}
+.global-card{background:#fff;border:1px solid var(--ag-border);border-radius:20px;padding:1.35rem;box-shadow:0 12px 32px rgba(18,76,48,.08)}
+.global-card h3{margin-top:0}.global-card ul{padding-left:1.15rem}
+.region-tabs,.filter-row,.language-switcher{display:flex;gap:.65rem;flex-wrap:wrap;margin:1.25rem 0}
+.region-tabs button,.filter-row button,.language-switcher button{border:1px solid var(--ag-green);background:#fff;color:var(--ag-dark);border-radius:999px;padding:.65rem 1rem;font-weight:700;cursor:pointer}
+.region-tabs button[aria-pressed="true"],.filter-row button[aria-pressed="true"],.language-switcher button[aria-pressed="true"]{background:var(--ag-green);color:#fff}
+.crop-library{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
+.crop-item{border:1px solid var(--ag-border);border-radius:16px;padding:1rem;background:#fff}
+.crop-item .tag{display:inline-block;margin:.15rem .25rem .15rem 0;padding:.25rem .5rem;border-radius:999px;background:var(--ag-lime);font-size:.8rem}
+.architecture-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;align-items:stretch}
+.architecture-node{background:var(--ag-blue);border-radius:18px;padding:1.2rem;border:1px solid #cfe5f8}
+.roadmap{display:grid;gap:1rem}.roadmap-step{display:grid;grid-template-columns:90px 1fr;gap:1rem;padding:1rem;border-left:5px solid var(--ag-green);background:#fff;border-radius:0 16px 16px 0}
+.metric-band{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem}.metric-band div{background:var(--ag-dark);color:#fff;padding:1.2rem;border-radius:16px}.metric-band strong{display:block;font-size:2rem}
+.notice{padding:1rem 1.2rem;border-radius:14px;background:var(--ag-sand);border:1px solid #f0dfb6}
+.search-box{width:100%;max-width:620px;padding:.9rem 1rem;border-radius:12px;border:1px solid var(--ag-border);font:inherit}
+.page-cta{background:var(--ag-dark);color:#fff;border-radius:24px;padding:2rem}.page-cta a{margin:.35rem}
+[hidden]{display:none!important}
+@media(max-width:700px){.global-hero{padding:3rem 0}.roadmap-step{grid-template-columns:1fr}.agri-subnav .shell{overflow-x:auto;white-space:nowrap}}

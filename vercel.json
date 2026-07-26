@@ -16,27 +16,84 @@
       "source": "/agrilearn-impact-dashboard.html",
       "destination": "/agrilearn-impact",
       "permanent": true
+    },
+    {
+      "source": "/agrilearn-crops.html",
+      "destination": "/agrilearn-crops",
+      "permanent": true
+    },
+    {
+      "source": "/agrilearn-architecture.html",
+      "destination": "/agrilearn-architecture",
+      "permanent": true
+    },
+    {
+      "source": "/agrilearn-roadmap.html",
+      "destination": "/agrilearn-roadmap",
+      "permanent": true
+    },
+    {
+      "source": "/agrilearn-research.html",
+      "destination": "/agrilearn-research",
+      "permanent": true
+    },
+    {
+      "source": "/agrilearn-partners.html",
+      "destination": "/agrilearn-partners",
+      "permanent": true
     }
   ],
   "rewrites": [
     {
       "source": "/agrilearn-impact",
       "destination": "/agrilearn-impact.html"
+    },
+    {
+      "source": "/agrilearn-crops",
+      "destination": "/agrilearn-crops.html"
+    },
+    {
+      "source": "/agrilearn-architecture",
+      "destination": "/agrilearn-architecture.html"
+    },
+    {
+      "source": "/agrilearn-roadmap",
+      "destination": "/agrilearn-roadmap.html"
+    },
+    {
+      "source": "/agrilearn-research",
+      "destination": "/agrilearn-research.html"
+    },
+    {
+      "source": "/agrilearn-partners",
+      "destination": "/agrilearn-partners.html"
     }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
       ]
     },
     {
       "source": "/agrilearn-impact",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
       ]
     }
   ]
