@@ -1,0 +1,148 @@
+name: Build AgriLearn Phase 5 Production Foundation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/agrilearn-phase5-production-foundation.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build Phase 5 production-ready platform shell
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          root=Path('.')
+          assets=root/'assets/programs'; assets.mkdir(parents=True,exist_ok=True)
+          data=root/'data'; data.mkdir(parents=True,exist_ok=True)
+
+          roles=[
+            {'id':'farmer','name':'Farmer','permissions':['manage own farms','manage fields and crops','submit crop scans','view weather and alerts','save advisory plans']},
+            {'id':'agronomist','name':'Agronomist','permissions':['review diagnoses','correct classifications','approve guidance','escalate urgent cases']},
+            {'id':'admin','name':'Administrator','permissions':['manage crops and content','manage users and roles','configure integrations','view audit logs']},
+            {'id':'government','name':'Government or NGO','permissions':['view aggregated regional insights','monitor alerts and extension activity','export approved reports']},
+            {'id':'researcher','name':'Researcher','permissions':['access approved anonymized datasets','evaluate models','submit research findings']}
+          ]
+          (data/'agrilearn-roles.json').write_text(json.dumps(roles,indent=2),encoding='utf-8')
+
+          farms=[
+            {'id':'demo-farm-001','name':'Green Valley Demonstration Farm','owner':'Demo Farmer','country':'Nigeria','state':'Oyo','district':'Ibadan','area':12,'unit':'hectares','soilType':'Loamy','status':'active'},
+            {'id':'demo-farm-002','name':'WHSF Learning Plot','owner':'Demo Farmer','country':'Nigeria','state':'Ogun','district':'Abeokuta','area':4.5,'unit':'hectares','soilType':'Sandy loam','status':'active'}
+          ]
+          fields=[
+            {'id':'field-a','farmId':'demo-farm-001','name':'Field A','crop':'Cassava','area':6,'unit':'hectares','plantingDate':'2026-04-15','growthStage':'Vegetative','health':'Watch','lat':7.3775,'lng':3.9470},
+            {'id':'field-b','farmId':'demo-farm-001','name':'Field B','crop':'Maize','area':6,'unit':'hectares','plantingDate':'2026-05-05','growthStage':'Flowering','health':'Stable','lat':7.3821,'lng':3.9514},
+            {'id':'field-c','farmId':'demo-farm-002','name':'Learning Plot','crop':'Tomato','area':4.5,'unit':'hectares','plantingDate':'2026-06-01','growthStage':'Fruiting','health':'Alert','lat':7.1475,'lng':3.3619}
+          ]
+          (data/'agrilearn-farms-demo.json').write_text(json.dumps(farms,indent=2),encoding='utf-8')
+          (data/'agrilearn-fields-demo.json').write_text(json.dumps(fields,indent=2),encoding='utf-8')
+
+          reviews=[
+            {'id':'review-001','crop':'Cassava','finding':'Possible cassava mosaic symptoms','confidence':0.74,'region':'Oyo, Nigeria','status':'Needs expert review','submitted':'2026-07-25','priority':'high'},
+            {'id':'review-002','crop':'Tomato','finding':'Possible fungal leaf spot','confidence':0.68,'region':'Ogun, Nigeria','status':'Needs more images','submitted':'2026-07-25','priority':'moderate'},
+            {'id':'review-003','crop':'Maize','finding':'Possible nitrogen stress','confidence':0.61,'region':'Oyo, Nigeria','status':'Pending soil data','submitted':'2026-07-24','priority':'moderate'}
+          ]
+          (data/'agrilearn-expert-reviews-demo.json').write_text(json.dumps(reviews,indent=2),encoding='utf-8')
+
+          contracts={
+            'version':'v1','status':'contracts-only','basePath':'/api/agrilearn/v1',
+            'authentication':{'login':'POST /auth/login','register':'POST /auth/register','refresh':'POST /auth/refresh','profile':'GET /users/me'},
+            'farms':{'list':'GET /farms','create':'POST /farms','read':'GET /farms/{farmId}','update':'PATCH /farms/{farmId}','fields':'GET/POST /farms/{farmId}/fields'},
+            'cropDoctor':{'diagnose':'POST /diagnoses','read':'GET /diagnoses/{diagnosisId}','history':'GET /diagnoses','expertReview':'POST /diagnoses/{diagnosisId}/review'},
+            'weather':{'forecast':'GET /weather/forecast','risk':'GET /weather/risk','irrigation':'GET /weather/irrigation-window'},
+            'alerts':{'list':'GET /alerts','subscribe':'POST /alerts/subscriptions','acknowledge':'POST /alerts/{alertId}/acknowledge'},
+            'advisory':{'generate':'POST /advisories','history':'GET /advisories','approve':'POST /advisories/{advisoryId}/approve'},
+            'audit':{'events':'GET /audit/events'},
+            'requiredControls':['OAuth 2.0 or OIDC','role-based access control','encrypted object storage','consent and retention records','rate limiting','audit logging','regional data residency review']
+          }
+          (root/'AGRILEARN_PHASE5_API_CONTRACTS.json').write_text(json.dumps(contracts,indent=2),encoding='utf-8')
+
+          cssp=assets/'agrilearn-v2.css'; css=cssp.read_text(encoding='utf-8')
+          extra='''
+          .portal-shell{display:grid;grid-template-columns:250px minmax(0,1fr);gap:1rem}.portal-sidebar{position:sticky;top:92px;align-self:start}.portal-menu{display:grid;gap:.45rem}.portal-menu button{width:100%;text-align:left;border:1px solid var(--ag-border);background:#fff;padding:.85rem;border-radius:12px;font-weight:800;cursor:pointer}.portal-menu button.active{background:var(--ag-primary);color:#fff}.portal-view{display:none}.portal-view.active{display:block}.portal-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.portal-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}.portal-stat{padding:1rem;border:1px solid var(--ag-border);border-radius:15px;background:#fff}.portal-stat strong{display:block;font-size:1.55rem}.farm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}.farm-card{border:1px solid var(--ag-border);border-radius:16px;background:#fff;padding:1rem}.field-row,.review-row{display:grid;grid-template-columns:1.2fr 1fr 1fr .8fr auto;gap:.7rem;align-items:center;border-bottom:1px solid var(--ag-border);padding:.85rem 0}.role-switcher{display:flex;gap:.45rem;flex-wrap:wrap}.role-switcher button{border:1px solid var(--ag-border);background:#fff;border-radius:999px;padding:.45rem .75rem;font-weight:700;cursor:pointer}.role-switcher button.active{background:#e8f3ed;color:var(--ag-primary);border-color:var(--ag-primary)}.map-placeholder{min-height:300px;border:1px dashed var(--ag-primary);border-radius:16px;background:linear-gradient(135deg,#edf7f1,#f7fbf8);display:grid;place-items:center;text-align:center;padding:2rem}.workflow-step{display:grid;grid-template-columns:36px 1fr;gap:.8rem;margin:.8rem 0}.workflow-step span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--ag-primary);color:#fff;font-weight:900}.priority-high{color:#b42318;font-weight:800}.priority-moderate{color:#9a6700;font-weight:800}.production-banner{background:#e8f3ed;border:1px solid #acd4bd;border-radius:16px;padding:1rem}.auth-panel{max-width:520px}.portal-table{overflow:auto}@media(max-width:980px){.portal-shell{grid-template-columns:1fr}.portal-sidebar{position:static}.portal-stat-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.portal-stat-grid,.farm-grid{grid-template-columns:1fr}.field-row,.review-row{grid-template-columns:1fr}.portal-top{display:block}}
+          '''
+          if '.portal-shell' not in css: cssp.write_text(css+extra,encoding='utf-8')
+
+          js=r'''(()=>{
+            const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+            $$('.portal-menu button').forEach(b=>b.addEventListener('click',()=>{$$('.portal-menu button').forEach(x=>x.classList.remove('active'));$$('.portal-view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#portal-'+b.dataset.portal)?.classList.add('active')}));
+            $$('.role-switcher button').forEach(b=>b.addEventListener('click',()=>{$$('.role-switcher button').forEach(x=>x.classList.remove('active'));b.classList.add('active');localStorage.setItem('agrilearnDemoRole',b.dataset.role);const el=$('#active-role');if(el)el.textContent=b.textContent}));
+            const saved=localStorage.getItem('agrilearnDemoRole');if(saved){const b=$(`.role-switcher button[data-role="${saved}"]`);if(b)b.click()}
+            async function load(){
+              try{
+                const [farms,fields,reviews]=await Promise.all(['data/agrilearn-farms-demo.json','data/agrilearn-fields-demo.json','data/agrilearn-expert-reviews-demo.json'].map(u=>fetch(u).then(r=>r.json())));
+                const fg=$('#farm-list');if(fg)fg.innerHTML=farms.map(f=>`<article class="farm-card"><span class="ag-chip">${f.status}</span><h3>${f.name}</h3><p>${f.district}, ${f.state}, ${f.country}</p><p><strong>${f.area} ${f.unit}</strong> · ${f.soilType}</p><button class="ag-btn ag-btn-secondary" data-open-farm="${f.id}">View farm</button></article>`).join('');
+                const ft=$('#field-list');if(ft)ft.innerHTML=fields.map(f=>`<div class="field-row"><strong>${f.name}</strong><span>${f.crop}</span><span>${f.growthStage}</span><span>${f.health}</span><button class="ag-btn ag-btn-secondary" data-field="${f.id}">Open</button></div>`).join('');
+                const rt=$('#review-list');if(rt)rt.innerHTML=reviews.map(r=>`<div class="review-row"><div><strong>${r.crop}</strong><small>${r.finding}</small></div><span>${Math.round(r.confidence*100)}% confidence</span><span>${r.region}</span><span class="priority-${r.priority}">${r.priority}</span><button class="ag-btn ag-btn-secondary" data-review="${r.id}">Review</button></div>`).join('');
+                $('#farm-count')&&($('#farm-count').textContent=farms.length);$('#field-count')&&($('#field-count').textContent=fields.length);$('#review-count')&&($('#review-count').textContent=reviews.length);
+              }catch(e){console.warn('Phase 5 demo data unavailable',e)}
+            }
+            load();
+            $('#auth-demo')?.addEventListener('submit',e=>{e.preventDefault();const email=$('#auth-email').value;localStorage.setItem('agrilearnDemoUser',JSON.stringify({email,role:localStorage.getItem('agrilearnDemoRole')||'farmer'}));$('#auth-result').innerHTML='<div class="production-banner"><strong>Demonstration profile created locally.</strong><p>No real account or password was transmitted. Production authentication requires a secured identity provider.</p></div>'});
+            $('#farm-form')?.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.target),farm=Object.fromEntries(fd.entries()),items=JSON.parse(localStorage.getItem('agrilearnLocalFarms')||'[]');items.push({...farm,id:'local-'+Date.now()});localStorage.setItem('agrilearnLocalFarms',JSON.stringify(items));$('#farm-form-result').textContent='Farm saved on this device for demonstration.';e.target.reset()});
+          })();'''
+          (assets/'agrilearn-phase5.js').write_text(js,encoding='utf-8')
+
+          base=(root/'agrilearn-smart.html').read_text(encoding='utf-8')
+          head_end=base.index('<main id="main">')+len('<main id="main">')
+          footer_start=base.index('</main>')
+          prefix=base[:head_end].replace('<title>Smart Farming | AgriLearn AI</title>','<title>Farmer Portal | AgriLearn AI</title>')
+          suffix=base[footer_start:]
+
+          farmer='''<section class="ag-hero"><div class="shell"><p class="ag-kicker">Phase 5 production foundation</p><h1>Farmer Portal</h1><p class="ag-lead">Manage farms, fields, crop records, diagnoses, weather risks and advisory plans from one secure-account-ready workspace.</p><div class="production-banner"><strong>Current deployment:</strong> This is a functional frontend and service-contract foundation. Accounts, cloud storage, maps, AI inference and weather feeds remain in demonstration mode until secured backend services and credentials are deployed.</div></div></section><section class="ag-section"><div class="shell portal-shell"><aside class="workspace-panel portal-sidebar"><h2>Farmer workspace</h2><div class="portal-menu"><button class="active" data-portal="dashboard">Dashboard</button><button data-portal="farms">My Farms</button><button data-portal="fields">Fields & Crops</button><button data-portal="doctor">AI Crop Doctor</button><button data-portal="weather">Weather & Alerts</button><button data-portal="account">Account & Roles</button></div></aside><div><section id="portal-dashboard" class="portal-view active"><div class="workspace-panel"><div class="portal-top"><div><p class="ag-kicker">Farm operations</p><h2>Welcome to AgriLearn AgriOS</h2><p>Track the health and readiness of your farm portfolio.</p></div><a class="ag-btn ag-btn-primary" href="agrilearn-demo.html">Scan a crop</a></div><div class="portal-stat-grid"><div class="portal-stat"><strong id="farm-count">—</strong><span>Farms</span></div><div class="portal-stat"><strong id="field-count">—</strong><span>Fields</span></div><div class="portal-stat"><strong id="review-count">—</strong><span>Open reviews</span></div><div class="portal-stat"><strong>0</strong><span>Live alerts</span></div></div><h3>Today's priorities</h3><div class="module-grid"><article class="ag-card"><h3>Review crop alerts</h3><p>Regional alert feeds will appear after verified providers are connected.</p></article><article class="ag-card"><h3>Update farm records</h3><p>Keep crop stage, planting date and field observations current.</p></article></div></div></section><section id="portal-farms" class="portal-view"><div class="workspace-panel"><div class="portal-top"><div><h2>My Farms</h2><p>Register and manage farm locations and production details.</p></div></div><div id="farm-list" class="farm-grid"></div><hr><h3>Add demonstration farm</h3><form id="farm-form" class="metric-input"><div class="field"><label>Farm name</label><input name="name" required></div><div class="field"><label>Country</label><input name="country" required></div><div class="field"><label>State or province</label><input name="state" required></div><div class="field"><label>Area</label><input name="area" type="number" min="0" step="0.1" required></div><button class="ag-btn ag-btn-primary" type="submit">Save on this device</button></form><p id="farm-form-result"></p></div></section><section id="portal-fields" class="portal-view"><div class="workspace-panel"><h2>Fields & Crops</h2><div class="map-placeholder"><div><h3>GIS field map foundation</h3><p>Production mapping will use PostGIS and a selected map provider. Demonstration field coordinates are stored in structured JSON.</p></div></div><div id="field-list" class="portal-table"></div></div></section><section id="portal-doctor" class="portal-view"><div class="workspace-panel"><h2>AI Crop Doctor</h2><div class="workflow-step"><span>1</span><div><strong>Capture</strong><p>Upload clear images and field context.</p></div></div><div class="workflow-step"><span>2</span><div><strong>Assess</strong><p>Check image quality, crop, symptoms and alternative causes.</p></div></div><div class="workflow-step"><span>3</span><div><strong>Review</strong><p>Escalate uncertain or high-risk results to an agronomist.</p></div></div><div class="workflow-step"><span>4</span><div><strong>Act safely</strong><p>Use locally approved, expert-reviewed guidance.</p></div></div><a class="ag-btn ag-btn-primary" href="agrilearn-demo.html">Open Crop Doctor</a></div></section><section id="portal-weather" class="portal-view"><div class="workspace-panel"><h2>Weather & Alerts</h2><p>Farm-specific forecasts, irrigation windows and outbreak warnings will be delivered through the Phase 5 API contracts.</p><a class="ag-btn ag-btn-primary" href="agrilearn-smart.html">Open Smart Farming</a></div></section><section id="portal-account" class="portal-view"><div class="workspace-panel auth-panel"><h2>Account & Roles</h2><p>Preview the role model that will be enforced by the production identity service.</p><div class="role-switcher"><button data-role="farmer" class="active">Farmer</button><button data-role="agronomist">Agronomist</button><button data-role="admin">Administrator</button><button data-role="government">Government / NGO</button><button data-role="researcher">Researcher</button></div><p>Active demonstration role: <strong id="active-role">Farmer</strong></p><form id="auth-demo"><div class="field"><label>Email</label><input id="auth-email" type="email" required placeholder="farmer@example.org"></div><button class="ag-btn ag-btn-primary" type="submit">Create local demonstration profile</button></form><div id="auth-result"></div></div></section></div></div></section>'''
+
+          farmer_page=prefix+farmer+suffix
+          if 'agrilearn-phase5.js' not in farmer_page: farmer_page=farmer_page.replace('</head>','<script src="assets/programs/agrilearn-phase5.js" defer></script></head>')
+          (root/'agrilearn-farmer.html').write_text(farmer_page,encoding='utf-8')
+
+          expert_prefix=prefix.replace('<title>Farmer Portal | AgriLearn AI</title>','<title>Expert Portal | AgriLearn AI</title>')
+          expert='''<section class="ag-hero"><div class="shell"><p class="ag-kicker">Human-in-the-loop agriculture AI</p><h1>Expert Review Portal</h1><p class="ag-lead">Agronomists review uncertain diagnoses, correct classifications, approve localized guidance and create a traceable quality-improvement loop.</p><div class="production-banner"><strong>Governance principle:</strong> High-risk or low-confidence recommendations require qualified human review before publication or farmer notification.</div></div></section><section class="ag-section"><div class="shell"><div class="workspace-panel"><div class="portal-top"><div><h2>Review queue</h2><p>Demonstration cases show the intended review workflow.</p></div><span class="ag-chip">Role: Agronomist</span></div><div class="portal-stat-grid"><div class="portal-stat"><strong id="review-count">—</strong><span>Pending reviews</span></div><div class="portal-stat"><strong>0</strong><span>Approved today</span></div><div class="portal-stat"><strong>0</strong><span>Escalated</span></div><div class="portal-stat"><strong>0</strong><span>Model corrections</span></div></div><div id="review-list" class="portal-table"></div><div class="safety-box"><strong>Required production controls:</strong> reviewer identity, timestamps, source evidence, regional scope, approval status, model version and immutable audit history.</div></div></div></section>'''
+          expert_page=expert_prefix+expert+suffix
+          if 'agrilearn-phase5.js' not in expert_page: expert_page=expert_page.replace('</head>','<script src="assets/programs/agrilearn-phase5.js" defer></script></head>')
+          (root/'agrilearn-expert.html').write_text(expert_page,encoding='utf-8')
+
+          for name in ['agrilearn-ai.html','agrilearn-platform.html','agrilearn-demo.html','agrilearn-smart.html','agrilearn-impact.html','agrilearn-partners.html']:
+            p=root/name;t=p.read_text(encoding='utf-8')
+            if 'agrilearn-farmer.html' not in t:
+              t=t.replace('<a href="agrilearn-smart.html"', '<a href="agrilearn-farmer.html">Farmer Portal</a><a href="agrilearn-smart.html"')
+            if 'agrilearn-phase5.js' not in t:
+              t=t.replace('</head>','<script src="assets/programs/agrilearn-phase5.js" defer></script></head>')
+            p.write_text(t,encoding='utf-8')
+
+          readme=root/'AGRILEARN_PHASE5.md'
+          readme.write_text('''# AgriLearn AI Phase 5 Production Foundation\n\n## Implemented\n- Farmer portal application shell\n- Role model for farmers, agronomists, administrators, government/NGO users and researchers\n- Farm and field structured data models\n- GIS-ready field coordinates\n- AI Crop Doctor workflow\n- Expert review portal and review queue\n- Versioned API contracts for authentication, farms, diagnoses, weather, alerts and advisory services\n- Local-device demonstration profiles and farm records\n- Production security and governance requirements\n\n## Not yet live\n- Real user authentication\n- Cloud database and object storage\n- Interactive map provider\n- Computer-vision inference\n- Weather and satellite provider feeds\n- Push notifications\n- Server-side audit logging\n\nThese capabilities require backend deployment, provider credentials, privacy decisions and agronomic validation.\n''',encoding='utf-8')
+
+          sw=root/'agrilearn-sw.js'; s=sw.read_text(encoding='utf-8')
+          s=s.replace('const CACHE="agrilearn-v4-1"','const CACHE="agrilearn-v5-1"')
+          if '/agrilearn-farmer.html' not in s:
+            s=s.replace('["/agrilearn-smart.html"','["/agrilearn-farmer.html","/agrilearn-expert.html","/assets/programs/agrilearn-phase5.js","/data/agrilearn-roles.json","/data/agrilearn-farms-demo.json","/data/agrilearn-fields-demo.json","/data/agrilearn-expert-reviews-demo.json","/agrilearn-smart.html"')
+          sw.write_text(s,encoding='utf-8')
+
+          assert (root/'agrilearn-farmer.html').exists()
+          assert (root/'agrilearn-expert.html').exists()
+          assert len(json.loads((data/'agrilearn-roles.json').read_text()))==5
+          assert 'WHSF Main Website' in (root/'agrilearn-farmer.html').read_text(encoding='utf-8')
+          assert 'contracts-only' in (root/'AGRILEARN_PHASE5_API_CONTRACTS.json').read_text(encoding='utf-8')
+          PY
+
+      - name: Commit Phase 5 production foundation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add agrilearn-*.html agrilearn-sw.js assets/programs/agrilearn-v2.css assets/programs/agrilearn-phase5.js data/agrilearn-roles.json data/agrilearn-farms-demo.json data/agrilearn-fields-demo.json data/agrilearn-expert-reviews-demo.json AGRILEARN_PHASE5.md AGRILEARN_PHASE5_API_CONTRACTS.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Launch AgriLearn Phase 5 production foundation"
+            git push
+          fi
