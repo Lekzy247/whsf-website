@@ -1,75 +1,14 @@
-name: Integrate AgriLearn on homepage
+name: Integrate AgriLearn on homepage (manual only)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'agrilearn-*.html'
-      - 'agrilearn-*.js'
-      - 'agrilearn-*.css'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  integrate:
+  paused:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Add AgriLearn navigation and homepage feature
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          path = Path('index.html')
-          text = path.read_text(encoding='utf-8-sig')
-
-          nav_link = '          <a href="/agrilearn-ai">AgriLearn AI</a>\n'
-          if 'href="/agrilearn-ai"' not in text:
-              marker = '          <a href="e-classroom.html">e-learning</a>'
-              if marker in text:
-                  text = text.replace(marker, marker + '\n' + nav_link.rstrip(), 1)
-              else:
-                  marker = '<a href="e-classroom.html">e-learning</a>'
-                  text = text.replace(marker, marker + '<a href="/agrilearn-ai">AgriLearn AI</a>', 1)
-
-          section = '''
-      <section class="section" id="agrilearn-ai-feature" aria-labelledby="agrilearn-home-title">
-        <div class="shell split-layout">
-          <div class="section-heading reveal">
-            <p class="eyebrow">WHSF digital learning</p>
-            <h2 id="agrilearn-home-title">AgriLearn AI: practical skills for agriculture, technology and sustainable development.</h2>
-          </div>
-          <div class="prose reveal delay-one">
-            <p class="lead">Learn at your own pace, track your progress and access an AI-supported learning experience developed by World Humanitarian Support Foundation.</p>
-            <p>Explore climate-smart agriculture, artificial intelligence, digital skills, entrepreneurship and SDG-focused learning pathways. Create a learner account to begin.</p>
-            <div class="impact-story-actions">
-              <a class="button" href="/agrilearn-ai/register">Start learning</a>
-              <a class="arrow-link" href="/agrilearn-ai/login">Learner sign in <span>→</span></a>
-            </div>
-          </div>
-        </div>
-      </section>
-'''
-          if 'id="agrilearn-ai-feature"' not in text:
-              marker = '      <section class="tech-impact-strip"'
-              pos = text.find(marker)
-              if pos != -1:
-                  text = text[:pos] + section + '\n' + text[pos:]
-              else:
-                  text = text.replace('<main id="main">', '<main id="main">\n' + section, 1)
-
-          path.write_text(text, encoding='utf-8')
-          PY
-      - name: Commit homepage integration
-        run: |
-          if git diff --quiet; then
-            echo "Homepage already integrated"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "Show AgriLearn AI on WHSF homepage"
-          git push
+      - name: Workflow paused
+        run: echo "Automatic homepage integration is paused. Run manually only after review."
