@@ -1,0 +1,168 @@
+name: Refactor AgriLearn AI v2
+
+on:
+  push:
+    paths:
+      - '.github/workflows/refactor-agrilearn-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refactor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build compact AgriLearn AI platform
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          root = Path('.')
+          assets = root / 'assets' / 'programs'
+          data_dir = root / 'data'
+          assets.mkdir(parents=True, exist_ok=True)
+          data_dir.mkdir(parents=True, exist_ok=True)
+
+          crops = [
+            {"id":"apple","name":"Apple","regions":["North America"],"countries":["United States"],"category":"Fruit","parts":["Leaf","Fruit","Bark","Flower"],"risks":["Apple scab","Fire blight","Codling moth"],"summary":"Orchard health, irrigation, pollination, harvest readiness and storage."},
+            {"id":"cassava","name":"Cassava","regions":["West Africa","Central Africa","East Africa"],"countries":["Nigeria","Ghana","Benin","Cameroon","Kenya"],"category":"Root crop","parts":["Leaf","Stem","Root"],"risks":["Cassava mosaic disease","Cassava brown streak","Mealybug"],"summary":"Clean planting material, disease awareness, processing safety and resilient production."},
+            {"id":"maize","name":"Maize","regions":["North America","West Africa","East Africa","Southern Africa"],"countries":["United States","Nigeria","Kenya","Ghana","Zambia"],"category":"Grain","parts":["Leaf","Stem","Cob","Root"],"risks":["Fall armyworm","Maize streak virus","Nutrient stress"],"summary":"Crop health, pest awareness, soil nutrition, harvest and storage learning."},
+            {"id":"rice","name":"Rice","regions":["North America","West Africa","East Africa"],"countries":["United States","Nigeria","Ghana","Kenya"],"category":"Grain","parts":["Leaf","Stem","Panicle","Root"],"risks":["Rice blast","Bacterial leaf blight","Stem borer"],"summary":"Water management, disease awareness, post-harvest handling and food security."},
+            {"id":"tomato","name":"Tomato","regions":["Global"],"countries":["United States","Nigeria","Ghana","Kenya","South Africa"],"category":"Vegetable","parts":["Leaf","Stem","Fruit","Flower"],"risks":["Early blight","Late blight","Leaf miner"],"summary":"Disease awareness, protected growing, irrigation, fruit quality and market readiness."},
+            {"id":"cocoa","name":"Cocoa","regions":["West Africa","Central Africa"],"countries":["Ghana","Nigeria","Cote d'Ivoire","Cameroon"],"category":"Tree crop","parts":["Leaf","Pod","Stem","Root"],"risks":["Black pod","Capsid damage","Swollen shoot"],"summary":"Farm sanitation, pod health, fermentation, drying and value-chain learning."},
+            {"id":"coffee","name":"Coffee","regions":["East Africa","Central Africa"],"countries":["Kenya","Ethiopia","Uganda","Rwanda"],"category":"Beverage crop","parts":["Leaf","Cherry","Stem","Root"],"risks":["Coffee leaf rust","Coffee berry disease","Berry borer"],"summary":"Shade, crop health, harvest quality, processing and climate resilience."},
+            {"id":"banana","name":"Banana","regions":["East Africa","Central Africa","Southern Africa"],"countries":["Uganda","Kenya","Tanzania","Cameroon"],"category":"Fruit","parts":["Leaf","Fruit","Pseudostem","Root"],"risks":["Banana wilt","Black sigatoka","Weevil"],"summary":"Plantation sanitation, leaf health, water management and post-harvest handling."},
+            {"id":"orange","name":"Orange","regions":["North America","North Africa","West Africa"],"countries":["United States","Morocco","Egypt","Nigeria"],"category":"Fruit","parts":["Leaf","Fruit","Stem","Flower"],"risks":["Citrus greening","Canker","Fruit fly"],"summary":"Citrus health, nutrient stress, fruit quality, irrigation and storage."},
+            {"id":"grape","name":"Grape","regions":["North America","North Africa","Southern Africa"],"countries":["United States","Morocco","South Africa"],"category":"Fruit","parts":["Leaf","Fruit","Vine","Flower"],"risks":["Powdery mildew","Downy mildew","Botrytis"],"summary":"Canopy management, mildew awareness, irrigation, harvest timing and quality."},
+            {"id":"avocado","name":"Avocado","regions":["North America","East Africa","Southern Africa"],"countries":["United States","Kenya","South Africa"],"category":"Fruit","parts":["Leaf","Fruit","Stem","Root"],"risks":["Root rot","Anthracnose","Persea mite"],"summary":"Root health, irrigation, fruit maturity and post-harvest handling."},
+            {"id":"mango","name":"Mango","regions":["West Africa","East Africa","Southern Africa"],"countries":["Nigeria","Ghana","Kenya","South Africa"],"category":"Fruit","parts":["Leaf","Fruit","Stem","Flower"],"risks":["Anthracnose","Fruit fly","Powdery mildew"],"summary":"Flowering, fruit health, pest awareness, harvest quality and market access."},
+            {"id":"yam","name":"Yam","regions":["West Africa","Central Africa"],"countries":["Nigeria","Ghana","Benin","Cameroon"],"category":"Root crop","parts":["Leaf","Vine","Tuber"],"risks":["Yam mosaic","Anthracnose","Nematodes"],"summary":"Seed yam health, staking, disease awareness, harvest and storage."},
+            {"id":"groundnut","name":"Groundnut","regions":["West Africa","East Africa","North America"],"countries":["Nigeria","Ghana","Kenya","United States"],"category":"Legume","parts":["Leaf","Pod","Stem","Root"],"risks":["Leaf spot","Rosette disease","Aflatoxin risk"],"summary":"Crop health, drying, aflatoxin risk reduction and storage protection."},
+            {"id":"wheat","name":"Wheat","regions":["North America","North Africa","East Africa"],"countries":["United States","Egypt","Morocco","Kenya"],"category":"Grain","parts":["Leaf","Stem","Head","Root"],"risks":["Stem rust","Leaf rust","Fusarium head blight"],"summary":"Rust awareness, water efficiency, harvest quality and grain storage."}
+          ]
+          (data_dir/'agrilearn-crops.json').write_text(json.dumps(crops, indent=2), encoding='utf-8')
+
+          css = r'''
+          :root{--ag-primary:#116149;--ag-primary-dark:#093d30;--ag-accent:#d9f3a8;--ag-ink:#17211d;--ag-muted:#61716a;--ag-bg:#f5f8f6;--ag-panel:#fff;--ag-border:#dce6e0;--ag-shadow:0 18px 48px rgba(18,73,55,.10)}
+          *{box-sizing:border-box}.ag-app{background:var(--ag-bg);color:var(--ag-ink)}
+          .ag-nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--ag-border)}
+          .ag-nav-inner{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+          .ag-brand{display:flex;align-items:center;gap:.75rem;color:var(--ag-primary-dark);text-decoration:none}.ag-brand img{width:46px;height:46px;border-radius:50%;object-fit:cover}.ag-brand strong{display:block}.ag-brand small{display:block;color:var(--ag-muted)}
+          .ag-links{display:flex;align-items:center;gap:.25rem}.ag-links a{padding:.7rem .9rem;border-radius:10px;text-decoration:none;color:var(--ag-ink);font-weight:700}.ag-links a:hover,.ag-links a[aria-current="page"]{background:#e8f3ed;color:var(--ag-primary)}
+          .ag-launch{background:var(--ag-primary)!important;color:#fff!important}.ag-menu{display:none;border:1px solid var(--ag-border);background:#fff;border-radius:10px;padding:.65rem}
+          .ag-hero{padding:6rem 0;background:radial-gradient(circle at 80% 20%,#e4f5bf 0,transparent 32%),linear-gradient(140deg,#eef8f1,#fff)}
+          .ag-hero-grid,.ag-two{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center}.ag-kicker{color:var(--ag-primary);font-weight:800;letter-spacing:.08em;text-transform:uppercase}.ag-hero h1{font-size:clamp(2.7rem,7vw,5.6rem);line-height:.96;margin:.3rem 0 1.25rem}.ag-lead{font-size:1.2rem;line-height:1.75;color:var(--ag-muted);max-width:760px}
+          .ag-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.5rem}.ag-btn{display:inline-flex;align-items:center;justify-content:center;padding:.9rem 1.2rem;border-radius:12px;border:1px solid var(--ag-primary);font-weight:800;text-decoration:none;cursor:pointer}.ag-btn-primary{background:var(--ag-primary);color:#fff}.ag-btn-secondary{background:#fff;color:var(--ag-primary)}
+          .ag-section{padding:5rem 0}.ag-section-alt{background:#edf4f0}.ag-section h2{font-size:clamp(2rem,4vw,3.3rem);margin:.25rem 0 1rem}.ag-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}.ag-card{background:var(--ag-panel);border:1px solid var(--ag-border);border-radius:20px;padding:1.4rem;box-shadow:var(--ag-shadow)}.ag-card h3{margin-top:0}.ag-chip{display:inline-flex;padding:.35rem .6rem;background:#e8f3ed;border-radius:999px;font-size:.82rem;font-weight:800;color:var(--ag-primary)}
+          .ag-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}.ag-stat{background:var(--ag-primary-dark);color:#fff;padding:1.4rem;border-radius:18px}.ag-stat strong{display:block;font-size:2rem}
+          .workspace-shell{padding:2rem 0 5rem}.workspace{display:grid;grid-template-columns:290px minmax(0,1fr) 330px;gap:1rem;align-items:start}.workspace-panel{background:#fff;border:1px solid var(--ag-border);border-radius:20px;padding:1.15rem;box-shadow:var(--ag-shadow)}.workspace-panel h2,.workspace-panel h3{margin-top:0}.workspace-main{min-height:690px}.field{display:grid;gap:.4rem;margin-bottom:1rem}.field label{font-size:.85rem;font-weight:800;color:var(--ag-muted)}.field input,.field select,.field textarea{width:100%;padding:.8rem;border:1px solid var(--ag-border);border-radius:10px;font:inherit;background:#fff}.mode-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1.2rem}.mode-tabs button{border:1px solid var(--ag-border);background:#fff;border-radius:10px;padding:.7rem;font-weight:800;cursor:pointer}.mode-tabs button.active{background:var(--ag-primary);color:#fff;border-color:var(--ag-primary)}
+          .upload-zone{border:2px dashed #a7bcb1;border-radius:18px;padding:3rem 1.5rem;text-align:center;background:#f8fbf9}.upload-zone input{max-width:100%}.result-empty{display:grid;place-items:center;min-height:500px;text-align:center;color:var(--ag-muted)}.result-card{border:1px solid var(--ag-border);border-radius:16px;padding:1rem;margin-top:1rem}.confidence{height:9px;background:#edf1ef;border-radius:99px;overflow:hidden}.confidence span{display:block;height:100%;background:var(--ag-primary);width:78%}.crop-results{display:grid;gap:.65rem;max-height:330px;overflow:auto}.crop-option{border:1px solid var(--ag-border);background:#fff;border-radius:12px;padding:.8rem;text-align:left;cursor:pointer}.crop-option:hover,.crop-option.active{border-color:var(--ag-primary);background:#edf7f1}.crop-option strong{display:block}.crop-option small{color:var(--ag-muted)}
+          .assistant-log{min-height:300px;max-height:420px;overflow:auto;border:1px solid var(--ag-border);border-radius:14px;padding:.8rem;background:#f8faf9}.bubble{padding:.75rem;border-radius:12px;margin:.55rem 0}.bubble.ai{background:#eaf5ef}.bubble.user{background:#f2f0e8}.resource-list{display:grid;gap:.7rem}.resource-list a{display:block;padding:.85rem;border:1px solid var(--ag-border);border-radius:12px;text-decoration:none;color:var(--ag-primary-dark);background:#fff}
+          .ag-footer{background:#092f25;color:#fff;padding:2.5rem 0}.ag-footer a{color:#dff7e9}.legacy-note{padding:1rem;border-radius:12px;background:#fff7df;border:1px solid #ecd99d}
+          @media(max-width:980px){.workspace{grid-template-columns:1fr}.ag-grid{grid-template-columns:repeat(2,1fr)}.ag-hero-grid,.ag-two{grid-template-columns:1fr}.workspace-main{min-height:auto}}
+          @media(max-width:760px){.ag-menu{display:block}.ag-links{display:none;position:absolute;top:74px;left:0;right:0;background:#fff;padding:1rem;box-shadow:var(--ag-shadow);flex-direction:column;align-items:stretch}.ag-links.open{display:flex}.ag-grid,.ag-stat-row{grid-template-columns:1fr}.ag-hero{padding:4rem 0}.mode-tabs{grid-template-columns:1fr}}
+          '''
+          (assets/'agrilearn-v2.css').write_text(css, encoding='utf-8')
+
+          js = r'''
+          (()=>{
+            const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+            const menu=$('#ag-menu'), links=$('#ag-links'); if(menu&&links) menu.addEventListener('click',()=>links.classList.toggle('open'));
+            const cropSearch=$('#crop-search'), cropList=$('#crop-list'), region=$('#region'), country=$('#country'), cropSelect=$('#crop-select'), cropDetail=$('#crop-detail');
+            let crops=[];
+            const renderCrops=()=>{
+              if(!cropList) return;
+              const term=(cropSearch?.value||'').toLowerCase(); const r=region?.value||'All'; const c=country?.value||'All';
+              const filtered=crops.filter(x=>(!term||`${x.name} ${x.category} ${x.summary}`.toLowerCase().includes(term))&&(r==='All'||x.regions.includes(r)||x.regions.includes('Global'))&&(c==='All'||x.countries.includes(c)));
+              cropList.innerHTML=filtered.map(x=>`<button class="crop-option" data-crop="${x.id}"><strong>${x.name}</strong><small>${x.category} · ${x.regions.join(', ')}</small></button>`).join('')||'<p>No matching crops found.</p>';
+              if(cropSelect) cropSelect.innerHTML='<option value="">Choose crop</option>'+filtered.map(x=>`<option value="${x.id}">${x.name}</option>`).join('');
+              $$('.crop-option',cropList).forEach(b=>b.addEventListener('click',()=>selectCrop(b.dataset.crop)));
+            };
+            const selectCrop=id=>{
+              const x=crops.find(y=>y.id===id); if(!x)return; if(cropSelect)cropSelect.value=id;
+              $$('.crop-option').forEach(b=>b.classList.toggle('active',b.dataset.crop===id));
+              if(cropDetail) cropDetail.innerHTML=`<span class="ag-chip">${x.category}</span><h3>${x.name}</h3><p>${x.summary}</p><strong>Common learning topics</strong><ul>${x.risks.map(r=>`<li>${r}</li>`).join('')}</ul><strong>Plant parts</strong><p>${x.parts.join(', ')}</p>`;
+            };
+            fetch('data/agrilearn-crops.json').then(r=>r.json()).then(d=>{crops=d; const regions=[...new Set(crops.flatMap(x=>x.regions))].sort(); const countries=[...new Set(crops.flatMap(x=>x.countries))].sort(); if(region) region.innerHTML='<option>All</option>'+regions.map(x=>`<option>${x}</option>`).join(''); if(country) country.innerHTML='<option>All</option>'+countries.map(x=>`<option>${x}</option>`).join(''); renderCrops();}).catch(()=>{if(cropList)cropList.innerHTML='<p>Crop data is temporarily unavailable.</p>'});
+            [cropSearch,region,country].forEach(el=>el&&el.addEventListener(el===cropSearch?'input':'change',renderCrops)); if(cropSelect) cropSelect.addEventListener('change',()=>selectCrop(cropSelect.value));
+            $$('.mode-tabs button').forEach(btn=>btn.addEventListener('click',()=>{$$('.mode-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const t=$('#workspace-title');if(t)t.textContent=btn.dataset.title;}));
+            const analyze=$('#analyze-btn'); if(analyze) analyze.addEventListener('click',()=>{const id=cropSelect?.value;const x=crops.find(y=>y.id===id);const output=$('#analysis-output');if(!x){output.innerHTML='<div class="legacy-note">Please select a crop before running the prototype.</div>';return;}output.innerHTML=`<span class="ag-chip">Prototype result</span><h2>${x.name} learning assessment</h2><p><strong>Likely issue:</strong> ${x.risks[0]}</p><p><strong>Confidence:</strong> 78% (demonstration only)</p><div class="confidence"><span></span></div><div class="result-card"><h3>What to check</h3><p>Review the affected plant part, recent weather, field pattern and crop history. Compare symptoms with trusted local guidance.</p></div><div class="result-card"><h3>Recommended next step</h3><p>Consult a qualified extension worker or agricultural specialist before treatment. Do not rely on this demonstration for pesticide or high-risk decisions.</p></div>`;});
+            const ask=$('#ask-btn'); if(ask) ask.addEventListener('click',()=>{const q=$('#assistant-question');const log=$('#assistant-log');if(!q.value.trim())return;log.innerHTML+=`<div class="bubble user">${q.value}</div><div class="bubble ai">This prototype can organize crop learning guidance. For field decisions, confirm symptoms with a local agricultural professional.</div>`;q.value='';log.scrollTop=log.scrollHeight;});
+          })();
+          '''
+          (assets/'agrilearn-v2.js').write_text(js, encoding='utf-8')
+
+          nav_items = [
+            ('agrilearn-ai.html','Home'),('agrilearn-platform.html','Platform'),('agrilearn-demo.html','Try the AI'),('agrilearn-impact.html','Impact'),('agrilearn-partners.html','Partners')
+          ]
+
+          def nav(active):
+            links=''.join(f'<a href="{href}"'+(' aria-current="page"' if href==active else '')+(' class="ag-launch"' if href=='agrilearn-demo.html' else '')+f'>{label}</a>' for href,label in nav_items)
+            return f'''<nav class="ag-nav"><div class="shell ag-nav-inner"><a class="ag-brand" href="agrilearn-ai.html"><img src="assets/whsf-logo.jpg" alt="WHSF emblem"><span><strong>AgriLearn AI</strong><small>by WHSF</small></span></a><button class="ag-menu" id="ag-menu" aria-label="Open menu">Menu</button><div class="ag-links" id="ag-links">{links}</div></div></nav>'''
+
+          def page(title, desc, active, body):
+            return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{desc}"><title>{title} | WHSF</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="assets/programs/agrilearn-v2.css"><script src="script.js" defer></script><script src="assets/programs/agrilearn-v2.js" defer></script></head><body class="ag-app"><a class="skip-link" href="#main">Skip to main content</a>{nav(active)}<main id="main">{body}</main><footer class="ag-footer"><div class="shell"><div class="ag-two"><div><strong>AgriLearn AI</strong><p>Responsible, multilingual and climate-smart agricultural learning by the World Humanitarian Support Foundation.</p></div><div><a href="agrilearn-platform.html">Platform</a> · <a href="agrilearn-demo.html">Try the AI</a> · <a href="agrilearn-partners.html">Partner with WHSF</a></div></div></div></footer></body></html>'''
+
+          home = '''<section class="ag-hero"><div class="shell ag-hero-grid"><div><p class="ag-kicker">WHSF flagship innovation</p><h1>Agricultural learning, organized around the farmer.</h1><p class="ag-lead">AgriLearn AI brings crop discovery, image-based learning, food recognition and climate-smart guidance into one multilingual workspace designed for farmers, students and extension teams.</p><div class="ag-actions"><a class="ag-btn ag-btn-primary" href="agrilearn-demo.html">Launch AI Workspace</a><a class="ag-btn ag-btn-secondary" href="agrilearn-platform.html">Explore the platform</a></div></div><div class="ag-card"><span class="ag-chip">One workspace</span><h2>Search. Select. Learn.</h2><p>Choose a region, country and crop, then explore trusted learning topics or test the image-analysis prototype.</p><div class="resource-list"><a href="agrilearn-demo.html">Crop diagnosis prototype</a><a href="agrilearn-demo.html">Food recognition mode</a><a href="agrilearn-demo.html">Crop learning library</a></div></div></div></section><section class="ag-section"><div class="shell"><p class="ag-kicker">Core capabilities</p><h2>Fewer pages. More useful actions.</h2><div class="ag-grid"><article class="ag-card"><span class="ag-chip">Discover</span><h3>Smart Crop Explorer</h3><p>Search crops by name, region, country and category without opening separate crop pages.</p></article><article class="ag-card"><span class="ag-chip">Analyze</span><h3>AI Learning Workspace</h3><p>Upload an image, select the plant part and receive an educational assessment with clear limitations.</p></article><article class="ag-card"><span class="ag-chip">Learn</span><h3>Contextual Resources</h3><p>Growing guidance, common risks, nutrition, weather and expert resources appear alongside each crop.</p></article></div><div class="ag-stat-row"><div class="ag-stat"><strong>15</strong>launch crop records</div><div class="ag-stat"><strong>5</strong>primary experiences</div><div class="ag-stat"><strong>1</strong>shared data layer</div><div class="ag-stat"><strong>0</strong>new crop pages required</div></div></div></section><section class="ag-section ag-section-alt"><div class="shell ag-two"><div><p class="ag-kicker">Built for responsible growth</p><h2>Designed to scale from pilot to platform.</h2><p class="ag-lead">New crops are added through structured data rather than new navigation. This keeps the experience simple as the knowledge base expands across countries, languages and partners.</p></div><div class="ag-card"><h3>Responsible AI commitments</h3><ul><li>Human confirmation for field decisions</li><li>Visible uncertainty and limitations</li><li>Minimum necessary data collection</li><li>Regional and language review</li><li>Clear distinction between prototypes and verified services</li></ul></div></div></section>'''
+
+          platform = '''<section class="ag-hero"><div class="shell"><p class="ag-kicker">Platform</p><h1>One system for agricultural discovery, learning and support.</h1><p class="ag-lead">AgriLearn AI combines crop knowledge, responsible AI, multilingual delivery and offline-aware design in a modular platform.</p></div></section><section class="ag-section"><div class="shell"><div class="ag-grid"><article class="ag-card"><h3>How it works</h3><p>Users choose a location and crop, provide an image or question, and receive structured educational guidance and relevant resources.</p></article><article class="ag-card"><h3>AI modules</h3><p>Crop diagnosis, food recognition, pest and disease learning, climate-smart lessons and conversational assistance share one workspace.</p></article><article class="ag-card"><h3>Data architecture</h3><p>Crop records are stored as reusable structured data so new content appears automatically in search and filters.</p></article><article class="ag-card"><h3>Languages</h3><p>The architecture supports English, French and Spanish first, with room for Arabic, Portuguese and African languages.</p></article><article class="ag-card"><h3>Offline awareness</h3><p>Future mobile delivery will prioritize low-bandwidth lessons, cached crop guides and field-friendly interactions.</p></article><article class="ag-card"><h3>Privacy and safety</h3><p>The platform minimizes data collection and never presents prototype output as a definitive diagnosis or treatment order.</p></article></div></div></section><section class="ag-section ag-section-alt"><div class="shell ag-two"><div><p class="ag-kicker">Technology</p><h2>Modular today, extensible tomorrow.</h2><p>The current static application uses structured JSON, reusable components and progressive enhancement. Future phases can connect the same experience to APIs, computer vision models, weather services and an administrative content system.</p></div><div class="ag-card"><h3>Planned service layers</h3><ol><li>Web and mobile interface</li><li>Crop and location data services</li><li>AI analysis and retrieval services</li><li>Expert-reviewed knowledge base</li><li>Impact, consent and governance controls</li></ol></div></div></section>'''
+
+          workspace = '''<section class="ag-hero"><div class="shell"><p class="ag-kicker">Try the prototype</p><h1>AgriLearn AI Workspace</h1><p class="ag-lead">Search crops, filter by region and test an educational analysis flow in one professional interface.</p><p class="legacy-note"><strong>Prototype notice:</strong> Results are demonstrations for learning and must not replace qualified agricultural advice, laboratory testing or pesticide labels.</p></div></section><section class="workspace-shell"><div class="shell workspace"><aside class="workspace-panel"><h2>Crop Explorer</h2><div class="field"><label for="crop-search">Search crops</label><input id="crop-search" type="search" placeholder="Apple, cassava, maize..."></div><div class="field"><label for="region">Region</label><select id="region"></select></div><div class="field"><label for="country">Country</label><select id="country"></select></div><div id="crop-list" class="crop-results"></div></aside><section class="workspace-panel workspace-main"><div class="mode-tabs"><button class="active" data-title="Crop Diagnosis">Crop Diagnosis</button><button data-title="Food Recognition">Food Recognition</button><button data-title="Crop Learning">Crop Learning</button></div><h2 id="workspace-title">Crop Diagnosis</h2><div class="field"><label for="crop-select">Selected crop</label><select id="crop-select"><option value="">Choose crop</option></select></div><div class="field"><label for="plant-part">Plant part</label><select id="plant-part"><option>Leaf</option><option>Fruit</option><option>Stem</option><option>Root</option><option>Flower</option><option>Whole plant</option></select></div><div class="upload-zone"><h3>Upload a crop or food image</h3><p>Use a clear, well-lit image showing the affected area.</p><input type="file" accept="image/*"><div class="ag-actions" style="justify-content:center"><button class="ag-btn ag-btn-primary" id="analyze-btn">Analyze prototype</button></div></div><div id="analysis-output"></div></section><aside class="workspace-panel"><div id="crop-detail"><span class="ag-chip">Crop profile</span><h3>Select a crop</h3><p>Crop guidance, common risks and learning topics will appear here.</p></div><hr><h3>AgriLearn Assistant</h3><div id="assistant-log" class="assistant-log"><div class="bubble ai">Ask a crop or farming question. This prototype provides educational guidance only.</div></div><div class="field"><textarea id="assistant-question" rows="3" placeholder="Why are my tomato leaves yellow?"></textarea></div><button class="ag-btn ag-btn-secondary" id="ask-btn">Ask assistant</button></aside></div></section>'''
+
+          impact = '''<section class="ag-hero"><div class="shell"><p class="ag-kicker">Impact</p><h1>Evidence before expansion.</h1><p class="ag-lead">AgriLearn AI will scale through measurable pilots, transparent reporting and community-led evaluation.</p></div></section><section class="ag-section"><div class="shell"><div class="ag-stat-row"><div class="ag-stat"><strong>5</strong>pilot experience areas</div><div class="ag-stat"><strong>3</strong>initial interface languages</div><div class="ag-stat"><strong>15</strong>structured launch crops</div><div class="ag-stat"><strong>100%</strong>prototype outputs labeled</div></div><div class="ag-grid" style="margin-top:2rem"><article class="ag-card"><h3>Pilot design</h3><p>Co-design with farmers, schools, extension workers and agricultural institutions before broader deployment.</p></article><article class="ag-card"><h3>Learning outcomes</h3><p>Measure knowledge improvement, user confidence, task completion and appropriate expert escalation.</p></article><article class="ag-card"><h3>Inclusion</h3><p>Track language access, gender participation, youth engagement, device constraints and rural connectivity.</p></article><article class="ag-card"><h3>Research</h3><p>Document usability, model limitations, regional validity and responsible AI safeguards.</p></article><article class="ag-card"><h3>SDG alignment</h3><p>Support food security, quality education, innovation, climate action and partnerships.</p></article><article class="ag-card"><h3>Roadmap</h3><p>Prototype, expert review, controlled pilot, evaluation, iteration and evidence-led scale.</p></article></div></div></section>'''
+
+          partners = '''<section class="ag-hero"><div class="shell"><p class="ag-kicker">Partners</p><h1>Build the next stage with WHSF.</h1><p class="ag-lead">We welcome agricultural institutions, universities, schools, cooperatives, governments, funders and responsible technology partners.</p><div class="ag-actions"><a class="ag-btn ag-btn-primary" href="contact.html">Contact WHSF</a><a class="ag-btn ag-btn-secondary" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Support the initiative</a></div></div></section><section class="ag-section"><div class="shell"><div class="ag-grid"><article class="ag-card"><h3>Pilot partners</h3><p>Host controlled field testing, recruit participants and support local implementation.</p></article><article class="ag-card"><h3>Agricultural experts</h3><p>Review crop content, validate regional guidance and strengthen escalation pathways.</p></article><article class="ag-card"><h3>Research institutions</h3><p>Support evaluation, ethics, usability research and evidence generation.</p></article><article class="ag-card"><h3>Technology partners</h3><p>Contribute AI, cloud, mobile, translation, data and accessibility expertise.</p></article><article class="ag-card"><h3>Funders and sponsors</h3><p>Support product development, pilots, local-language content and farmer access.</p></article><article class="ag-card"><h3>Volunteers</h3><p>Assist with content, testing, translation, design, training and community outreach.</p></article></div></div></section>'''
+
+          pages = {
+            'agrilearn-ai.html': page('AgriLearn AI','WHSF agricultural AI learning platform.','agrilearn-ai.html',home),
+            'agrilearn-platform.html': page('AgriLearn Platform','How AgriLearn AI works, its technology and responsible AI approach.','agrilearn-platform.html',platform),
+            'agrilearn-demo.html': page('Try AgriLearn AI','Unified crop explorer and AgriLearn AI prototype workspace.','agrilearn-demo.html',workspace),
+            'agrilearn-impact.html': page('AgriLearn Impact','AgriLearn AI impact, pilot, research and roadmap.','agrilearn-impact.html',impact),
+            'agrilearn-partners.html': page('AgriLearn Partners','Partner, sponsor or collaborate with AgriLearn AI and WHSF.','agrilearn-partners.html',partners)
+          }
+          for path, content in pages.items(): (root/path).write_text(content, encoding='utf-8')
+
+          redirects = {
+            'agrilearn-about.html':'agrilearn-platform.html','agrilearn-features.html':'agrilearn-platform.html','agrilearn-architecture.html':'agrilearn-platform.html','agrilearn-faq.html':'agrilearn-platform.html','agrilearn-crops.html':'agrilearn-demo.html','agrilearn-resources.html':'agrilearn-demo.html','agrilearn-pilot.html':'agrilearn-impact.html','agrilearn-research.html':'agrilearn-impact.html','agrilearn-roadmap.html':'agrilearn-impact.html','agrilearn-updates.html':'agrilearn-impact.html','agrilearn-contact.html':'agrilearn-partners.html'
+          }
+          for old,new in redirects.items():
+            (root/old).write_text(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0; url={new}"><link rel="canonical" href="{new}"><title>AgriLearn AI</title></head><body><p>This content has moved to <a href="{new}">{new}</a>.</p></body></html>''', encoding='utf-8')
+
+          sitemap = root/'sitemap.xml'
+          if sitemap.exists():
+            text=sitemap.read_text(encoding='utf-8')
+            urls=['agrilearn-ai.html','agrilearn-platform.html','agrilearn-demo.html','agrilearn-impact.html','agrilearn-partners.html']
+            base='https://www.worldhsfoundation.org/'
+            kept=[]
+            for line in text.splitlines():
+              if '<loc>' in line and 'agrilearn-' in line and not any(u in line for u in urls): continue
+              kept.append(line)
+            if '</urlset>' in '\n'.join(kept):
+              idx=max(i for i,l in enumerate(kept) if '</urlset>' in l)
+              entries=[f'  <url><loc>{base}{u}</loc></url>' for u in urls if not any(u in l for l in kept)]
+              kept[idx:idx]=entries
+            sitemap.write_text('\n'.join(kept)+'\n',encoding='utf-8')
+
+          required=list(pages)+['assets/programs/agrilearn-v2.css','assets/programs/agrilearn-v2.js','data/agrilearn-crops.json']
+          for p in required:
+            assert (root/p).exists(), p
+          assert all('agrilearn-platform.html' in (root/p).read_text(encoding='utf-8') for p in pages)
+          assert len(json.loads((data_dir/'agrilearn-crops.json').read_text())) >= 15
+          PY
+
+      - name: Commit AgriLearn AI v2 refactor
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add agrilearn-*.html assets/programs/agrilearn-v2.css assets/programs/agrilearn-v2.js data/agrilearn-crops.json sitemap.xml
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Launch compact AgriLearn AI workspace"
+            git push
+          fi
