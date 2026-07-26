@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Course Catalog | AgriLearn AI</title>
+  <link rel="icon" href="assets/whsf-logo.jpg" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="agrilearn-app.css" />
+  <style>
+    .catalog-shell{max-width:1180px;margin:0 auto;padding:2rem 1.2rem 4rem}.catalog-hero{display:grid;grid-template-columns:1.3fr .7fr;gap:2rem;align-items:end;margin:2rem 0}.catalog-hero h1{margin:.4rem 0 1rem}.catalog-tools{display:flex;gap:.8rem;flex-wrap:wrap;margin:1.5rem 0}.catalog-tools input,.catalog-tools select{padding:.85rem 1rem;border:1px solid #d8c7cb;border-radius:.8rem;background:#fff;min-width:220px}.course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}.course-card{background:#fff;border:1px solid #eadde0;border-radius:1.2rem;overflow:hidden;box-shadow:0 .7rem 2rem rgba(46,22,26,.07);display:flex;flex-direction:column}.course-card img{width:100%;height:190px;object-fit:cover}.course-body{padding:1.2rem;display:flex;flex-direction:column;gap:.7rem;flex:1}.course-meta{display:flex;justify-content:space-between;gap:.6rem;font-size:.9rem;color:#6f6266}.course-tag{display:inline-flex;align-self:flex-start;padding:.3rem .65rem;border-radius:999px;background:#f5ecee;color:#6d1024;font-weight:700;font-size:.82rem}.course-body h2{font-size:1.25rem;margin:0}.course-body p{margin:0;color:#655a5d}.course-actions{margin-top:auto;display:flex;gap:.7rem;flex-wrap:wrap}.empty-state{padding:2rem;border:1px dashed #c9b4b9;border-radius:1rem;text-align:center}.app-topbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.2rem;border-bottom:1px solid #eadde0;background:#fff;position:sticky;top:0;z-index:10}.app-brand{display:flex;align-items:center;gap:.8rem;text-decoration:none;color:inherit}.app-brand img{width:44px;height:44px;border-radius:50%}.app-nav{display:flex;gap:1rem;flex-wrap:wrap}.app-nav a{text-decoration:none;font-weight:700;color:#5b4147}.app-nav a[aria-current="page"]{color:#6d1024}.badge{padding:.45rem .7rem;border-radius:999px;background:#eef7ee;color:#24652a;font-weight:700;font-size:.82rem}@media(max-width:900px){.catalog-hero{grid-template-columns:1fr}.course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:640px){.course-grid{grid-template-columns:1fr}.app-topbar{align-items:flex-start;flex-direction:column}.catalog-tools{flex-direction:column}.catalog-tools input,.catalog-tools select{width:100%;min-width:0}}
+  </style>
+</head>
+<body>
+  <header class="app-topbar">
+    <a class="app-brand" href="/agrilearn-ai/dashboard"><img src="assets/whsf-logo.jpg" alt="WHSF logo"><span><strong>AgriLearn AI</strong><br><small>World Humanitarian Support Foundation</small></span></a>
+    <nav class="app-nav" aria-label="Learner navigation"><a href="/agrilearn-ai/dashboard">Dashboard</a><a href="/agrilearn-ai/courses" aria-current="page">Courses</a><a href="/agrilearn-ai">About</a></nav>
+  </header>
+
+  <main class="catalog-shell">
+    <section class="catalog-hero">
+      <div><p class="eyebrow">Learning pathways</p><h1>Build practical skills for agriculture, technology and sustainable development.</h1><p>Browse beginner-friendly courses, enroll at no cost and track your learning progress.</p></div>
+      <div class="badge">6 starter courses available</div>
+    </section>
+
+    <section aria-labelledby="catalog-title">
+      <h2 id="catalog-title" class="sr-only">Course catalog</h2>
+      <div class="catalog-tools">
+        <input id="course-search" type="search" placeholder="Search courses" aria-label="Search courses">
+        <select id="course-category" aria-label="Filter by category"><option value="all">All categories</option><option value="agriculture">Agriculture</option><option value="ai">AI & Digital Skills</option><option value="business">Agribusiness</option><option value="sdg">Sustainable Development</option></select>
+        <select id="course-level" aria-label="Filter by level"><option value="all">All levels</option><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option></select>
+      </div>
+      <div id="course-grid" class="course-grid"></div>
+      <div id="course-empty" class="empty-state" hidden>No courses match your search.</div>
+    </section>
+  </main>
+  <script src="agrilearn-courses.js" defer></script>
+</body>
+</html>
