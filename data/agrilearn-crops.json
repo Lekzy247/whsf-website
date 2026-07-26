@@ -1,0 +1,412 @@
+[
+  {
+    "id": "apple",
+    "name": "Apple",
+    "regions": [
+      "North America"
+    ],
+    "countries": [
+      "United States"
+    ],
+    "category": "Fruit",
+    "parts": [
+      "Leaf",
+      "Fruit",
+      "Bark",
+      "Flower"
+    ],
+    "risks": [
+      "Apple scab",
+      "Fire blight",
+      "Codling moth"
+    ],
+    "summary": "Orchard health, irrigation, pollination, harvest readiness and storage."
+  },
+  {
+    "id": "cassava",
+    "name": "Cassava",
+    "regions": [
+      "West Africa",
+      "Central Africa",
+      "East Africa"
+    ],
+    "countries": [
+      "Nigeria",
+      "Ghana",
+      "Benin",
+      "Cameroon",
+      "Kenya"
+    ],
+    "category": "Root crop",
+    "parts": [
+      "Leaf",
+      "Stem",
+      "Root"
+    ],
+    "risks": [
+      "Cassava mosaic disease",
+      "Cassava brown streak",
+      "Mealybug"
+    ],
+    "summary": "Clean planting material, disease awareness, processing safety and resilient production."
+  },
+  {
+    "id": "maize",
+    "name": "Maize",
+    "regions": [
+      "North America",
+      "West Africa",
+      "East Africa",
+      "Southern Africa"
+    ],
+    "countries": [
+      "United States",
+      "Nigeria",
+      "Kenya",
+      "Ghana",
+      "Zambia"
+    ],
+    "category": "Grain",
+    "parts": [
+      "Leaf",
+      "Stem",
+      "Cob",
+      "Root"
+    ],
+    "risks": [
+      "Fall armyworm",
+      "Maize streak virus",
+      "Nutrient stress"
+    ],
+    "summary": "Crop health, pest awareness, soil nutrition, harvest and storage learning."
+  },
+  {
+    "id": "rice",
+    "name": "Rice",
+    "regions": [
+      "North America",
+      "West Africa",
+      "East Africa"
+    ],
+    "countries": [
+      "United States",
+      "Nigeria",
+      "Ghana",
+      "Kenya"
+    ],
+    "category": "Grain",
+    "parts": [
+      "Leaf",
+      "Stem",
+      "Panicle",
+      "Root"
+    ],
+    "risks": [
+      "Rice blast",
+      "Bacterial leaf blight",
+      "Stem borer"
+    ],
+    "summary": "Water management, disease awareness, post-harvest handling and food security."
+  },
+  {
+    "id": "tomato",
+    "name": "Tomato",
+    "regions": [
+      "Global"
+    ],
+    "countries": [
+      "United States",
+      "Nigeria",
+      "Ghana",
+      "Kenya",
+      "South Africa"
+    ],
+    "category": "Vegetable",
+    "parts": [
+      "Leaf",
+      "Stem",
+      "Fruit",
+      "Flower"
+    ],
+    "risks": [
+      "Early blight",
+      "Late blight",
+      "Leaf miner"
+    ],
+    "summary": "Disease awareness, protected growing, irrigation, fruit quality and market readiness."
+  },
+  {
+    "id": "cocoa",
+    "name": "Cocoa",
+    "regions": [
+      "West Africa",
+      "Central Africa"
+    ],
+    "countries": [
+      "Ghana",
+      "Nigeria",
+      "Cote d'Ivoire",
+      "Cameroon"
+    ],
+    "category": "Tree crop",
+    "parts": [
+      "Leaf",
+      "Pod",
+      "Stem",
+      "Root"
+    ],
+    "risks": [
+      "Black pod",
+      "Capsid damage",
+      "Swollen shoot"
+    ],
+    "summary": "Farm sanitation, pod health, fermentation, drying and value-chain learning."
+  },
+  {
+    "id": "coffee",
+    "name": "Coffee",
+    "regions": [
+      "East Africa",
+      "Central Africa"
+    ],
+    "countries": [
+      "Kenya",
+      "Ethiopia",
+      "Uganda",
+      "Rwanda"
+    ],
+    "category": "Beverage crop",
+    "parts": [
+      "Leaf",
+      "Cherry",
+      "Stem",
+      "Root"
+    ],
+    "risks": [
+      "Coffee leaf rust",
+      "Coffee berry disease",
+      "Berry borer"
+    ],
+    "summary": "Shade, crop health, harvest quality, processing and climate resilience."
+  },
+  {
+    "id": "banana",
+    "name": "Banana",
+    "regions": [
+      "East Africa",
+      "Central Africa",
+      "Southern Africa"
+    ],
+    "countries": [
+      "Uganda",
+      "Kenya",
+      "Tanzania",
+      "Cameroon"
+    ],
+    "category": "Fruit",
+    "parts": [
+      "Leaf",
+      "Fruit",
+      "Pseudostem",
+      "Root"
+    ],
+    "risks": [
+      "Banana wilt",
+      "Black sigatoka",
+      "Weevil"
+    ],
+    "summary": "Plantation sanitation, leaf health, water management and post-harvest handling."
+  },
+  {
+    "id": "orange",
+    "name": "Orange",
+    "regions": [
+      "North America",
+      "North Africa",
+      "West Africa"
+    ],
+    "countries": [
+      "United States",
+      "Morocco",
+      "Egypt",
+      "Nigeria"
+    ],
+    "category": "Fruit",
+    "parts": [
+      "Leaf",
+      "Fruit",
+      "Stem",
+      "Flower"
+    ],
+    "risks": [
+      "Citrus greening",
+      "Canker",
+      "Fruit fly"
+    ],
+    "summary": "Citrus health, nutrient stress, fruit quality, irrigation and storage."
+  },
+  {
+    "id": "grape",
+    "name": "Grape",
+    "regions": [
+      "North America",
+      "North Africa",
+      "Southern Africa"
+    ],
+    "countries": [
+      "United States",
+      "Morocco",
+      "South Africa"
+    ],
+    "category": "Fruit",
+    "parts": [
+      "Leaf",
+      "Fruit",
+      "Vine",
+      "Flower"
+    ],
+    "risks": [
+      "Powdery mildew",
+      "Downy mildew",
+      "Botrytis"
+    ],
+    "summary": "Canopy management, mildew awareness, irrigation, harvest timing and quality."
+  },
+  {
+    "id": "avocado",
+    "name": "Avocado",
+    "regions": [
+      "North America",
+      "East Africa",
+      "Southern Africa"
+    ],
+    "countries": [
+      "United States",
+      "Kenya",
+      "South Africa"
+    ],
+    "category": "Fruit",
+    "parts": [
+      "Leaf",
+      "Fruit",
+      "Stem",
+      "Root"
+    ],
+    "risks": [
+      "Root rot",
+      "Anthracnose",
+      "Persea mite"
+    ],
+    "summary": "Root health, irrigation, fruit maturity and post-harvest handling."
+  },
+  {
+    "id": "mango",
+    "name": "Mango",
+    "regions": [
+      "West Africa",
+      "East Africa",
+      "Southern Africa"
+    ],
+    "countries": [
+      "Nigeria",
+      "Ghana",
+      "Kenya",
+      "South Africa"
+    ],
+    "category": "Fruit",
+    "parts": [
+      "Leaf",
+      "Fruit",
+      "Stem",
+      "Flower"
+    ],
+    "risks": [
+      "Anthracnose",
+      "Fruit fly",
+      "Powdery mildew"
+    ],
+    "summary": "Flowering, fruit health, pest awareness, harvest quality and market access."
+  },
+  {
+    "id": "yam",
+    "name": "Yam",
+    "regions": [
+      "West Africa",
+      "Central Africa"
+    ],
+    "countries": [
+      "Nigeria",
+      "Ghana",
+      "Benin",
+      "Cameroon"
+    ],
+    "category": "Root crop",
+    "parts": [
+      "Leaf",
+      "Vine",
+      "Tuber"
+    ],
+    "risks": [
+      "Yam mosaic",
+      "Anthracnose",
+      "Nematodes"
+    ],
+    "summary": "Seed yam health, staking, disease awareness, harvest and storage."
+  },
+  {
+    "id": "groundnut",
+    "name": "Groundnut",
+    "regions": [
+      "West Africa",
+      "East Africa",
+      "North America"
+    ],
+    "countries": [
+      "Nigeria",
+      "Ghana",
+      "Kenya",
+      "United States"
+    ],
+    "category": "Legume",
+    "parts": [
+      "Leaf",
+      "Pod",
+      "Stem",
+      "Root"
+    ],
+    "risks": [
+      "Leaf spot",
+      "Rosette disease",
+      "Aflatoxin risk"
+    ],
+    "summary": "Crop health, drying, aflatoxin risk reduction and storage protection."
+  },
+  {
+    "id": "wheat",
+    "name": "Wheat",
+    "regions": [
+      "North America",
+      "North Africa",
+      "East Africa"
+    ],
+    "countries": [
+      "United States",
+      "Egypt",
+      "Morocco",
+      "Kenya"
+    ],
+    "category": "Grain",
+    "parts": [
+      "Leaf",
+      "Stem",
+      "Head",
+      "Root"
+    ],
+    "risks": [
+      "Stem rust",
+      "Leaf rust",
+      "Fusarium head blight"
+    ],
+    "summary": "Rust awareness, water efficiency, harvest quality and grain storage."
+  }
+]
