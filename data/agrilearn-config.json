@@ -1,0 +1,20 @@
+{
+  "version": "3.0-foundation",
+  "environment": "production",
+  "features": {
+    "pwa": true,
+    "offlineCropLibrary": true,
+    "savedSessions": true,
+    "apiAdapter": true,
+    "realVisionModel": false,
+    "userAuthentication": false,
+    "weatherIntegration": false
+  },
+  "api": {
+    "baseUrl": "/api",
+    "analysisEndpoint": "/api/agrilearn/analyze",
+    "assistantEndpoint": "/api/agrilearn/assistant",
+    "mode": "prototype"
+  },
+  "notice": "Phase 3 foundation is active. Live AI, authentication and weather services require secured backend services and provider credentials."
+}

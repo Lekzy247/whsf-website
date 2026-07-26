@@ -1,0 +1,6 @@
+window.AgriLearnAPI={
+  async config(){return fetch("data/agrilearn-config.json").then(r=>r.json())},
+  async analyze(payload){const cfg=await this.config();if(cfg.api.mode!=="live")return {mode:"prototype",confidence:0.78,label:payload.crop?`${payload.crop} learning assessment`:"Crop learning assessment",message:"Prototype response. Confirm field decisions with a qualified agricultural professional."};const r=await fetch(cfg.api.analysisEndpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});if(!r.ok)throw new Error("Analysis service unavailable");return r.json()},
+  saveSession(session){const items=JSON.parse(localStorage.getItem("agrilearnSessions")||"[]");items.unshift({...session,id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),savedAt:new Date().toISOString()});localStorage.setItem("agrilearnSessions",JSON.stringify(items.slice(0,20)));return items[0]},
+  getSessions(){return JSON.parse(localStorage.getItem("agrilearnSessions")||"[]")}
+};
