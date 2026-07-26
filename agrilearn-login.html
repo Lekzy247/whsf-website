@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login | AgriLearn AI</title>
+  <meta name="description" content="Sign in to AgriLearn AI by WHSF.">
+  <link rel="stylesheet" href="/agrilearn-app.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/agrilearn-ai">AgriLearn AI<small>World Humanitarian Support Foundation</small></a>
+    <a class="btn secondary" href="/agrilearn-ai/register">Create account</a>
+  </header>
+
+  <main class="auth-layout">
+    <section class="story">
+      <span class="eyebrow">Learn. Grow. Transform.</span>
+      <h1>Practical learning for a changing world.</h1>
+      <p>Access agriculture, technology, entrepreneurship and sustainable-development courses designed for learners, farmers and emerging professionals.</p>
+    </section>
+
+    <section class="panel-wrap">
+      <div class="card auth-card">
+        <span class="eyebrow">Welcome back</span>
+        <h2>Sign in to your account</h2>
+        <p class="muted">Continue your courses, track progress and use the AgriLearn AI assistant.</p>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+          </div>
+          <button id="loginButton" class="btn" type="submit" style="width:100%">Sign in</button>
+        </form>
+
+        <div class="helper">
+          <button id="resetButton" class="btn secondary" type="button">Forgot password?</button>
+          <a href="/agrilearn-ai/register">New learner? Register</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { observeAuth, loginLearner, resetLearnerPassword, friendlyAuthError } from '/agrilearn-auth.js';
+
+    const form = document.getElementById('loginForm');
+    const loginButton = document.getElementById('loginButton');
+    const resetButton = document.getElementById('resetButton');
+    const message = document.getElementById('message');
+
+    const showMessage = (text, type = 'error') => {
+      message.textContent = text;
+      message.className = `message show ${type}`;
+    };
+
+    observeAuth((user) => {
+      if (user) window.location.replace('/agrilearn-ai/dashboard');
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      loginButton.disabled = true;
+      loginButton.textContent = 'Signing in...';
+      message.className = 'message';
+      try {
+        await loginLearner(form.email.value.trim(), form.password.value);
+        window.location.replace('/agrilearn-ai/dashboard');
+      } catch (error) {
+        showMessage(friendlyAuthError(error));
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = 'Sign in';
+      }
+    });
+
+    resetButton.addEventListener('click', async () => {
+      const email = form.email.value.trim();
+      if (!email) {
+        showMessage('Enter your email address first, then select “Forgot password?”.');
+        form.email.focus();
+        return;
+      }
+      resetButton.disabled = true;
+      try {
+        await resetLearnerPassword(email);
+        showMessage('Password reset email sent. Check your inbox and spam folder.', 'success');
+      } catch (error) {
+        showMessage(friendlyAuthError(error));
+      } finally {
+        resetButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
