@@ -1,0 +1,32 @@
+{
+  "phase": "4",
+  "productGoal": "AgriLearn AI is an agricultural smart application that uses artificial intelligence to scan crops, interpret weather and environmental data, provide rapid educational diagnostics, deliver early warnings, and offer localized farming guidance that helps farmers prevent losses, use water and farm inputs more efficiently, and improve productivity.",
+  "frontend": [
+    "Five-page public product",
+    "Smart Farming command center",
+    "PWA and offline crop library",
+    "Local saved sessions"
+  ],
+  "serviceContracts": {
+    "vision": "POST /api/agrilearn/v1/diagnose",
+    "weather": "GET /api/agrilearn/v1/weather",
+    "alerts": "GET /api/agrilearn/v1/alerts",
+    "advisory": "POST /api/agrilearn/v1/advisory",
+    "farmProfile": "GET/PUT /api/agrilearn/v1/farms/{id}"
+  },
+  "requiredIntegrations": [
+    "Verified weather and satellite provider",
+    "Validated crop-vision model",
+    "Regional pest and disease intelligence",
+    "Secure authentication",
+    "Database and object storage",
+    "Agronomist-reviewed recommendation rules"
+  ],
+  "safetyGates": [
+    "No definitive diagnosis without confidence and alternatives",
+    "No exact chemical or fertilizer rate without location, crop stage, label and agronomist validation",
+    "Display source, timestamp and geographic coverage for alerts",
+    "Separate educational guidance from regulated treatment instructions",
+    "Human escalation for severe or uncertain cases"
+  ]
+}

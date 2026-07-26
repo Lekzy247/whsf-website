@@ -1,0 +1,83 @@
+{
+  "goal": "AgriLearn AI is an agricultural smart application that uses artificial intelligence to scan crops, interpret weather and environmental data, provide rapid educational diagnostics, deliver early warnings, and offer localized farming guidance that helps farmers prevent losses, use water and farm inputs more efficiently, and improve productivity.",
+  "modules": [
+    {
+      "id": "weather",
+      "title": "Weather & Prevention",
+      "icon": "\ud83c\udf26",
+      "summary": "Localized rain, heat, frost and drought intelligence.",
+      "capabilities": [
+        "Forecast analysis",
+        "Field-level risk outlook",
+        "Planting and irrigation windows",
+        "Climate-smart prevention guidance"
+      ],
+      "status": "API-ready"
+    },
+    {
+      "id": "alerts",
+      "title": "Early Alerts",
+      "icon": "\ud83d\udea8",
+      "summary": "Regional pest, disease and fungal-risk notifications.",
+      "capabilities": [
+        "Regional outbreak signals",
+        "Risk radius and urgency",
+        "Crop-specific prevention checklist",
+        "Extension-service escalation"
+      ],
+      "status": "Prototype"
+    },
+    {
+      "id": "diagnosis",
+      "title": "Pest & Disease Detection",
+      "icon": "\ud83d\udcf7",
+      "summary": "Photo-based learning support for visible crop symptoms.",
+      "capabilities": [
+        "Leaf and stem photo intake",
+        "Possible pest or disease matches",
+        "Confidence and alternative causes",
+        "Expert confirmation pathway"
+      ],
+      "status": "Prototype"
+    },
+    {
+      "id": "nutrients",
+      "title": "Nutrient & Soil Insights",
+      "icon": "\ud83e\uddea",
+      "summary": "Educational assessment of discoloration and soil patterns.",
+      "capabilities": [
+        "Possible nitrogen, iron and other deficiencies",
+        "Leaf-pattern comparison",
+        "Soil-test recommendation",
+        "Input-use safety checks"
+      ],
+      "status": "Prototype"
+    },
+    {
+      "id": "advisory",
+      "title": "Farmer Advisory",
+      "icon": "\ud83e\uddd1\ud83c\udffe\u200d\ud83c\udf3e",
+      "summary": "Location, crop and season-aware farm planning.",
+      "capabilities": [
+        "Planting-window guidance",
+        "Irrigation scheduling",
+        "Crop rotation learning",
+        "Harvest and storage reminders"
+      ],
+      "status": "Data-ready"
+    },
+    {
+      "id": "yield",
+      "title": "Yield Optimization",
+      "icon": "\ud83d\udcc8",
+      "summary": "Decision support for water, inputs and productivity.",
+      "capabilities": [
+        "Field activity planning",
+        "Water-efficiency guidance",
+        "Input-waste reduction",
+        "Yield-factor tracking"
+      ],
+      "status": "Foundation"
+    }
+  ]
+}

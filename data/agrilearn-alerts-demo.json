@@ -1,0 +1,26 @@
+[
+  {
+    "level": "moderate",
+    "title": "Fungal-risk watch",
+    "region": "Selected region",
+    "crop": "Tomato",
+    "message": "Warm, humid conditions may increase fungal-disease pressure. Inspect lower leaves and improve airflow.",
+    "source": "Demonstration scenario"
+  },
+  {
+    "level": "high",
+    "title": "Heat-stress advisory",
+    "region": "Selected region",
+    "crop": "Maize",
+    "message": "High heat can increase water stress near flowering. Review soil moisture and local irrigation guidance.",
+    "source": "Demonstration scenario"
+  },
+  {
+    "level": "low",
+    "title": "Pest scouting reminder",
+    "region": "Selected region",
+    "crop": "Cassava",
+    "message": "Inspect young leaves and stems for unusual curling, mosaic patterns or insect activity.",
+    "source": "Demonstration scenario"
+  }
+]
