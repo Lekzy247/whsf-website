@@ -3,6 +3,11 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/agrilearn.html",
+      "destination": "/agrilearn",
+      "permanent": true
+    },
+    {
       "source": "/agrilearn-impact.html",
       "destination": "/agrilearn-impact",
       "permanent": true
@@ -45,6 +50,10 @@
   ],
   "rewrites": [
     {
+      "source": "/agrilearn",
+      "destination": "/agrilearn/index.html"
+    },
+    {
       "source": "/agrilearn-impact",
       "destination": "/agrilearn-impact.html"
     },
@@ -84,6 +93,19 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/agrilearn",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(self), geolocation=()"
         }
       ]
     },
