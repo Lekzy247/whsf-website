@@ -1,0 +1,191 @@
+name: Build AgriLearn Global Portal
+
+on:
+  push:
+    paths:
+      - '.github/workflows/build-agrilearn-global-portal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build global multilingual AgriLearn portal
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, re
+
+          root = Path('.')
+          css_path = root / 'assets/programs/agrilearn-global.css'
+          js_path = root / 'assets/programs/agrilearn-global.js'
+          css_path.parent.mkdir(parents=True, exist_ok=True)
+
+          css_path.write_text(r'''
+          :root{--ag-green:#176b45;--ag-dark:#0b3d2a;--ag-lime:#dff3cf;--ag-sand:#fff8e9;--ag-blue:#eaf5ff;--ag-border:#d9e5dc}
+          .global-hero{padding:5rem 0;background:linear-gradient(135deg,#edf9ef,#fff8e9)}
+          .global-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem}
+          .global-card{background:#fff;border:1px solid var(--ag-border);border-radius:20px;padding:1.35rem;box-shadow:0 12px 32px rgba(18,76,48,.08)}
+          .global-card h3{margin-top:0}.global-card ul{padding-left:1.15rem}
+          .region-tabs,.filter-row,.language-switcher{display:flex;gap:.65rem;flex-wrap:wrap;margin:1.25rem 0}
+          .region-tabs button,.filter-row button,.language-switcher button{border:1px solid var(--ag-green);background:#fff;color:var(--ag-dark);border-radius:999px;padding:.65rem 1rem;font-weight:700;cursor:pointer}
+          .region-tabs button[aria-pressed="true"],.filter-row button[aria-pressed="true"],.language-switcher button[aria-pressed="true"]{background:var(--ag-green);color:#fff}
+          .crop-library{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem}
+          .crop-item{border:1px solid var(--ag-border);border-radius:16px;padding:1rem;background:#fff}
+          .crop-item .tag{display:inline-block;margin:.15rem .25rem .15rem 0;padding:.25rem .5rem;border-radius:999px;background:var(--ag-lime);font-size:.8rem}
+          .architecture-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;align-items:stretch}
+          .architecture-node{background:var(--ag-blue);border-radius:18px;padding:1.2rem;border:1px solid #cfe5f8}
+          .roadmap{display:grid;gap:1rem}.roadmap-step{display:grid;grid-template-columns:90px 1fr;gap:1rem;padding:1rem;border-left:5px solid var(--ag-green);background:#fff;border-radius:0 16px 16px 0}
+          .metric-band{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem}.metric-band div{background:var(--ag-dark);color:#fff;padding:1.2rem;border-radius:16px}.metric-band strong{display:block;font-size:2rem}
+          .notice{padding:1rem 1.2rem;border-radius:14px;background:var(--ag-sand);border:1px solid #f0dfb6}
+          .search-box{width:100%;max-width:620px;padding:.9rem 1rem;border-radius:12px;border:1px solid var(--ag-border);font:inherit}
+          .page-cta{background:var(--ag-dark);color:#fff;border-radius:24px;padding:2rem}.page-cta a{margin:.35rem}
+          [hidden]{display:none!important}
+          @media(max-width:700px){.global-hero{padding:3rem 0}.roadmap-step{grid-template-columns:1fr}.agri-subnav .shell{overflow-x:auto;white-space:nowrap}}
+          ''', encoding='utf-8')
+
+          js_path.write_text(r'''
+          (()=>{
+            const q=(s,c=document)=>c.querySelector(s), qa=(s,c=document)=>[...c.querySelectorAll(s)];
+            qa('[data-region]').forEach(btn=>btn.addEventListener('click',()=>{
+              qa('[data-region]').forEach(b=>b.setAttribute('aria-pressed','false'));
+              btn.setAttribute('aria-pressed','true');
+              const value=btn.dataset.region;
+              qa('[data-crop-region]').forEach(card=>card.hidden=value!=='all'&&!card.dataset.cropRegion.split(' ').includes(value));
+            }));
+            const search=q('#crop-search');
+            if(search) search.addEventListener('input',()=>{const term=search.value.toLowerCase();qa('[data-crop-region]').forEach(card=>{card.hidden=!card.textContent.toLowerCase().includes(term)})});
+            qa('[data-lang]').forEach(btn=>btn.addEventListener('click',()=>{
+              qa('[data-lang]').forEach(b=>b.setAttribute('aria-pressed','false'));btn.setAttribute('aria-pressed','true');
+              const lang=btn.dataset.lang;qa('[data-i18n]').forEach(el=>{const text=el.dataset[lang];if(text)el.textContent=text});
+              document.documentElement.lang=lang;
+            }));
+          })();
+          ''', encoding='utf-8')
+
+          nav = '''<nav class="agri-subnav" aria-label="AgriLearn AI navigation"><div class="shell"><a href="agrilearn-ai.html">Overview</a><a href="agrilearn-crops.html">Crop Explorer</a><a href="agrilearn-architecture.html">Architecture</a><a href="agrilearn-roadmap.html">Roadmap</a><a href="agrilearn-research.html">Research</a><a href="agrilearn-partners.html">Partners</a><a href="agrilearn-impact.html">Impact Dashboard</a><a href="agrilearn-demo.html">Demo</a><a href="agrilearn-contact.html">Contact</a></div></nav>'''
+
+          def page(title, description, active, body):
+              active_nav = nav.replace(f'href="{active}"', f'href="{active}" aria-current="page"', 1)
+              return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{description}"><title>{title} | WHSF</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="assets/programs/agrilearn-mini.css"><link rel="stylesheet" href="assets/programs/agrilearn-global.css"><script src="script.js" defer></script><script src="assets/programs/agrilearn-global.js" defer></script></head><body><a class="skip-link" href="#main">Skip to main content</a><header class="site-header"><div class="shell nav-wrap"><a class="brand" href="index.html"><img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem"><span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span></a><nav class="primary-nav"><a href="index.html">Home</a><a href="programs.html">Programs</a><a href="contact.html">Contact</a></nav></div></header>{active_nav}<main id="main">{body}</main><footer class="site-footer"><div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation.</p><a href="agrilearn-ai.html">AgriLearn AI overview</a></div></footer></body></html>'''
+
+          crops = [
+            ('Apple','usa','fruit','United States focus crop','Orchard health, scab awareness, codling moth, irrigation and harvest readiness.'),
+            ('Strawberry','usa','fruit','United States','Leaf spot, gray mold awareness, irrigation and post-harvest handling.'),
+            ('Blueberry','usa','fruit','United States','Soil acidity, fruit quality, pollination and disease awareness.'),
+            ('Orange','usa africa','fruit','United States and Africa','Citrus greening awareness, nutrient stress and fruit quality.'),
+            ('Grape','usa africa','fruit','United States, North and Southern Africa','Mildew awareness, canopy management and harvest timing.'),
+            ('Avocado','usa africa','fruit','United States, East and Southern Africa','Root health, water management and fruit maturity.'),
+            ('Mango','africa','fruit','Pan-African','Anthracnose awareness, fruit fly risk and post-harvest quality.'),
+            ('Banana','africa','fruit','East, Central and Southern Africa','Wilt awareness, leaf health and plantation sanitation.'),
+            ('Coffee','africa','beverage','East and Central Africa','Coffee leaf rust awareness, shade and harvest quality.'),
+            ('Cocoa','africa','food','West and Central Africa','Black pod awareness, farm sanitation and fermentation learning.'),
+            ('Olive','africa','fruit','North Africa','Water efficiency, olive fly awareness and harvest timing.'),
+            ('Date Palm','africa','fruit','North Africa and Sahel','Palm health, irrigation and post-harvest handling.'),
+            ('Maize','africa usa','grain','Africa and United States','Fall armyworm awareness, nutrient stress and storage safety.'),
+            ('Rice','africa usa','grain','Africa and United States','Water management, blast awareness and post-harvest loss prevention.'),
+            ('Cassava','africa','root','Pan-African','Mosaic disease awareness, clean planting material and processing safety.'),
+            ('Yam','africa','root','West, Central and East Africa','Tuber health, staking, storage and disease awareness.'),
+            ('Sorghum','africa usa','grain','Africa and United States','Drought resilience, bird pressure and storage learning.'),
+            ('Millet','africa','grain','Sahel, East and Southern Africa','Dryland production, head health and household nutrition.'),
+            ('Cowpea','africa','legume','Pan-African','Pod pest awareness, soil health and storage protection.'),
+            ('Groundnut','africa usa','legume','Africa and United States','Leaf spot awareness, aflatoxin risk reduction and drying.'),
+            ('Tomato','africa usa','vegetable','Global','Blight awareness, fruit quality, irrigation and protected growing.'),
+            ('Okra','africa usa','vegetable','Africa and United States','Pest awareness, flowering, harvest frequency and nutrition.'),
+            ('Sweet Potato','africa usa','root','Africa and United States','Vine health, weevil awareness and nutrition education.'),
+            ('Wheat','africa usa','grain','North, East and Southern Africa; United States','Rust awareness, water efficiency and grain storage.'),
+          ]
+          crop_cards=''.join(f'''<article class="crop-item" data-crop-region="{r}"><h3>{n}</h3><p><span class="tag">{t}</span><span class="tag">{loc}</span></p><p>{d}</p><a href="agrilearn-demo.html">Try learning demo</a></article>''' for n,r,t,loc,d in crops)
+
+          crops_body=f'''<section class="global-hero"><div class="shell"><p class="eyebrow">Global crop and food knowledge</p><h1 data-i18n data-en="Crop Explorer" data-fr="Explorateur de cultures" data-es="Explorador de cultivos">Crop Explorer</h1><p class="lead" data-i18n data-en="Explore fruit, vegetables, grains, legumes and roots across the United States and every region of Africa." data-fr="Explorez les fruits, légumes, céréales, légumineuses et racines aux États-Unis et dans toutes les régions d’Afrique." data-es="Explore frutas, verduras, cereales, legumbres y raíces en Estados Unidos y todas las regiones de África.">Explore fruit, vegetables, grains, legumes and roots across the United States and every region of Africa.</p><div class="language-switcher" aria-label="Language"><button data-lang="en" aria-pressed="true">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="es" aria-pressed="false">Español</button></div></div></section><section class="agri-section"><div class="shell"><div class="notice"><strong>Educational use:</strong> Guidance supports awareness and learning and should not replace local agricultural experts, laboratories, extension services or pesticide labels.</div><h2>Find crops and foods</h2><input id="crop-search" class="search-box" type="search" placeholder="Search apple, maize, cassava, tomato..."><div class="region-tabs" aria-label="Crop region filters"><button data-region="all" aria-pressed="true">All regions</button><button data-region="usa" aria-pressed="false">United States</button><button data-region="africa" aria-pressed="false">Africa</button></div><div class="metric-band"><div><strong>24+</strong>launch crop and food profiles</div><div><strong>3</strong>interface languages</div><div><strong>5</strong>African regions represented</div><div><strong>1</strong>dedicated U.S. apple focus</div></div><h2>Crop library</h2><div class="crop-library">{crop_cards}</div></div></section><section class="agri-section tint"><div class="shell"><h2>Dedicated U.S. focus: Apple</h2><div class="global-grid"><article class="global-card"><h3>Orchard learning</h3><p>Seasonal lessons for pruning, bloom, pollination, thinning, irrigation and harvest readiness.</p></article><article class="global-card"><h3>Risk awareness</h3><p>Educational identification support for apple scab, fire blight, codling moth and nutrient stress.</p></article><article class="global-card"><h3>Food pathway</h3><p>Fresh fruit quality, storage, processing, food loss reduction and nutrition education.</p></article></div></div></section>'''
+          (root/'agrilearn-crops.html').write_text(page('AgriLearn Crop Explorer','Global crop and food explorer for the United States and Africa.','agrilearn-crops.html',crops_body),encoding='utf-8')
+
+          architecture_body='''<section class="global-hero"><div class="shell"><p class="eyebrow">System design</p><h1>AgriLearn AI Architecture</h1><p class="lead">A modular, multilingual and offline-aware platform designed for responsible agricultural learning.</p></div></section><section class="agri-section"><div class="shell"><div class="architecture-flow"><article class="architecture-node"><h3>Mobile & Web</h3><p>Farmer, student and extension-worker interfaces.</p></article><article class="architecture-node"><h3>Language Layer</h3><p>English, French and Spanish content delivery, with room for African languages.</p></article><article class="architecture-node"><h3>AI Services</h3><p>Crop image triage, food recognition, search and learning assistant.</p></article><article class="architecture-node"><h3>Knowledge Base</h3><p>Crop profiles, regional guides, safety notices and expert-reviewed learning content.</p></article><article class="architecture-node"><h3>Regional Intelligence</h3><p>Country, climate zone, season and crop-specific learning pathways.</p></article><article class="architecture-node"><h3>Impact & Governance</h3><p>Consent, audit trails, evaluation, safeguarding and transparent reporting.</p></article></div><h2>Responsible AI controls</h2><div class="global-grid"><article class="global-card"><h3>Human confirmation</h3><p>Users are directed to qualified experts for treatment and high-risk decisions.</p></article><article class="global-card"><h3>Confidence and limits</h3><p>Outputs disclose uncertainty and distinguish education from diagnosis.</p></article><article class="global-card"><h3>Privacy by design</h3><p>Minimum necessary data, clear consent and retention controls.</p></article></div></div></section>'''
+          (root/'agrilearn-architecture.html').write_text(page('AgriLearn Architecture','AgriLearn AI system architecture and responsible AI design.','agrilearn-architecture.html',architecture_body),encoding='utf-8')
+
+          roadmap_body='''<section class="global-hero"><div class="shell"><p class="eyebrow">Delivery roadmap</p><h1>From co-design to responsible scale</h1><p class="lead">A staged plan that validates usefulness, safety, language quality and measurable impact before expansion.</p></div></section><section class="agri-section"><div class="shell roadmap"><article class="roadmap-step"><strong>Phase 1</strong><div><h3>Discovery and expert review</h3><p>Validate priority crops, regions, users, languages and safeguarding requirements.</p></div></article><article class="roadmap-step"><strong>Phase 2</strong><div><h3>Global prototype</h3><p>Launch Crop Explorer, apple focus, pan-African crop library and trilingual interface.</p></div></article><article class="roadmap-step"><strong>Phase 3</strong><div><h3>Community pilots</h3><p>Test with U.S. youth agriculture partners and institutions across North, West, Central, East and Southern Africa.</p></div></article><article class="roadmap-step"><strong>Phase 4</strong><div><h3>Evidence and model improvement</h3><p>Evaluate learning gains, inclusion, usability, trust, safety and regional relevance.</p></div></article><article class="roadmap-step"><strong>Phase 5</strong><div><h3>Regional expansion</h3><p>Add more crops, languages, expert networks, APIs and country-specific learning pathways.</p></div></article></div></section>'''
+          (root/'agrilearn-roadmap.html').write_text(page('AgriLearn Roadmap','Roadmap for piloting and scaling AgriLearn AI.','agrilearn-roadmap.html',roadmap_body),encoding='utf-8')
+
+          research_body='''<section class="global-hero"><div class="shell"><p class="eyebrow">Research and evidence</p><h1>Research & Innovation Hub</h1><p class="lead">A transparent home for the documents, methods and evidence needed to build trust.</p></div></section><section class="agri-section"><div class="shell global-grid"><article class="global-card"><h3>Concept note</h3><p>Problem definition, beneficiaries, proposed solution and implementation model.</p><a href="agrilearn-contact.html">Request project brief</a></article><article class="global-card"><h3>Responsible AI framework</h3><p>Human oversight, limitations, data governance, bias monitoring and safety escalation.</p><a href="agrilearn-about.html">Review commitments</a></article><article class="global-card"><h3>Pilot methodology</h3><p>Baseline, learning assessment, adoption indicators and qualitative feedback.</p><a href="agrilearn-pilot.html">View pilot framework</a></article><article class="global-card"><h3>Impact reporting</h3><p>Targets, verified results, assumptions and methodology clearly separated.</p><a href="agrilearn-impact.html">Open dashboard</a></article><article class="global-card"><h3>Crop content governance</h3><p>Expert review, regional validation, source tracking and update cycles.</p></article><article class="global-card"><h3>Language quality</h3><p>Human review for French and Spanish agricultural terminology and local comprehension.</p></article></div></section>'''
+          (root/'agrilearn-research.html').write_text(page('AgriLearn Research Hub','Research, responsible AI and evaluation resources for AgriLearn AI.','agrilearn-research.html',research_body),encoding='utf-8')
+
+          partners_body='''<section class="global-hero"><div class="shell"><p class="eyebrow">Partnership and funding</p><h1>Partner with AgriLearn AI</h1><p class="lead">Collaborate on crop expertise, language quality, community pilots, technology, research and responsible scale.</p></div></section><section class="agri-section"><div class="shell global-grid"><article class="global-card"><h3>Agricultural institutions</h3><p>Validate crop guidance and connect extension experts.</p></article><article class="global-card"><h3>Universities and schools</h3><p>Co-design learning modules and evaluate outcomes.</p></article><article class="global-card"><h3>Technology partners</h3><p>Support AI, mobile, cloud, offline access and cybersecurity.</p></article><article class="global-card"><h3>Funders and foundations</h3><p>Sponsor pilots, language expansion, research and inclusion.</p></article><article class="global-card"><h3>Farmer organizations</h3><p>Shape practical use cases and regional relevance.</p></article><article class="global-card"><h3>Food and nutrition partners</h3><p>Connect crop learning with food quality, storage and household nutrition.</p></article></div><div class="shell page-cta"><h2>Build a regional pilot with WHSF.</h2><p>Partnership packages can focus on the United States, a single African country, a cross-regional African program, or a multilingual research initiative.</p><a class="button" href="agrilearn-contact.html">Start partnership discussion</a><a class="button button-secondary" href="agrilearn-roadmap.html">View roadmap</a></div></section>'''
+          (root/'agrilearn-partners.html').write_text(page('AgriLearn Partners','Partnership and funding opportunities for AgriLearn AI.','agrilearn-partners.html',partners_body),encoding='utf-8')
+
+          # Replace AgriLearn navigation everywhere with the expanded portal navigation.
+          for path in root.glob('agrilearn-*.html'):
+              if path.name == 'agrilearn-impact-dashboard.html':
+                  continue
+              text=path.read_text(encoding='utf-8')
+              current=path.name
+              current_nav=nav.replace(f'href="{current}"',f'href="{current}" aria-current="page"',1)
+              text=re.sub(r'<nav class="agri-subnav"[^>]*>.*?</nav>',current_nav,text,count=1,flags=re.S)
+              if 'agrilearn-global.css' not in text:
+                  text=text.replace('</head>','<link rel="stylesheet" href="assets/programs/agrilearn-global.css"></head>',1)
+              path.write_text(text,encoding='utf-8')
+
+          # Add global portal callout to overview.
+          overview=root/'agrilearn-ai.html'
+          if overview.exists():
+              text=overview.read_text(encoding='utf-8')
+              if 'Explore the global crop library' not in text:
+                  block='''<section class="section section-tint"><div class="shell"><div class="section-heading centered"><p class="eyebrow">Global expansion</p><h2>United States, Africa and multilingual learning.</h2><p>Explore fruit, food, field crops and region-specific learning across the United States and all five African regions, with English, French and Spanish access.</p></div><div class="hero-actions" style="justify-content:center"><a class="button" href="agrilearn-crops.html">Explore the global crop library</a><a class="button button-secondary" href="agrilearn-architecture.html">View system architecture</a><a class="button button-secondary" href="agrilearn-roadmap.html">See development roadmap</a></div></div></section>'''
+                  text=text.replace('</main>',block+'</main>',1)
+              overview.write_text(text,encoding='utf-8')
+
+          # Add clean Vercel routes.
+          vercel=root/'vercel.json'
+          if vercel.exists():
+              data=json.loads(vercel.read_text(encoding='utf-8'))
+              rewrites=data.setdefault('rewrites',[])
+              redirects=data.setdefault('redirects',[])
+              pages=['crops','architecture','roadmap','research','partners']
+              for p in pages:
+                  src=f'/agrilearn-{p}'
+                  dest=f'/agrilearn-{p}.html'
+                  if not any(x.get('source')==src for x in rewrites): rewrites.append({'source':src,'destination':dest})
+                  html=f'/agrilearn-{p}.html'
+                  if not any(x.get('source')==html for x in redirects): redirects.append({'source':html,'destination':src,'permanent':True})
+              vercel.write_text(json.dumps(data,indent=2)+"\n",encoding='utf-8')
+
+          # Add sitemap entries.
+          sitemap=root/'sitemap.xml'
+          if sitemap.exists():
+              text=sitemap.read_text(encoding='utf-8')
+              for p in ['crops','architecture','roadmap','research','partners']:
+                  url=f'https://www.worldhsfoundation.org/agrilearn-{p}'
+                  if url not in text:
+                      text=text.replace('</urlset>',f'  <url><loc>{url}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n</urlset>')
+              sitemap.write_text(text,encoding='utf-8')
+          PY
+
+      - name: Validate generated pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          required=['agrilearn-crops.html','agrilearn-architecture.html','agrilearn-roadmap.html','agrilearn-research.html','agrilearn-partners.html','assets/programs/agrilearn-global.css','assets/programs/agrilearn-global.js']
+          missing=[p for p in required if not Path(p).exists()]
+          if missing: raise SystemExit('Missing: '+', '.join(missing))
+          for p in Path('.').glob('agrilearn-*.html'):
+              if p.name!='agrilearn-impact-dashboard.html' and 'agrilearn-crops.html' not in p.read_text(encoding='utf-8'):
+                  raise SystemExit(f'Navigation missing on {p}')
+          print('AgriLearn global portal validation passed.')
+          PY
+
+      - name: Commit global portal
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add agrilearn-*.html assets/programs/agrilearn-global.* vercel.json sitemap.xml
+          if git diff --cached --quiet; then
+            echo "No changes required."
+          else
+            git commit -m "Launch AgriLearn global multilingual portal"
+            git push
+          fi
