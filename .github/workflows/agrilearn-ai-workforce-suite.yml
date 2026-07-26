@@ -1,19 +1,14 @@
-name: Build AgriLearn AI Workforce Suite
+name: AgriLearn AI Workforce Suite (manual only)
 
 on:
-  workflow_run:
-    workflows: ["Stabilize AgriLearn Phases 1-10"]
-    types: [completed]
   workflow_dispatch:
 
 permissions:
-  contents: write
-
-concurrency:
-  group: agrilearn-ai-workforce
-  cancel-in-progress: false
+  contents: read
 
 jobs:
-  build:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu
+  paused:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow paused
+        run: echo "AgriLearn AI workforce automation is paused."
