@@ -1,0 +1,627 @@
+name: Stabilize AgriLearn Phases 1-10
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/agrilearn-phase1-10-stabilize.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agrilearn-stabilization
+  cancel-in-progress: false
+
+jobs:
+  stabilize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate consolidated production foundation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          root = Path('.')
+          files = {
+          'agrilearn-api/requirements.txt': '''fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic-settings==2.7.1
+sqlalchemy==2.0.36
+python-multipart==0.0.20
+httpx==0.28.1
+pytest==8.3.4
+''',
+          'agrilearn-api/app/__init__.py': '',
+          'agrilearn-api/app/main.py': '''from __future__ import annotations
+
+import json
+import os
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+import httpx
+from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from sqlalchemy import DateTime, Float, Integer, String, create_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
+
+APP_VERSION = "10.0.0"
+DATABASE_URL = os.getenv("AGRILEARN_DATABASE_URL", "sqlite:///./agrilearn.db")
+LIVE_WEATHER = os.getenv("AGRILEARN_LIVE_WEATHER", "false").lower() == "true"
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+ALLOWED_IMAGES = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}
+
+class Base(DeclarativeBase):
+    pass
+
+class Diagnosis(Base):
+    __tablename__ = "diagnoses"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    crop: Mapped[str] = mapped_column(String(100), index=True)
+    image_name: Mapped[str] = mapped_column(String(255))
+    status: Mapped[str] = mapped_column(String(60), default="expert_review_required")
+    confidence: Mapped[float] = mapped_column(Float, default=0.0)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
+Base.metadata.create_all(engine)
+
+app = FastAPI(
+    title="AgriLearn AI API",
+    version=APP_VERSION,
+    description="WHSF agriculture learning, weather and human-reviewed crop diagnosis API.",
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[origin.strip() for origin in os.getenv("AGRILEARN_ALLOWED_ORIGINS", "*").split(",")],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
+KNOWLEDGE: list[dict[str, Any]] = [
+    {
+        "id": "cassava-mosaic-screening",
+        "crop": "cassava",
+        "topic": "disease",
+        "title": "Cassava mosaic symptom screening",
+        "symptoms": ["mosaic leaf patterns", "leaf distortion", "stunted growth"],
+        "guidance": [
+            "Photograph young and mature leaves in good light.",
+            "Compare affected plants with healthy plants in the same field.",
+            "Ask a qualified agronomist or extension officer to confirm the diagnosis.",
+        ],
+        "safety": "Do not prescribe pesticides from image evidence alone.",
+    },
+    {
+        "id": "tomato-leaf-spot-screening",
+        "crop": "tomato",
+        "topic": "disease",
+        "title": "Tomato leaf spot differential screening",
+        "symptoms": ["circular lesions", "yellowing", "lower leaves affected"],
+        "guidance": [
+            "Photograph both leaf surfaces and the whole plant.",
+            "Record rainfall, humidity and irrigation conditions.",
+            "Obtain expert confirmation because bacterial and fungal symptoms can overlap.",
+        ],
+        "safety": "Do not prescribe fungicides or antibiotics without local expert confirmation.",
+    },
+    {
+        "id": "maize-nitrogen-screening",
+        "crop": "maize",
+        "topic": "nutrient",
+        "title": "Maize nitrogen-stress screening",
+        "symptoms": ["pale leaves", "V-shaped yellowing", "reduced vigor"],
+        "guidance": [
+            "Confirm whether symptoms begin on older leaves.",
+            "Review rainfall, fertilizer history and soil-test information.",
+            "Use soil or tissue testing before changing fertilizer applications.",
+        ],
+        "safety": "Do not calculate fertilizer dosage without verified local agronomic data.",
+    },
+]
+
+class FarmInput(BaseModel):
+    name: str = Field(min_length=2, max_length=160)
+    country: str = Field(min_length=2, max_length=100)
+    state: str = Field(min_length=2, max_length=100)
+    crop: str = Field(min_length=2, max_length=100)
+    area: float = Field(gt=0)
+    unit: str = Field(default="hectares", max_length=30)
+
+FARMS: list[dict[str, Any]] = []
+
+@app.get("/")
+def root() -> dict[str, Any]:
+    return {"service": "AgriLearn AI", "version": APP_VERSION, "docs": "/docs", "health": "/api/agrilearn/v1/health"}
+
+@app.get("/api/agrilearn/v1/health")
+def health() -> dict[str, Any]:
+    return {"status": "healthy", "version": APP_VERSION, "time": datetime.now(timezone.utc).isoformat()}
+
+@app.get("/api/agrilearn/v1/features")
+def features() -> dict[str, Any]:
+    return {
+        "farmer_portal": True,
+        "expert_review": True,
+        "knowledge_retrieval": True,
+        "live_weather": LIVE_WEATHER,
+        "ai_diagnosis": False,
+        "diagnosis_policy": "human-review-required",
+    }
+
+@app.get("/api/agrilearn/v1/knowledge/search")
+def knowledge_search(crop: str = Query(min_length=2), query: str = "") -> dict[str, Any]:
+    terms = {term.lower() for term in query.split() if term.strip()}
+    crop_name = crop.lower().strip()
+    results = []
+    for entry in KNOWLEDGE:
+        text = json.dumps(entry).lower()
+        if entry["crop"] == crop_name or any(term in text for term in terms):
+            results.append(entry)
+    return {"review_status": "pilot-curated", "results": results}
+
+@app.get("/api/agrilearn/v1/weather/forecast")
+async def weather(lat: float, lng: float) -> dict[str, Any]:
+    if not (-90 <= lat <= 90 and -180 <= lng <= 180):
+        raise HTTPException(422, "Invalid latitude or longitude")
+    if not LIVE_WEATHER:
+        return {
+            "status": "demonstration",
+            "location": {"latitude": lat, "longitude": lng},
+            "warning": "Live weather is disabled until staging validation is completed.",
+            "forecast": [],
+        }
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": lat,
+        "longitude": lng,
+        "current": "temperature_2m,relative_humidity_2m,precipitation,weather_code",
+        "daily": "temperature_2m_max,temperature_2m_min,precipitation_probability_max",
+        "forecast_days": 5,
+        "timezone": "auto",
+    }
+    try:
+        async with httpx.AsyncClient(timeout=12) as client:
+            response = await client.get(url, params=params)
+            response.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise HTTPException(502, "Weather provider is temporarily unavailable") from exc
+    return {"status": "live", "provider": "Open-Meteo", "data": response.json(), "advisory": "Verify local conditions before farm decisions."}
+
+@app.get("/api/agrilearn/v1/farms")
+def list_farms() -> list[dict[str, Any]]:
+    return FARMS
+
+@app.post("/api/agrilearn/v1/farms", status_code=201)
+def create_farm(payload: FarmInput) -> dict[str, Any]:
+    item = {"id": len(FARMS) + 1, **payload.model_dump()}
+    FARMS.append(item)
+    return item
+
+@app.post("/api/agrilearn/v1/diagnoses", status_code=202)
+async def create_diagnosis(crop: str = Form(min_length=2), image: UploadFile = File(...)) -> dict[str, Any]:
+    if image.content_type not in ALLOWED_IMAGES:
+        raise HTTPException(415, "Upload a JPEG, PNG or WEBP image")
+    content = await image.read(MAX_UPLOAD_BYTES + 1)
+    if len(content) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "Image exceeds the 10 MB limit")
+    upload_dir = Path(os.getenv("AGRILEARN_UPLOAD_DIR", "./uploads"))
+    upload_dir.mkdir(parents=True, exist_ok=True)
+    safe_name = f"{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S%f')}.{ALLOWED_IMAGES[image.content_type]}"
+    (upload_dir / safe_name).write_bytes(content)
+    with Session(engine) as session:
+        record = Diagnosis(crop=crop.strip().lower(), image_name=safe_name)
+        session.add(record)
+        session.commit()
+        session.refresh(record)
+        diagnosis_id = record.id
+    return {
+        "id": diagnosis_id,
+        "status": "expert_review_required",
+        "confidence": 0.0,
+        "message": "The image was received. No automated treatment recommendation has been issued.",
+    }
+
+@app.get("/api/agrilearn/v1/impact/summary")
+def impact_summary() -> dict[str, Any]:
+    with Session(engine) as session:
+        diagnoses = session.query(Diagnosis).count()
+    return {"farms_registered": len(FARMS), "diagnoses_submitted": diagnoses, "expert_review_policy": "required", "countries_active": 0}
+''',
+          'agrilearn-api/tests/test_api.py': '''from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
+
+def test_health():
+    response = client.get("/api/agrilearn/v1/health")
+    assert response.status_code == 200
+    assert response.json()["status"] == "healthy"
+
+def test_features_are_safe_by_default():
+    data = client.get("/api/agrilearn/v1/features").json()
+    assert data["ai_diagnosis"] is False
+    assert data["diagnosis_policy"] == "human-review-required"
+
+def test_knowledge_search():
+    response = client.get("/api/agrilearn/v1/knowledge/search?crop=cassava&query=mosaic")
+    assert response.status_code == 200
+    assert response.json()["results"][0]["crop"] == "cassava"
+
+def test_weather_demo_default():
+    response = client.get("/api/agrilearn/v1/weather/forecast?lat=7.37&lng=3.94")
+    assert response.status_code == 200
+    assert response.json()["status"] == "demonstration"
+
+def test_create_farm():
+    response = client.post("/api/agrilearn/v1/farms", json={"name":"Pilot Farm","country":"Nigeria","state":"Oyo","crop":"cassava","area":2.5,"unit":"hectares"})
+    assert response.status_code == 201
+    assert response.json()["crop"] == "cassava"
+''',
+          'agrilearn-api/Dockerfile': '''FROM python:3.12-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+RUN mkdir -p /app/uploads
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+''',
+          'agrilearn-api/.dockerignore': '''__pycache__/
+.pytest_cache/
+*.pyc
+*.db
+uploads/
+.env
+''',
+          'agrilearn-api/.env.example': '''AGRILEARN_DATABASE_URL=sqlite:///./agrilearn.db
+AGRILEARN_ALLOWED_ORIGINS=http://localhost:8080,https://www.worldhsfoundation.org
+AGRILEARN_LIVE_WEATHER=false
+AGRILEARN_UPLOAD_DIR=./uploads
+''',
+          'agrilearn-api/README.md': '''# AgriLearn AI API
+
+A consolidated, runnable FastAPI foundation for WHSF AgriLearn.
+
+## Local development
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+Open `http://localhost:8000/docs`.
+
+## Safety
+
+Automated crop treatment advice is disabled. Submitted diagnoses are marked for expert review. Live weather is disabled by default and must be enabled only after staging validation.
+''',
+          'agrilearn/index.html': '''<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="AgriLearn AI by WHSF: climate-smart farming education, weather support and human-reviewed crop diagnosis.">
+  <title>AgriLearn AI | WHSF</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="../index.html">WHSF</a>
+    <nav><a href="#platform">Platform</a><a href="#diagnosis">Crop Doctor</a><a href="#knowledge">Knowledge</a><a href="../contact.html">Contact</a></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">WHSF Agricultural Intelligence</p>
+      <h1>Practical farming support, strengthened by responsible AI.</h1>
+      <p>AgriLearn combines agricultural learning, weather information, farm records and human-reviewed crop diagnosis for farmers and development partners.</p>
+      <div class="actions"><a class="button" href="#diagnosis">Try Crop Doctor</a><a class="secondary" href="../partner-sponsor.html">Partner with WHSF</a></div>
+      <div id="system-status" class="status">Checking platform status…</div>
+    </section>
+
+    <section id="platform" class="grid">
+      <article><h2>Farmer Portal</h2><p>Register farms, fields and crops, then retain a simple record of observations and submitted cases.</p></article>
+      <article><h2>Weather</h2><p>Location-based weather support is protected by a staging feature flag and includes decision-support warnings.</p></article>
+      <article><h2>Expert Review</h2><p>Automated treatment advice is disabled. Crop images enter a review-required workflow.</p></article>
+    </section>
+
+    <section id="diagnosis" class="panel">
+      <div><p class="eyebrow">Crop Doctor</p><h2>Submit a crop image for review</h2><p>Upload a clear JPEG, PNG or WEBP image. AgriLearn will not prescribe treatment automatically.</p></div>
+      <form id="diagnosis-form">
+        <label>Crop name<input name="crop" required minlength="2" placeholder="e.g. cassava"></label>
+        <label>Crop image<input name="image" required type="file" accept="image/jpeg,image/png,image/webp"></label>
+        <button class="button" type="submit">Submit for review</button>
+        <p id="diagnosis-result" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="knowledge" class="panel">
+      <div><p class="eyebrow">Learning Library</p><h2>Search pilot crop guidance</h2><p>Results are educational and should be confirmed by a qualified local professional.</p></div>
+      <form id="knowledge-form">
+        <label>Crop<input name="crop" required placeholder="cassava"></label>
+        <label>Symptoms or topic<input name="query" placeholder="mosaic leaves"></label>
+        <button class="button" type="submit">Search</button>
+      </form>
+      <div id="knowledge-results"></div>
+    </section>
+  </main>
+  <footer><p>AgriLearn AI is a World Humanitarian Support Foundation initiative.</p><a href="../privacy.html">Privacy</a><a href="../contact.html">Support</a></footer>
+  <script src="app.js"></script>
+</body>
+</html>
+''',
+          'agrilearn/styles.css': ''':root{--ink:#122018;--green:#175f3c;--mint:#e8f3eb;--cream:#fbf8ee;--line:#cdd9d0}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,sans-serif;line-height:1.6}header,footer{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1rem max(5vw,1rem);background:#fff;border-bottom:1px solid var(--line)}header nav,footer{flex-wrap:wrap}nav a,footer a{margin-left:1rem;color:var(--ink);text-decoration:none}.brand{font-weight:800;color:var(--green);text-decoration:none;font-size:1.25rem}main{max-width:1180px;margin:auto;padding:3rem max(3vw,1rem)}.hero{padding:4rem 0}.hero h1{font-size:clamp(2.5rem,6vw,5rem);line-height:1.02;max-width:900px;margin:.5rem 0}.hero>p{max-width:760px;font-size:1.15rem}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--green);font-size:.8rem}.actions{display:flex;gap:1rem;flex-wrap:wrap;margin:2rem 0}.button,.secondary{display:inline-block;border:0;border-radius:999px;padding:.85rem 1.25rem;font-weight:700;text-decoration:none;cursor:pointer}.button{background:var(--green);color:#fff}.secondary{border:1px solid var(--green);color:var(--green)}.status{display:inline-block;padding:.6rem 1rem;background:var(--mint);border-radius:999px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.grid article,.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.5rem}.panel{margin-top:2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem}form{display:grid;gap:1rem}label{display:grid;gap:.35rem;font-weight:700}input{width:100%;padding:.8rem;border:1px solid #9daf9f;border-radius:10px;font:inherit}#knowledge-results article{border-top:1px solid var(--line);padding:1rem 0}@media(max-width:760px){header{align-items:flex-start;flex-direction:column}.grid,.panel{grid-template-columns:1fr}.hero{padding:2rem 0}nav a{margin:0 1rem 0 0}}
+''',
+          'agrilearn/app.js': '''const API = localStorage.getItem("agrilearnApi") || "http://localhost:8000/api/agrilearn/v1";
+const statusBox = document.querySelector("#system-status");
+fetch(`${API}/health`).then(r => r.ok ? r.json() : Promise.reject()).then(data => { statusBox.textContent = `Platform API: ${data.status} • v${data.version}`; }).catch(() => { statusBox.textContent = "Preview mode: connect the deployed AgriLearn API to enable submissions."; });
+
+document.querySelector("#diagnosis-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const result = document.querySelector("#diagnosis-result");
+  result.textContent = "Submitting…";
+  try {
+    const response = await fetch(`${API}/diagnoses`, { method: "POST", body: new FormData(event.currentTarget) });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || "Submission failed");
+    result.textContent = `Case ${data.id}: ${data.message}`;
+    event.currentTarget.reset();
+  } catch (error) { result.textContent = `${error.message}. Confirm the API address and CORS settings.`; }
+});
+
+document.querySelector("#knowledge-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const params = new URLSearchParams({ crop: form.get("crop"), query: form.get("query") || "" });
+  const box = document.querySelector("#knowledge-results");
+  box.textContent = "Searching…";
+  try {
+    const response = await fetch(`${API}/knowledge/search?${params}`);
+    const data = await response.json();
+    box.innerHTML = data.results.length ? data.results.map(item => `<article><h3>${item.title}</h3><p><strong>Symptoms:</strong> ${item.symptoms.join(", ")}</p><p>${item.guidance.join(" ")}</p><p><strong>Safety:</strong> ${item.safety}</p></article>`).join("") : "<p>No pilot entry matched. Contact an agronomist.</p>";
+  } catch { box.textContent = "Knowledge service unavailable. Confirm the deployed API address."; }
+});
+''',
+          'docker-compose.yml': '''services:
+  agrilearn-api:
+    build: ./agrilearn-api
+    environment:
+      AGRILEARN_DATABASE_URL: sqlite:////data/agrilearn.db
+      AGRILEARN_ALLOWED_ORIGINS: http://localhost:8080
+      AGRILEARN_LIVE_WEATHER: "false"
+      AGRILEARN_UPLOAD_DIR: /data/uploads
+    volumes:
+      - agrilearn-data:/data
+    ports:
+      - "8000:8000"
+  website:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"
+volumes:
+  agrilearn-data:
+''',
+          'render.yaml': '''services:
+  - type: web
+    name: whsf-agrilearn-api
+    runtime: docker
+    dockerfilePath: ./agrilearn-api/Dockerfile
+    dockerContext: ./agrilearn-api
+    healthCheckPath: /api/agrilearn/v1/health
+    envVars:
+      - key: AGRILEARN_ALLOWED_ORIGINS
+        value: https://www.worldhsfoundation.org
+      - key: AGRILEARN_LIVE_WEATHER
+        value: "false"
+      - key: AGRILEARN_DATABASE_URL
+        value: sqlite:////data/agrilearn.db
+    disk:
+      name: agrilearn-data
+      mountPath: /data
+      sizeGB: 1
+''',
+          'vercel.json': '''{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {"source": "/(.*)", "headers": [
+      {"key": "X-Content-Type-Options", "value": "nosniff"},
+      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+      {"key": "Permissions-Policy", "value": "camera=(self), geolocation=(self)"}
+    ]}
+  ]
+}
+''',
+          'scripts/site_audit.py': '''from html.parser import HTMLParser
+from pathlib import Path
+from urllib.parse import urlparse
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+IGNORE = {"mailto", "tel", "http", "https", "javascript", "data"}
+
+class Parser(HTMLParser):
+    def __init__(self):
+        super().__init__(); self.refs=[]
+    def handle_starttag(self, tag, attrs):
+        values=dict(attrs)
+        for key in ("href","src"):
+            if key in values:self.refs.append((tag,key,values[key]))
+
+errors=[]
+html_files=[p for p in ROOT.rglob("*.html") if ".git" not in p.parts]
+for html in html_files:
+    parser=Parser();parser.feed(html.read_text(encoding="utf-8-sig",errors="replace"))
+    for tag,key,value in parser.refs:
+        value=(value or "").strip()
+        if not value or value.startswith("#"):continue
+        parsed=urlparse(value)
+        if parsed.scheme in IGNORE or value.startswith("//"):continue
+        path=value.split("#",1)[0].split("?",1)[0]
+        if not path:continue
+        target=(ROOT/path.lstrip("/")) if path.startswith("/") else (html.parent/path)
+        if not target.exists():errors.append(f"{html.relative_to(ROOT)}: missing {key}={value}")
+print(f"Audited {len(html_files)} HTML files")
+if errors:
+    print("\n".join(errors));sys.exit(1)
+print("All local HTML links and assets resolve.")
+''',
+          '.github/workflows/agrilearn-ci.yml': '''name: AgriLearn CI
+on:
+  push:
+    branches: [main]
+    paths:
+      - "agrilearn/**"
+      - "agrilearn-api/**"
+      - "*.html"
+      - "styles.css"
+      - "script.js"
+      - "scripts/site_audit.py"
+      - ".github/workflows/agrilearn-ci.yml"
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python scripts/site_audit.py
+  api:
+    runs-on: ubuntu-latest
+    defaults: {run: {working-directory: agrilearn-api}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12", cache: "pip", cache-dependency-path: agrilearn-api/requirements.txt}
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+      - run: python -m compileall app
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: ./agrilearn-api
+          push: false
+''',
+          'AGRILEARN_PHASES_1_10_AUDIT.md': '''# AgriLearn Phases 1–10 Consolidated Audit
+
+## Result
+The earlier repository contained a working static WHSF website and several phase-generator workflows, but the later generated backend artifacts were not consistently present on `main`. This stabilization release replaces the fragile workflow chain with a directly testable website, AgriLearn portal and backend foundation.
+
+## Phase status
+1. **Public experience:** WHSF website retained; AgriLearn receives its own accessible portal.
+2. **AI workflow UX:** Crop, image and knowledge-search interactions are implemented.
+3. **PWA/offline foundation:** Existing WHSF manifest/service-worker assets remain available; AgriLearn is static-host compatible.
+4. **Smart farming:** Farm records, weather endpoint and educational knowledge support are available.
+5. **Portals/roles foundation:** Farmer-facing portal exists; expert review is enforced as a policy. Production identity remains an external deployment configuration.
+6. **Backend MVP:** Runnable FastAPI API, validation, SQLite persistence, Docker and tests are included.
+7. **Security/staging:** CORS configuration, upload restrictions, safe defaults, environment configuration and container deployment are included. OIDC must be configured before protected production accounts are launched.
+8. **Controlled intelligence:** Knowledge retrieval is active; automated treatment diagnosis is deliberately disabled; live weather is feature-flagged.
+9. **Pilot readiness:** Health checks, API documentation, test automation, deployment manifests and impact summary are included.
+10. **Enterprise roadmap:** Multi-tenancy, satellite intelligence, IoT, model registry and native mobile applications remain roadmap items and must not be advertised as deployed features.
+
+## Required production decisions
+- Select and configure the production identity provider.
+- Deploy the API and set the frontend API URL.
+- Confirm the official privacy, safeguarding and agricultural-advice disclaimers.
+- Replace in-memory farm storage with managed PostgreSQL before a multi-user pilot.
+- Recruit qualified agronomist reviewers before enabling real diagnosis operations.
+- Keep automated treatment recommendations disabled until a validated model, clinical-style safety review and field pilot are complete.
+''',
+          'DEPLOYMENT.md': '''# WHSF and AgriLearn Deployment
+
+## Local acceptance test
+
+```bash
+docker compose up --build
+```
+
+Open:
+- WHSF website: `http://localhost:8080`
+- AgriLearn portal: `http://localhost:8080/agrilearn/`
+- API documentation: `http://localhost:8000/docs`
+- API health: `http://localhost:8000/api/agrilearn/v1/health`
+
+## Public website
+Deploy the repository root to Vercel. The included `vercel.json` supplies clean URLs and baseline security headers.
+
+## API
+The included `render.yaml` deploys the Dockerized API to Render. After deployment, update the AgriLearn frontend API address by replacing the default in `agrilearn/app.js`, or set it in the browser during staging:
+
+```js
+localStorage.setItem("agrilearnApi", "https://YOUR-API/api/agrilearn/v1")
+```
+
+## Before public pilot
+1. Configure a managed PostgreSQL database.
+2. Restrict `AGRILEARN_ALLOWED_ORIGINS` to the final domains.
+3. Add an OIDC identity provider and authorization enforcement.
+4. Configure encrypted object storage for images.
+5. Approve privacy, safeguarding, consent and agricultural-advice wording.
+6. Assign qualified agronomists to the review queue.
+7. Run CI and complete user acceptance testing on mobile and desktop.
+'''
+          }
+
+          for name, content in files.items():
+              path = root / name
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_text(textwrap.dedent(content).lstrip(), encoding='utf-8')
+
+          index = root / 'index.html'
+          if index.exists():
+              text = index.read_text(encoding='utf-8-sig')
+              if 'href="agrilearn/index.html"' not in text:
+                  anchor = '<a href="programs.html">Programs</a>'
+                  replacement = anchor + '\n          <a href="agrilearn/index.html">AgriLearn AI</a>'
+                  text = text.replace(anchor, replacement, 1)
+              index.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Validate website links and assets
+        run: python scripts/site_audit.py
+
+      - name: Validate backend
+        working-directory: agrilearn-api
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pytest -q
+          python -m compileall app
+
+      - name: Validate container build
+        run: docker build -t agrilearn-api:stabilized ./agrilearn-api
+
+      - name: Commit stabilized platform
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html agrilearn agrilearn-api scripts docker-compose.yml render.yaml vercel.json DEPLOYMENT.md AGRILEARN_PHASES_1_10_AUDIT.md .github/workflows/agrilearn-ci.yml
+          if git diff --cached --quiet; then
+            echo "No stabilization changes required"
+          else
+            git commit -m "Launch consolidated AgriLearn phases 1-10 platform"
+            git push origin main
+          fi
