@@ -1,0 +1,147 @@
+name: Build AgriLearn Phase 4 Smart Farming
+
+on:
+  push:
+    paths:
+      - '.github/workflows/agrilearn-phase4-smart-farming.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build smart farming modules and product goal
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          root=Path('.')
+          assets=root/'assets/programs'
+          data=root/'data'
+          assets.mkdir(parents=True,exist_ok=True)
+          data.mkdir(parents=True,exist_ok=True)
+
+          goal='AgriLearn AI is an agricultural smart application that uses artificial intelligence to scan crops, interpret weather and environmental data, provide rapid educational diagnostics, deliver early warnings, and offer localized farming guidance that helps farmers prevent losses, use water and farm inputs more efficiently, and improve productivity.'
+
+          modules=[
+            {'id':'weather','title':'Weather & Prevention','icon':'🌦','summary':'Localized rain, heat, frost and drought intelligence.','capabilities':['Forecast analysis','Field-level risk outlook','Planting and irrigation windows','Climate-smart prevention guidance'],'status':'API-ready'},
+            {'id':'alerts','title':'Early Alerts','icon':'🚨','summary':'Regional pest, disease and fungal-risk notifications.','capabilities':['Regional outbreak signals','Risk radius and urgency','Crop-specific prevention checklist','Extension-service escalation'],'status':'Prototype'},
+            {'id':'diagnosis','title':'Pest & Disease Detection','icon':'📷','summary':'Photo-based learning support for visible crop symptoms.','capabilities':['Leaf and stem photo intake','Possible pest or disease matches','Confidence and alternative causes','Expert confirmation pathway'],'status':'Prototype'},
+            {'id':'nutrients','title':'Nutrient & Soil Insights','icon':'🧪','summary':'Educational assessment of discoloration and soil patterns.','capabilities':['Possible nitrogen, iron and other deficiencies','Leaf-pattern comparison','Soil-test recommendation','Input-use safety checks'],'status':'Prototype'},
+            {'id':'advisory','title':'Farmer Advisory','icon':'🧑🏾‍🌾','summary':'Location, crop and season-aware farm planning.','capabilities':['Planting-window guidance','Irrigation scheduling','Crop rotation learning','Harvest and storage reminders'],'status':'Data-ready'},
+            {'id':'yield','title':'Yield Optimization','icon':'📈','summary':'Decision support for water, inputs and productivity.','capabilities':['Field activity planning','Water-efficiency guidance','Input-waste reduction','Yield-factor tracking'],'status':'Foundation'}
+          ]
+          (data/'agrilearn-modules.json').write_text(json.dumps({'goal':goal,'modules':modules},indent=2),encoding='utf-8')
+
+          alerts=[
+            {'level':'moderate','title':'Fungal-risk watch','region':'Selected region','crop':'Tomato','message':'Warm, humid conditions may increase fungal-disease pressure. Inspect lower leaves and improve airflow.','source':'Demonstration scenario'},
+            {'level':'high','title':'Heat-stress advisory','region':'Selected region','crop':'Maize','message':'High heat can increase water stress near flowering. Review soil moisture and local irrigation guidance.','source':'Demonstration scenario'},
+            {'level':'low','title':'Pest scouting reminder','region':'Selected region','crop':'Cassava','message':'Inspect young leaves and stems for unusual curling, mosaic patterns or insect activity.','source':'Demonstration scenario'}
+          ]
+          (data/'agrilearn-alerts-demo.json').write_text(json.dumps(alerts,indent=2),encoding='utf-8')
+
+          cssp=assets/'agrilearn-v2.css'
+          css=cssp.read_text(encoding='utf-8')
+          extra='''
+          .smart-dashboard{display:grid;grid-template-columns:260px minmax(0,1fr);gap:1rem;align-items:start}.smart-sidebar{position:sticky;top:92px}.smart-nav{display:grid;gap:.45rem}.smart-nav button{border:1px solid var(--ag-border);background:#fff;border-radius:12px;padding:.85rem;text-align:left;font-weight:800;cursor:pointer}.smart-nav button.active{background:var(--ag-primary);color:#fff;border-color:var(--ag-primary)}.smart-view{display:none}.smart-view.active{display:block}.module-hero{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.module-icon{font-size:2rem}.risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.risk-card{border:1px solid var(--ag-border);border-radius:16px;padding:1rem;background:#fff}.risk-card.high{border-left:5px solid #b42318}.risk-card.moderate{border-left:5px solid #b7791f}.risk-card.low{border-left:5px solid #287a5c}.forecast-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:.65rem}.forecast-day{border:1px solid var(--ag-border);border-radius:14px;padding:.8rem;text-align:center;background:#fff}.safety-box{background:#fff5df;border:1px solid #e7c978;border-radius:14px;padding:1rem}.data-status{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}.data-status div{padding:1rem;border:1px solid var(--ag-border);border-radius:14px;background:#fff}.module-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}.metric-input{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}.output-panel{min-height:160px;border:1px solid var(--ag-border);border-radius:14px;padding:1rem;background:#f8faf9}.status-live{color:#287a5c}.status-prototype{color:#9a6700}@media(max-width:980px){.smart-dashboard{grid-template-columns:1fr}.smart-sidebar{position:static}.risk-grid,.forecast-strip,.data-status,.module-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.risk-grid,.forecast-strip,.data-status,.module-grid,.metric-input{grid-template-columns:1fr}}
+          '''
+          if '.smart-dashboard' not in css: cssp.write_text(css+extra,encoding='utf-8')
+
+          js=r'''(()=>{
+            const $$=(s,c=document)=>[...c.querySelectorAll(s)],$=(s,c=document)=>c.querySelector(s);
+            $$('.smart-nav button').forEach(b=>b.addEventListener('click',()=>{$$('.smart-nav button').forEach(x=>x.classList.remove('active'));$$('.smart-view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#view-'+b.dataset.view)?.classList.add('active')}));
+            const weather=$('#weather-run');if(weather)weather.addEventListener('click',()=>{$('#weather-output').innerHTML='<span class="ag-chip">Demonstration forecast</span><h3>Localized prevention outlook</h3><p>Rain probability, heat stress, frost and drought risk will appear here after a verified weather provider and farm coordinates are connected.</p><div class="safety-box"><strong>Current status:</strong> No live weather data is being used. Do not make planting, irrigation or spraying decisions from this demonstration.</div>'});
+            const alertBtn=$('#alerts-run');if(alertBtn)alertBtn.addEventListener('click',async()=>{const box=$('#alerts-output');try{const items=await fetch('data/agrilearn-alerts-demo.json').then(r=>r.json());box.innerHTML='<div class="risk-grid">'+items.map(a=>`<article class="risk-card ${a.level}"><span class="ag-chip">${a.level} risk</span><h3>${a.title}</h3><p>${a.message}</p><small>${a.source}</small></article>`).join('')+'</div>'}catch(e){box.textContent='Alerts are temporarily unavailable.'}});
+            const nutrient=$('#nutrient-run');if(nutrient)nutrient.addEventListener('click',()=>{$('#nutrient-output').innerHTML='<h3>Possible nutrient-stress pattern</h3><p>Leaf yellowing can have several causes, including nutrient imbalance, water stress, root damage or disease. A photo alone is not sufficient to prescribe fertilizer.</p><ol><li>Confirm the affected crop and leaf age.</li><li>Review irrigation and drainage.</li><li>Compare symptoms across the field.</li><li>Obtain a soil or tissue test before applying a corrective rate.</li></ol>'});
+            const advisory=$('#advisory-run');if(advisory)advisory.addEventListener('click',()=>{const crop=$('#advisory-crop').value||'Selected crop',region=$('#advisory-region').value||'selected location';$('#advisory-output').innerHTML=`<h3>${crop} planning guide</h3><p>A localized planting, irrigation, rotation and harvest plan for ${region} will be generated when seasonal calendars, soils and live weather services are connected.</p><div class="safety-box">This prototype does not calculate chemical rates or prescribe restricted products. Any future treatment guidance must be checked against local labels, regulations and qualified agronomic advice.</div>`});
+            const yieldBtn=$('#yield-run');if(yieldBtn)yieldBtn.addEventListener('click',()=>{$('#yield-output').innerHTML='<h3>Yield opportunity checklist</h3><ul><li>Improve field records and crop-stage tracking.</li><li>Match irrigation to soil moisture and crop demand.</li><li>Use scouting and early alerts to prevent avoidable loss.</li><li>Base fertilizer decisions on soil or tissue tests.</li><li>Track harvest quantity, quality and post-harvest losses.</li></ul>'});
+          })();'''
+          (assets/'agrilearn-phase4.js').write_text(js,encoding='utf-8')
+
+          smart_body=f'''<section class="ag-hero"><div class="shell"><p class="ag-kicker">Phase 4 smart farming platform</p><h1>From crop symptoms to preventive action.</h1><p class="ag-lead">{goal}</p><div class="phase3-status"><span class="phase3-badge">Crop scanning</span><span class="phase3-badge">Weather intelligence</span><span class="phase3-badge">Early alerts</span><span class="phase3-badge">Localized advisory</span><span class="phase3-badge">Yield planning</span></div><p class="safety-box"><strong>Responsible-use notice:</strong> Current diagnostic, alert and treatment outputs are prototypes. Exact fertilizer quantities, pesticide selections and application instructions will only be enabled after local regulatory review, verified agronomic content, crop-stage validation and secure live services are connected.</p></div></section><section class="ag-section"><div class="shell smart-dashboard"><aside class="workspace-panel smart-sidebar"><h2>Smart tools</h2><div class="smart-nav"><button class="active" data-view="overview">Command Center</button><button data-view="weather">Weather & Prevention</button><button data-view="alerts">Early Alerts</button><button data-view="diagnosis">Photo Diagnosis</button><button data-view="nutrients">Nutrient Insights</button><button data-view="advisory">Farmer Advisory</button><button data-view="yield">Yield Optimization</button></div></aside><div>
+          <section id="view-overview" class="smart-view active"><div class="workspace-panel"><div class="module-hero"><div><p class="ag-kicker">Farm intelligence</p><h2>Command Center</h2><p>One dashboard for crop health, weather risk, field alerts and practical learning guidance.</p></div><span class="module-icon">🌱</span></div><div class="data-status"><div><strong>Crop vision</strong><p class="status-prototype">Prototype</p></div><div><strong>Weather feed</strong><p class="status-prototype">Awaiting provider</p></div><div><strong>Regional alerts</strong><p class="status-prototype">Demo data</p></div><div><strong>Farm profile</strong><p class="status-live">Local-device ready</p></div></div><h3>Phase 4 capabilities</h3><div class="module-grid">{''.join(f'<article class="ag-card"><span class="module-icon">{m["icon"]}</span><h3>{m["title"]}</h3><p>{m["summary"]}</p><ul>'+''.join(f'<li>{c}</li>' for c in m['capabilities'])+f'</ul><span class="ag-chip">{m["status"]}</span></article>' for m in modules)}</div></div></section>
+          <section id="view-weather" class="smart-view"><div class="workspace-panel"><h2>Weather & Prevention Forecast</h2><p>Designed to combine farm coordinates, satellite products and verified forecast services.</p><div class="metric-input"><div class="field"><label>Country or region</label><input placeholder="Oyo, Nigeria"></div><div class="field"><label>Crop</label><input placeholder="Cassava"></div></div><div class="forecast-strip"><div class="forecast-day"><strong>Rain</strong><p>Provider required</p></div><div class="forecast-day"><strong>Heat</strong><p>Provider required</p></div><div class="forecast-day"><strong>Frost</strong><p>Provider required</p></div><div class="forecast-day"><strong>Drought</strong><p>Provider required</p></div><div class="forecast-day"><strong>Spray window</strong><p>Disabled</p></div></div><button id="weather-run" class="ag-btn ag-btn-primary">Generate demonstration</button><div id="weather-output" class="output-panel"></div></div></section>
+          <section id="view-alerts" class="smart-view"><div class="workspace-panel"><h2>Early Alerts</h2><p>Regional pest movement, fungal-risk and extreme-weather warnings will be filtered by crop and location.</p><button id="alerts-run" class="ag-btn ag-btn-primary">Load demonstration alerts</button><div id="alerts-output" style="margin-top:1rem"></div></div></section>
+          <section id="view-diagnosis" class="smart-view"><div class="workspace-panel"><h2>Photo Diagnosis</h2><p>Use the existing image workspace for crop, plant-part and symptom intake.</p><div class="ag-actions"><a class="ag-btn ag-btn-primary" href="agrilearn-demo.html">Open image-analysis workspace</a></div><div class="safety-box"><strong>Planned output:</strong> possible matches, confidence, alternative causes, image-quality checks, scouting questions and expert escalation—not an unqualified definitive diagnosis.</div></div></section>
+          <section id="view-nutrients" class="smart-view"><div class="workspace-panel"><h2>Nutrient & Soil Insights</h2><div class="metric-input"><div class="field"><label>Crop</label><input placeholder="Maize"></div><div class="field"><label>Visible pattern</label><select><option>Older leaves yellowing</option><option>Young leaves yellowing</option><option>Purple coloration</option><option>Leaf-edge scorching</option><option>Uneven field growth</option></select></div></div><button id="nutrient-run" class="ag-btn ag-btn-primary">Review learning pattern</button><div id="nutrient-output" class="output-panel"></div></div></section>
+          <section id="view-advisory" class="smart-view"><div class="workspace-panel"><h2>Localized Farmer Advisory</h2><div class="metric-input"><div class="field"><label>Location</label><input id="advisory-region" placeholder="Oyo, Nigeria"></div><div class="field"><label>Crop</label><input id="advisory-crop" placeholder="Cassava"></div><div class="field"><label>Farm stage</label><select><option>Planning</option><option>Planting</option><option>Vegetative growth</option><option>Flowering or fruiting</option><option>Harvest</option><option>Storage</option></select></div><div class="field"><label>Primary goal</label><select><option>Planting time</option><option>Irrigation</option><option>Crop rotation</option><option>Pest prevention</option><option>Harvest planning</option></select></div></div><button id="advisory-run" class="ag-btn ag-btn-primary">Build demonstration plan</button><div id="advisory-output" class="output-panel"></div></div></section>
+          <section id="view-yield" class="smart-view"><div class="workspace-panel"><h2>Yield Optimization</h2><p>Track decisions that reduce avoidable loss, water waste and unnecessary inputs.</p><div class="metric-input"><div class="field"><label>Farm area</label><input type="number" min="0" placeholder="Area"></div><div class="field"><label>Area unit</label><select><option>Hectares</option><option>Acres</option></select></div><div class="field"><label>Expected yield</label><input type="number" min="0" placeholder="Target"></div><div class="field"><label>Main constraint</label><select><option>Water</option><option>Pests or disease</option><option>Soil fertility</option><option>Labor</option><option>Post-harvest loss</option></select></div></div><button id="yield-run" class="ag-btn ag-btn-primary">Generate optimization checklist</button><div id="yield-output" class="output-panel"></div></div></section>
+          </div></div></section>'''
+
+          # Derive page shell from existing smart application page.
+          base=(root/'agrilearn-platform.html').read_text(encoding='utf-8')
+          start=base.index('<!doctype html>')
+          head_end=base.index('<main id="main">')+len('<main id="main">')
+          footer_start=base.index('</main>')
+          shell_prefix=base[:head_end]
+          shell_suffix=base[footer_start:]
+          shell_prefix=shell_prefix.replace('<title>AgriLearn Platform | WHSF</title>','<title>Smart Farming | AgriLearn AI</title>')
+          shell_prefix=shell_prefix.replace('agrilearn-platform.html" aria-current="page"','agrilearn-platform.html"')
+          # Add Smart Farming link to all primary pages.
+          for name in ['agrilearn-ai.html','agrilearn-platform.html','agrilearn-demo.html','agrilearn-impact.html','agrilearn-partners.html']:
+            p=root/name;t=p.read_text(encoding='utf-8')
+            if 'agrilearn-smart.html' not in t:
+              t=t.replace('<a href="agrilearn-impact.html"', '<a href="agrilearn-smart.html">Smart Farming</a><a href="agrilearn-impact.html"')
+            if 'agrilearn-phase4.js' not in t:
+              t=t.replace('</head>','<script src="assets/programs/agrilearn-phase4.js" defer></script></head>')
+            p.write_text(t,encoding='utf-8')
+          smart=shell_prefix.replace('<a href="agrilearn-impact.html"','<a href="agrilearn-smart.html" aria-current="page">Smart Farming</a><a href="agrilearn-impact.html"')+smart_body+shell_suffix
+          if 'agrilearn-phase4.js' not in smart: smart=smart.replace('</head>','<script src="assets/programs/agrilearn-phase4.js" defer></script></head>')
+          (root/'agrilearn-smart.html').write_text(smart,encoding='utf-8')
+
+          # Strengthen home and platform product goal.
+          home=root/'agrilearn-ai.html';t=home.read_text(encoding='utf-8')
+          old='AgriLearn AI brings crop discovery, image-based learning, food recognition and climate-smart guidance into one multilingual workspace designed for farmers, students and extension teams.'
+          t=t.replace(old,goal)
+          if 'Smart Farming Command Center' not in t:
+            t=t.replace('<div class="ag-actions">','<div class="ag-actions"><a class="ag-btn ag-btn-secondary" href="agrilearn-smart.html">Smart Farming Command Center</a>')
+          home.write_text(t,encoding='utf-8')
+
+          platform=root/'agrilearn-platform.html';t=platform.read_text(encoding='utf-8')
+          if goal not in t:
+            t=t.replace('<p class="ag-lead">','<p class="ag-lead">'+goal+'</p><p class="ag-lead">',1)
+          platform.write_text(t,encoding='utf-8')
+
+          architecture={
+            'phase':'4','productGoal':goal,
+            'frontend':['Five-page public product','Smart Farming command center','PWA and offline crop library','Local saved sessions'],
+            'serviceContracts':{
+              'vision':'POST /api/agrilearn/v1/diagnose','weather':'GET /api/agrilearn/v1/weather','alerts':'GET /api/agrilearn/v1/alerts','advisory':'POST /api/agrilearn/v1/advisory','farmProfile':'GET/PUT /api/agrilearn/v1/farms/{id}'},
+            'requiredIntegrations':['Verified weather and satellite provider','Validated crop-vision model','Regional pest and disease intelligence','Secure authentication','Database and object storage','Agronomist-reviewed recommendation rules'],
+            'safetyGates':['No definitive diagnosis without confidence and alternatives','No exact chemical or fertilizer rate without location, crop stage, label and agronomist validation','Display source, timestamp and geographic coverage for alerts','Separate educational guidance from regulated treatment instructions','Human escalation for severe or uncertain cases']
+          }
+          (root/'AGRILEARN_PHASE4_ARCHITECTURE.json').write_text(json.dumps(architecture,indent=2),encoding='utf-8')
+          (root/'AGRILEARN_PHASE4.md').write_text(f'''# AgriLearn AI Phase 4\n\n## Product goal\n{goal}\n\n## Implemented\n- Smart Farming command center\n- Weather and prevention module shell\n- Regional early-alert demonstration\n- Photo-diagnosis pathway\n- Nutrient and soil learning assessment\n- Localized advisory planner\n- Yield-optimization checklist\n- Versioned service contracts and safety gates\n\n## Production integrations still required\n- Verified weather and satellite provider\n- Validated computer-vision model\n- Regional pest and disease feeds\n- Secure identity and farm profiles\n- Cloud database, object storage and audit logs\n- Agronomist-reviewed local treatment and fertilizer rules\n\nExact chemical or fertilizer recommendations remain disabled until those controls are in place.\n''',encoding='utf-8')
+
+          # Extend service worker cache.
+          sw=root/'agrilearn-sw.js';s=sw.read_text(encoding='utf-8')
+          s=s.replace('const CACHE="agrilearn-v3-1"','const CACHE="agrilearn-v4-1"')
+          if '/agrilearn-smart.html' not in s:
+            s=s.replace('["/agrilearn-ai.html"','["/agrilearn-smart.html","/assets/programs/agrilearn-phase4.js","/data/agrilearn-modules.json","/data/agrilearn-alerts-demo.json","/agrilearn-ai.html"')
+          sw.write_text(s,encoding='utf-8')
+
+          assert (root/'agrilearn-smart.html').exists()
+          assert goal in (root/'agrilearn-ai.html').read_text(encoding='utf-8')
+          assert 'WHSF Main Website' in (root/'agrilearn-smart.html').read_text(encoding='utf-8')
+          assert 'Smart Farming' in (root/'agrilearn-smart.html').read_text(encoding='utf-8')
+          assert len(json.loads((data/'agrilearn-modules.json').read_text())['modules'])==6
+          PY
+
+      - name: Commit Phase 4 smart farming platform
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add agrilearn-*.html agrilearn-sw.js assets/programs/agrilearn-v2.css assets/programs/agrilearn-phase4.js data/agrilearn-modules.json data/agrilearn-alerts-demo.json AGRILEARN_PHASE4.md AGRILEARN_PHASE4_ARCHITECTURE.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Launch AgriLearn Phase 4 smart farming command center"
+            git push
+          fi
