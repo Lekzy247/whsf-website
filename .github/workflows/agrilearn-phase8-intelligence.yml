@@ -1,0 +1,258 @@
+name: Build AgriLearn Phase 8 Controlled Intelligence Layer
+
+on:
+  workflow_run:
+    workflows: ["Build AgriLearn Phase 7 Secure Staging Foundation"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync previous phases
+        run: |
+          git pull --ff-only origin "${{ github.event.repository.default_branch }}"
+          test -d agrilearn-api/app/auth || { echo "Phase 7 secure staging foundation is required first."; exit 1; }
+
+      - name: Generate controlled intelligence layer
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          root=Path('.')
+          api=root/'agrilearn-api'
+          app=api/'app'
+          for p in [app/'knowledge',app/'observability',app/'services/providers',api/'knowledge']:
+              p.mkdir(parents=True,exist_ok=True)
+
+          req=api/'requirements.txt'
+          t=req.read_text(encoding='utf-8')
+          for dep in ['prometheus-client==0.21.1','tenacity==9.0.0']:
+              if dep not in t:t+=dep+'\n'
+          req.write_text(t,encoding='utf-8')
+
+          env=api/'.env.example'
+          t=env.read_text(encoding='utf-8')
+          extra='''AGRILEARN_FEATURE_LIVE_WEATHER=false
+AGRILEARN_FEATURE_AI_DIAGNOSIS=false
+AGRILEARN_FEATURE_RAG=true
+AGRILEARN_WEATHER_API_KEY=
+AGRILEARN_WEATHER_BASE_URL=https://api.openweathermap.org/data/2.5
+AGRILEARN_REVIEW_CONFIDENCE_THRESHOLD=0.80
+AGRILEARN_KNOWLEDGE_PATH=./knowledge/agriculture.json
+'''
+          if 'AGRILEARN_FEATURE_LIVE_WEATHER' not in t:env.write_text(t+extra,encoding='utf-8')
+
+          config=app/'core/config.py'
+          t=config.read_text(encoding='utf-8')
+          marker='    redis_url: str = "redis://localhost:6379/0"\n'
+          add='''    feature_live_weather: bool = False
+    feature_ai_diagnosis: bool = False
+    feature_rag: bool = True
+    weather_api_key: str = ""
+    weather_base_url: str = "https://api.openweathermap.org/data/2.5"
+    review_confidence_threshold: float = 0.80
+    knowledge_path: str = "./knowledge/agriculture.json"
+'''
+          if 'feature_live_weather:' not in t:t=t.replace(marker,marker+add)
+          config.write_text(t,encoding='utf-8')
+
+          knowledge={
+            'version':'2026.1','review_status':'pilot-curated','entries':[
+              {'id':'cassava-mosaic-001','crop':'cassava','category':'disease','title':'Cassava mosaic symptom screening','regions':['West Africa'],'symptoms':['mosaic leaf patterns','leaf distortion','stunted growth'],'guidance':['Capture multiple clear images of young and mature leaves.','Compare affected and unaffected plants across the field.','Escalate suspected cases to a qualified extension officer or agronomist.'],'prohibited':['Do not recommend pesticide treatment from image evidence alone.'],'sources':['WHSF pilot knowledge record; expert validation required before production use.']},
+              {'id':'tomato-leaf-spot-001','crop':'tomato','category':'disease','title':'Tomato leaf spot differential screening','regions':['global'],'symptoms':['circular leaf lesions','yellowing around lesions','lower leaves affected first'],'guidance':['Check both leaf surfaces and photograph the whole plant.','Record recent rainfall, humidity and irrigation method.','Seek expert confirmation because fungal and bacterial symptoms can overlap.'],'prohibited':['Do not prescribe fungicides or antibiotics without local expert confirmation.'],'sources':['WHSF pilot knowledge record; expert validation required before production use.']},
+              {'id':'maize-nitrogen-001','crop':'maize','category':'nutrient','title':'Maize nitrogen-stress screening','regions':['global'],'symptoms':['pale green leaves','V-shaped yellowing from leaf tip','reduced vigor'],'guidance':['Check whether symptoms begin on older leaves.','Review soil test results, rainfall and fertilizer history.','Use a soil or tissue test before changing nutrient applications.'],'prohibited':['Do not calculate fertilizer dosage without verified soil, crop-stage and local agronomic data.'],'sources':['WHSF pilot knowledge record; expert validation required before production use.']}
+            ]
+          }
+          (api/'knowledge/agriculture.json').write_text(json.dumps(knowledge,indent=2),encoding='utf-8')
+
+          files={
+          'agrilearn-api/app/knowledge/__init__.py':'',
+          'agrilearn-api/app/knowledge/retriever.py':'''import json
+from functools import lru_cache
+from pathlib import Path
+from app.core.config import get_settings
+
+@lru_cache
+def load_knowledge():
+    path=Path(get_settings().knowledge_path)
+    if not path.exists():
+        return {"version":"missing","entries":[]}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def retrieve(crop:str,query:str="",limit:int=5):
+    crop=crop.lower().strip();terms=set(query.lower().split())
+    scored=[]
+    for entry in load_knowledge().get("entries",[]):
+        haystack=" ".join([entry.get("title",""),*entry.get("symptoms",[]),*entry.get("guidance",[])]).lower()
+        score=(5 if entry.get("crop","").lower()==crop else 0)+sum(1 for term in terms if term in haystack)
+        if score:scored.append((score,entry))
+    return [entry for _,entry in sorted(scored,key=lambda item:item[0],reverse=True)[:limit]]
+''',
+          'agrilearn-api/app/services/providers/__init__.py':'',
+          'agrilearn-api/app/services/providers/openweather.py':'''import httpx
+from tenacity import retry,stop_after_attempt,wait_exponential
+from app.core.config import get_settings
+
+class OpenWeatherProvider:
+    def __init__(self):
+        self.settings=get_settings()
+        if not self.settings.weather_api_key:
+            raise RuntimeError("AGRILEARN_WEATHER_API_KEY is required")
+
+    @retry(stop=stop_after_attempt(3),wait=wait_exponential(min=1,max=4),reraise=True)
+    async def forecast(self,lat:float,lng:float):
+        async with httpx.AsyncClient(timeout=10) as client:
+            response=await client.get(f"{self.settings.weather_base_url}/forecast",params={"lat":lat,"lon":lng,"appid":self.settings.weather_api_key,"units":"metric"})
+            response.raise_for_status();data=response.json()
+        items=[]
+        for point in data.get("list",[])[:8]:
+            items.append({"time":point.get("dt_txt"),"temperature_c":point.get("main",{}).get("temp"),"humidity":point.get("main",{}).get("humidity"),"rain_mm":point.get("rain",{}).get("3h",0),"description":(point.get("weather") or [{}])[0].get("description")})
+        return {"provider":"openweather","status":"live","location":{"latitude":lat,"longitude":lng},"forecast":items,"warning":"Forecasts are decision-support information and should be checked against local conditions."}
+''',
+          'agrilearn-api/app/services/weather.py':'''from app.core.config import get_settings
+from app.services.providers.openweather import OpenWeatherProvider
+
+class WeatherService:
+    def __init__(self):self.settings=get_settings()
+    async def forecast(self,lat:float,lng:float):
+        if self.settings.feature_live_weather and self.settings.weather_provider=="openweather":
+            return await OpenWeatherProvider().forecast(lat,lng)
+        return {"provider":"demo","status":"demonstration","location":{"latitude":lat,"longitude":lng},"forecast":[{"day":"today","rain_probability":35,"max_temp_c":31,"risk":"moderate heat"},{"day":"tomorrow","rain_probability":62,"max_temp_c":29,"risk":"possible rain"}],"warning":"Demonstration data only. Do not use for operational farm decisions."}
+''',
+          'agrilearn-api/app/services/diagnosis_orchestrator.py':'''from app.core.config import get_settings
+from app.knowledge.retriever import retrieve
+from app.services.vision import VisionService
+
+class DiagnosisOrchestrator:
+    async def analyze(self,crop:str,image_uri:str,notes:str=""):
+        settings=get_settings()
+        if not settings.feature_ai_diagnosis:
+            result=await VisionService().analyze(crop,image_uri)
+        else:
+            result=await VisionService().analyze(crop,image_uri)
+        evidence=retrieve(crop,notes or result.get("finding","") ) if settings.feature_rag else []
+        confidence=float(result.get("confidence") or 0)
+        requires_review=confidence < settings.review_confidence_threshold or result.get("status") in {"needs_expert_review","high_risk"}
+        result.update({"knowledge_evidence":evidence,"requires_expert_review":requires_review,"guidance_status":"withheld_pending_review" if requires_review else "educational_only"})
+        return result
+''',
+          'agrilearn-api/app/api/routes/knowledge.py':'''from fastapi import APIRouter,Query
+from app.knowledge.retriever import load_knowledge,retrieve
+router=APIRouter(prefix="/knowledge",tags=["knowledge"])
+@router.get("/search")
+def search(crop:str,query:str=Query(default="")):
+    store=load_knowledge()
+    return {"version":store.get("version"),"review_status":store.get("review_status"),"results":retrieve(crop,query)}
+''',
+          'agrilearn-api/app/api/routes/features.py':'''from fastapi import APIRouter
+from app.core.config import get_settings
+router=APIRouter(prefix="/features",tags=["features"])
+@router.get("")
+def features():
+    s=get_settings()
+    return {"live_weather":s.feature_live_weather,"ai_diagnosis":s.feature_ai_diagnosis,"rag":s.feature_rag,"weather_provider":s.weather_provider,"vision_provider":s.vision_provider,"review_confidence_threshold":s.review_confidence_threshold}
+''',
+          'agrilearn-api/app/observability/__init__.py':'',
+          'agrilearn-api/app/observability/metrics.py':'''from prometheus_client import Counter,Histogram,generate_latest,CONTENT_TYPE_LATEST
+from fastapi import APIRouter,Response
+REQUESTS=Counter("agrilearn_requests_total","AgriLearn API requests",["method","path","status"])
+LATENCY=Histogram("agrilearn_request_seconds","AgriLearn API request latency",["path"])
+router=APIRouter(tags=["observability"])
+@router.get("/metrics",include_in_schema=False)
+def metrics():return Response(generate_latest(),media_type=CONTENT_TYPE_LATEST)
+''',
+          'agrilearn-api/tests/test_intelligence.py':'''import os
+os.environ["AGRILEARN_FEATURE_LIVE_WEATHER"]="false"
+os.environ["AGRILEARN_FEATURE_AI_DIAGNOSIS"]="false"
+os.environ["AGRILEARN_FEATURE_RAG"]="true"
+from fastapi.testclient import TestClient
+from app.main import app
+client=TestClient(app)
+
+def test_feature_flags():
+    r=client.get("/api/agrilearn/v1/features")
+    assert r.status_code==200 and r.json()["rag"] is True
+
+def test_grounded_knowledge_search():
+    r=client.get("/api/agrilearn/v1/knowledge/search?crop=cassava&query=mosaic")
+    assert r.status_code==200
+    assert r.json()["results"][0]["crop"]=="cassava"
+
+def test_weather_remains_demo_without_flag():
+    r=client.get("/api/agrilearn/v1/weather/forecast?lat=7.37&lng=3.94")
+    assert r.json()["status"]=="demonstration"
+''',
+          'AGRILEARN_PHASE8.md':'''# AgriLearn AI Phase 8 — Controlled Intelligence Layer
+
+## Delivered
+- Feature flags for live weather, AI diagnosis and grounded knowledge retrieval
+- OpenWeather adapter with retries, timeouts and normalized responses
+- Curated pilot agricultural knowledge store and retrieval endpoint
+- Diagnosis orchestration with evidence attachment and mandatory expert-review thresholds
+- Feature-status endpoint
+- Prometheus metrics endpoint foundation
+- Automated tests confirming live providers remain disabled by default
+
+## Safety design
+- Live weather is off until a provider key is configured and the feature flag is enabled.
+- AI diagnosis is off until a validated model is connected.
+- Low-confidence and high-risk findings are automatically marked for expert review.
+- Treatment guidance is withheld when review is required.
+- Pilot knowledge entries explicitly prohibit unsupported pesticide, antibiotic and fertilizer prescriptions.
+
+## Next recommended milestone
+Run a controlled pilot: connect an identity provider, deploy staging, enable one verified weather provider, recruit agronomist reviewers, curate 100–300 validated crop cases, and measure accuracy, escalation rate, response time and safety incidents before enabling farmer-facing AI diagnosis.
+'''
+          }
+          for path,content in files.items():
+              p=root/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(content,encoding='utf-8')
+
+          router=app/'api/router.py';t=router.read_text(encoding='utf-8')
+          t=t.replace('from app.api.routes import account,diagnoses,farms,health,weather','from app.api.routes import account,diagnoses,farms,features,health,knowledge,weather')
+          for route in ['features.router','knowledge.router']:
+              if route not in t:t=t.replace('api_router=APIRouter()',f'api_router=APIRouter()\napi_router.include_router({route})',1)
+          router.write_text(t,encoding='utf-8')
+
+          diag=app/'api/routes/diagnoses.py';t=diag.read_text(encoding='utf-8')
+          t=t.replace('from app.services.vision import VisionService','from app.services.diagnosis_orchestrator import DiagnosisOrchestrator')
+          t=t.replace('result=await VisionService().analyze(crop,image_uri)','result=await DiagnosisOrchestrator().analyze(crop,image_uri)')
+          t=t.replace('item=Diagnosis(field_id=field_id,crop=crop,image_path=image_uri,**result)','db_result={k:result.get(k) for k in ["status","finding","confidence","provider"]}\n    item=Diagnosis(field_id=field_id,crop=crop,image_path=image_uri,**db_result)')
+          diag.write_text(t,encoding='utf-8')
+
+          main=app/'main.py';t=main.read_text(encoding='utf-8')
+          if 'metrics_router' not in t:
+              t=t.replace('from app.models import domain','from app.models import domain\nfrom app.observability.metrics import router as metrics_router')
+              t=t.replace('app.include_router(api_router,prefix="/api/agrilearn/v1")','app.include_router(api_router,prefix="/api/agrilearn/v1")\napp.include_router(metrics_router)')
+          main.write_text(t,encoding='utf-8')
+          PY
+
+      - name: Validate Phase 8
+        run: |
+          cd agrilearn-api
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          alembic upgrade head
+          pytest -q
+
+      - name: Commit Phase 8
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add agrilearn-api AGRILEARN_PHASE8.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Launch AgriLearn Phase 8 controlled intelligence layer"
+            git push
+          fi
