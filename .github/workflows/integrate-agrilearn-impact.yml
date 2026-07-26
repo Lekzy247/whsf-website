@@ -1,0 +1,101 @@
+name: Integrate AgriLearn Impact Dashboard
+
+on:
+  push:
+    paths:
+      - '.github/workflows/integrate-agrilearn-impact.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Integrate dashboard across AgriLearn portal
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          impact_link = '<a href="agrilearn-impact.html">Impact Dashboard</a>'
+
+          # Add the dashboard to every AgriLearn sub-navigation.
+          for path in sorted(root.glob('agrilearn-*.html')):
+              if path.name == 'agrilearn-impact-dashboard.html':
+                  continue
+              text = path.read_text(encoding='utf-8')
+              if 'class="agri-subnav"' not in text or 'agrilearn-impact.html' in text:
+                  continue
+              patterns = [
+                  ('<a href="agrilearn-demo.html">Demo</a>', '<a href="agrilearn-demo.html">Demo</a>' + impact_link),
+                  ('<a href="agrilearn-pilot.html">Pilot</a>', '<a href="agrilearn-pilot.html">Pilot</a>' + impact_link),
+              ]
+              for old, new in patterns:
+                  if old in text:
+                      text = text.replace(old, new, 1)
+                      break
+              path.write_text(text, encoding='utf-8')
+
+          # Make the Overview page prominently feature the dashboard.
+          overview = root / 'agrilearn-ai.html'
+          if overview.exists():
+              text = overview.read_text(encoding='utf-8')
+              if 'Open the Impact Dashboard' not in text:
+                  target = '<a class="button button-secondary" href="agrilearn-pilot.html">Partner on the pilot</a>'
+                  replacement = target + '<a class="button button-secondary" href="agrilearn-impact.html">Open the Impact Dashboard</a>'
+                  text = text.replace(target, replacement, 1)
+              if 'impact-dashboard-feature' not in text:
+                  block = '''\n<section class="section section-tint impact-dashboard-feature"><div class="shell hero-grid"><div><p class="eyebrow">Transparent impact</p><h2>Explore the AgriLearn AI Impact Dashboard.</h2><p>Review proposed pilot targets, inclusion indicators, learning outcomes, implementation reach, Sustainable Development Goal alignment and the evidence methods that will separate verified results from projections.</p><div class="hero-actions"><a class="button" href="agrilearn-impact.html">View Impact Dashboard</a><a class="button button-secondary" href="agrilearn-pilot.html">Review Pilot Framework</a></div></div><div class="challenge-panel"><h3>Evidence before scale</h3><p>The dashboard presents targets as targets—not completed results—and explains how future pilot performance will be measured responsibly.</p><div class="responsible-list"><div><strong>Reach</strong><br>Participation and inclusion.</div><div><strong>Learn</strong><br>Knowledge improvement.</div><div><strong>Apply</strong><br>Practice adoption.</div><div><strong>Trust</strong><br>Safety and usefulness.</div></div></div></div></section>\n'''
+                  text = text.replace('</main>', block + '</main>', 1)
+              overview.write_text(text, encoding='utf-8')
+
+          # Add a visible entry point on Programs.
+          programs = root / 'programs.html'
+          if programs.exists():
+              text = programs.read_text(encoding='utf-8')
+              if 'AgriLearn AI Impact Dashboard' not in text:
+                  block = '''\n<section class="section section-tint" id="agrilearn-impact-entry"><div class="shell"><div class="section-heading centered"><p class="eyebrow">Flagship innovation</p><h2>AgriLearn AI Impact Dashboard</h2><p>Explore WHSF's transparent framework for measuring agricultural learning, inclusion, climate resilience and responsible AI outcomes.</p></div><div class="hero-actions" style="justify-content:center"><a class="button" href="agrilearn-impact.html">Open Impact Dashboard</a><a class="button button-secondary" href="agrilearn-ai.html">Explore AgriLearn AI</a></div></div></section>\n'''
+                  text = text.replace('</main>', block + '</main>', 1)
+              programs.write_text(text, encoding='utf-8')
+
+          # Upgrade dashboard discoverability, accessibility and lightweight interaction.
+          dashboard = root / 'agrilearn-impact.html'
+          if dashboard.exists():
+              text = dashboard.read_text(encoding='utf-8')
+              text = text.replace('<main>', '<main id="main">', 1)
+              if '<a class="skip-link" href="#main">' not in text:
+                  text = text.replace('<body>', '<body><a class="skip-link" href="#main">Skip to main content</a>', 1)
+              if 'data-impact-counter' not in text:
+                  text = re.sub(r'<strong>(1,000|50%|20|4)</strong>', lambda m: f'<strong data-impact-counter>{m.group(1)}</strong>', text)
+              if 'impact-dashboard-interaction' not in text:
+                  script = '''\n<script id="impact-dashboard-interaction">\n(() => {\n  const counters = document.querySelectorAll('[data-impact-counter]');\n  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n  const animate = (el) => {\n    const raw = el.textContent.trim();\n    const suffix = raw.includes('%') ? '%' : '';\n    const target = Number(raw.replace(/[^0-9.]/g, ''));\n    if (!target || reduceMotion) return;\n    const start = performance.now();\n    const duration = 900;\n    const tick = (now) => {\n      const p = Math.min((now - start) / duration, 1);\n      const value = Math.round(target * (1 - Math.pow(1 - p, 3)));\n      el.textContent = value.toLocaleString() + suffix;\n      if (p < 1) requestAnimationFrame(tick);\n    };\n    el.textContent = '0' + suffix;\n    requestAnimationFrame(tick);\n  };\n  const observer = new IntersectionObserver(entries => entries.forEach(entry => {\n    if (entry.isIntersecting) { animate(entry.target); observer.unobserve(entry.target); }\n  }), { threshold: .4 });\n  counters.forEach(counter => observer.observe(counter));\n})();\n</script>\n'''
+                  text = text.replace('</body>', script + '</body>', 1)
+              dashboard.write_text(text, encoding='utf-8')
+
+          # Add dashboard URL to sitemap when present.
+          sitemap = root / 'sitemap.xml'
+          if sitemap.exists():
+              text = sitemap.read_text(encoding='utf-8')
+              url = 'https://www.worldhsfoundation.org/agrilearn-impact'
+              if url not in text:
+                  entry = f'  <url><loc>{url}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n'
+                  text = text.replace('</urlset>', entry + '</urlset>')
+                  sitemap.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit integrated portal
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add agrilearn-*.html programs.html sitemap.xml 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No integration changes required."
+          else
+            git commit -m "Integrate AgriLearn impact dashboard across portal"
+            git push
+          fi
