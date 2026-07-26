@@ -2,143 +2,42 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    {
-      "source": "/agrilearn.html",
-      "destination": "/agrilearn",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn/login",
-      "destination": "/agrilearn-app.html",
-      "permanent": false
-    },
-    {
-      "source": "/agrilearn/register",
-      "destination": "/agrilearn-app.html",
-      "permanent": false
-    },
-    {
-      "source": "/agrilearn/dashboard",
-      "destination": "/agrilearn-app.html",
-      "permanent": false
-    },
-    {
-      "source": "/agrilearn-impact.html",
-      "destination": "/agrilearn-impact",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn-impact-dashboard",
-      "destination": "/agrilearn-impact",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn-impact-dashboard.html",
-      "destination": "/agrilearn-impact",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn-crops.html",
-      "destination": "/agrilearn-crops",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn-architecture.html",
-      "destination": "/agrilearn-architecture",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn-roadmap.html",
-      "destination": "/agrilearn-roadmap",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn-research.html",
-      "destination": "/agrilearn-research",
-      "permanent": true
-    },
-    {
-      "source": "/agrilearn-partners.html",
-      "destination": "/agrilearn-partners",
-      "permanent": true
-    }
+    { "source": "/agrilearn.html", "destination": "/agrilearn", "permanent": true },
+    { "source": "/agrilearn-impact.html", "destination": "/agrilearn-impact", "permanent": true },
+    { "source": "/agrilearn-impact-dashboard", "destination": "/agrilearn-impact", "permanent": true },
+    { "source": "/agrilearn-impact-dashboard.html", "destination": "/agrilearn-impact", "permanent": true },
+    { "source": "/agrilearn-crops.html", "destination": "/agrilearn-crops", "permanent": true },
+    { "source": "/agrilearn-architecture.html", "destination": "/agrilearn-architecture", "permanent": true },
+    { "source": "/agrilearn-roadmap.html", "destination": "/agrilearn-roadmap", "permanent": true },
+    { "source": "/agrilearn-research.html", "destination": "/agrilearn-research", "permanent": true },
+    { "source": "/agrilearn-partners.html", "destination": "/agrilearn-partners", "permanent": true }
   ],
   "rewrites": [
-    {
-      "source": "/agrilearn-ai",
-      "destination": "https://whsf-agrilearn.vercel.app/agrilearn-ai"
-    },
-    {
-      "source": "/agrilearn-ai/:path*",
-      "destination": "https://whsf-agrilearn.vercel.app/agrilearn-ai/:path*"
-    },
-    {
-      "source": "/agrilearn",
-      "destination": "/agrilearn-ai.html"
-    },
-    {
-      "source": "/agrilearn-impact",
-      "destination": "/agrilearn-impact.html"
-    },
-    {
-      "source": "/agrilearn-crops",
-      "destination": "/agrilearn-crops.html"
-    },
-    {
-      "source": "/agrilearn-architecture",
-      "destination": "/agrilearn-architecture.html"
-    },
-    {
-      "source": "/agrilearn-roadmap",
-      "destination": "/agrilearn-roadmap.html"
-    },
-    {
-      "source": "/agrilearn-research",
-      "destination": "/agrilearn-research.html"
-    },
-    {
-      "source": "/agrilearn-partners",
-      "destination": "/agrilearn-partners.html"
-    }
+    { "source": "/agrilearn-ai", "destination": "/agrilearn-ai.html" },
+    { "source": "/agrilearn-ai/login", "destination": "/agrilearn-login.html" },
+    { "source": "/agrilearn-ai/register", "destination": "/agrilearn-register.html" },
+    { "source": "/agrilearn-ai/dashboard", "destination": "/agrilearn-dashboard.html" },
+    { "source": "/agrilearn", "destination": "/agrilearn-ai.html" },
+    { "source": "/agrilearn-impact", "destination": "/agrilearn-impact.html" },
+    { "source": "/agrilearn-crops", "destination": "/agrilearn-crops.html" },
+    { "source": "/agrilearn-architecture", "destination": "/agrilearn-architecture.html" },
+    { "source": "/agrilearn-roadmap", "destination": "/agrilearn-roadmap.html" },
+    { "source": "/agrilearn-research", "destination": "/agrilearn-research.html" },
+    { "source": "/agrilearn-partners", "destination": "/agrilearn-partners.html" }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
       ]
     },
     {
-      "source": "/agrilearn",
+      "source": "/agrilearn-ai/(.*)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(self), geolocation=()"
-        }
-      ]
-    },
-    {
-      "source": "/agrilearn-impact",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     }
   ]
