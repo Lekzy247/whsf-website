@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Create Account | AgriLearn AI</title>
+  <meta name="description" content="Create your AgriLearn AI learner account.">
+  <link rel="stylesheet" href="/agrilearn-app.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/agrilearn-ai">AgriLearn AI<small>World Humanitarian Support Foundation</small></a>
+    <a class="btn secondary" href="/agrilearn-ai/login">Sign in</a>
+  </header>
+
+  <main class="auth-layout">
+    <section class="story">
+      <span class="eyebrow">Start learning today</span>
+      <h1>Build skills that create opportunity.</h1>
+      <p>Create a free learner profile to access practical courses in agriculture, technology, entrepreneurship and sustainable development.</p>
+    </section>
+
+    <section class="panel-wrap">
+      <div class="card auth-card">
+        <span class="eyebrow">New learner</span>
+        <h2>Create your account</h2>
+        <p class="muted">Your profile helps us recommend relevant courses and learning pathways.</p>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <form id="registerForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="name">Full name</label>
+              <input id="name" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="country">Country</label>
+              <input id="country" name="country" autocomplete="country-name" placeholder="e.g. Nigeria" required>
+            </div>
+            <div class="field">
+              <label for="role">I am a</label>
+              <select id="role" name="role" required>
+                <option value="">Select one</option>
+                <option>Student</option>
+                <option>Farmer</option>
+                <option>Entrepreneur</option>
+                <option>Teacher or Instructor</option>
+                <option>Professional</option>
+                <option>Community Volunteer</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="interest">Primary learning interest</label>
+            <select id="interest" name="interest" required>
+              <option value="">Select an interest</option>
+              <option>Agriculture and climate-smart farming</option>
+              <option>Artificial intelligence and data</option>
+              <option>Cybersecurity and digital skills</option>
+              <option>Entrepreneurship and business</option>
+              <option>STEM education</option>
+              <option>Sustainable development</option>
+            </select>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" autocomplete="new-password" minlength="6" required>
+            </div>
+            <div class="field">
+              <label for="confirmPassword">Confirm password</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="6" required>
+            </div>
+          </div>
+
+          <label style="display:flex;gap:.65rem;align-items:flex-start;margin:1rem 0">
+            <input id="terms" type="checkbox" required style="margin-top:.3rem">
+            <span class="muted">I agree to use the platform responsibly and accept the WHSF learning-platform terms and privacy practices.</span>
+          </label>
+
+          <button id="registerButton" class="btn" type="submit" style="width:100%">Create learner account</button>
+        </form>
+
+        <div class="helper">
+          <span class="muted">Already registered?</span>
+          <a href="/agrilearn-ai/login">Sign in</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { observeAuth, registerLearner, friendlyAuthError } from '/agrilearn-auth.js';
+
+    const form = document.getElementById('registerForm');
+    const button = document.getElementById('registerButton');
+    const message = document.getElementById('message');
+
+    const showMessage = (text, type = 'error') => {
+      message.textContent = text;
+      message.className = `message show ${type}`;
+    };
+
+    observeAuth((user) => {
+      if (user) window.location.replace('/agrilearn-ai/dashboard');
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      message.className = 'message';
+
+      if (form.password.value !== form.confirmPassword.value) {
+        showMessage('The passwords do not match.');
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Creating account...';
+
+      try {
+        await registerLearner({
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          password: form.password.value,
+          country: form.country.value.trim(),
+          role: form.role.value,
+          interest: form.interest.value
+        });
+        showMessage('Account created. A verification email has been sent.', 'success');
+        setTimeout(() => window.location.replace('/agrilearn-ai/dashboard'), 900);
+      } catch (error) {
+        showMessage(friendlyAuthError(error));
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Create learner account';
+      }
+    });
+  </script>
+</body>
+</html>
