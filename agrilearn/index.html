@@ -2,88 +2,133 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AgriLearn AI by WHSF advances responsible AI, digital inclusion, practical skills and climate-smart agriculture for underserved communities.">
-  <meta name="theme-color" content="#0f5132">
-  <title>AgriLearn AI | Responsible AI for Digital Inclusion</title>
-  <style>
-    :root{--forest-900:#082d1c;--forest-800:#0b3d26;--forest-700:#0f5132;--forest-600:#167247;--mint-100:#e8f5ed;--mint-50:#f3faf6;--gold:#d8a62e;--ink:#10251a;--muted:#52675a;--line:#c9ddd0;--canvas:#fbfaf3;--white:#fff;--shadow:0 24px 70px rgba(8,45,28,.13);--radius:24px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}a{color:inherit}.skip{position:absolute;left:-999px;top:0}.skip:focus{left:1rem;top:1rem;z-index:100;background:#fff;padding:.75rem 1rem;border:2px solid var(--forest-700);border-radius:10px}button,input,select,textarea{font:inherit}:focus-visible{outline:3px solid var(--gold);outline-offset:3px}header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,221,208,.9)}.nav{max-width:1180px;margin:auto;padding:.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}.brand{text-decoration:none;font-weight:900;color:var(--forest-700);font-size:1.2rem;line-height:1.1}.brand small{display:block;color:var(--muted);font-size:.68rem;font-weight:650;margin-top:.2rem}.menu{display:flex;gap:1rem;align-items:center}.menu a{text-decoration:none;font-size:.92rem;font-weight:800}.menu-toggle{display:none;border:1px solid var(--line);background:#fff;border-radius:12px;padding:.65rem .85rem;min-width:44px;min-height:44px}.button{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;border:0;border-radius:999px;padding:.86rem 1.18rem;background:var(--forest-700);color:#fff;text-decoration:none;font-weight:850;cursor:pointer;transition:transform .2s ease,background .2s ease}.button:hover{background:var(--forest-600);transform:translateY(-1px)}.button.secondary{background:#fff;color:var(--forest-700);border:1px solid var(--forest-700)}.button.soft{background:var(--mint-100);color:var(--forest-800)}main{overflow:hidden}.hero{max-width:1180px;margin:auto;padding:6rem 1.25rem 4.5rem;display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:var(--forest-600);font-size:.76rem;font-weight:900}.hero h1{font-size:clamp(3rem,7vw,6.2rem);line-height:.96;letter-spacing:-.055em;margin:.65rem 0 1.25rem;max-width:800px}.hero-copy{font-size:1.16rem;max-width:720px;color:#2e4638}.actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.8rem}.trust-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;color:var(--muted);font-size:.9rem;font-weight:750}.ai-shell{position:relative;background:linear-gradient(145deg,#fff,var(--mint-50));border:1px solid var(--line);border-radius:32px;padding:1.25rem;box-shadow:var(--shadow)}.ai-shell:before{content:"";position:absolute;inset:-30px -35px auto auto;width:170px;height:170px;background:radial-gradient(circle,rgba(216,166,46,.22),transparent 70%);pointer-events:none}.ai-top{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.25rem .25rem 1rem}.status{display:inline-flex;align-items:center;gap:.45rem;font-size:.82rem;font-weight:850;color:var(--forest-600)}.dot{width:9px;height:9px;border-radius:50%;background:#2eaf63;box-shadow:0 0 0 5px rgba(46,175,99,.12)}.chat{background:var(--forest-900);color:#fff;border-radius:23px;padding:1.2rem}.chat h2{font-size:1.45rem;margin:.1rem 0 .4rem}.chat p{margin:.2rem 0 1rem;color:#d6e7dc}.quick{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}.quick button{border:1px solid #39614b;background:#123f29;color:#fff;border-radius:15px;text-align:left;padding:.8rem;cursor:pointer}.composer{margin-top:.8rem;background:#fff;border-radius:18px;padding:.7rem;border:1px solid var(--line)}.composer textarea{width:100%;min-height:95px;border:0;resize:vertical;padding:.65rem;color:var(--ink)}.composer textarea:focus{outline:0}.composer-actions{display:flex;justify-content:space-between;gap:.65rem;align-items:center;flex-wrap:wrap}.icon-actions{display:flex;gap:.45rem}.icon-btn{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}.strip{background:var(--forest-800);color:#fff}.metrics{max-width:1180px;margin:auto;padding:1.25rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}.metrics article{padding:1rem}.metrics strong{display:block;font-size:1.45rem}.metrics span{color:#cfe3d6}.section{max-width:1180px;margin:auto;padding:5.2rem 1.25rem}.section.alt{max-width:none;background:var(--mint-50)}.section-inner{max-width:1180px;margin:auto}.section-head{max-width:760px;margin-bottom:2.2rem}.section h2{font-size:clamp(2.15rem,4.5vw,4rem);line-height:1.05;letter-spacing:-.035em;margin:.5rem 0}.section-head p:last-child{color:var(--muted);font-size:1.05rem}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.45rem;box-shadow:0 10px 28px rgba(8,45,28,.05)}.card h3{margin:.25rem 0}.icon{font-size:1.8rem}.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem}.feature-large{background:linear-gradient(145deg,var(--forest-700),var(--forest-900));color:#fff;padding:2rem;border-radius:28px}.feature-large p{color:#d5e7dc}.feature-list{display:grid;gap:1rem}.feature-row{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.2rem;display:grid;grid-template-columns:auto 1fr;gap:1rem}.learning{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.course{background:#fff;border:1px solid var(--line);border-radius:22px;padding:1.35rem}.course small{font-weight:850;color:var(--forest-600)}.progress{height:8px;background:#e7eee9;border-radius:999px;overflow:hidden;margin:.85rem 0}.progress span{display:block;height:100%;background:var(--forest-600)}.impact{background:var(--forest-900);color:#fff;max-width:none}.impact .section-inner{max-width:1180px;margin:auto}.impact .card{background:#123f29;color:#fff;border-color:#315d46}.impact .card p{color:#d5e7dc}.partners{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}.partner-types{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}.partner-types div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem;font-weight:850}.responsible{display:grid;grid-template-columns:.9fr 1.1fr;gap:2rem;align-items:center}.principles{display:grid;gap:.8rem}.principles div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem}.principles strong{display:block}.sdgs{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}.sdgs span{background:#fff;border:1px solid var(--line);padding:.55rem .8rem;border-radius:999px;font-weight:800;font-size:.86rem}.notice{font-size:.88rem;color:var(--muted)}footer{background:#061b10;color:#dcebe1;padding:2.2rem 1.25rem}.foot{max-width:1180px;margin:auto;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}.foot a{color:#fff}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:900px){.hero,.platform-grid,.partners,.responsible{grid-template-columns:1fr}.grid,.learning{grid-template-columns:1fr 1fr}.menu-toggle{display:inline-flex;align-items:center;justify-content:center}.menu{display:none;position:absolute;top:72px;left:1rem;right:1rem;background:#fff;border:1px solid var(--line);border-radius:18px;padding:1rem;box-shadow:var(--shadow);flex-direction:column;align-items:stretch}.menu.open{display:flex}.menu a{padding:.65rem}.metrics{grid-template-columns:1fr 1fr}}@media(max-width:580px){.hero{padding-top:3.7rem}.hero h1{font-size:3rem}.quick,.grid,.learning,.metrics,.partner-types{grid-template-columns:1fr}.actions .button{width:100%}.composer-actions{align-items:stretch}.composer-actions .button{width:100%}.section{padding:4rem 1rem}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="AgriSmart AI is a simple mobile farming assistant for plant diagnosis, weather advice, pest control and crop guidance.">
+  <meta name="theme-color" content="#12643d">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <title>AgriSmart AI | Smart Farming for Everyone</title>
 </head>
 <body>
-<a class="skip" href="#main">Skip to main content</a>
-<header>
-  <div class="nav">
-    <a class="brand" href="../index.html">AgriLearn AI<small>Powered by World Humanitarian Support Foundation</small></a>
-    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="menu">Menu</button>
-    <nav class="menu" id="menu" aria-label="Primary navigation">
-      <a href="#platform">Platform</a><a href="#skills">Digital Skills</a><a href="#impact">Impact</a><a href="#partners">Partners</a><a href="#responsible-ai">Responsible AI</a><a class="button" href="#try">Try AgriLearn</a>
-    </nav>
-  </div>
-</header>
-<main id="main">
-  <section class="hero">
-    <div>
-      <p class="eyebrow">Responsible AI • Digital inclusion • Climate-smart livelihoods</p>
-      <h1>AI that helps communities learn, grow and thrive.</h1>
-      <p class="hero-copy">AgriLearn AI gives farmers, women, youth and community organizations practical access to agricultural guidance, digital skills and trusted learning—designed for mobile, voice and low-bandwidth environments.</p>
-      <div class="actions"><a class="button" href="#try">Start with AgriLearn</a><a class="button secondary" href="#partners">Build a partnership</a></div>
-      <div class="trust-row"><span>✓ Voice-ready</span><span>✓ Human oversight</span><span>✓ Mobile-first</span><span>✓ Built for inclusion</span></div>
-    </div>
-    <aside class="ai-shell" id="try" aria-label="AgriLearn AI demonstration">
-      <div class="ai-top"><strong>AgriLearn Assistant</strong><span class="status"><span class="dot"></span>Demo available</span></div>
-      <div class="chat">
-        <h2>Hello. How can I help today?</h2>
-        <p>Ask about a crop, a digital skill or a community programme.</p>
-        <div class="quick" aria-label="Example prompts"><button data-prompt="My maize leaves are turning yellow. What should I check first?">🌽 Check a crop symptom</button><button data-prompt="Create a beginner learning path for digital literacy.">🎓 Build a learning path</button><button data-prompt="How can women farmers use digital tools to reach markets?">📱 Explore market access</button><button data-prompt="Explain responsible AI in simple language.">🤝 Learn responsible AI</button></div>
-        <div class="composer">
-          <label class="sr-only" for="question">Ask AgriLearn</label>
-          <textarea id="question" placeholder="Type your question here..."></textarea>
-          <div class="composer-actions"><div class="icon-actions"><button class="icon-btn" id="listen" type="button" aria-label="Speak your question">🎤</button><button class="icon-btn" type="button" aria-label="Image upload coming soon" title="Image upload coming soon">📷</button><button class="icon-btn" type="button" aria-label="Document upload coming soon" title="Document upload coming soon">📄</button></div><button class="button" id="ask" type="button">Ask AgriLearn</button></div>
+  <header class="topbar">
+    <a class="brand" href="index.html">AgriSmart AI<small>Powered by World Humanitarian Support Foundation</small></a>
+    <select class="lang" id="language" aria-label="Language">
+      <option value="en">English</option>
+      <option value="yo">Yoruba</option>
+      <option value="ha">Hausa</option>
+      <option value="ig">Igbo</option>
+    </select>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Simple digital agriculture for underserved communities</p>
+        <h1>Scan. Understand. Grow smarter.</h1>
+        <p>Use your phone or tablet to check plant problems, receive weather-based advice, learn about pests and improve farm decisions.</p>
+        <div class="actions">
+          <button class="btn light" data-open="scan">📷 Scan a plant</button>
+          <button class="btn secondary" data-open="weather">🌦 Get weather advice</button>
         </div>
-        <div id="answer" role="status" aria-live="polite" style="margin-top:.9rem;padding:1rem;background:#fff;color:var(--ink);border-radius:15px">Your guidance will appear here.</div>
-        <button class="button soft" id="read" type="button" style="margin-top:.75rem">🔊 Read answer aloud</button>
       </div>
-      <p class="notice">AI-assisted educational demonstration. Important crop, financial or safety decisions should be confirmed with a qualified local professional.</p>
-    </aside>
-  </section>
+      <aside class="hero-card">
+        <span class="status"><span class="dot"></span> Mobile-ready demonstration</span>
+        <strong>Built for practical use</strong>
+        <ul>
+          <li>Large buttons and clear instructions</li>
+          <li>Phone camera and image upload support</li>
+          <li>Low-bandwidth, offline-friendly crop guides</li>
+          <li>Voice-ready and local-language prepared</li>
+        </ul>
+      </aside>
+    </section>
 
-  <section class="strip" aria-label="Platform commitments"><div class="metrics"><article><strong>Mobile-first</strong><span>Designed for affordable devices</span></article><article><strong>Voice-ready</strong><span>Less dependence on typing</span></article><article><strong>Human-reviewed</strong><span>Safety before automation</span></article><article><strong>Skills-linked</strong><span>Learning connected to livelihoods</span></article></div></section>
+    <section class="app" aria-label="AgriSmart AI tools">
+      <div class="tool-grid">
+        <button class="tool" data-open="scan"><span>📷</span><strong>Scan Plant</strong><small>Check disease or deficiency</small></button>
+        <button class="tool" data-open="weather"><span>🌦</span><strong>Weather Advice</strong><small>Plan planting, spraying and irrigation</small></button>
+        <button class="tool" data-open="pests"><span>🐛</span><strong>Pest & Disease</strong><small>Symptoms, prevention and control</small></button>
+        <button class="tool" data-open="soil"><span>🌱</span><strong>Soil & Nutrients</strong><small>Understand common deficiencies</small></button>
+        <button class="tool" data-open="guides"><span>📚</span><strong>Crop Guides</strong><small>Simple farming lessons</small></button>
+        <button class="tool" data-open="assistant"><span>🤖</span><strong>Ask AgriSmart</strong><small>Get clear farming guidance</small></button>
+        <button class="tool" data-open="alerts"><span>🚨</span><strong>Community Alerts</strong><small>Weather and pest warnings</small></button>
+        <button class="tool" data-open="about"><span>🤝</span><strong>About the Project</strong><small>Inclusive agriculture by WHSF</small></button>
+      </div>
 
-  <section id="platform" class="section">
-    <div class="section-head"><p class="eyebrow">One inclusive platform</p><h2>Practical AI for real community needs.</h2><p>AgriLearn brings agricultural support, digital learning and programme insight into one clear experience instead of making users navigate disconnected services.</p></div>
-    <div class="platform-grid">
-      <article class="feature-large"><p class="eyebrow" style="color:#9de0b6">Primary experience</p><h3 style="font-size:2rem">Ask, learn and act through conversation.</h3><p>Users can describe a crop problem, request a learning pathway, explore an opportunity or receive step-by-step guidance using plain language and voice.</p><a class="button secondary" href="#try">Try the assistant</a></article>
-      <div class="feature-list"><article class="feature-row"><div class="icon">🌱</div><div><h3>Agricultural intelligence</h3><p>Symptom guidance, weather context, planting support and escalation when confidence is low.</p></div></article><article class="feature-row"><div class="icon">🎓</div><div><h3>Digital Skills Academy</h3><p>Short, practical learning in AI literacy, cybersecurity, data, entrepreneurship and digital agriculture.</p></div></article><article class="feature-row"><div class="icon">📊</div><div><h3>Impact and partner insight</h3><p>Transparent programme metrics, beneficiary progress and evidence for partners, donors and communities.</p></div></article></div>
-    </div>
-  </section>
+      <section class="panel" id="scan" aria-labelledby="scanTitle">
+        <div class="panel-head"><div><h2 id="scanTitle">Scan a plant</h2><p class="muted">Take a clear photo of one affected leaf in natural light.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <div class="upload">
+          <strong>Upload or take a photo</strong>
+          <input id="plantImage" type="file" accept="image/*" capture="environment">
+          <img id="imagePreview" class="preview" alt="Selected plant preview">
+          <button class="btn block" id="analyzePlant">Analyze plant</button>
+        </div>
+        <div class="result" id="scanResult">Your plant assessment will appear here. AI diagnosis will be connected in the next integration step.</div>
+        <p class="notice">Do not use this tool as the only basis for pesticide or food-safety decisions. Confirm serious cases with a qualified extension officer.</p>
+      </section>
 
-  <section id="skills" class="section alt"><div class="section-inner">
-    <div class="section-head"><p class="eyebrow">Digital Skills Academy</p><h2>Learning paths built around confidence and opportunity.</h2><p>Each pathway is designed to move a learner from foundational understanding to a practical task, assessment and certificate.</p></div>
-    <div class="learning"><article class="course"><small>FOUNDATION</small><h3>Digital Literacy</h3><p>Smartphone use, online safety, communication, digital identity and records.</p><div class="progress"><span style="width:82%"></span></div><strong>Beginner friendly</strong></article><article class="course"><small>AI & DATA</small><h3>AI Literacy</h3><p>Prompting, verification, bias, privacy and responsible use of AI tools.</p><div class="progress"><span style="width:68%"></span></div><strong>Practical exercises</strong></article><article class="course"><small>LIVELIHOODS</small><h3>Digital Agriculture</h3><p>Weather tools, farm records, crop support, market discovery and planning.</p><div class="progress"><span style="width:74%"></span></div><strong>Field focused</strong></article><article class="course"><small>CAREERS</small><h3>Cybersecurity</h3><p>Passwords, scams, device protection, safe browsing and data protection.</p><div class="progress"><span style="width:61%"></span></div><strong>Safety first</strong></article><article class="course"><small>ENTERPRISE</small><h3>Business & Markets</h3><p>Digital payments, customer communication, bookkeeping and market access.</p><div class="progress"><span style="width:70%"></span></div><strong>Income oriented</strong></article><article class="course"><small>LEADERSHIP</small><h3>Women & Youth Innovation</h3><p>Community leadership, mentoring, entrepreneurship and local technology projects.</p><div class="progress"><span style="width:78%"></span></div><strong>Community powered</strong></article></div>
-  </div></section>
+      <section class="panel" id="weather" aria-labelledby="weatherTitle">
+        <div class="panel-head"><div><h2 id="weatherTitle">Weather advice</h2><p class="muted">Enter your town, village or local government area.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <div class="form-grid"><input id="weatherLocation" placeholder="Example: Ibadan, Oyo"><button class="btn" id="checkWeather">Get advice</button></div>
+        <div class="result warning" id="weatherResult">Live weather integration is being prepared. Enter a location to preview the farming advice format.</div>
+      </section>
 
-  <section id="impact" class="section impact"><div class="section-inner">
-    <div class="section-head"><p class="eyebrow" style="color:#9de0b6">Measurable inclusion</p><h2>Impact is measured by outcomes, not only activity.</h2><p style="color:#d5e7dc">The platform separates verified results, active programme data and future targets so partners and communities can understand what has actually been achieved.</p></div>
-    <div class="grid"><article class="card"><h3>Access</h3><p>Communities reached, device accessibility, bandwidth performance, languages and voice usage.</p></article><article class="card"><h3>Learning</h3><p>Courses completed, competencies demonstrated, certificates earned and learner progression.</p></article><article class="card"><h3>Livelihoods</h3><p>Reported decision confidence, digital market participation, farm records and enterprise outcomes.</p></article></div>
-  </div></section>
+      <section class="panel" id="pests" aria-labelledby="pestTitle">
+        <div class="panel-head"><div><h2 id="pestTitle">Pest and disease guide</h2><p class="muted">Start with the visible symptom and crop type.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <div class="advice-list">
+          <article class="advice"><strong>Fall armyworm — maize</strong><span class="muted">Ragged holes, leaf damage and dark waste inside the whorl.</span><p>Remove heavily damaged leaves where practical, encourage natural predators and seek locally approved control advice before applying chemicals.</p></article>
+          <article class="advice"><strong>Cassava mosaic disease</strong><span class="muted">Mottled leaves, distortion and reduced plant growth.</span><p>Remove affected plants, use disease-free cuttings and choose resistant varieties recommended for your area.</p></article>
+          <article class="advice"><strong>Tomato early blight</strong><span class="muted">Brown circular spots, often with ring patterns.</span><p>Remove infected lower leaves, improve airflow, avoid wetting foliage and rotate crops.</p></article>
+          <article class="advice"><strong>Aphids</strong><span class="muted">Clusters of small insects, curling leaves and sticky residue.</span><p>Inspect new growth, encourage beneficial insects and use approved low-risk treatment where necessary.</p></article>
+        </div>
+      </section>
 
-  <section id="partners" class="section">
-    <div class="partners"><div><p class="eyebrow">Partnerships for scale</p><h2>Built for local delivery and global collaboration.</h2><p>WHSF invites institutions that can strengthen local validation, connectivity, training, research, expert review and responsible deployment.</p><a class="button" href="../partner-sponsor.html">Become a partner</a><div class="sdgs"><span>SDG 1</span><span>SDG 2</span><span>SDG 4</span><span>SDG 5</span><span>SDG 8</span><span>SDG 9</span><span>SDG 10</span><span>SDG 13</span><span>SDG 17</span></div></div><div class="partner-types"><div>Governments</div><div>UN Agencies</div><div>NGOs</div><div>Universities</div><div>Technology Partners</div><div>Funders</div></div></div>
-  </section>
+      <section class="panel" id="soil" aria-labelledby="soilTitle">
+        <div class="panel-head"><div><h2 id="soilTitle">Soil and nutrient guidance</h2><p class="muted">Common signs can overlap, so soil testing is recommended.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <div class="guide-grid">
+          <article class="guide"><h3>Nitrogen</h3><p>Older leaves may turn pale or yellow and growth can slow.</p><strong>Action:</strong> Consider compost, well-managed manure or locally recommended nitrogen fertilizer.</article>
+          <article class="guide"><h3>Potassium</h3><p>Leaf edges may yellow or brown, especially on older leaves.</p><strong>Action:</strong> Use soil-test guidance and an appropriate potassium source.</article>
+          <article class="guide"><h3>Phosphorus</h3><p>Plants may be stunted and leaves can become unusually dark or purple.</p><strong>Action:</strong> Improve soil organic matter and apply phosphorus only at the recommended rate.</article>
+          <article class="guide"><h3>Soil health</h3><p>Healthy soil holds water, supports roots and reduces crop stress.</p><strong>Action:</strong> Add organic matter, reduce erosion and rotate crops.</article>
+        </div>
+      </section>
 
-  <section id="responsible-ai" class="section alt"><div class="section-inner responsible"><div><p class="eyebrow">Responsible AI by design</p><h2>Trust is part of the product.</h2><p>AgriLearn is designed to explain limitations, protect user data, avoid unsupported certainty and keep people involved in high-impact decisions.</p></div><div class="principles"><div><strong>Transparent assistance</strong><span>Users are told when content is AI-assisted and when information should be verified.</span></div><div><strong>Human oversight</strong><span>Uncertain and high-impact cases can be referred to qualified local experts.</span></div><div><strong>Privacy and dignity</strong><span>Personal and farm information should be collected only when necessary and handled responsibly.</span></div><div><strong>Inclusive access</strong><span>Voice, keyboard access, readable layouts and low-bandwidth design reduce participation barriers.</span></div></div></div></section>
-</main>
-<footer><div class="foot"><div><strong>AgriLearn AI</strong><br><span>A World Humanitarian Support Foundation initiative.</span></div><div><a href="../index.html">WHSF Home</a> · <a href="../contact.html">Contact</a> · <a href="../privacy.html">Privacy</a></div></div></footer>
-<script>
-const menuToggle=document.querySelector('#menuToggle'),menu=document.querySelector('#menu'),question=document.querySelector('#question'),answer=document.querySelector('#answer');
-menuToggle.addEventListener('click',()=>{const open=menu.classList.toggle('open');menuToggle.setAttribute('aria-expanded',String(open));});
-document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{menu.classList.remove('open');menuToggle.setAttribute('aria-expanded','false');}));
-document.querySelectorAll('[data-prompt]').forEach(btn=>btn.addEventListener('click',()=>{question.value=btn.dataset.prompt;question.focus();}));
-function guidance(){const q=question.value.trim();if(!q){answer.textContent='Please describe what you want help with.';return;}let text='Start by identifying your immediate goal, what you have already observed or tried, and any local conditions that may affect the answer. ';if(/yellow|spot|mosaic|pest|disease|leaf|crop|maize|cassava|tomato/i.test(q)){text+='For a crop concern, take clear photos of the whole plant and both sides of affected leaves, compare affected and healthy plants, record recent weather and farm practices, and seek confirmation from a qualified agronomist before applying treatment. ';}else if(/learn|course|digital|ai|skill|cyber/i.test(q)){text+='For a learning goal, begin with one practical task, complete a guided example, repeat it independently, and verify AI-generated information with a trusted source or facilitator. ';}else{text+='Break the request into one immediate action, one fact to verify and one person or service that can provide local support. ';}text+='This demonstration provides educational guidance and does not replace qualified professional advice.';answer.textContent=text;}
-document.querySelector('#ask').addEventListener('click',guidance);
-document.querySelector('#read').addEventListener('click',()=>{if('speechSynthesis'in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(answer.textContent));}});
-document.querySelector('#listen').addEventListener('click',()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){answer.textContent='Voice recognition is not supported in this browser. Please type your question instead.';return;}const rec=new SR();rec.lang='en-US';rec.interimResults=false;rec.onresult=e=>{question.value=e.results[0][0].transcript;guidance();};rec.onerror=()=>answer.textContent='Voice input could not start. Please type your question.';rec.start();});
-</script>
+      <section class="panel" id="guides" aria-labelledby="guideTitle">
+        <div class="panel-head"><div><h2 id="guideTitle">Crop guides</h2><p class="muted">Short lessons designed for phones and offline access.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <div class="guide-grid">
+          <article class="guide"><h3>🌽 Maize</h3><p>Site preparation, planting spacing, weed control and harvest checks.</p></article>
+          <article class="guide"><h3>🌿 Cassava</h3><p>Healthy stem selection, planting methods and disease prevention.</p></article>
+          <article class="guide"><h3>🍅 Vegetables</h3><p>Nursery care, transplanting, irrigation and safe pest control.</p></article>
+          <article class="guide"><h3>🌾 Rice</h3><p>Field preparation, water management, weed control and harvest timing.</p></article>
+        </div>
+      </section>
+
+      <section class="panel" id="assistant" aria-labelledby="assistantTitle">
+        <div class="panel-head"><div><h2 id="assistantTitle">Ask AgriSmart AI</h2><p class="muted">Describe the crop, symptom and how long the problem has been present.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <div class="form-grid"><input id="farmerQuestion" placeholder="Why are my maize leaves turning yellow?"><button class="btn" id="askAssistant">Ask</button></div>
+        <div class="result" id="assistantResult">A helpful answer will appear here. The current version provides safe demonstration guidance while the AI service is connected.</div>
+      </section>
+
+      <section class="panel" id="alerts" aria-labelledby="alertsTitle">
+        <div class="panel-head"><div><h2 id="alertsTitle">Community alerts</h2><p class="muted">Location-based alerts will be added with live data.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <div class="result warning"><strong>No active local alerts in this demonstration.</strong><p>Future alerts will cover heavy rain, flooding, drought, heat stress and pest outbreaks.</p></div>
+      </section>
+
+      <section class="panel" id="about" aria-labelledby="aboutTitle">
+        <div class="panel-head"><div><h2 id="aboutTitle">About AgriSmart AI</h2><p class="muted">A WHSF digital inclusion initiative.</p></div><button class="close" aria-label="Close">✕</button></div>
+        <p>AgriSmart AI is designed to help smallholder farmers, women, young people, extension workers and underserved communities use accessible digital tools for better agricultural decisions.</p>
+        <p>The project supports food security, climate resilience, responsible technology and inclusive livelihoods.</p>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Quick navigation">
+    <button data-open="scan"><span>📷</span>Scan</button>
+    <button data-open="weather"><span>🌦</span>Weather</button>
+    <button data-open="pests"><span>🐛</span>Pests</button>
+    <button data-open="assistant"><span>🤖</span>Ask AI</button>
+  </nav>
+
+  <script src="app.js" defer></script>
 </body>
 </html>
