@@ -15,17 +15,51 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+const ROLE_ALIASES = {
+  student: 'student',
+  learner: 'student',
+  farmer: 'student',
+  entrepreneur: 'student',
+  professional: 'student',
+  'community volunteer': 'student',
+  instructor: 'instructor',
+  teacher: 'instructor',
+  'teacher or instructor': 'instructor',
+  organization: 'organization',
+  organisation: 'organization',
+  admin: 'admin',
+  'super admin': 'super-admin'
+};
+
+export function normalizeAccountType(value = '') {
+  return ROLE_ALIASES[String(value).trim().toLowerCase()] || 'student';
+}
+
+export function dashboardForRole(role = 'student') {
+  const accountType = normalizeAccountType(role);
+  if (accountType === 'instructor') return '/agrilearn-ai/instructor';
+  if (accountType === 'organization') return '/agrilearn-ai/organization';
+  if (accountType === 'admin' || accountType === 'super-admin') return '/agrilearn-ai/admin';
+  return '/agrilearn-ai/dashboard';
+}
+
 export async function registerLearner({ name, email, password, country, role, interest }) {
   const credential = await createUserWithEmailAndPassword(auth, email, password);
+  const accountType = normalizeAccountType(role);
   await updateProfile(credential.user, { displayName: name });
   await setDoc(doc(db, 'users', credential.user.uid), {
-    name, email, country, role, interest,
-    accountType: 'student',
+    name,
+    email,
+    country,
+    role,
+    interest,
+    accountType,
+    status: accountType === 'instructor' || accountType === 'organization' ? 'pending-review' : 'active',
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   });
   await sendEmailVerification(credential.user);
-  return credential.user;
+  return { user: credential.user, accountType };
 }
 
 export async function loginLearner(email, password) {
@@ -43,6 +77,20 @@ export async function logoutLearner() {
 export async function getLearnerProfile(uid) {
   const snapshot = await getDoc(doc(db, 'users', uid));
   return snapshot.exists() ? snapshot.data() : null;
+}
+
+export async function resolveUserDashboard(user) {
+  if (!user) return '/agrilearn-ai/login';
+  const profile = await getLearnerProfile(user.uid);
+  return dashboardForRole(profile?.accountType || profile?.role || 'student');
+}
+
+export async function requireRole(user, allowedRoles = []) {
+  if (!user) return { allowed: false, redirect: '/agrilearn-ai/login', profile: null };
+  const profile = await getLearnerProfile(user.uid);
+  const accountType = normalizeAccountType(profile?.accountType || profile?.role || 'student');
+  const allowed = allowedRoles.map(normalizeAccountType).includes(accountType);
+  return { allowed, redirect: dashboardForRole(accountType), profile: { ...profile, accountType } };
 }
 
 export function observeAuth(callback) {
