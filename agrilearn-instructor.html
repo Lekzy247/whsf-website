@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Instructor Dashboard | AgriLearn AI</title>
+  <link rel="stylesheet" href="/agrilearn-app.css">
+</head>
+<body class="dashboard-shell">
+  <header class="topbar">
+    <a class="brand" href="/agrilearn-ai">AgriLearn AI<small>Instructor Portal</small></a>
+    <div><a class="btn secondary" href="/agrilearn-ai/courses">Course catalog</a> <button id="logout" class="btn danger">Sign out</button></div>
+  </header>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <h3>Instructor Portal</h3>
+      <small id="sideEmail">Loading...</small>
+      <nav class="nav">
+        <a class="active" href="/agrilearn-ai/instructor">Dashboard</a>
+        <a href="#courses">My courses</a>
+        <a href="#students">Students</a>
+        <a href="#assessments">Assessments</a>
+        <a href="#analytics">Analytics</a>
+      </nav>
+    </aside>
+    <main class="main">
+      <section class="welcome">
+        <div><span class="eyebrow">Instructor dashboard</span><h1>Welcome, <span id="displayName">Instructor</span>.</h1><p class="muted">Create learning experiences, manage learners and monitor course performance.</p></div>
+        <button class="btn" type="button" disabled>Create course — coming next</button>
+      </section>
+      <section class="stats">
+        <article class="card stat"><strong>0</strong><span>Published courses</span></article>
+        <article class="card stat"><strong>0</strong><span>Active learners</span></article>
+        <article class="card stat"><strong>0</strong><span>Pending reviews</span></article>
+        <article class="card stat"><strong>0%</strong><span>Average completion</span></article>
+      </section>
+      <section id="courses" class="card"><h2>Course workspace</h2><p class="muted">The course builder will support modules, lessons, videos, PDFs, quizzes and assignments.</p></section>
+      <section id="students" class="grid" style="margin-top:1rem">
+        <article class="card"><h3>Learner roster</h3><p class="muted">View enrolled learners and their progress.</p></article>
+        <article id="assessments" class="card"><h3>Assessments</h3><p class="muted">Create quizzes and review assignment submissions.</p></article>
+        <article id="analytics" class="card"><h3>Course analytics</h3><p class="muted">Track engagement, completion and assessment results.</p></article>
+      </section>
+      <section class="card" style="margin-top:1rem"><h2>Account status</h2><p><strong>Status:</strong> <span id="status">Checking...</span></p><p class="muted">New instructor accounts may require administrator approval before publishing courses.</p></section>
+    </main>
+  </div>
+  <script type="module">
+    import { observeAuth, requireRole, logoutLearner } from '/agrilearn-auth.js';
+    const byId = (id) => document.getElementById(id);
+    observeAuth(async (user) => {
+      if (!user) { location.replace('/agrilearn-ai/login'); return; }
+      const access = await requireRole(user, ['instructor']);
+      if (!access.allowed) { location.replace(access.redirect); return; }
+      byId('displayName').textContent = access.profile?.name || user.displayName || 'Instructor';
+      byId('sideEmail').textContent = user.email || '';
+      byId('status').textContent = (access.profile?.status || 'pending-review').replace('-', ' ');
+    });
+    byId('logout').addEventListener('click', async () => { await logoutLearner(); location.replace('/agrilearn-ai/login'); });
+  </script>
+</body>
+</html>
