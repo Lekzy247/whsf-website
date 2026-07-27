@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Organization Dashboard | AgriLearn AI</title>
+  <link rel="stylesheet" href="/agrilearn-app.css">
+</head>
+<body class="dashboard-shell">
+  <header class="topbar">
+    <a class="brand" href="/agrilearn-ai">AgriLearn AI<small>Organization Portal</small></a>
+    <div><a class="btn secondary" href="/agrilearn-ai/courses">Course catalog</a> <button id="logout" class="btn danger">Sign out</button></div>
+  </header>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <h3>Organization Portal</h3>
+      <small id="sideEmail">Loading...</small>
+      <nav class="nav">
+        <a class="active" href="/agrilearn-ai/organization">Dashboard</a>
+        <a href="#learners">Learners</a>
+        <a href="#training">Training</a>
+        <a href="#certificates">Certificates</a>
+        <a href="#reports">Reports</a>
+      </nav>
+    </aside>
+    <main class="main">
+      <section class="welcome">
+        <div><span class="eyebrow">Organization dashboard</span><h1>Welcome, <span id="displayName">Organization</span>.</h1><p class="muted">Manage workforce learning, assign courses and track institutional outcomes.</p></div>
+        <button class="btn" type="button" disabled>Invite learners — coming next</button>
+      </section>
+      <section class="stats">
+        <article class="card stat"><strong>0</strong><span>Registered learners</span></article>
+        <article class="card stat"><strong>0</strong><span>Assigned courses</span></article>
+        <article class="card stat"><strong>0</strong><span>Certificates earned</span></article>
+        <article class="card stat"><strong>0%</strong><span>Completion rate</span></article>
+      </section>
+      <section id="learners" class="card"><h2>Learner management</h2><p class="muted">Invite staff, volunteers or beneficiaries and organize them into learning groups.</p></section>
+      <section class="grid" style="margin-top:1rem">
+        <article id="training" class="card"><h3>Training assignments</h3><p class="muted">Assign courses and learning pathways to individuals or groups.</p></article>
+        <article id="certificates" class="card"><h3>Certificate tracking</h3><p class="muted">Review certificates issued across your organization.</p></article>
+        <article id="reports" class="card"><h3>Reports</h3><p class="muted">Measure participation, completion and learning impact.</p></article>
+      </section>
+      <section class="card" style="margin-top:1rem"><h2>Account status</h2><p><strong>Status:</strong> <span id="status">Checking...</span></p><p class="muted">Organization accounts may require administrator verification before inviting learners.</p></section>
+    </main>
+  </div>
+  <script type="module">
+    import { observeAuth, requireRole, logoutLearner } from '/agrilearn-auth.js';
+    const byId = (id) => document.getElementById(id);
+    observeAuth(async (user) => {
+      if (!user) { location.replace('/agrilearn-ai/login'); return; }
+      const access = await requireRole(user, ['organization']);
+      if (!access.allowed) { location.replace(access.redirect); return; }
+      byId('displayName').textContent = access.profile?.name || user.displayName || 'Organization';
+      byId('sideEmail').textContent = user.email || '';
+      byId('status').textContent = (access.profile?.status || 'pending-review').replaceAll('-', ' ');
+    });
+    byId('logout').addEventListener('click', async () => { await logoutLearner(); location.replace('/agrilearn-ai/login'); });
+  </script>
+</body>
+</html>
