@@ -4,7 +4,9 @@
   const HARVEST_KEY = 'agrismart-harvests-v1';
   const INVENTORY_KEY = 'agrismart-inventory-v1';
   const MOVEMENT_KEY = 'agrismart-inventory-movements-v1';
+  const CURRENCY_KEY = 'agrismart-currency-v1';
   const DATA_KEYS = [FARM_KEY, EXPENSE_KEY, HARVEST_KEY, INVENTORY_KEY, MOVEMENT_KEY];
+  const SUPPORTED_CURRENCIES = Object.freeze(['NGN', 'USD', 'EUR', 'GBP', 'CAD', 'AUD', 'GHS', 'KES', 'ZAR', 'XOF']);
 
   const read = key => {
     try {
@@ -13,6 +15,19 @@
     } catch {
       return [];
     }
+  };
+
+  const normalizeCurrency = value => {
+    const code = String(value || '').trim().toUpperCase();
+    return SUPPORTED_CURRENCIES.includes(code) ? code : 'NGN';
+  };
+
+  const getCurrency = () => normalizeCurrency(localStorage.getItem(CURRENCY_KEY) || 'NGN');
+  const setCurrency = value => {
+    const currency = normalizeCurrency(value);
+    localStorage.setItem(CURRENCY_KEY, currency);
+    window.dispatchEvent(new CustomEvent('agrismart:currencychange', { detail: { currency } }));
+    return currency;
   };
 
   const emitChange = (key, eventName = 'agrismart:datachange') => {
@@ -35,6 +50,7 @@
       category: String(record.category || 'Other').trim(),
       description: String(record.description || '').trim(),
       amount: normalizeMoney(record.amount),
+      currency: normalizeCurrency(record.currency || getCurrency()),
       date: record.date || new Date().toISOString().slice(0, 10),
       farmId: record.farmId || null,
       createdAt: new Date().toISOString()
@@ -52,6 +68,7 @@
       quantity: Math.max(0, Number(record.quantity) || 0),
       unit: String(record.unit || 'kg').trim(),
       revenue: normalizeMoney(record.revenue),
+      currency: normalizeCurrency(record.currency || getCurrency()),
       date: record.date || new Date().toISOString().slice(0, 10),
       farmId: record.farmId || null,
       createdAt: new Date().toISOString()
@@ -73,20 +90,23 @@
     return true;
   };
 
-  const getSummary = () => {
+  const getSummary = requestedCurrency => {
+    const currency = normalizeCurrency(requestedCurrency || getCurrency());
     const farms = read(FARM_KEY);
     const expenses = read(EXPENSE_KEY);
     const harvests = read(HARVEST_KEY);
     const inventory = read(INVENTORY_KEY);
     const movements = read(MOVEMENT_KEY);
-    const totalExpenses = expenses.reduce((sum, item) => sum + normalizeMoney(item.amount), 0);
-    const totalRevenue = harvests.reduce((sum, item) => sum + normalizeMoney(item.revenue), 0);
+    const matchesCurrency = item => normalizeCurrency(item.currency || currency) === currency;
+    const totalExpenses = expenses.filter(matchesCurrency).reduce((sum, item) => sum + normalizeMoney(item.amount), 0);
+    const totalRevenue = harvests.filter(matchesCurrency).reduce((sum, item) => sum + normalizeMoney(item.revenue), 0);
     const totalArea = farms.reduce((sum, farm) => sum + (Number(farm.size) || 0), 0);
     return {
+      currency,
       farms: farms.length,
       totalArea,
-      expenses: expenses.length,
-      harvests: harvests.length,
+      expenses: expenses.filter(matchesCurrency).length,
+      harvests: harvests.filter(matchesCurrency).length,
       inventoryItems: inventory.length,
       inventoryMovements: movements.length,
       totalExpenses,
@@ -96,12 +116,12 @@
   };
 
   const buildCsv = () => {
-    const rows = [['Record Type', 'Date', 'Farm ID', 'Category/Crop', 'Description/Unit', 'Amount/Revenue', 'Quantity']];
+    const rows = [['Record Type', 'Date', 'Farm ID', 'Category/Crop', 'Description/Unit', 'Amount/Revenue', 'Currency', 'Quantity']];
     read(EXPENSE_KEY).forEach(item => rows.push([
-      'Expense', item.date, item.farmId || '', item.category, item.description, item.amount, ''
+      'Expense', item.date, item.farmId || '', item.category, item.description, item.amount, normalizeCurrency(item.currency || getCurrency()), ''
     ]));
     read(HARVEST_KEY).forEach(item => rows.push([
-      'Harvest', item.date, item.farmId || '', item.crop, item.unit, item.revenue, item.quantity
+      'Harvest', item.date, item.farmId || '', item.crop, item.unit, item.revenue, normalizeCurrency(item.currency || getCurrency()), item.quantity
     ]));
     return rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
   };
@@ -125,6 +145,7 @@
       app: 'AgriSmart Connect',
       version: 2,
       exportedAt: new Date().toISOString(),
+      settings: { currency: getCurrency() },
       farms: read(FARM_KEY),
       expenses: read(EXPENSE_KEY),
       harvests: read(HARVEST_KEY),
@@ -145,10 +166,10 @@
     throw new Error(`Invalid backup structure: ${key} is missing`);
   };
 
-  const captureSnapshot = () => Object.fromEntries(DATA_KEYS.map(key => [key, localStorage.getItem(key)]));
+  const captureSnapshot = () => Object.fromEntries([...DATA_KEYS, CURRENCY_KEY].map(key => [key, localStorage.getItem(key)]));
 
   const restoreSnapshot = snapshot => {
-    DATA_KEYS.forEach(key => {
+    [...DATA_KEYS, CURRENCY_KEY].forEach(key => {
       if (snapshot[key] === null) localStorage.removeItem(key);
       else localStorage.setItem(key, snapshot[key]);
     });
@@ -157,6 +178,7 @@
   const notifyAllDataChanged = () => {
     [FARM_KEY, EXPENSE_KEY, HARVEST_KEY].forEach(key => emitChange(key));
     [INVENTORY_KEY, MOVEMENT_KEY].forEach(key => emitChange(key, 'agrismart:inventorychange'));
+    window.dispatchEvent(new CustomEvent('agrismart:currencychange', { detail: { currency: getCurrency() } }));
     window.dispatchEvent(new CustomEvent('agrismart:restorecomplete'));
   };
 
@@ -181,6 +203,7 @@
     const snapshot = captureSnapshot();
     try {
       DATA_KEYS.forEach(key => localStorage.setItem(key, JSON.stringify(restoredData[key])));
+      if (data.settings?.currency) localStorage.setItem(CURRENCY_KEY, normalizeCurrency(data.settings.currency));
     } catch (error) {
       try {
         restoreSnapshot(snapshot);
@@ -203,6 +226,9 @@
     getExpenses: () => read(EXPENSE_KEY),
     getHarvests: () => read(HARVEST_KEY),
     getSummary,
+    getCurrency,
+    setCurrency,
+    supportedCurrencies: SUPPORTED_CURRENCIES,
     exportCsv,
     exportBackup,
     importBackup
