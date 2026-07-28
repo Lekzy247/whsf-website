@@ -2,6 +2,8 @@
   const FARM_KEY = 'agrismart-farms-v1';
   const EXPENSE_KEY = 'agrismart-expenses-v1';
   const HARVEST_KEY = 'agrismart-harvests-v1';
+  const INVENTORY_KEY = 'agrismart-inventory-v1';
+  const MOVEMENT_KEY = 'agrismart-inventory-movements-v1';
 
   const read = key => {
     try {
@@ -12,9 +14,9 @@
     }
   };
 
-  const write = (key, value) => {
+  const write = (key, value, eventName = 'agrismart:datachange') => {
     localStorage.setItem(key, JSON.stringify(value));
-    window.dispatchEvent(new CustomEvent('agrismart:datachange', { detail: { key } }));
+    window.dispatchEvent(new CustomEvent(eventName, { detail: { key } }));
   };
 
   const normalizeMoney = value => {
@@ -70,6 +72,8 @@
     const farms = read(FARM_KEY);
     const expenses = read(EXPENSE_KEY);
     const harvests = read(HARVEST_KEY);
+    const inventory = read(INVENTORY_KEY);
+    const movements = read(MOVEMENT_KEY);
     const totalExpenses = expenses.reduce((sum, item) => sum + normalizeMoney(item.amount), 0);
     const totalRevenue = harvests.reduce((sum, item) => sum + normalizeMoney(item.revenue), 0);
     const totalArea = farms.reduce((sum, farm) => sum + (Number(farm.size) || 0), 0);
@@ -78,6 +82,8 @@
       totalArea,
       expenses: expenses.length,
       harvests: harvests.length,
+      inventoryItems: inventory.length,
+      inventoryMovements: movements.length,
       totalExpenses,
       totalRevenue,
       estimatedProfit: totalRevenue - totalExpenses
@@ -111,24 +117,46 @@
 
   const exportBackup = () => {
     const payload = {
-      version: 1,
+      app: 'AgriSmart Connect',
+      version: 2,
       exportedAt: new Date().toISOString(),
       farms: read(FARM_KEY),
       expenses: read(EXPENSE_KEY),
-      harvests: read(HARVEST_KEY)
+      harvests: read(HARVEST_KEY),
+      inventory: read(INVENTORY_KEY),
+      inventoryMovements: read(MOVEMENT_KEY)
     };
     download(JSON.stringify(payload, null, 2), `agrismart-backup-${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
   };
 
+  const validateArray = (data, key, required = true) => {
+    if (Array.isArray(data[key])) return data[key];
+    if (!required && data[key] === undefined) return [];
+    throw new Error(`Invalid backup structure: ${key} is missing`);
+  };
+
   const importBackup = async file => {
-    const data = JSON.parse(await file.text());
-    if (!data || data.version !== 1) throw new Error('Unsupported backup file');
-    if (!Array.isArray(data.farms) || !Array.isArray(data.expenses) || !Array.isArray(data.harvests)) {
-      throw new Error('Invalid backup structure');
+    let data;
+    try {
+      data = JSON.parse(await file.text());
+    } catch {
+      throw new Error('This file is not valid JSON');
     }
-    write(FARM_KEY, data.farms);
-    write(EXPENSE_KEY, data.expenses);
-    write(HARVEST_KEY, data.harvests);
+
+    if (!data || ![1, 2].includes(data.version)) throw new Error('Unsupported backup file');
+
+    const farms = validateArray(data, 'farms');
+    const expenses = validateArray(data, 'expenses');
+    const harvests = validateArray(data, 'harvests');
+    const inventory = validateArray(data, 'inventory', false);
+    const inventoryMovements = validateArray(data, 'inventoryMovements', false);
+
+    write(FARM_KEY, farms);
+    write(EXPENSE_KEY, expenses);
+    write(HARVEST_KEY, harvests);
+    write(INVENTORY_KEY, inventory, 'agrismart:inventorychange');
+    write(MOVEMENT_KEY, inventoryMovements, 'agrismart:inventorychange');
+
     return getSummary();
   };
 
