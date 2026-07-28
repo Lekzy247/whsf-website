@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="AgriSmart Connect by WHSF: crop guidance, farm records, finance, inventory, harvests, weather and market tools in one digital agriculture application.">
+  <meta name="theme-color" content="#0d4d35">
+  <title>AgriSmart Connect App | WHSF</title>
+  <link rel="icon" href="/assets/whsf-logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/agrismart-app.css">
+  <script src="/agrismart-reports.js" defer></script>
+  <script src="/agrismart-inventory.js" defer></script>
+  <script src="/agrismart-ai-advisor.js" defer></script>
+  <script src="/agrismart-app.js" defer></script>
+  <script src="/agrismart-final-app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar" aria-label="AgriSmart navigation">
+      <a class="app-brand" href="/agrismart/">
+        <img src="/assets/whsf-logo.jpg" alt="WHSF logo">
+        <span><strong>AgriSmart Connect</strong><small>Powered by WHSF</small></span>
+      </a>
+      <nav class="app-nav">
+        <button class="active" data-view="home">⌂ Dashboard</button>
+        <button data-view="scan">◎ Crop Scanner</button>
+        <button data-view="farm">⌖ Farms</button>
+        <button data-view="finance">$ Finance</button>
+        <button data-view="inventory">▦ Inventory</button>
+        <button data-view="advisor">✦ Smart Advisor</button>
+        <button data-view="marketplace">▣ Marketplace</button>
+        <button data-view="academy">◫ Academy</button>
+      </nav>
+      <div class="sidebar-card">
+        <strong>Farm intelligence in one place</strong>
+        <p>Record activities, track performance and receive practical decision support.</p>
+        <a class="primary-btn" href="/agrismart/" style="display:inline-block;text-decoration:none">AgriSmart Page</a>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="topbar">
+        <div>
+          <button class="icon-btn mobile-menu" type="button" aria-label="Open navigation">☰</button>
+          <h1 data-page-title>AgriSmart Dashboard</h1>
+          <p data-page-subtitle>Manage farm operations and make informed decisions.</p>
+        </div>
+        <div class="top-actions">
+          <span class="chip" data-connectivity>Online</span>
+          <button class="secondary-btn" type="button" data-install-app>Install App</button>
+          <a class="primary-btn" href="/agrismart/" style="text-decoration:none">AgriSmart Website</a>
+        </div>
+      </header>
+
+      <section class="view active" data-view-panel="home" data-operations-dashboard>
+        <div class="hero-panel">
+          <p>SMART FARM OPERATIONS</p>
+          <h2>Plan, record, monitor and improve your farm from one practical workspace.</h2>
+          <p>AgriSmart Connect combines farm records, crop guidance, finance, inventory, harvest management and AI-supported recommendations.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" data-view="scan">Scan a crop</button>
+            <button class="secondary-btn" data-view="finance">Record finance</button>
+            <button class="secondary-btn" data-view="inventory">Manage stock</button>
+          </div>
+        </div>
+        <div class="metric-grid" style="margin-top:18px">
+          <article class="metric-card"><span>Revenue</span><strong data-ops-revenue>$0</strong><small>Recorded harvest income</small></article>
+          <article class="metric-card"><span>Expenses</span><strong data-ops-expenses>$0</strong><small>Recorded farm costs</small></article>
+          <article class="metric-card"><span>Estimated profit</span><strong data-ops-profit>$0</strong><small><span data-ops-margin>0%</span> margin</small></article>
+          <article class="metric-card"><span>Inventory alerts</span><strong data-ops-low-stock>0</strong><small><span data-ops-out-stock>0</span> out of stock</small></article>
+        </div>
+        <div class="dashboard-grid" style="margin-top:18px">
+          <section class="panel">
+            <div class="panel-head"><div><h3>Recent activity</h3><p>Harvest, expense and stock updates.</p></div></div>
+            <div class="order-list" data-recent-activity></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>Operational alerts</h3><span class="chip">Live</span></div>
+            <div class="result-list" data-operations-alerts></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="scan">
+        <div class="scan-layout">
+          <section class="panel scan-drop">
+            <div data-scan-placeholder><div style="font-size:4rem">🌿</div><h2>Upload a clear crop image</h2><p>Photograph the affected leaf or plant in natural light.</p><label class="primary-btn" for="crop-photo">Choose crop photo</label></div>
+            <img class="scan-preview" alt="Selected crop preview"><input id="crop-photo" type="file" accept="image/*">
+          </section>
+          <section class="panel scan-result"><div class="panel-head"><h3>Diagnostic guidance</h3><span class="chip">AI preview</span></div><div data-diagnosis><div class="notice">Upload a crop image to begin. Confirm important decisions with a qualified agronomist.</div></div><button class="primary-btn" data-analyze disabled style="margin-top:18px">Analyze crop</button></section>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="farm">
+        <div class="dashboard-grid">
+          <section class="panel"><div class="panel-head"><h3>Register a farm</h3><span class="chip">Farm records</span></div><form id="farm-form" class="form-grid"><label class="field"><span>Farm name</span><input name="farmName" required></label><label class="field"><span>Main crop</span><select name="crop" required><option value="">Select crop</option><option>Maize</option><option>Cassava</option><option>Rice</option><option>Tomato</option><option>Vegetables</option></select></label><label class="field"><span>Size (hectares)</span><input name="size" type="number" min="0.1" step="0.1" required></label><label class="field"><span>Location</span><input name="location" required></label><label class="field full"><span>Notes</span><textarea name="notes" rows="3"></textarea></label><button class="primary-btn" type="submit">Save farm</button></form></section>
+          <section class="panel"><div class="panel-head"><h3>Farm location</h3><span class="chip">GPS</span></div><div class="map-box"><span class="map-pin"></span></div><button class="secondary-btn" type="button" data-use-location style="margin-top:14px">Use current location</button><p class="notice" data-location-status>Location is only accessed after permission.</p></section>
+        </div>
+        <section class="panel" style="margin-top:18px"><div class="panel-head"><h3>Your farms</h3></div><div class="order-list" data-farm-list><div class="notice">No farms recorded yet.</div></div></section>
+      </section>
+
+      <section class="view" data-view-panel="finance" data-finance-dashboard>
+        <div class="metric-grid"><article class="metric-card"><span>Total revenue</span><strong data-total-revenue>$0</strong></article><article class="metric-card"><span>Total expenses</span><strong data-total-expenses>$0</strong></article><article class="metric-card"><span>Estimated profit</span><strong data-estimated-profit>$0</strong></article><article class="metric-card"><span>Harvest records</span><strong data-harvest-count>0</strong></article></div>
+        <div class="dashboard-grid" style="margin-top:18px">
+          <section class="panel"><div class="panel-head"><h3>Add expense</h3></div><form class="form-grid" data-expense-form><label class="field"><span>Category</span><select name="category" required><option>Seeds</option><option>Fertilizer</option><option>Labour</option><option>Transport</option><option>Equipment</option><option>Other</option></select></label><label class="field"><span>Amount</span><input name="amount" type="number" min="0" step="0.01" required></label><label class="field"><span>Date</span><input name="date" type="date" required></label><label class="field full"><span>Description</span><input name="description"></label><button class="primary-btn" type="submit">Save expense</button></form></section>
+          <section class="panel"><div class="panel-head"><h3>Record harvest</h3></div><form class="form-grid" data-harvest-form><label class="field"><span>Crop</span><input name="crop" required></label><label class="field"><span>Quantity</span><input name="quantity" type="number" min="0" step="0.01" required></label><label class="field"><span>Unit</span><select name="unit"><option>kg</option><option>tonnes</option><option>bags</option><option>crates</option></select></label><label class="field"><span>Revenue</span><input name="revenue" type="number" min="0" step="0.01"></label><label class="field"><span>Date</span><input name="date" type="date" required></label><button class="primary-btn" type="submit">Save harvest</button></form></section>
+        </div>
+        <div class="dashboard-grid" style="margin-top:18px"><section class="panel"><div class="panel-head"><h3>Expenses</h3><button class="secondary-btn" data-export-csv>Export CSV</button></div><div class="order-list" data-expense-list></div></section><section class="panel"><div class="panel-head"><h3>Harvests</h3><button class="secondary-btn" data-export-backup>Backup</button></div><div class="order-list" data-harvest-list></div></section></div>
+      </section>
+
+      <section class="view" data-view-panel="inventory" data-inventory-dashboard>
+        <div class="metric-grid"><article class="metric-card"><span>Inventory items</span><strong data-inventory-count>0</strong></article><article class="metric-card"><span>Low stock</span><strong data-inventory-low>0</strong></article><article class="metric-card"><span>Out of stock</span><strong data-inventory-out>0</strong></article><article class="metric-card"><span>Categories</span><strong data-inventory-categories>0</strong></article></div>
+        <div class="dashboard-grid" style="margin-top:18px">
+          <section class="panel"><div class="panel-head"><h3>Add inventory item</h3></div><form class="form-grid" data-inventory-form><label class="field"><span>Item name</span><input name="name" required></label><label class="field"><span>Category</span><select name="category"><option>Seeds</option><option>Fertilizer</option><option>Chemicals</option><option>Tools</option><option>Packaging</option><option>Other</option></select></label><label class="field"><span>Quantity</span><input name="quantity" type="number" min="0" step="0.01" required></label><label class="field"><span>Unit</span><input name="unit" value="units" required></label><label class="field"><span>Reorder level</span><input name="reorderLevel" type="number" min="0" step="0.01" value="5"></label><label class="field"><span>Supplier</span><input name="supplier"></label><button class="primary-btn" type="submit">Add item</button></form></section>
+          <section class="panel"><div class="panel-head"><h3>Stock movement</h3></div><form class="form-grid" data-movement-form><label class="field full"><span>Inventory item</span><select name="itemId" data-item-select required><option value="">Select item</option></select></label><label class="field"><span>Movement</span><select name="type"><option value="in">Stock received</option><option value="out">Stock used</option></select></label><label class="field"><span>Quantity</span><input name="quantity" type="number" min="0.01" step="0.01" required></label><label class="field full"><span>Reason</span><input name="reason"></label><button class="primary-btn" type="submit">Record movement</button></form></section>
+        </div>
+        <section class="panel" style="margin-top:18px"><div class="panel-head"><h3>Inventory</h3><button class="secondary-btn" data-export-inventory>Export CSV</button></div><div class="order-list" data-inventory-list></div></section>
+      </section>
+
+      <section class="view" data-view-panel="advisor">
+        <div class="dashboard-grid"><section class="panel"><div class="panel-head"><h3>Smart farm advisor</h3><span class="chip">Decision support</span></div><form class="form-grid" data-advisor-form><label class="field"><span>Soil moisture (%)</span><input name="soilMoisture" type="number" min="0" max="100" value="45"></label><label class="field"><span>Temperature (°C)</span><input name="temperature" type="number" value="29"></label><label class="field"><span>Rain forecast (%)</span><input name="rainForecast" type="number" min="0" max="100" value="30"></label><label class="field"><span>Pest risk (%)</span><input name="pestRisk" type="number" min="0" max="100" value="20"></label><label class="field full"><span>Crop stage</span><select name="cropStage"><option>Planting</option><option>Vegetative</option><option>Flowering</option><option>Harvest</option></select></label><button class="primary-btn" type="submit">Generate advice</button></form></section><section class="panel"><div class="panel-head"><h3>Recommendations</h3></div><div class="result-list" data-advisor-results><div class="notice">Enter current farm conditions to generate practical recommendations.</div></div></section></div>
+      </section>
+
+      <section class="view" data-view-panel="marketplace"><div class="panel-head"><div><h3>Marketplace opportunities</h3><p>Sample listings for farm inputs, produce and services.</p></div></div><div class="market-grid"><article class="market-card"><div class="market-visual">🌽</div><div class="body"><h4>Improved maize seed</h4><p>Quality seed from a verified input supplier.</p><div class="market-meta"><span>Input</span><strong>Request quote</strong></div></div></article><article class="market-card"><div class="market-visual">💧</div><div class="body"><h4>Solar irrigation kit</h4><p>Water-efficient pumping and drip irrigation package.</p><div class="market-meta"><span>Equipment</span><strong>Request quote</strong></div></div></article><article class="market-card"><div class="market-visual">🚚</div><div class="body"><h4>Produce logistics</h4><p>Pickup and delivery support for farmer groups.</p><div class="market-meta"><span>Service</span><strong>Connect</strong></div></div></article></div></section>
+
+      <section class="view" data-view-panel="academy"><div class="hero-panel"><p>AGRISMART ACADEMY</p><h2>Build practical skills for climate-smart and technology-enabled farming.</h2><div class="hero-actions"><a class="primary-btn" href="/agrismart/training.html" style="text-decoration:none">Open Training Centre</a><a class="secondary-btn" href="/agrismart/crop-guide.html" style="text-decoration:none">Crop Guide</a></div></div></section>
+    </main>
+  </div>
+  <nav class="bottom-nav" aria-label="Mobile navigation"><button class="active" data-view="home">⌂<br>Home</button><button data-view="scan">◎<br>Scan</button><button data-view="finance">$<br>Finance</button><button data-view="inventory">▦<br>Stock</button><button data-view="advisor">✦<br>Advisor</button></nav>
+</body>
+</html>
