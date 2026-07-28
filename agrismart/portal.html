@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="AgriSmart Field Operations Portal for participants, instructors, programme managers and partners." />
+  <meta name="theme-color" content="#0b3524" />
+  <title>AgriSmart Field Operations Portal</title>
+  <link rel="icon" href="/assets/whsf-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/agrismart/portal.css" />
+  <script src="/agrismart/portal.js" defer></script>
+</head>
+<body>
+  <header class="portal-header">
+    <a class="portal-brand" href="/agrismart/"><img src="/assets/whsf-logo.jpg" alt="WHSF emblem" /><span><strong>AgriSmart</strong><small>Field Operations Portal</small></span></a>
+    <div class="header-actions"><button class="icon-button" type="button" aria-label="Notifications">🔔<span>3</span></button><button class="profile-button" type="button"><span class="avatar">AO</span><span><b>Programme Admin</b><small>WHSF AgriSmart</small></span></button></div>
+  </header>
+
+  <aside class="portal-sidebar" aria-label="Portal navigation">
+    <nav>
+      <button class="nav-item active" data-view="overview"><span>▦</span>Overview</button>
+      <button class="nav-item" data-view="participants"><span>👥</span>Participants</button>
+      <button class="nav-item" data-view="field"><span>🌱</span>Field activities</button>
+      <button class="nav-item" data-view="plots"><span>⌖</span>Farm plots</button>
+      <button class="nav-item" data-view="evidence"><span>📷</span>Evidence</button>
+      <button class="nav-item" data-view="assessment"><span>✓</span>Assessments</button>
+      <button class="nav-item" data-view="impact"><span>📊</span>Impact</button>
+    </nav>
+    <div class="sidebar-support"><span>AI</span><b>AgriSmart Assistant</b><p>Get quick field guidance.</p><button type="button" data-open-ai>Ask AI</button></div>
+  </aside>
+
+  <main class="portal-main">
+    <section class="view active" id="view-overview">
+      <div class="page-heading"><div><p>Monday, 27 July 2026</p><h1>Good afternoon, Programme Team</h1><span>Here is today's field operations summary.</span></div><div class="page-actions"><button class="secondary-action" type="button">Export report</button><button class="primary-action" type="button" data-modal="participant-modal">+ Register participant</button></div></div>
+
+      <div class="metric-grid">
+        <article><div><span>Active learners</span><strong data-count="248">248</strong><small>↑ 18 this month</small></div><i>👥</i></article>
+        <article><div><span>Attendance today</span><strong data-count="91" data-suffix="%">91%</strong><small>226 checked in</small></div><i>✓</i></article>
+        <article><div><span>Active plots</span><strong data-count="36">36</strong><small>8 crops in production</small></div><i>🌱</i></article>
+        <article><div><span>Tasks completed</span><strong data-count="84" data-suffix="%">84%</strong><small>47 due this week</small></div><i>▦</i></article>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="panel programme-progress"><div class="panel-head"><div><p>Current cohort</p><h2>Ibadan Field Academy — Cohort 01</h2></div><span class="status live">Active</span></div><div class="progress-summary"><div class="progress-ring" style="--progress:58"><b>58%</b><span>Programme complete</span></div><div class="progress-details"><div><span>Current module</span><strong>Week 7: Pest and Disease Scouting</strong></div><div class="bar"><span style="width:58%"></span></div><div class="mini-stats"><span><b>7</b> of 12 weeks</span><span><b>12</b> facilitators</span><span><b>8</b> teams</span></div></div></div></section>
+        <section class="panel weather-panel"><div class="panel-head"><div><p>Demonstration farm</p><h2>Field conditions</h2></div><span>Ibadan, NG</span></div><div class="weather-main"><span class="weather-icon">☀️</span><div><strong>29°C</strong><span>Partly sunny</span></div></div><div class="weather-stats"><span><b>68%</b>Humidity</span><span><b>12 km/h</b>Wind</span><span><b>Low</b>Rain risk</span></div><div class="field-advice">Good conditions for scouting and light irrigation after 4:00 PM.</div></section>
+      </div>
+
+      <div class="dashboard-grid lower-grid">
+        <section class="panel"><div class="panel-head"><div><p>Today's operations</p><h2>Field activity schedule</h2></div><button class="text-button" type="button" data-view-link="field">View all</button></div><div class="activity-list">
+          <article><span class="time">09:00</span><i class="dot green"></i><div><b>Tomato plot disease scouting</b><small>Teams A–D • Plot Zone B</small></div><span class="status ongoing">In progress</span></article>
+          <article><span class="time">11:30</span><i class="dot blue"></i><div><b>Digital field-record workshop</b><small>All participants • Digital Lab</small></div><span class="status upcoming">Upcoming</span></article>
+          <article><span class="time">14:00</span><i class="dot orange"></i><div><b>Drip irrigation inspection</b><small>Farm team • Irrigation Station</small></div><span class="status upcoming">Upcoming</span></article>
+          <article><span class="time">16:00</span><i class="dot purple"></i><div><b>Mentor reflection and evidence review</b><small>Facilitators • Learning Hub</small></div><span class="status upcoming">Upcoming</span></article>
+        </div></section>
+        <section class="panel"><div class="panel-head"><div><p>Action required</p><h2>Pending reviews</h2></div><span class="count-badge">12</span></div><div class="review-list"><article><span>📷</span><div><b>8 field evidence uploads</b><small>Awaiting facilitator approval</small></div><button>Review</button></article><article><span>📝</span><div><b>3 practical assessments</b><small>Scoring incomplete</small></div><button>Score</button></article><article><span>⚠️</span><div><b>1 safeguarding follow-up</b><small>Confidential action required</small></div><button>Open</button></article></div></section>
+      </div>
+    </section>
+
+    <section class="view" id="view-participants"><div class="page-heading"><div><p>Cohort management</p><h1>Participants</h1><span>Manage enrollment, teams, attendance and progress.</span></div><button class="primary-action" type="button" data-modal="participant-modal">+ Register participant</button></div><section class="panel table-panel"><div class="table-tools"><input id="participant-search" type="search" placeholder="Search participants" /><select><option>All teams</option><option>Team A</option><option>Team B</option><option>Team C</option></select><select><option>All status</option><option>Active</option><option>Needs attention</option></select></div><div class="data-table"><div class="table-row table-head"><span>Participant</span><span>Team</span><span>Attendance</span><span>Tasks</span><span>Status</span></div><div id="participant-rows"></div></div></section></section>
+
+    <section class="view" id="view-field"><div class="page-heading"><div><p>Practical delivery</p><h1>Field activities</h1><span>Plan, assign and verify every hands-on task.</span></div><button class="primary-action" type="button" data-modal="activity-modal">+ New activity</button></div><div id="activity-board" class="kanban"></div></section>
+
+    <section class="view" id="view-plots"><div class="page-heading"><div><p>Demonstration farm</p><h1>Farm plots</h1><span>Monitor plot allocation, crop stage, health and field actions.</span></div><button class="primary-action" type="button">+ Add plot</button></div><div class="plot-layout"><section class="panel farm-map"><div class="panel-head"><div><p>Interactive overview</p><h2>Plot map</h2></div><span class="status live">36 active</span></div><div class="map-grid" id="farm-map"></div></section><section class="panel" id="plot-detail"><div class="empty-detail"><span>⌖</span><h2>Select a plot</h2><p>Choose a plot on the map to see crop stage, assigned team and outstanding tasks.</p></div></section></div></section>
+
+    <section class="view" id="view-evidence"><div class="page-heading"><div><p>Digital portfolios</p><h1>Field evidence</h1><span>Review photos, measurements, reports and activity records.</span></div><button class="primary-action" type="button">Upload evidence</button></div><div class="evidence-grid" id="evidence-grid"></div></section>
+
+    <section class="view" id="view-assessment"><div class="page-heading"><div><p>Competency verification</p><h1>Practical assessments</h1><span>Score demonstrated skills and certification requirements.</span></div><button class="primary-action" type="button">Create assessment</button></div><section class="panel"><div class="assessment-overview"><article><strong>73%</strong><span>Average competency score</span></article><article><strong>201</strong><span>Learners assessment-ready</span></article><article><strong>42</strong><span>Reviews outstanding</span></article><article><strong>18</strong><span>Certificates ready</span></article></div><div class="rubric-list"><h2>Current practical rubric</h2><label><span>Identifies visible crop symptoms correctly</span><progress value="86" max="100"></progress><b>86%</b></label><label><span>Records observations and evidence accurately</span><progress value="78" max="100"></progress><b>78%</b></label><label><span>Applies safe field procedures</span><progress value="93" max="100"></progress><b>93%</b></label><label><span>Recommends appropriate next steps</span><progress value="69" max="100"></progress><b>69%</b></label></div></section></section>
+
+    <section class="view" id="view-impact"><div class="page-heading"><div><p>Monitoring and evaluation</p><h1>Impact dashboard</h1><span>Programme outputs and early outcome indicators.</span></div><button class="secondary-action" type="button">Download donor report</button></div><div class="metric-grid impact-metrics"><article><div><span>Girls and women enrolled</span><strong>192</strong><small>77% of cohort</small></div><i>♀</i></article><article><div><span>Practical hours delivered</span><strong>1,864</strong><small>Across 7 modules</small></div><i>⏱</i></article><article><div><span>Community projects</span><strong>8</strong><small>6 currently active</small></div><i>🤝</i></article><article><div><span>Produce harvested</span><strong>1.2 t</strong><small>Training and market use</small></div><i>⚖</i></article></div><div class="dashboard-grid"><section class="panel"><div class="panel-head"><div><p>Cohort progression</p><h2>Weekly completion</h2></div></div><div class="bar-chart" id="impact-bars"></div></section><section class="panel sdg-panel"><div class="panel-head"><div><p>Programme alignment</p><h2>Sustainable Development Goals</h2></div></div><div class="sdg-grid"><article><b>2</b><span>Zero Hunger</span></article><article><b>4</b><span>Quality Education</span></article><article><b>5</b><span>Gender Equality</span></article><article><b>8</b><span>Decent Work</span></article><article><b>12</b><span>Responsible Production</span></article><article><b>13</b><span>Climate Action</span></article></div></section></div></section>
+  </main>
+
+  <dialog id="participant-modal" class="portal-modal"><form method="dialog"><button class="modal-close" value="cancel" aria-label="Close">×</button><p>Enrollment</p><h2>Register participant</h2><div class="form-grid"><label>First name<input required /></label><label>Last name<input required /></label><label>Email or phone<input required /></label><label>Age group<select><option>12–15</option><option>16–18</option><option>19–24</option><option>25+</option></select></label><label>Team<select><option>Team A</option><option>Team B</option><option>Team C</option><option>Team D</option></select></label><label>Community<input /></label></div><div class="modal-actions"><button value="cancel" class="secondary-action">Cancel</button><button value="default" class="primary-action" id="save-participant">Save participant</button></div></form></dialog>
+  <dialog id="activity-modal" class="portal-modal"><form method="dialog"><button class="modal-close" value="cancel" aria-label="Close">×</button><p>Field operations</p><h2>Create activity</h2><div class="form-grid"><label class="wide">Activity title<input required /></label><label>Date<input type="date" required /></label><label>Time<input type="time" required /></label><label>Location<input /></label><label>Assigned team<select><option>All participants</option><option>Team A</option><option>Team B</option><option>Team C</option></select></label><label class="wide">Expected evidence<textarea rows="3"></textarea></label></div><div class="modal-actions"><button value="cancel" class="secondary-action">Cancel</button><button value="default" class="primary-action">Create activity</button></div></form></dialog>
+
+  <aside class="ai-drawer" id="ai-drawer" aria-hidden="true"><div class="ai-drawer-head"><div><span>AI</span><div><b>AgriSmart Assistant</b><small>Field guidance prototype</small></div></div><button type="button" data-close-ai>×</button></div><div class="ai-conversation" id="ai-conversation"><div class="ai-message">Hello. Ask me about today's field activities, crop symptoms, irrigation or farm records.</div></div><form class="ai-form" id="ai-form"><input id="ai-input" placeholder="Ask a field question…" autocomplete="off" /><button>Send</button></form></aside>
+</body>
+</html>
