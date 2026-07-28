@@ -1,10 +1,9 @@
-const CACHE_NAME = "agrismart-v3";
+const CACHE_NAME = "agrismart-v4";
 const APP_SHELL = [
   "/agrismart/",
   "/agrismart/app.html",
   "/agrismart/offline.html",
   "/agrismart/manifest.webmanifest",
-  "/agrismart/service-worker.js",
   "/agrismart/register-service-worker.js",
   "/agrismart/auth-provider.js",
   "/agrismart/cloud-sync-provider.js",
@@ -24,73 +23,95 @@ const APP_SHELL = [
 
 async function notifyClients(message) {
   const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-  clients.forEach((client) => client.postMessage(message));
+  clients.forEach(client => client.postMessage(message));
 }
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+async function cacheAppShell() {
+  const cache = await caches.open(CACHE_NAME);
+  const results = await Promise.allSettled(
+    APP_SHELL.map(async url => {
+      const request = new Request(url, { cache: "reload" });
+      const response = await fetch(request);
+      if (!response.ok) throw new Error(`Unable to cache ${url}: ${response.status}`);
+      await cache.put(request, response);
+    })
   );
+
+  const failed = results.filter(result => result.status === "rejected");
+  if (failed.length) {
+    console.warn(`AgriSmart cached with ${failed.length} optional asset failure(s).`);
+  }
+}
+
+self.addEventListener("install", event => {
+  event.waitUntil(cacheAppShell());
 });
 
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+      .then(keys => Promise.all(
+        keys.filter(key => key.startsWith("agrismart-") && key !== CACHE_NAME)
+          .map(key => caches.delete(key))
       ))
       .then(() => self.clients.claim())
       .then(() => notifyClients({ type: "AGRISMART_APP_READY", cache: CACHE_NAME }))
   );
 });
 
-self.addEventListener("message", (event) => {
-  if (event.data?.type === "AGRISMART_SKIP_WAITING") self.skipWaiting();
+self.addEventListener("message", event => {
+  if (event.data?.type === "AGRISMART_SKIP_WAITING") {
+    event.waitUntil(self.skipWaiting());
+  }
   if (event.data?.type === "AGRISMART_SYNC_REQUEST") {
-    notifyClients({ type: "AGRISMART_SYNC_REQUEST" });
+    event.waitUntil(notifyClients({ type: "AGRISMART_SYNC_REQUEST" }));
   }
 });
 
-self.addEventListener("sync", (event) => {
+self.addEventListener("sync", event => {
   if (event.tag === "agrismart-data-sync") {
     event.waitUntil(notifyClients({ type: "AGRISMART_SYNC_REQUEST" }));
   }
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+  const requestUrl = new URL(event.request.url);
 
   if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          notifyClients({ type: "AGRISMART_CONNECTIVITY", online: true });
+        .then(response => {
+          if (response.ok && requestUrl.origin === self.location.origin) {
+            const copy = response.clone();
+            event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)));
+          }
+          event.waitUntil(notifyClients({ type: "AGRISMART_CONNECTIVITY", online: true }));
           return response;
         })
         .catch(async () => {
-          notifyClients({ type: "AGRISMART_CONNECTIVITY", online: false });
-          const cached = await caches.match(event.request);
-          return cached || caches.match("/agrismart/offline.html");
+          event.waitUntil(notifyClients({ type: "AGRISMART_CONNECTIVITY", online: false }));
+          return (await caches.match(event.request)) ||
+            (await caches.match("/agrismart/app.html")) ||
+            caches.match("/agrismart/offline.html");
         })
     );
     return;
   }
 
+  if (requestUrl.origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.match(event.request).then((cached) => {
+    caches.match(event.request).then(cached => {
       const networkRequest = fetch(event.request)
-        .then((response) => {
-          if (response && response.status === 200 && response.type !== "opaque") {
+        .then(response => {
+          if (response.ok) {
             const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+            event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)));
           }
           return response;
         })
-        .catch(() => cached);
+        .catch(() => cached || Response.error());
 
       return cached || networkRequest;
     })
