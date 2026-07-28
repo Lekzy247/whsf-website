@@ -1,49 +1,88 @@
 (() => {
   'use strict';
 
-  const state = { configured: false, lastSync: null, provider: null };
+  const JOURNAL_KEY = 'agrismart.sync.journal.v1';
+  const state = {
+    configured: false,
+    lastSync: null,
+    provider: null,
+    mode: 'local',
+    recordsStored: 0
+  };
+
+  function readJournal() {
+    try {
+      const value = JSON.parse(localStorage.getItem(JOURNAL_KEY) || '[]');
+      return Array.isArray(value) ? value : [];
+    } catch (error) {
+      console.warn('AgriSmart sync journal could not be read.', error);
+      return [];
+    }
+  }
+
+  function writeJournal(records) {
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(records));
+    state.recordsStored = records.length;
+  }
 
   async function configure(options = {}) {
-    state.provider = options.provider || null;
-    state.configured = Boolean(state.provider);
-    return state.configured;
+    state.provider = options.provider || 'local-journal';
+    state.mode = options.mode || 'local';
+    state.configured = true;
+    state.recordsStored = readJournal().length;
+    return status();
   }
 
   async function push(record) {
-    if (!state.configured) throw new Error('Cloud sync provider not configured.');
-    state.lastSync = new Date().toISOString();
-    return { success: true, record, provider: state.provider, lastSync: state.lastSync };
+    if (!state.configured) throw new Error('Synchronization provider not configured.');
+    if (!record || typeof record !== 'object') throw new Error('Invalid synchronization record.');
+
+    const journal = readJournal();
+    const entry = {
+      ...record,
+      synchronizedAt: new Date().toISOString(),
+      provider: state.provider
+    };
+
+    const existingIndex = journal.findIndex(item => item.id && entry.id && item.id === entry.id);
+    if (existingIndex >= 0) journal[existingIndex] = entry;
+    else journal.push(entry);
+
+    writeJournal(journal);
+    state.lastSync = entry.synchronizedAt;
+
+    return {
+      success: true,
+      record: entry,
+      provider: state.provider,
+      mode: state.mode,
+      lastSync: state.lastSync,
+      recordsStored: state.recordsStored
+    };
   }
 
   async function pull() {
-    if (!state.configured) throw new Error('Cloud sync provider not configured.');
-    return { success: true, data: null, provider: state.provider };
+    if (!state.configured) throw new Error('Synchronization provider not configured.');
+    const data = readJournal();
+    state.recordsStored = data.length;
+    return { success: true, data, provider: state.provider, mode: state.mode };
+  }
+
+  async function clearLocalJournal() {
+    localStorage.removeItem(JOURNAL_KEY);
+    state.recordsStored = 0;
+    return true;
   }
 
   function status() {
     return { ...state };
   }
 
-  window.AgriSmartCloudSync = Object.freeze({ configure, push, pull, status });
-
-  function loadScript(src) {
-    return new Promise((resolve, reject) => {
-      if (document.querySelector(`script[src="${src}"]`)) return resolve();
-      const script = document.createElement('script');
-      script.src = src;
-      script.defer = true;
-      script.onload = resolve;
-      script.onerror = () => reject(new Error(`Unable to load ${src}`));
-      document.head.appendChild(script);
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', async () => {
-    try {
-      await loadScript('/agrismart/sync-manager.js');
-      await loadScript('/agrismart/sync-integration.js');
-    } catch (error) {
-      console.error('AgriSmart synchronization startup failed', error);
-    }
-  }, { once: true });
+  window.AgriSmartCloudSync = Object.freeze({
+    configure,
+    push,
+    pull,
+    status,
+    clearLocalJournal
+  });
 })();
