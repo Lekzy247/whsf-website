@@ -41,10 +41,14 @@ const javascriptFiles = rootEntries
   .filter(entry => entry.isFile() && entry.name.endsWith('.js'))
   .map(entry => entry.name)
   .sort();
-const htmlFiles = rootEntries
+const allHtmlFiles = rootEntries
   .filter(entry => entry.isFile() && entry.name.endsWith('.html'))
   .map(entry => entry.name)
   .sort();
+
+// Validate the AgriSmart application entry point instead of unrelated legacy pages.
+// Fall back to all root HTML files only when app.html is not present.
+const htmlFiles = allHtmlFiles.includes('app.html') ? ['app.html'] : allHtmlFiles;
 
 for (const file of javascriptFiles) {
   const result = spawnSync(process.execPath, ['--check', file], {
@@ -113,8 +117,8 @@ if (htmlFiles.length === 0) {
     pass(`Local HTML asset references checked: ${file}`);
   }
 
-  if (!appScriptLinked) fail('No HTML page references agrismart-final-app.js');
-  if (manifestPath && !manifestLinked) fail(`No HTML page links the PWA manifest: ${manifestPath}`);
+  if (!appScriptLinked) fail('AgriSmart entry page does not reference agrismart-final-app.js');
+  if (manifestPath && !manifestLinked) fail(`AgriSmart entry page does not link the PWA manifest: ${manifestPath}`);
 }
 
 try {
