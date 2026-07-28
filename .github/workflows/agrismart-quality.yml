@@ -8,7 +8,9 @@ on:
       - '*.html'
       - 'manifest.json'
       - 'manifest.webmanifest'
+      - 'vercel.json'
       - 'scripts/**'
+      - 'docs/AGRISMART-RELEASE-CHECKLIST.md'
       - '.github/workflows/agrismart-quality.yml'
   pull_request:
     paths:
@@ -16,7 +18,9 @@ on:
       - '*.html'
       - 'manifest.json'
       - 'manifest.webmanifest'
+      - 'vercel.json'
       - 'scripts/**'
+      - 'docs/AGRISMART-RELEASE-CHECKLIST.md'
       - '.github/workflows/agrismart-quality.yml'
   workflow_dispatch:
 
