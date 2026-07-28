@@ -9,6 +9,14 @@ const passes = [];
 
 const pass = message => passes.push(message);
 const fail = message => failures.push(message);
+const exists = async filePath => {
+  try {
+    await access(filePath, constants.R_OK);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 const requiredFiles = [
   'agrismart-final-app.js',
@@ -22,17 +30,17 @@ const requiredFiles = [
 ];
 
 for (const file of requiredFiles) {
-  try {
-    await access(path.join(root, file), constants.R_OK);
-    pass(`Required file exists: ${file}`);
-  } catch {
-    fail(`Missing required file: ${file}`);
-  }
+  if (await exists(path.join(root, file))) pass(`Required file exists: ${file}`);
+  else fail(`Missing required file: ${file}`);
 }
 
 const rootEntries = await readdir(root, { withFileTypes: true });
 const javascriptFiles = rootEntries
   .filter(entry => entry.isFile() && entry.name.endsWith('.js'))
+  .map(entry => entry.name)
+  .sort();
+const htmlFiles = rootEntries
+  .filter(entry => entry.isFile() && entry.name.endsWith('.html'))
   .map(entry => entry.name)
   .sort();
 
@@ -48,12 +56,9 @@ for (const file of javascriptFiles) {
 const manifestCandidates = ['manifest.json', 'manifest.webmanifest'];
 let manifestPath = null;
 for (const candidate of manifestCandidates) {
-  try {
-    await access(path.join(root, candidate), constants.R_OK);
+  if (await exists(path.join(root, candidate))) {
     manifestPath = candidate;
     break;
-  } catch {
-    // Try the next supported manifest name.
   }
 }
 
@@ -66,6 +71,11 @@ if (manifestPath) {
     if (!Array.isArray(manifest.icons) || manifest.icons.length === 0) {
       fail('PWA manifest must define at least one icon');
     } else {
+      for (const icon of manifest.icons) {
+        if (!icon?.src || /^(?:https?:|data:)/i.test(icon.src)) continue;
+        const iconPath = path.resolve(root, icon.src.replace(/^\//, ''));
+        if (!(await exists(iconPath))) fail(`PWA manifest icon does not exist: ${icon.src}`);
+      }
       pass(`PWA manifest valid: ${manifestPath}`);
     }
   } catch (error) {
@@ -73,6 +83,36 @@ if (manifestPath) {
   }
 } else {
   fail('No PWA manifest found (manifest.json or manifest.webmanifest)');
+}
+
+if (htmlFiles.length === 0) {
+  fail('No root HTML entry page found');
+} else {
+  let manifestLinked = false;
+  let appScriptLinked = false;
+
+  for (const file of htmlFiles) {
+    const html = await readFile(path.join(root, file), 'utf8');
+    const localReferences = [
+      ...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi),
+      ...html.matchAll(/<link\b[^>]*\bhref=["']([^"']+)["']/gi)
+    ].map(match => match[1]);
+
+    for (const reference of localReferences) {
+      if (/^(?:https?:|data:|mailto:|tel:|#|\/\/)/i.test(reference)) continue;
+      const cleanReference = reference.split(/[?#]/)[0];
+      if (!cleanReference) continue;
+      const referencedPath = path.resolve(path.dirname(path.join(root, file)), cleanReference.replace(/^\//, ''));
+      if (!(await exists(referencedPath))) fail(`${file} references a missing local asset: ${reference}`);
+      if (cleanReference.endsWith('agrismart-final-app.js')) appScriptLinked = true;
+      if (manifestCandidates.some(candidate => cleanReference.endsWith(candidate))) manifestLinked = true;
+    }
+
+    pass(`Local HTML asset references checked: ${file}`);
+  }
+
+  if (!appScriptLinked) fail('No HTML page references agrismart-final-app.js');
+  if (manifestPath && !manifestLinked) fail(`No HTML page links the PWA manifest: ${manifestPath}`);
 }
 
 try {
@@ -91,10 +131,10 @@ try {
 
 try {
   const reports = await readFile(path.join(root, 'agrismart-reports.js'), 'utf8');
-  for (const marker of ['inventoryMovements', 'captureSnapshot', 'restoreSnapshot', 'agrismart:restorecomplete']) {
-    if (!reports.includes(marker)) fail(`Backup/restore safeguard missing: ${marker}`);
-  }
-  pass('Backup and restore safeguards detected');
+  const safeguards = ['inventoryMovements', 'captureSnapshot', 'restoreSnapshot', 'agrismart:restorecomplete'];
+  const missingSafeguards = safeguards.filter(marker => !reports.includes(marker));
+  for (const marker of missingSafeguards) fail(`Backup/restore safeguard missing: ${marker}`);
+  if (missingSafeguards.length === 0) pass('Backup and restore safeguards detected');
 } catch (error) {
   fail(`Unable to inspect backup module: ${error.message}`);
 }
