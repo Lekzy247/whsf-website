@@ -42,6 +42,49 @@
     }
   }
 
+  function configureDataRestore() {
+    if (!reports?.importBackup || document.querySelector('[data-import-backup]')) return;
+    const backupButton = document.querySelector('[data-export-backup]');
+    if (!backupButton) return;
+
+    const importButton = document.createElement('button');
+    importButton.className = 'secondary-btn';
+    importButton.type = 'button';
+    importButton.dataset.importBackup = '';
+    importButton.textContent = 'Restore Backup';
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'application/json,.json';
+    fileInput.hidden = true;
+    fileInput.setAttribute('aria-label', 'Select an AgriSmart backup file');
+
+    backupButton.insertAdjacentElement('afterend', importButton);
+    importButton.insertAdjacentElement('afterend', fileInput);
+
+    importButton.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      const approved = confirm('Restoring this backup will replace the current farm, expense and harvest records on this device. Continue?');
+      if (!approved) { fileInput.value = ''; return; }
+
+      importButton.disabled = true;
+      importButton.textContent = 'Restoring...';
+      try {
+        const summary = await reports.importBackup(file);
+        renderAll();
+        toast(`Backup restored: ${summary.farms} farms, ${summary.expenses} expenses and ${summary.harvests} harvests.`);
+      } catch (error) {
+        toast(error.message || 'Unable to restore this backup.', 'error');
+      } finally {
+        fileInput.value = '';
+        importButton.disabled = false;
+        importButton.textContent = 'Restore Backup';
+      }
+    });
+  }
+
   function setDefaultDates() {
     document.querySelectorAll('input[type="date"]').forEach(input => { if (!input.value) input.value = today(); });
   }
@@ -173,6 +216,7 @@
   installButton?.addEventListener('click', async () => { if (!installPrompt) { toast('Use your browser menu to install this app.'); return; } installPrompt.prompt(); await installPrompt.userChoice; installPrompt = null; });
 
   configurePwa();
+  configureDataRestore();
   setDefaultDates();
   updateConnectivity();
   renderAll();
