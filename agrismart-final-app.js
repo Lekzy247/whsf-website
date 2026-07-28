@@ -25,6 +25,23 @@
     setTimeout(() => item.remove(), 3400);
   }
 
+  function configurePwa() {
+    if (!document.querySelector('link[rel="manifest"]')) {
+      const manifest = document.createElement('link');
+      manifest.rel = 'manifest';
+      manifest.href = '/agrismart/manifest.webmanifest';
+      document.head.appendChild(manifest);
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/agrismart/service-worker.js')
+          .then(registration => console.info('AgriSmart offline support active:', registration.scope))
+          .catch(error => console.error('AgriSmart offline support failed:', error));
+      }, { once: true });
+    }
+  }
+
   function setDefaultDates() {
     document.querySelectorAll('input[type="date"]').forEach(input => { if (!input.value) input.value = today(); });
   }
@@ -155,6 +172,7 @@
   window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; if (installButton) installButton.hidden = false; });
   installButton?.addEventListener('click', async () => { if (!installPrompt) { toast('Use your browser menu to install this app.'); return; } installPrompt.prompt(); await installPrompt.userChoice; installPrompt = null; });
 
+  configurePwa();
   setDefaultDates();
   updateConnectivity();
   renderAll();
