@@ -1,0 +1,59 @@
+name: AgriSmart Quality Gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.js'
+      - '*.html'
+      - 'manifest.json'
+      - 'manifest.webmanifest'
+      - 'scripts/**'
+      - '.github/workflows/agrismart-quality.yml'
+  pull_request:
+    paths:
+      - '*.js'
+      - '*.html'
+      - 'manifest.json'
+      - 'manifest.webmanifest'
+      - 'scripts/**'
+      - '.github/workflows/agrismart-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agrismart-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate MVP release readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run AgriSmart release validator
+        run: node scripts/validate-agrismart.mjs
+
+      - name: Publish validation summary
+        if: always()
+        run: |
+          {
+            echo '## AgriSmart quality gate'
+            echo
+            if [ "${{ job.status }}" = "success" ]; then
+              echo 'All automated release-readiness checks passed.'
+            else
+              echo 'One or more automated release-readiness checks failed. Review the validation step above.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
