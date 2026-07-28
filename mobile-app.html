@@ -1,358 +1,245 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="WHSF Mobile App equips donors, volunteers and members with a branded mobile experience to stay connected wherever they are." />
-    <meta name="theme-color" content="#6d1024" />
-    <title>WHSF Mobile App | Donors, Volunteers & Members</title>
-    <link rel="icon" href="assets/whsf-logo.jpg" />
-    <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="WHSF" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to main content</a>
-    <div class="utility-bar">
-      <div class="shell utility-inner">
-        <p>Advancing dignity, inclusion and sustainable development</p>
-        <div class="utility-actions" aria-label="Accessibility controls">
-          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
-          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
-          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
-        </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="AgriSmart Connect is WHSF's digital agriculture platform for crop diagnostics, farm management, weather intelligence, markets, services and learning.">
+  <meta name="theme-color" content="#0d4d35">
+  <title>AgriSmart Connect | WHSF</title>
+  <link rel="icon" href="assets/whsf-logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="agrismart-app.css">
+  <script src="agrismart-app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar" aria-label="AgriSmart navigation">
+      <a class="app-brand" href="index.html">
+        <img src="assets/whsf-logo.jpg" alt="WHSF logo">
+        <span><strong>AgriSmart Connect</strong><small>Powered by WHSF</small></span>
+      </a>
+      <nav class="app-nav">
+        <button class="active" data-view="home">⌂ Overview</button>
+        <button data-view="scan">◎ AI Crop Scanner</button>
+        <button data-view="weather">☀ Farm Weather</button>
+        <button data-view="farm">⌖ My Farm</button>
+        <button data-view="marketplace">▣ Marketplace</button>
+        <button data-view="services">⚙ Services</button>
+        <button data-view="academy">◫ Academy</button>
+        <button data-view="assistant">✦ AI Assistant</button>
+      </nav>
+      <div class="sidebar-card">
+        <strong>Innovation for every farmer</strong>
+        <p>Digital tools designed to support smarter decisions, stronger yields and better market access.</p>
+        <a class="primary-btn" href="agrismart/index.html" style="display:inline-block;text-decoration:none">Visit AgriSmart</a>
       </div>
-    </div>
+    </aside>
 
-    <header class="site-header" id="top">
-      <div class="shell nav-wrap">
-        <a class="brand" href="index.html" aria-label="WHSF home">
-          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
-          <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
-        </a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-          <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
-        </button>
-        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-          <a href="index.html">Home</a>
-          <a href="programs.html">Programs</a>
-          <a href="blog.html">Blog</a><a href="e-classroom.html">e-learning</a>
-          <a href="impact-dashboard.html">Impact</a>
-          <a href="partner-sponsor.html">Partner &amp; Sponsor</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
-    </header>
+    <main class="app-main">
+      <header class="topbar">
+        <div>
+          <button class="icon-btn mobile-menu" type="button" aria-label="Open navigation">☰</button>
+          <h1 data-page-title>Good evening, Farmer</h1>
+          <p data-page-subtitle>Here is today’s farm intelligence and activity.</p>
+        </div>
+        <div class="top-actions">
+          <button class="secondary-btn" type="button">Notifications</button>
+          <a class="primary-btn" href="index.html" style="text-decoration:none">WHSF Website</a>
+        </div>
+      </header>
 
-    <main id="main">
-      <section class="mobile-app-hero" aria-labelledby="mobile-app-title">
-        <div class="shell mobile-app-hero-grid">
-          <div class="reveal">
-            <p class="eyebrow eyebrow-light">WHSF Innovation Project</p>
-            <h1 id="mobile-app-title">WHSF Mobile App</h1>
-            <p class="hero-lead">Equip donors, volunteers, partners, students and members with a branded mobile app so the WHSF community can stay connected, informed and active wherever they are.</p>
-            <div class="hero-actions">
-              <button class="button button-light" type="button" data-install-pwa>Install WHSF App</button>
-              <a class="button button-light" href="#mobile-portal">Open app portal</a>
-              <a class="button button-light" href="mobile-app-admin.html">Admin Login</a>
-            </div>
+      <section class="view active" data-view-panel="home">
+        <div class="hero-panel">
+          <p>AGRICULTURE, POWERED BY INTELLIGENCE</p>
+          <h2>One platform for healthier crops, stronger farms and better markets.</h2>
+          <p>Use practical digital tools for crop diagnostics, local weather planning, farm records, agricultural services, learning and market access.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" data-view="scan">Scan a crop</button>
+            <button class="secondary-btn" data-view="farm">Add your farm</button>
+            <button class="secondary-btn" data-view="marketplace">Explore market</button>
           </div>
-          <div class="mobile-phone-card reveal delay-one" aria-label="WHSF mobile app preview">
-            <div class="phone-shell">
-              <div class="phone-top"></div>
-              <img src="assets/whsf-logo.jpg" alt="WHSF logo" />
-              <strong>WHSF Connect</strong>
-              <span>Donors • Volunteers • Members</span>
-              <div class="phone-menu">
-                <p><b>Impact Feed</b><small>New robotics outreach update</small></p>
-                <p><b>Volunteer Task</b><small>Confirm Saturday mentoring session</small></p>
-                <p><b>Member Hub</b><small>3 new WHSF announcements</small></p>
-              </div>
+        </div>
+
+        <div class="metric-grid">
+          <article class="metric-card"><span>Crop health score</span><strong>82%</strong><small>Stable this week</small></article>
+          <article class="metric-card"><span>Active fields</span><strong>4</strong><small>12.6 hectares</small></article>
+          <article class="metric-card"><span>Rain outlook</span><strong>68%</strong><small>Next 48 hours</small></article>
+          <article class="metric-card"><span>Market opportunities</span><strong>9</strong><small>Near your region</small></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-head"><div><h3>Quick actions</h3><p>Start with the tools you use most.</p></div></div>
+            <div class="quick-grid">
+              <button class="quick-action" data-view="scan">📷<b>Scan crop</b><span>Check visible symptoms</span></button>
+              <button class="quick-action" data-view="weather">🌦️<b>Weather plan</b><span>Review farm conditions</span></button>
+              <button class="quick-action" data-view="farm">🌱<b>Add field</b><span>Build farm records</span></button>
+              <button class="quick-action" data-view="marketplace">🛒<b>Buy inputs</b><span>Explore products</span></button>
+              <button class="quick-action" data-view="services">🚜<b>Book service</b><span>Find farm support</span></button>
+              <button class="quick-action" data-view="assistant">✨<b>Ask AgriSmart</b><span>Get guided answers</span></button>
             </div>
-          </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>Farm health</h3><span class="chip">Good</span></div>
+            <div class="health-ring"></div>
+            <p style="text-align:center;color:var(--muted)">Most fields are performing well. Review Field B for early yellowing symptoms.</p>
+          </section>
         </div>
       </section>
 
-      <section class="section section-tint" id="mvp-features">
-        <div class="shell">
-          <div class="section-heading centered reveal">
-            <p class="eyebrow">App features</p>
-            <h2>Simple tools for action, learning and collaboration.</h2>
-          </div>
-          <div class="mobile-feature-grid">
-            <article class="global-feature-card reveal"><span>01</span><h3>Impact Feed</h3><p>Real-time WHSF stories, programme updates, photos, videos and field progress for donors, volunteers and members.</p></article>
-            <article class="global-feature-card reveal"><span>02</span><h3>Community Chat</h3><p>Volunteers, donors, members, partners and students can share updates, coordinate support and stay connected.</p></article>
-            <article class="global-feature-card reveal"><span>03</span><h3>Donor Giving Portal</h3><p>Donation links, campaign pages, giving history guidance, impact reports and sponsor updates in one branded experience.</p></article>
-            <article class="global-feature-card reveal"><span>04</span><h3>Video Rooms</h3><p>Create meeting links for mentoring, donor briefings, volunteer coordination, student support and partner conversations.</p></article>
-            <article class="global-feature-card reveal"><span>05</span><h3>Member Dashboard</h3><p>Membership profile, announcements, certificates, e-learning links, programme invitations and community updates.</p></article>
-            <article class="global-feature-card reveal"><span>06</span><h3>Alerts & Support</h3><p>Receive important reminders, contact WHSF, request support and find the right programme contact faster.</p></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section mobile-portal-section" id="mobile-portal" aria-labelledby="mobile-portal-title">
-        <div class="shell">
-          <div class="section-heading centered reveal">
-            <p class="eyebrow">WHSF Connect portal</p>
-            <h2 id="mobile-portal-title">A secure collaborative space for WHSF users.</h2>
-            <p>Volunteers, partners, students, members and donors can sign in to a guided dashboard, follow impact updates, manage tasks and connect with WHSF support.</p>
-            <p class="form-hint"><a class="arrow-link" href="mobile-app-admin.html">WHSF staff admin login <span>→</span></a></p>
-          </div>
-
-          <div class="mobile-portal-grid">
-            <aside class="mobile-login-card reveal" aria-label="WHSF mobile app sign in">
-              <div class="mobile-login-header">
-                <img src="assets/whsf-logo.jpg" alt="WHSF logo" />
-                <div>
-                  <span>WHSF Connect</span>
-                  <strong>Secure member login</strong>
-                </div>
-              </div>
-              <div class="auth-mode-toggle" role="tablist" aria-label="Account access mode">
-                <button type="button" class="active" data-auth-mode="create">Create account</button>
-                <button type="button" data-auth-mode="signin">Sign in</button>
-              </div>
-              <form id="mobile-app-login-form" class="mobile-login-form">
-                <label for="mobile-user-name">Full name</label>
-                <input id="mobile-user-name" name="name" type="text" autocomplete="name" placeholder="Enter your full name" required data-create-required />
-
-                <label for="mobile-user-email">Email address</label>
-                <input id="mobile-user-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
-
-                <label for="mobile-user-password">Password</label>
-                <input id="mobile-user-password" name="password" type="password" autocomplete="current-password" minlength="8" placeholder="Enter your password" required />
-
-                <div data-confirm-password-wrap>
-                  <label for="mobile-user-password-confirm">Confirm password</label>
-                  <input id="mobile-user-password-confirm" name="passwordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm your password" required data-create-required />
-                </div>
-
-                <label for="mobile-user-role">User role</label>
-                <select id="mobile-user-role" name="role" required data-create-required>
-                  <option value="">Choose your role</option>
-                  <option value="volunteer">Volunteer</option>
-                  <option value="partner">Partner</option>
-                  <option value="student">Student</option>
-                  <option value="member">Member</option>
-                  <option value="donor">Donor</option>
-                </select>
-
-                <p class="form-hint">Create an account before using the WHSF app portal. Accounts and chat are protected with secure authentication.</p>
-
-                <button class="button" type="submit" data-auth-submit>Create Account</button>
-                <p id="mobile-login-status" class="form-status" role="status" aria-live="polite"></p>
-              </form>
-            </aside>
-
-            <div class="mobile-dashboard-card reveal delay-one" data-mobile-dashboard hidden>
-              <div class="mobile-dashboard-topbar">
-                <div>
-                  <p class="eyebrow">Signed in</p>
-                  <h3 data-mobile-welcome>Welcome to WHSF Connect</h3>
-                  <span data-mobile-role-summary>Role-based dashboard</span>
-                </div>
-                <button class="text-button" type="button" data-mobile-signout>Sign out</button>
-              </div>
-
-              <div class="mobile-dashboard-tabs" role="tablist" aria-label="Mobile app dashboard sections">
-                <button type="button" class="active" data-mobile-tab="impact">Impact Feed</button>
-                <button type="button" data-mobile-tab="volunteer">Volunteer Hub</button>
-                <button type="button" data-mobile-tab="donor">Donor Hub</button>
-                <button type="button" data-mobile-tab="member">Member Dashboard</button>
-                <button type="button" data-mobile-tab="chat">Community Chat</button>
-                <button type="button" data-mobile-tab="video">Video Rooms</button>
-                <button type="button" data-mobile-tab="notifications">Notifications</button>
-              </div>
-
-              <div class="mobile-dashboard-panels">
-                <section class="mobile-dashboard-panel active" data-mobile-panel="impact">
-                  <div class="portal-panel-heading">
-                    <h4>Impact feed</h4>
-                    <button type="button" class="mini-action" data-add-impact-update>Add update</button>
-                  </div>
-                  <div class="impact-feed-list" data-impact-feed>
-                    <article><span>Education access</span><strong>7,500+ girls impacted through WHSF technology and education programmes.</strong><p>Programme teams can publish field updates, photos, stories and measurable results for supporters.</p></article>
-                    <article><span>e-learning</span><strong>New digital learning pathway available.</strong><p>Students can continue learning, track progress and access certificates from WHSF learning pages.</p></article>
-                    <article><span>Volunteer action</span><strong>Mentorship session planning in progress.</strong><p>Coordinators can share event needs and invite volunteers to support upcoming programmes.</p></article>
-                  </div>
-                </section>
-
-                <section class="mobile-dashboard-panel" data-mobile-panel="volunteer">
-                  <div class="portal-panel-heading">
-                    <h4>Volunteer hub</h4>
-                    <span data-volunteer-progress>0 of 3 tasks completed</span>
-                  </div>
-                  <div class="task-list" data-volunteer-tasks>
-                    <label><input type="checkbox" /> Confirm availability for mentoring session</label>
-                    <label><input type="checkbox" /> Review safeguarding and programme guidance</label>
-                    <label><input type="checkbox" /> Submit service-hour update after activity</label>
-                  </div>
-                  <div class="collaboration-board">
-                    <label for="mobile-collab-note">Collaboration note</label>
-                    <textarea id="mobile-collab-note" rows="4" placeholder="Share a short update for WHSF coordinators, partners or team members."></textarea>
-                    <button class="button" type="button" data-save-collab-note>Save note</button>
-                    <p data-collab-status class="form-status" role="status" aria-live="polite"></p>
-                  </div>
-                </section>
-
-                <section class="mobile-dashboard-panel" data-mobile-panel="donor">
-                  <div class="portal-panel-heading">
-                    <h4>Donor hub</h4>
-                    <span>Transparent giving and impact</span>
-                  </div>
-                  <div class="portal-action-grid">
-                    <a class="portal-action-card" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer"><strong>Donate securely</strong><span>Open the official WHSF PayPal charity page.</span></a>
-                    <a class="portal-action-card" href="impact-dashboard.html"><strong>View impact dashboard</strong><span>See programme reach, training outcomes and public impact metrics.</span></a>
-                    <a class="portal-action-card" href="contact.html"><strong>Request donor update</strong><span>Contact WHSF for campaign, reporting or partnership support.</span></a>
-                  </div>
-                </section>
-
-                <section class="mobile-dashboard-panel" data-mobile-panel="member">
-                  <div class="portal-panel-heading">
-                    <h4>Member dashboard</h4>
-                    <span>Learning, certificates and announcements</span>
-                  </div>
-                  <div class="portal-action-grid">
-                    <a class="portal-action-card" href="e-classroom.html"><strong>Continue e-learning</strong><span>Open WHSF technology training and learner dashboard.</span></a>
-                    <a class="portal-action-card" href="verify-certificate.html"><strong>Verify certificate</strong><span>Check WHSF-issued certificates using the verification page.</span></a>
-                    <a class="portal-action-card" href="programs.html"><strong>Explore programmes</strong><span>View WHSF learning, robotics, drone, ICT and community programmes.</span></a>
-                  </div>
-                </section>
-
-                <section class="mobile-dashboard-panel" data-mobile-panel="chat">
-                  <div class="portal-panel-heading">
-                    <h4>Community chat</h4>
-                    <span>Volunteers • Donors • Partners • Members • Students</span>
-                  </div>
-                  <div class="chat-room-tabs" role="tablist" aria-label="Community chat rooms">
-                    <button type="button" class="active" data-chat-room="volunteers">Volunteers</button>
-                    <button type="button" data-chat-room="donors">Donors</button>
-                    <button type="button" data-chat-room="students">Students</button>
-                    <button type="button" data-chat-room="partners">Partners</button>
-                    <button type="button" data-chat-room="members">Members</button>
-                    <button type="button" data-chat-room="technology">Technology Advancement</button>
-                    <button type="button" data-chat-room="impact">Community Impact</button>
-                    <button type="button" data-chat-room="trends">Tech Trends</button>
-                    <button type="button" data-chat-room="events">Global Tech Events</button>
-                    <button type="button" data-chat-room="exchange">Student Exchange</button>
-                    <button type="button" data-chat-room="opportunities">Opportunities</button>
-                    <button type="button" data-chat-room="employment">Employment</button>
-                    <button type="button" data-chat-room="entrepreneurship">Entrepreneurship</button>
-                    <button type="button" data-chat-room="networking">Networking</button>
-                    <button type="button" data-chat-room="safeguarding">Support & Safeguarding</button>
-                  </div>
-                  <div class="collaboration-topic-grid" aria-label="Collaboration focus areas">
-                    <button type="button" data-chat-room-shortcut="technology"><strong>Technology advancement</strong><span>AI, robotics, cybersecurity, drones, accessibility and data skills.</span></button>
-                    <button type="button" data-chat-room-shortcut="impact"><strong>Community impact</strong><span>Field stories, outcomes, donor-visible results and programme needs.</span></button>
-                    <button type="button" data-chat-room-shortcut="trends"><strong>Technology trends</strong><span>Emerging tools, responsible innovation and future-ready skills.</span></button>
-                    <button type="button" data-chat-room-shortcut="events"><strong>Tech events worldwide</strong><span>Conferences, webinars, hackathons, competitions and showcases.</span></button>
-                    <button type="button" data-chat-room-shortcut="exchange"><strong>Student exchange</strong><span>Mentorship, virtual classrooms, cultural learning and international exposure.</span></button>
-                    <button type="button" data-chat-room-shortcut="opportunities"><strong>Scholarships & careers</strong><span>Scholarships, fellowships, internships, grants and entrepreneurship support.</span></button>
-                    <button type="button" data-chat-room-shortcut="employment"><strong>Employment opportunities</strong><span>Jobs, internships, apprenticeships, remote work and workplace readiness.</span></button>
-                    <button type="button" data-chat-room-shortcut="entrepreneurship"><strong>Entrepreneurship</strong><span>Startup ideas, digital business, social enterprise and income generation.</span></button>
-                    <button type="button" data-chat-room-shortcut="networking"><strong>Networking</strong><span>Mentor links, partner introductions, alumni support and global connections.</span></button>
-                  </div>
-                  <div class="chat-room-meta">
-                    <strong data-chat-room-title>Volunteers room</strong>
-                    <span data-chat-room-description>Coordinate service activities, mentorship and event support.</span>
-                  </div>
-                  <div class="community-chat-box" data-community-chat aria-live="polite"></div>
-                  <form class="community-chat-form" data-community-chat-form>
-                    <label for="community-chat-message" class="sr-only">Write a message</label>
-                    <input id="community-chat-message" name="message" type="text" placeholder="Write a collaboration message..." required />
-                    <button class="button" type="submit">Send</button>
-                  </form>
-                  <div class="admin-announcement-card" hidden>
-                    <strong>WHSF admin announcement</strong>
-                    <p>Post one message to every room for important reminders, programme updates or urgent support notices.</p>
-                    <form data-admin-announcement-form>
-                      <label for="admin-announcement-message" class="sr-only">Announcement message</label>
-                      <input id="admin-announcement-message" name="announcement" type="text" placeholder="Write announcement for all rooms..." required />
-                      <button class="mini-action" type="submit">Send announcement</button>
-                    </form>
-                    <p class="form-hint">Announcement access is restricted to WHSF admin accounts.</p>
-                  </div>
-                  <p class="moderation-notice">Moderation notice: keep messages respectful, safeguarding-aware and programme-related. Shared chat history can later be connected to protected WHSF user accounts for secure records.</p>
-                </section>
-
-                <section class="mobile-dashboard-panel" data-mobile-panel="video">
-                  <div class="portal-panel-heading">
-                    <h4>Video rooms</h4>
-                    <span>Mentoring, donor meetings and team collaboration</span>
-                  </div>
-                  <div class="video-room-grid">
-                    <article>
-                      <strong>Mentorship room</strong>
-                      <p>For students, mentors and TechWomen learning support.</p>
-                      <a class="arrow-link" href="https://meet.google.com/new" target="_blank" rel="noreferrer">Open meeting room <span>→</span></a>
-                    </article>
-                    <article>
-                      <strong>Volunteer briefing</strong>
-                      <p>For volunteer orientation, task review and event planning.</p>
-                      <a class="arrow-link" href="https://meet.google.com/new" target="_blank" rel="noreferrer">Start briefing <span>→</span></a>
-                    </article>
-                    <article>
-                      <strong>Partner and donor meeting</strong>
-                      <p>For programme presentations, impact updates and collaboration calls.</p>
-                      <a class="arrow-link" href="contact.html">Request meeting <span>→</span></a>
-                    </article>
-                  </div>
-                </section>
-
-                <section class="mobile-dashboard-panel" data-mobile-panel="notifications">
-                  <div class="portal-panel-heading">
-                    <h4>Push notification preferences</h4>
-                    <button type="button" class="mini-action" data-request-notifications>Enable browser alerts</button>
-                  </div>
-                  <div class="notification-preferences">
-                    <label><input type="checkbox" checked /> Programme announcements</label>
-                    <label><input type="checkbox" checked /> Volunteer reminders</label>
-                    <label><input type="checkbox" checked /> e-learning and certificate updates</label>
-                    <label><input type="checkbox" /> Donor campaign updates</label>
-                    <label><input type="checkbox" /> Partner and event opportunities</label>
-                  </div>
-                  <p class="security-note">WHSF will only send important alerts, reminders and programme updates with user consent.</p>
-                  <p data-notification-status class="form-status" role="status" aria-live="polite"></p>
-                </section>
-              </div>
+      <section class="view" data-view-panel="scan">
+        <div class="scan-layout">
+          <section class="panel scan-drop">
+            <div data-scan-placeholder>
+              <div style="font-size:4rem">🌿</div>
+              <h2>Upload a clear crop image</h2>
+              <p>Photograph the affected leaf or plant in natural light and keep the symptom in focus.</p>
+              <label class="primary-btn" for="crop-photo">Choose crop photo</label>
             </div>
-          </div>
+            <img class="scan-preview" alt="Selected crop preview">
+            <input id="crop-photo" type="file" accept="image/*">
+          </section>
+          <section class="panel scan-result">
+            <div class="panel-head"><h3>Diagnostic guidance</h3><span class="chip">AI preview</span></div>
+            <div data-diagnosis>
+              <div class="notice">Upload a crop image to begin. Results are educational guidance and should be confirmed by an agronomist where possible.</div>
+            </div>
+            <button class="primary-btn" data-analyze disabled style="margin-top:18px">Analyze crop</button>
+          </section>
         </div>
       </section>
 
-      <section class="section">
-        <div class="shell impact-report-card">
-          <div>
-            <h2>A WHSF app can turn supporters into an always-connected action community.</h2>
-            <p>Donors see impact, volunteers stay organised, and members stay connected to WHSF wherever they are.</p>
+      <section class="view" data-view-panel="weather">
+        <div class="weather-grid">
+          <article class="weather-card"><span>Current</span><strong>29°C</strong><p>Partly cloudy</p></article>
+          <article class="weather-card"><span>Rain chance</span><strong>68%</strong><p>Likely after 4 PM</p></article>
+          <article class="weather-card"><span>Humidity</span><strong>74%</strong><p>Moderate disease risk</p></article>
+          <article class="weather-card"><span>Wind</span><strong>11 km/h</strong><p>Spraying caution</p></article>
+        </div>
+        <div class="dashboard-grid" style="margin-top:18px">
+          <section class="panel">
+            <div class="panel-head"><h3>7-day farm outlook</h3><span class="chip">Demo forecast</span></div>
+            <div class="order-list">
+              <div class="order-item"><div><strong>Monday</strong><div>Warm with afternoon rain</div></div><span>30° / 23°</span></div>
+              <div class="order-item"><div><strong>Tuesday</strong><div>Cloudy, scattered showers</div></div><span>28° / 22°</span></div>
+              <div class="order-item"><div><strong>Wednesday</strong><div>Dry morning, humid evening</div></div><span>31° / 23°</span></div>
+              <div class="order-item"><div><strong>Thursday</strong><div>Heavy rain possible</div></div><span>27° / 21°</span></div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>Recommended actions</h3></div>
+            <div class="result-list">
+              <article><strong>Planting</strong><p>Delay planting in poorly drained fields until heavy rainfall risk reduces.</p></article>
+              <article><strong>Spraying</strong><p>Avoid spraying before expected rainfall and during strong wind.</p></article>
+              <article><strong>Irrigation</strong><p>Check soil moisture before watering; rainfall may meet short-term needs.</p></article>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="farm">
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-head"><h3>Register a farm or field</h3><span class="chip">Farm records</span></div>
+            <form id="farm-form" class="form-grid">
+              <label class="field"><span>Farm name</span><input name="farmName" required placeholder="e.g. Sunrise Farm"></label>
+              <label class="field"><span>Main crop</span><select name="crop" required><option value="">Select crop</option><option>Maize</option><option>Cassava</option><option>Rice</option><option>Tomato</option><option>Yam</option><option>Vegetables</option></select></label>
+              <label class="field"><span>Farm size (hectares)</span><input name="size" type="number" min="0.1" step="0.1" required placeholder="2.5"></label>
+              <label class="field"><span>Location</span><input name="location" required placeholder="Town or community"></label>
+              <label class="field full"><span>Notes</span><textarea name="notes" rows="3" placeholder="Soil type, planting date, irrigation or other details"></textarea></label>
+              <button class="primary-btn" type="submit">Save farm</button>
+            </form>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>Farm map</h3><span class="chip">GPS preview</span></div>
+            <div class="map-box"><span class="map-pin"></span></div>
+            <p class="notice" style="margin-bottom:0">Interactive boundary mapping and satellite data will require a production map service and user permission.</p>
+          </section>
+        </div>
+        <section class="panel" style="margin-top:18px">
+          <div class="panel-head"><h3>Your farms</h3><span>Season overview</span></div>
+          <div class="order-list" data-farm-list>
+            <div class="order-item"><div><strong>Green Valley Plot</strong><div>Maize · 4.2 hectares</div></div><span class="chip">Active</span></div>
+            <div class="order-item"><div><strong>Riverbank Field</strong><div>Cassava · 3.8 hectares</div></div><span class="chip">Active</span></div>
           </div>
-          <div class="impact-report-actions">
-            <a class="button button-light" href="contact.html">Join the pilot</a>
-            <a class="button button-light" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Support WHSF</a>
-          </div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="marketplace">
+        <div class="panel-head"><div><h3>Featured marketplace</h3><p>Discover produce, verified inputs and local opportunities.</p></div><button class="primary-btn">List produce</button></div>
+        <div class="market-grid">
+          <article class="market-card"><div class="market-visual">🌽</div><div class="body"><h4>Premium maize seed</h4><p>Improved seed suitable for local growing conditions.</p><div class="market-meta"><span>Input supplier</span><strong>From ₦18,500</strong></div><button class="primary-btn" data-market-action style="margin-top:14px">View product</button></div></article>
+          <article class="market-card"><div class="market-visual">🧺</div><div class="body"><h4>Fresh tomatoes</h4><p>Bulk supply opportunity from a registered farmer group.</p><div class="market-meta"><span>Produce</span><strong>Price by request</strong></div><button class="primary-btn" data-market-action style="margin-top:14px">Find seller</button></div></article>
+          <article class="market-card"><div class="market-visual">💧</div><div class="body"><h4>Solar irrigation kit</h4><p>Entry-level solar pumping and drip irrigation package.</p><div class="market-meta"><span>Equipment</span><strong>From ₦245,000</strong></div><button class="primary-btn" data-market-action style="margin-top:14px">View equipment</button></div></article>
+          <article class="market-card"><div class="market-visual">🌾</div><div class="body"><h4>Rice buyer request</h4><p>Buyer seeking quality paddy rice from farmer cooperatives.</p><div class="market-meta"><span>Buyer opportunity</span><strong>Open</strong></div><button class="primary-btn" data-market-action style="margin-top:14px">Connect</button></div></article>
+          <article class="market-card"><div class="market-visual">🧪</div><div class="body"><h4>Soil testing package</h4><p>Basic pH and nutrient assessment with interpretation.</p><div class="market-meta"><span>Farm service</span><strong>From ₦15,000</strong></div><button class="primary-btn" data-market-action style="margin-top:14px">Book test</button></div></article>
+          <article class="market-card"><div class="market-visual">🥬</div><div class="body"><h4>Vegetable aggregation</h4><p>Weekly aggregation for restaurants and local retailers.</p><div class="market-meta"><span>Market access</span><strong>Join group</strong></div><button class="primary-btn" data-market-action style="margin-top:14px">Learn more</button></div></article>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="services">
+        <div class="service-grid">
+          <article class="service-card"><span>🚜</span><h3>Tractor hire</h3><p>Request land preparation, ploughing and harrowing support.</p><button class="secondary-btn">Request service</button></article>
+          <article class="service-card"><span>🛩️</span><h3>Drone services</h3><p>Explore aerial mapping, crop monitoring and field inspection.</p><button class="secondary-btn">Request service</button></article>
+          <article class="service-card"><span>🧑🏾‍🌾</span><h3>Agronomist support</h3><p>Connect with qualified professionals for field guidance.</p><button class="secondary-btn">Find expert</button></article>
+          <article class="service-card"><span>🚚</span><h3>Farm logistics</h3><p>Arrange pickup and delivery for produce and farm inputs.</p><button class="secondary-btn">Get logistics</button></article>
+          <article class="service-card"><span>🐄</span><h3>Veterinary services</h3><p>Locate animal health support for livestock and poultry.</p><button class="secondary-btn">Find veterinarian</button></article>
+          <article class="service-card"><span>🔧</span><h3>Equipment repair</h3><p>Request inspection and repairs for farm machinery and tools.</p><button class="secondary-btn">Book technician</button></article>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="academy">
+        <div class="hero-panel">
+          <p>AGRISMART ACADEMY</p>
+          <h2>Practical learning for modern, climate-smart farming.</h2>
+          <p>Short courses, field guides and learning pathways designed for farmers, youth, extension workers and agribusiness founders.</p>
+          <div class="hero-actions"><a class="primary-btn" href="agrismart/training.html" style="text-decoration:none">Open training centre</a></div>
+        </div>
+        <div class="service-grid" style="margin-top:18px">
+          <article class="service-card"><span>🌱</span><h3>Crop production basics</h3><p>Learn land preparation, seed selection, planting and field management.</p><span class="chip">Beginner</span></article>
+          <article class="service-card"><span>🧠</span><h3>AI in agriculture</h3><p>Understand crop imaging, data-driven decisions and responsible AI use.</p><span class="chip">Innovation</span></article>
+          <article class="service-card"><span>💧</span><h3>Climate-smart farming</h3><p>Improve water use, soil health and resilience to changing weather.</p><span class="chip">Core course</span></article>
+          <article class="service-card"><span>📈</span><h3>Farm business skills</h3><p>Build records, calculate costs, price produce and plan for profit.</p><span class="chip">Business</span></article>
+          <article class="service-card"><span>🤖</span><h3>Agricultural robotics</h3><p>Explore automation, sensors, drones and future farm machines.</p><span class="chip">Future skills</span></article>
+          <article class="service-card"><span>🛡️</span><h3>Safe input use</h3><p>Learn responsible pesticide handling, storage and protective practices.</p><span class="chip">Safety</span></article>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="assistant">
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-head"><h3>Ask AgriSmart</h3><span class="chip">Educational assistant</span></div>
+            <div class="order-list" data-chat-log style="max-height:430px;overflow:auto">
+              <article class="order-item" style="display:block"><strong>AgriSmart Assistant</strong><p>Hello. Ask me about crop symptoms, planting, weather preparation, farm records or market readiness.</p></article>
+            </div>
+            <form id="ai-chat-form" class="field" style="margin-top:14px">
+              <textarea id="ai-question" rows="3" placeholder="Ask a farming question..." required></textarea>
+              <button class="primary-btn" type="submit">Send question</button>
+            </form>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>Suggested questions</h3></div>
+            <div class="result-list">
+              <button class="quick-action" data-prompt="Why are my maize leaves turning yellow?"><b>Yellow maize leaves</b><span>Explore possible causes</span></button>
+              <button class="quick-action" data-prompt="When should I plant maize after the rain starts?"><b>Planting timing</b><span>Plan around reliable rainfall</span></button>
+              <button class="quick-action" data-prompt="Is today a good day to spray pesticide?"><b>Spraying conditions</b><span>Review weather and safety</span></button>
+              <button class="quick-action" data-prompt="What farm records should I keep?"><b>Farm records</b><span>Improve business decisions</span></button>
+            </div>
+            <div class="notice" style="margin-top:18px">The assistant provides general education, not professional diagnosis, veterinary advice or legally binding recommendations.</div>
+          </section>
         </div>
       </section>
     </main>
+  </div>
 
-    <footer class="site-footer">
-      <div class="shell footer-grid">
-        <div class="footer-brand"><img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" /><div><strong>World Humanitarian<br />Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p></div></div>
-        <div class="footer-links">
-          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="programs.html">Programs</a><a href="blog.html">Blog</a><a href="programs.html#innovation">Innovation</a><a href="mobile-app.html">Mobile App</a><a href="mobile-app-admin.html">Mobile App Admin</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a></div>
-          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
-        </div>
-        <div class="footer-award" aria-label="WHSF recognition"><img src="assets/whsf-logo.jpg" alt="World Humanitarian Support Foundation logo" /><span>2025 London Data Center World Award Winner</span></div>
-      </div>
-      <div class="shell social-links" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a></div>
-      <div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p><a href="#top">Back to top ↑</a></div>
-    </footer>
-  </body>
+  <nav class="bottom-nav" aria-label="Mobile navigation">
+    <button class="active" data-view="home">⌂<br>Home</button>
+    <button data-view="scan">◎<br>Scan</button>
+    <button data-view="farm">⌖<br>Farm</button>
+    <button data-view="marketplace">▣<br>Market</button>
+    <button data-view="assistant">✦<br>Ask AI</button>
+  </nav>
+</body>
 </html>
