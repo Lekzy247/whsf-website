@@ -14,34 +14,91 @@
     assistant: ['AgriSmart AI Assistant', 'Ask questions and receive practical farming guidance.']
   };
 
-  function showView(name) {
-    views.forEach(v => v.classList.toggle('active', v.dataset.viewPanel === name));
-    navButtons.forEach(b => b.classList.toggle('active', b.dataset.view === name));
-    if (pageMeta[name]) {
-      title.textContent = pageMeta[name][0];
-      subtitle.textContent = pageMeta[name][1];
-    }
+  const escapeHtml = value => String(value).replace(/[&<>'"]/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  }[char]));
+
+  function showView(name, updateHash = true) {
+    if (!pageMeta[name]) name = 'home';
+    views.forEach(view => view.classList.toggle('active', view.dataset.viewPanel === name));
+    navButtons.forEach(button => button.classList.toggle('active', button.dataset.view === name));
+    title.textContent = pageMeta[name][0];
+    subtitle.textContent = pageMeta[name][1];
+    if (updateHash && location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   navButtons.forEach(button => button.addEventListener('click', () => showView(button.dataset.view)));
+  window.addEventListener('hashchange', () => showView(location.hash.slice(1), false));
+  showView(location.hash.slice(1) || 'home', false);
+
+  const manifest = document.createElement('link');
+  manifest.rel = 'manifest';
+  manifest.href = 'agrismart-manifest.webmanifest';
+  document.head.appendChild(manifest);
+
+  const appleIcon = document.createElement('link');
+  appleIcon.rel = 'apple-touch-icon';
+  appleIcon.href = 'assets/whsf-logo.jpg';
+  document.head.appendChild(appleIcon);
+
+  const connectionBadge = document.createElement('span');
+  connectionBadge.className = 'chip';
+  connectionBadge.setAttribute('role', 'status');
+  connectionBadge.setAttribute('aria-live', 'polite');
+  document.querySelector('.top-actions')?.prepend(connectionBadge);
+  const updateConnectionBadge = () => {
+    connectionBadge.textContent = navigator.onLine ? 'Online' : 'Offline mode';
+    connectionBadge.title = navigator.onLine ? 'Connected to the internet' : 'Cached app features remain available';
+  };
+  updateConnectionBadge();
+  window.addEventListener('online', updateConnectionBadge);
+  window.addEventListener('offline', updateConnectionBadge);
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('agrismart-sw.js').catch(() => {}));
+  }
+
+  let installPrompt;
+  const installButton = document.createElement('button');
+  installButton.className = 'secondary-btn';
+  installButton.type = 'button';
+  installButton.textContent = 'Install App';
+  installButton.hidden = true;
+  document.querySelector('.top-actions')?.appendChild(installButton);
+  window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    installPrompt = event;
+    installButton.hidden = false;
+  });
+  installButton.addEventListener('click', async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    installButton.hidden = true;
+  });
+  window.addEventListener('appinstalled', () => { installButton.hidden = true; });
 
   const fileInput = document.querySelector('#crop-photo');
   const preview = document.querySelector('.scan-preview');
   const scanPlaceholder = document.querySelector('[data-scan-placeholder]');
   const analyzeButton = document.querySelector('[data-analyze]');
   const diagnosis = document.querySelector('[data-diagnosis]');
-  if (fileInput) {
-    fileInput.addEventListener('change', () => {
-      const file = fileInput.files && fileInput.files[0];
-      if (!file) return;
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = 'block';
-      scanPlaceholder.hidden = true;
-      analyzeButton.disabled = false;
-      diagnosis.innerHTML = '<div class="notice">Image ready. Select “Analyze crop” to run the guided diagnostic demonstration.</div>';
-    });
-  }
+  fileInput?.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      diagnosis.innerHTML = '<div class="notice">Please choose a valid image file.</div>';
+      return;
+    }
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+    scanPlaceholder.hidden = true;
+    analyzeButton.disabled = false;
+    diagnosis.innerHTML = '<div class="notice">Image ready. Select “Analyze crop” to run the guided diagnostic demonstration.</div>';
+  });
+
   analyzeButton?.addEventListener('click', () => {
     analyzeButton.disabled = true;
     analyzeButton.textContent = 'Analyzing…';
@@ -61,28 +118,52 @@
     }, 1300);
   });
 
+  const FARM_STORAGE_KEY = 'agrismart-farms-v1';
   const farmForm = document.querySelector('#farm-form');
   const farmList = document.querySelector('[data-farm-list]');
+  const getFarms = () => {
+    try { return JSON.parse(localStorage.getItem(FARM_STORAGE_KEY)) || []; }
+    catch { return []; }
+  };
+  const renderFarm = farm => {
+    const item = document.createElement('div');
+    item.className = 'order-item';
+    item.dataset.savedFarm = 'true';
+    item.innerHTML = `<div><strong>${escapeHtml(farm.name)}</strong><div>${escapeHtml(farm.crop)} · ${escapeHtml(farm.size)} hectares · ${escapeHtml(farm.location)}</div></div><button class="chip" type="button" aria-label="Remove ${escapeHtml(farm.name)}">Remove</button>`;
+    item.querySelector('button').addEventListener('click', () => {
+      const farms = getFarms().filter(saved => saved.id !== farm.id);
+      localStorage.setItem(FARM_STORAGE_KEY, JSON.stringify(farms));
+      item.remove();
+    });
+    farmList?.appendChild(item);
+  };
+  getFarms().forEach(renderFarm);
+
   farmForm?.addEventListener('submit', event => {
     event.preventDefault();
     const data = new FormData(farmForm);
-    const name = data.get('farmName');
-    const crop = data.get('crop');
-    const size = data.get('size');
-    const item = document.createElement('div');
-    item.className = 'order-item';
-    item.innerHTML = `<div><strong>${name}</strong><div>${crop} · ${size} hectares</div></div><span class="chip">Active</span>`;
-    farmList.appendChild(item);
+    const farm = {
+      id: Date.now(),
+      name: data.get('farmName').trim(),
+      crop: data.get('crop'),
+      size: data.get('size'),
+      location: data.get('location').trim(),
+      notes: data.get('notes')?.trim() || ''
+    };
+    if (!farm.name || !farm.crop || !farm.size || !farm.location) return;
+    const farms = getFarms();
+    farms.push(farm);
+    localStorage.setItem(FARM_STORAGE_KEY, JSON.stringify(farms));
+    renderFarm(farm);
     farmForm.reset();
   });
 
   document.querySelectorAll('[data-market-action]').forEach(button => {
     button.addEventListener('click', () => {
-      const card = button.closest('.market-card');
-      const product = card?.querySelector('h4')?.textContent || 'Item';
-      button.textContent = 'Added';
+      const original = button.textContent;
+      button.textContent = 'Request saved';
       button.disabled = true;
-      setTimeout(() => { button.textContent = `View ${product}`; button.disabled = false; }, 1400);
+      setTimeout(() => { button.textContent = original; button.disabled = false; }, 1600);
     });
   });
 
@@ -99,11 +180,11 @@
     event.preventDefault();
     const question = chatInput.value.trim();
     if (!question) return;
-    chatLog.insertAdjacentHTML('beforeend', `<article><strong>You</strong><p>${question.replace(/[<>]/g, '')}</p></article>`);
+    chatLog.insertAdjacentHTML('beforeend', `<article class="order-item" style="display:block"><strong>You</strong><p>${escapeHtml(question)}</p></article>`);
     chatInput.value = '';
     const response = answers[Math.floor(Math.random() * answers.length)];
     setTimeout(() => {
-      chatLog.insertAdjacentHTML('beforeend', `<article><strong>AgriSmart Assistant</strong><p>${response}</p></article>`);
+      chatLog.insertAdjacentHTML('beforeend', `<article class="order-item" style="display:block"><strong>AgriSmart Assistant</strong><p>${response}</p></article>`);
       chatLog.scrollTop = chatLog.scrollHeight;
     }, 500);
   });
