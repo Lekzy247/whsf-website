@@ -6,7 +6,7 @@
   const MOVEMENT_KEY = 'agrismart-inventory-movements-v1';
   const CURRENCY_KEY = 'agrismart-currency-v1';
   const DATA_KEYS = [FARM_KEY, EXPENSE_KEY, HARVEST_KEY, INVENTORY_KEY, MOVEMENT_KEY];
-  const SUPPORTED_CURRENCIES = Object.freeze(['NGN', 'USD', 'EUR', 'GBP', 'CAD', 'AUD', 'GHS', 'KES', 'ZAR', 'XOF']);
+  const SUPPORTED_CURRENCIES = Object.freeze(['NGN', 'USD', 'EUR', 'GBP', 'CAD', 'AUD', 'GHS', 'MWK', 'SLE', 'ZAR', 'XOF']);
 
   const read = key => {
     try {
