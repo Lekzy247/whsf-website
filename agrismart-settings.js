@@ -12,15 +12,18 @@
   });
 
   const countries = Object.freeze([
-    ['NG', 'Nigeria'], ['GH', 'Ghana'], ['KE', 'Kenya'], ['ZA', 'South Africa'],
-    ['SN', 'Senegal'], ['CI', "Côte d'Ivoire"], ['GB', 'United Kingdom'],
-    ['US', 'United States'], ['CA', 'Canada'], ['AU', 'Australia'], ['IE', 'Ireland']
+    ['NG', 'Nigeria'], ['GH', 'Ghana'], ['MW', 'Malawi'], ['SL', 'Sierra Leone'],
+    ['ZA', 'South Africa'], ['SN', 'Senegal'], ['CI', "Côte d'Ivoire"],
+    ['GB', 'United Kingdom'], ['US', 'United States'], ['CA', 'Canada'],
+    ['AU', 'Australia'], ['IE', 'Ireland']
   ]);
 
   const read = () => {
     try {
       const stored = JSON.parse(localStorage.getItem(SETTINGS_KEY));
-      return { ...defaults, ...(stored && typeof stored === 'object' ? stored : {}) };
+      const merged = { ...defaults, ...(stored && typeof stored === 'object' ? stored : {}) };
+      if (merged.country === 'KE') merged.country = 'MW';
+      return merged;
     } catch {
       return { ...defaults };
     }
@@ -28,6 +31,7 @@
 
   const save = settings => {
     const normalized = { ...defaults, ...settings };
+    if (normalized.country === 'KE') normalized.country = 'MW';
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(normalized));
     window.dispatchEvent(new CustomEvent('agrismart:settingschange', { detail: normalized }));
     return normalized;
