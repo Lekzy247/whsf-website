@@ -4,6 +4,7 @@
   const HARVEST_KEY = 'agrismart-harvests-v1';
   const INVENTORY_KEY = 'agrismart-inventory-v1';
   const MOVEMENT_KEY = 'agrismart-inventory-movements-v1';
+  const DATA_KEYS = [FARM_KEY, EXPENSE_KEY, HARVEST_KEY, INVENTORY_KEY, MOVEMENT_KEY];
 
   const read = key => {
     try {
@@ -14,9 +15,13 @@
     }
   };
 
+  const emitChange = (key, eventName = 'agrismart:datachange') => {
+    window.dispatchEvent(new CustomEvent(eventName, { detail: { key } }));
+  };
+
   const write = (key, value, eventName = 'agrismart:datachange') => {
     localStorage.setItem(key, JSON.stringify(value));
-    window.dispatchEvent(new CustomEvent(eventName, { detail: { key } }));
+    emitChange(key, eventName);
   };
 
   const normalizeMoney = value => {
@@ -130,9 +135,29 @@
   };
 
   const validateArray = (data, key, required = true) => {
-    if (Array.isArray(data[key])) return data[key];
+    if (Array.isArray(data[key])) {
+      if (data[key].some(item => !item || typeof item !== 'object' || Array.isArray(item))) {
+        throw new Error(`Invalid backup structure: ${key} contains an invalid record`);
+      }
+      return data[key];
+    }
     if (!required && data[key] === undefined) return [];
     throw new Error(`Invalid backup structure: ${key} is missing`);
+  };
+
+  const captureSnapshot = () => Object.fromEntries(DATA_KEYS.map(key => [key, localStorage.getItem(key)]));
+
+  const restoreSnapshot = snapshot => {
+    DATA_KEYS.forEach(key => {
+      if (snapshot[key] === null) localStorage.removeItem(key);
+      else localStorage.setItem(key, snapshot[key]);
+    });
+  };
+
+  const notifyAllDataChanged = () => {
+    [FARM_KEY, EXPENSE_KEY, HARVEST_KEY].forEach(key => emitChange(key));
+    [INVENTORY_KEY, MOVEMENT_KEY].forEach(key => emitChange(key, 'agrismart:inventorychange'));
+    window.dispatchEvent(new CustomEvent('agrismart:restorecomplete'));
   };
 
   const importBackup = async file => {
@@ -145,18 +170,29 @@
 
     if (!data || ![1, 2].includes(data.version)) throw new Error('Unsupported backup file');
 
-    const farms = validateArray(data, 'farms');
-    const expenses = validateArray(data, 'expenses');
-    const harvests = validateArray(data, 'harvests');
-    const inventory = validateArray(data, 'inventory', false);
-    const inventoryMovements = validateArray(data, 'inventoryMovements', false);
+    const restoredData = {
+      [FARM_KEY]: validateArray(data, 'farms'),
+      [EXPENSE_KEY]: validateArray(data, 'expenses'),
+      [HARVEST_KEY]: validateArray(data, 'harvests'),
+      [INVENTORY_KEY]: validateArray(data, 'inventory', false),
+      [MOVEMENT_KEY]: validateArray(data, 'inventoryMovements', false)
+    };
 
-    write(FARM_KEY, farms);
-    write(EXPENSE_KEY, expenses);
-    write(HARVEST_KEY, harvests);
-    write(INVENTORY_KEY, inventory, 'agrismart:inventorychange');
-    write(MOVEMENT_KEY, inventoryMovements, 'agrismart:inventorychange');
+    const snapshot = captureSnapshot();
+    try {
+      DATA_KEYS.forEach(key => localStorage.setItem(key, JSON.stringify(restoredData[key])));
+    } catch (error) {
+      try {
+        restoreSnapshot(snapshot);
+      } catch {
+        throw new Error('Restore failed and the previous local data could not be fully recovered');
+      }
+      throw new Error(error?.name === 'QuotaExceededError'
+        ? 'Restore failed because this device does not have enough storage space'
+        : 'Restore failed; your previous data was preserved');
+    }
 
+    notifyAllDataChanged();
     return getSummary();
   };
 
