@@ -26,7 +26,9 @@ const requiredFiles = [
   'sync-integration.js',
   'cloud-sync-provider.js',
   'service-worker.js',
-  'register-service-worker.js'
+  'register-service-worker.js',
+  'vercel.json',
+  'docs/AGRISMART-RELEASE-CHECKLIST.md'
 ];
 
 for (const file of requiredFiles) {
@@ -137,6 +139,41 @@ try {
   if (missingSafeguards.length === 0) pass('Backup and restore safeguards detected');
 } catch (error) {
   fail(`Unable to inspect backup module: ${error.message}`);
+}
+
+try {
+  const vercel = JSON.parse(await readFile(path.join(root, 'vercel.json'), 'utf8'));
+  if (!Array.isArray(vercel.headers)) {
+    fail('vercel.json must define a headers array');
+  } else {
+    const headerRules = new Map(vercel.headers.map(rule => [rule.source, rule.headers || []]));
+    const globalHeaders = new Map((headerRules.get('/(.*)') || []).map(header => [header.key.toLowerCase(), header.value]));
+    for (const key of ['x-content-type-options', 'x-frame-options', 'referrer-policy', 'permissions-policy', 'strict-transport-security']) {
+      if (!globalHeaders.has(key)) fail(`Global deployment header missing: ${key}`);
+    }
+
+    const serviceWorkerHeaders = new Map((headerRules.get('/service-worker.js') || []).map(header => [header.key.toLowerCase(), header.value]));
+    if (!/max-age=0/i.test(serviceWorkerHeaders.get('cache-control') || '')) {
+      fail('service-worker.js must be configured for immediate cache revalidation');
+    }
+    if (serviceWorkerHeaders.get('service-worker-allowed') !== '/') {
+      fail('service-worker.js must allow root scope');
+    }
+
+    const availableManifestRule = manifestCandidates.find(candidate => headerRules.has(`/${candidate}`));
+    if (!availableManifestRule) {
+      fail('No deployment header rule found for a PWA manifest');
+    } else {
+      const manifestHeaders = new Map((headerRules.get(`/${availableManifestRule}`) || []).map(header => [header.key.toLowerCase(), header.value]));
+      if (!/application\/manifest\+json/i.test(manifestHeaders.get('content-type') || '')) {
+        fail(`${availableManifestRule} must use the application/manifest+json content type`);
+      }
+    }
+
+    pass('Vercel deployment configuration checked');
+  }
+} catch (error) {
+  fail(`Invalid or unreadable vercel.json: ${error.message}`);
 }
 
 for (const message of passes) console.log(`PASS: ${message}`);
