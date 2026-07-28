@@ -46,6 +46,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Scan repository for committed secrets
+        run: node scripts/scan-secrets.mjs
+
       - name: Run AgriSmart release validator
         run: node scripts/validate-agrismart.mjs
 
@@ -58,6 +61,6 @@ jobs:
             if [ "${{ job.status }}" = "success" ]; then
               echo 'All automated release-readiness checks passed.'
             else
-              echo 'One or more automated release-readiness checks failed. Review the validation step above.'
+              echo 'One or more automated release-readiness checks failed. Review the validation steps above.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
