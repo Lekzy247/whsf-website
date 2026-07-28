@@ -12,14 +12,15 @@
     CAD: 'Canadian Dollar',
     AUD: 'Australian Dollar',
     GHS: 'Ghanaian Cedi',
-    KES: 'Kenyan Shilling',
+    MWK: 'Malawian Kwacha',
+    SLE: 'Sierra Leonean Leone',
     ZAR: 'South African Rand',
     XOF: 'West African CFA Franc'
   });
 
   const localeByCurrency = Object.freeze({
     NGN: 'en-NG', USD: 'en-US', EUR: 'en-IE', GBP: 'en-GB', CAD: 'en-CA',
-    AUD: 'en-AU', GHS: 'en-GH', KES: 'en-KE', ZAR: 'en-ZA', XOF: 'fr-SN'
+    AUD: 'en-AU', GHS: 'en-GH', MWK: 'en-MW', SLE: 'en-SL', ZAR: 'en-ZA', XOF: 'fr-SN'
   });
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
