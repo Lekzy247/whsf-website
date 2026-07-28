@@ -107,7 +107,53 @@
     });
   }
 
+  function loadScript(src) {
+    if (document.querySelector(`script[src="${src}"]`)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.defer = true;
+      script.addEventListener('load', resolve, { once:true });
+      script.addEventListener('error', () => reject(new Error(`Unable to load ${src}`)), { once:true });
+      document.head.appendChild(script);
+    });
+  }
+
+  async function enableExtendedModules() {
+    const marketplacePanel = document.querySelector('[data-view-panel="marketplace"]');
+    if (marketplacePanel) marketplacePanel.dataset.marketplacePanel = '';
+
+    const main = document.querySelector('.app-main');
+    const nav = document.querySelector('.app-nav');
+    if (main && !document.querySelector('[data-view-panel="analytics"]')) {
+      const analytics = document.createElement('section');
+      analytics.className = 'view';
+      analytics.dataset.viewPanel = 'analytics';
+      analytics.innerHTML = '<div class="section-heading"><p class="eyebrow">Farm intelligence</p><h2>Analytics and performance</h2><p>Track financial trends, crop performance, inventory risk and operational data.</p></div><div data-analytics-panel></div>';
+      const settingsPanel = document.querySelector('[data-view-panel="settings"]');
+      main.insertBefore(analytics, settingsPanel || null);
+    }
+    if (nav && !nav.querySelector('[data-view="analytics"]')) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.view = 'analytics';
+      button.textContent = '▥ Analytics';
+      const settingsButton = nav.querySelector('[data-view="settings"]');
+      nav.insertBefore(button, settingsButton || null);
+    }
+
+    try {
+      await loadScript('/agrismart-analytics.js');
+      await loadScript('/agrismart-marketplace-commerce.js');
+      await loadScript('/agrismart-local-payments.js');
+      window.dispatchEvent(new CustomEvent('agrismart:extendedmodulesready'));
+    } catch (error) {
+      console.error('AgriSmart extended modules failed to load.', error);
+    }
+  }
+
   window.AgriSmartSettings = Object.freeze({ get: read, save, countries });
   renderSettingsForm();
   applySettings();
+  enableExtendedModules();
 })();
