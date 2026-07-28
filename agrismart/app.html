@@ -23,6 +23,8 @@
   <script src="/agrismart-ai-advisor.js" defer></script>
   <script src="/agrismart-app.js" defer></script>
   <script src="/agrismart-final-app.js" defer></script>
+  <script src="/agrismart-currency-ui.js" defer></script>
+  <script src="/agrismart-settings.js" defer></script>
   <script src="/agrismart/register-service-worker.js" defer></script>
 </head>
 <body>
@@ -41,6 +43,7 @@
         <button data-view="advisor">✦ Smart Advisor</button>
         <button data-view="marketplace">▣ Marketplace</button>
         <button data-view="academy">◫ Academy</button>
+        <button data-view="settings">⚙ Settings</button>
       </nav>
       <div class="sidebar-card">
         <strong>Farm intelligence in one place</strong>
@@ -75,29 +78,20 @@
           </div>
         </div>
         <div class="metric-grid" style="margin-top:18px">
-          <article class="metric-card"><span>Revenue</span><strong data-ops-revenue>$0</strong><small>Recorded harvest income</small></article>
-          <article class="metric-card"><span>Expenses</span><strong data-ops-expenses>$0</strong><small>Recorded farm costs</small></article>
-          <article class="metric-card"><span>Estimated profit</span><strong data-ops-profit>$0</strong><small><span data-ops-margin>0%</span> margin</small></article>
+          <article class="metric-card"><span>Revenue</span><strong data-ops-revenue>₦0</strong><small>Recorded harvest income</small></article>
+          <article class="metric-card"><span>Expenses</span><strong data-ops-expenses>₦0</strong><small>Recorded farm costs</small></article>
+          <article class="metric-card"><span>Estimated profit</span><strong data-ops-profit>₦0</strong><small><span data-ops-margin>0%</span> margin</small></article>
           <article class="metric-card"><span>Inventory alerts</span><strong data-ops-low-stock>0</strong><small><span data-ops-out-stock>0</span> out of stock</small></article>
         </div>
         <div class="dashboard-grid" style="margin-top:18px">
-          <section class="panel">
-            <div class="panel-head"><div><h3>Recent activity</h3><p>Harvest, expense and stock updates.</p></div></div>
-            <div class="order-list" data-recent-activity></div>
-          </section>
-          <section class="panel">
-            <div class="panel-head"><h3>Operational alerts</h3><span class="chip">Live</span></div>
-            <div class="result-list" data-operations-alerts></div>
-          </section>
+          <section class="panel"><div class="panel-head"><div><h3>Recent activity</h3><p>Harvest, expense and stock updates.</p></div></div><div class="order-list" data-recent-activity></div></section>
+          <section class="panel"><div class="panel-head"><h3>Operational alerts</h3><span class="chip">Live</span></div><div class="result-list" data-operations-alerts></div></section>
         </div>
       </section>
 
       <section class="view" data-view-panel="scan">
         <div class="scan-layout">
-          <section class="panel scan-drop">
-            <div data-scan-placeholder><div style="font-size:4rem">🌿</div><h2>Upload a clear crop image</h2><p>Photograph the affected leaf or plant in natural light.</p><label class="primary-btn" for="crop-photo">Choose crop photo</label></div>
-            <img class="scan-preview" alt="Selected crop preview"><input id="crop-photo" type="file" accept="image/*">
-          </section>
+          <section class="panel scan-drop"><div data-scan-placeholder><div style="font-size:4rem">🌿</div><h2>Upload a clear crop image</h2><p>Photograph the affected leaf or plant in natural light.</p><label class="primary-btn" for="crop-photo">Choose crop photo</label></div><img class="scan-preview" alt="Selected crop preview"><input id="crop-photo" type="file" accept="image/*"></section>
           <section class="panel scan-result"><div class="panel-head"><h3>Diagnostic guidance</h3><span class="chip">AI preview</span></div><div data-diagnosis><div class="notice">Upload a crop image to begin. Confirm important decisions with a qualified agronomist.</div></div><button class="primary-btn" data-analyze disabled style="margin-top:18px">Analyze crop</button></section>
         </div>
       </section>
@@ -111,7 +105,7 @@
       </section>
 
       <section class="view" data-view-panel="finance" data-finance-dashboard>
-        <div class="metric-grid"><article class="metric-card"><span>Total revenue</span><strong data-total-revenue>$0</strong></article><article class="metric-card"><span>Total expenses</span><strong data-total-expenses>$0</strong></article><article class="metric-card"><span>Estimated profit</span><strong data-estimated-profit>$0</strong></article><article class="metric-card"><span>Harvest records</span><strong data-harvest-count>0</strong></article></div>
+        <div class="metric-grid"><article class="metric-card"><span>Total revenue</span><strong data-total-revenue>₦0</strong></article><article class="metric-card"><span>Total expenses</span><strong data-total-expenses>₦0</strong></article><article class="metric-card"><span>Estimated profit</span><strong data-estimated-profit>₦0</strong></article><article class="metric-card"><span>Harvest records</span><strong data-harvest-count>0</strong></article></div>
         <div class="dashboard-grid" style="margin-top:18px">
           <section class="panel"><div class="panel-head"><h3>Add expense</h3></div><form class="form-grid" data-expense-form><label class="field"><span>Category</span><select name="category" required><option>Seeds</option><option>Fertilizer</option><option>Labour</option><option>Transport</option><option>Equipment</option><option>Other</option></select></label><label class="field"><span>Amount</span><input name="amount" type="number" min="0" step="0.01" required></label><label class="field"><span>Date</span><input name="date" type="date" required></label><label class="field full"><span>Description</span><input name="description"></label><button class="primary-btn" type="submit">Save expense</button></form></section>
           <section class="panel"><div class="panel-head"><h3>Record harvest</h3></div><form class="form-grid" data-harvest-form><label class="field"><span>Crop</span><input name="crop" required></label><label class="field"><span>Quantity</span><input name="quantity" type="number" min="0" step="0.01" required></label><label class="field"><span>Unit</span><select name="unit"><option>kg</option><option>tonnes</option><option>bags</option><option>crates</option></select></label><label class="field"><span>Revenue</span><input name="revenue" type="number" min="0" step="0.01"></label><label class="field"><span>Date</span><input name="date" type="date" required></label><button class="primary-btn" type="submit">Save harvest</button></form></section>
@@ -135,6 +129,11 @@
       <section class="view" data-view-panel="marketplace"><div class="panel-head"><div><h3>Marketplace opportunities</h3><p>Sample listings for farm inputs, produce and services.</p></div></div><div class="market-grid"><article class="market-card"><div class="market-visual">🌽</div><div class="body"><h4>Improved maize seed</h4><p>Quality seed from a verified input supplier.</p><div class="market-meta"><span>Input</span><strong>Request quote</strong></div></div></article><article class="market-card"><div class="market-visual">💧</div><div class="body"><h4>Solar irrigation kit</h4><p>Water-efficient pumping and drip irrigation package.</p><div class="market-meta"><span>Equipment</span><strong>Request quote</strong></div></div></article><article class="market-card"><div class="market-visual">🚚</div><div class="body"><h4>Produce logistics</h4><p>Pickup and delivery support for farmer groups.</p><div class="market-meta"><span>Service</span><strong>Connect</strong></div></div></article></div></section>
 
       <section class="view" data-view-panel="academy"><div class="hero-panel"><p>AGRISMART ACADEMY</p><h2>Build practical skills for climate-smart and technology-enabled farming.</h2><div class="hero-actions"><a class="primary-btn" href="/agrismart/training.html" style="text-decoration:none">Open Training Centre</a><a class="secondary-btn" href="/agrismart/crop-guide.html" style="text-decoration:none">Crop Guide</a></div></div></section>
+
+      <section class="view" data-view-panel="settings">
+        <div class="section-heading"><p class="eyebrow">International configuration</p><h2>Regional and measurement settings</h2><p>Configure AgriSmart for your country, language, units and operating time zone.</p></div>
+        <div data-settings-panel></div>
+      </section>
     </main>
   </div>
   <nav class="bottom-nav" aria-label="Mobile navigation"><button class="active" data-view="home">⌂<br>Home</button><button data-view="scan">◎<br>Scan</button><button data-view="finance">$<br>Finance</button><button data-view="inventory">▦<br>Stock</button><button data-view="advisor">✦<br>Advisor</button></nav>
