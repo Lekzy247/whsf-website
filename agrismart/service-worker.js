@@ -1,7 +1,11 @@
-const CACHE_NAME = "agrismart-v1";
+const CACHE_NAME = "agrismart-v2";
 const APP_SHELL = [
   "/agrismart/app.html",
   "/agrismart/offline.html",
+  "/agrismart/manifest.webmanifest",
+  "/agrismart/service-worker.js",
+  "/agrismart/register-service-worker.js",
+  "/agrismart/auth-provider.js",
   "/agrismart-app.css",
   "/agrismart-app.js",
   "/agrismart-reports.js",
