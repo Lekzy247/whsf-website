@@ -19,6 +19,7 @@
     }
     const item = document.createElement('div');
     item.setAttribute('role', 'status');
+    item.setAttribute('aria-live', 'polite');
     item.textContent = message;
     Object.assign(item.style, { padding:'13px 16px', borderRadius:'12px', color:'#fff', background:type === 'error' ? '#a52a2a' : '#0d4d35', boxShadow:'0 12px 32px rgba(0,0,0,.2)', fontWeight:'700' });
     container.appendChild(item);
@@ -31,14 +32,6 @@
       manifest.rel = 'manifest';
       manifest.href = '/agrismart/manifest.webmanifest';
       document.head.appendChild(manifest);
-    }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/agrismart/service-worker.js')
-          .then(registration => console.info('AgriSmart offline support active:', registration.scope))
-          .catch(error => console.error('AgriSmart offline support failed:', error));
-      }, { once: true });
     }
   }
 
@@ -204,20 +197,66 @@
   });
 
   const connectivity = document.querySelector('[data-connectivity]');
-  function updateConnectivity() { if (connectivity) connectivity.textContent = navigator.onLine ? 'Online' : 'Offline'; }
+  function updateConnectivity() {
+    if (!connectivity) return;
+    connectivity.textContent = navigator.onLine ? 'Online' : 'Offline';
+    connectivity.dataset.state = navigator.onLine ? 'online' : 'offline';
+  }
   window.addEventListener('online', updateConnectivity);
   window.addEventListener('offline', updateConnectivity);
   window.addEventListener('agrismart:datachange', renderAll);
   window.addEventListener('agrismart:inventorychange', renderAll);
 
-  let installPrompt;
+  let installPrompt = null;
   const installButton = document.querySelector('[data-install-app]');
-  window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; if (installButton) installButton.hidden = false; });
-  installButton?.addEventListener('click', async () => { if (!installPrompt) { toast('Use your browser menu to install this app.'); return; } installPrompt.prompt(); await installPrompt.userChoice; installPrompt = null; });
+  const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+  function updateInstallButton() {
+    if (!installButton) return;
+    if (isStandalone()) {
+      installButton.textContent = 'App Installed';
+      installButton.disabled = true;
+      installButton.hidden = false;
+      return;
+    }
+    installButton.disabled = false;
+    installButton.hidden = !installPrompt;
+    installButton.textContent = 'Install App';
+  }
+
+  window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    installPrompt = event;
+    updateInstallButton();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installPrompt = null;
+    updateInstallButton();
+    toast('AgriSmart has been installed successfully.');
+  });
+
+  installButton?.addEventListener('click', async () => {
+    if (isStandalone()) return;
+    if (!installPrompt) {
+      toast('Installation is not available yet. Use your browser menu to add AgriSmart to your device.', 'error');
+      return;
+    }
+    installButton.disabled = true;
+    try {
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      if (choice.outcome !== 'accepted') toast('Installation was cancelled.', 'error');
+    } finally {
+      installPrompt = null;
+      updateInstallButton();
+    }
+  });
 
   configurePwa();
   configureDataRestore();
   setDefaultDates();
   updateConnectivity();
+  updateInstallButton();
   renderAll();
 })();
