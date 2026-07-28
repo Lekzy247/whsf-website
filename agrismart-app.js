@@ -3,6 +3,8 @@
   const navButtons = [...document.querySelectorAll('[data-view]')];
   const title = document.querySelector('[data-page-title]');
   const subtitle = document.querySelector('[data-page-subtitle]');
+  const topActions = document.querySelector('.top-actions');
+  const sidebar = document.querySelector('.app-sidebar');
   const pageMeta = {
     home: ['Good evening, Farmer', 'Here is today’s farm intelligence and activity.'],
     scan: ['AI Crop Scanner', 'Upload a crop image for a guided diagnostic preview.'],
@@ -18,19 +20,50 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
   }[char]));
 
+  const toast = message => {
+    document.querySelector('.toast')?.remove();
+    const element = document.createElement('div');
+    element.className = 'toast';
+    element.setAttribute('role', 'status');
+    element.textContent = message;
+    document.body.appendChild(element);
+    setTimeout(() => element.remove(), 2800);
+  };
+
+  function closeMobileMenu() {
+    sidebar?.classList.remove('open');
+    document.querySelector('.mobile-overlay')?.classList.remove('open');
+  }
+
   function showView(name, updateHash = true) {
     if (!pageMeta[name]) name = 'home';
     views.forEach(view => view.classList.toggle('active', view.dataset.viewPanel === name));
     navButtons.forEach(button => button.classList.toggle('active', button.dataset.view === name));
-    title.textContent = pageMeta[name][0];
-    subtitle.textContent = pageMeta[name][1];
+    if (title) title.textContent = pageMeta[name][0];
+    if (subtitle) subtitle.textContent = pageMeta[name][1];
     if (updateHash && location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
+    closeMobileMenu();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   navButtons.forEach(button => button.addEventListener('click', () => showView(button.dataset.view)));
   window.addEventListener('hashchange', () => showView(location.hash.slice(1), false));
   showView(location.hash.slice(1) || 'home', false);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'mobile-overlay';
+  overlay.addEventListener('click', closeMobileMenu);
+  document.body.appendChild(overlay);
+  document.querySelector('.mobile-menu')?.addEventListener('click', () => {
+    sidebar?.classList.toggle('open');
+    overlay.classList.toggle('open');
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      closeMobileMenu();
+      document.querySelector('.notification-panel')?.setAttribute('hidden', '');
+    }
+  });
 
   const manifest = document.createElement('link');
   manifest.rel = 'manifest';
@@ -42,18 +75,61 @@
   appleIcon.href = 'assets/whsf-logo.jpg';
   document.head.appendChild(appleIcon);
 
+  const savedTheme = localStorage.getItem('agrismart-theme');
+  if (savedTheme === 'dark' || (!savedTheme && matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark-mode');
+  }
+  const themeButton = document.createElement('button');
+  themeButton.className = 'secondary-btn';
+  themeButton.type = 'button';
+  themeButton.dataset.themeToggle = 'true';
+  const updateThemeLabel = () => {
+    const dark = document.body.classList.contains('dark-mode');
+    themeButton.textContent = dark ? '☀ Light' : '◐ Dark';
+    themeButton.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  };
+  updateThemeLabel();
+  themeButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('agrismart-theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    updateThemeLabel();
+    toast('Display theme updated');
+  });
+  topActions?.appendChild(themeButton);
+
   const connectionBadge = document.createElement('span');
   connectionBadge.className = 'chip';
   connectionBadge.setAttribute('role', 'status');
   connectionBadge.setAttribute('aria-live', 'polite');
-  document.querySelector('.top-actions')?.prepend(connectionBadge);
+  topActions?.prepend(connectionBadge);
   const updateConnectionBadge = () => {
     connectionBadge.textContent = navigator.onLine ? 'Online' : 'Offline mode';
     connectionBadge.title = navigator.onLine ? 'Connected to the internet' : 'Cached app features remain available';
   };
   updateConnectionBadge();
-  window.addEventListener('online', updateConnectionBadge);
-  window.addEventListener('offline', updateConnectionBadge);
+  window.addEventListener('online', () => { updateConnectionBadge(); toast('Internet connection restored'); });
+  window.addEventListener('offline', () => { updateConnectionBadge(); toast('Offline mode is active'); });
+
+  const notificationButton = document.createElement('button');
+  notificationButton.className = 'icon-btn';
+  notificationButton.type = 'button';
+  notificationButton.textContent = '🔔';
+  notificationButton.setAttribute('aria-label', 'Open notifications');
+  notificationButton.setAttribute('aria-expanded', 'false');
+  const notificationPanel = document.createElement('section');
+  notificationPanel.className = 'notification-panel';
+  notificationPanel.hidden = true;
+  notificationPanel.innerHTML = `
+    <h3>Farm alerts</h3>
+    <article><strong>Rain planning reminder</strong><p>Review drainage and field access before the next major rainfall.</p></article>
+    <article><strong>Crop check due</strong><p>Inspect maize leaves for discoloration, pest damage and moisture stress.</p></article>
+    <article><strong>Record keeping</strong><p>Add this week’s input costs and field activity to your farm records.</p></article>`;
+  document.body.appendChild(notificationPanel);
+  notificationButton.addEventListener('click', () => {
+    notificationPanel.hidden = !notificationPanel.hidden;
+    notificationButton.setAttribute('aria-expanded', String(!notificationPanel.hidden));
+  });
+  topActions?.prepend(notificationButton);
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('agrismart-sw.js').catch(() => {}));
@@ -65,7 +141,7 @@
   installButton.type = 'button';
   installButton.textContent = 'Install App';
   installButton.hidden = true;
-  document.querySelector('.top-actions')?.appendChild(installButton);
+  topActions?.appendChild(installButton);
   window.addEventListener('beforeinstallprompt', event => {
     event.preventDefault();
     installPrompt = event;
@@ -74,11 +150,12 @@
   installButton.addEventListener('click', async () => {
     if (!installPrompt) return;
     installPrompt.prompt();
-    await installPrompt.userChoice;
+    const result = await installPrompt.userChoice;
+    toast(result.outcome === 'accepted' ? 'AgriSmart installation started' : 'Installation cancelled');
     installPrompt = null;
     installButton.hidden = true;
   });
-  window.addEventListener('appinstalled', () => { installButton.hidden = true; });
+  window.addEventListener('appinstalled', () => { installButton.hidden = true; toast('AgriSmart Connect installed'); });
 
   const fileInput = document.querySelector('#crop-photo');
   const preview = document.querySelector('.scan-preview');
@@ -115,6 +192,7 @@
         <div class="notice">This prototype provides educational guidance and is not a laboratory diagnosis. Consult a qualified agronomist before treatment.</div>`;
       analyzeButton.textContent = 'Analyze another image';
       analyzeButton.disabled = false;
+      toast('Crop diagnostic preview completed');
     }, 1300);
   });
 
@@ -131,9 +209,9 @@
     item.dataset.savedFarm = 'true';
     item.innerHTML = `<div><strong>${escapeHtml(farm.name)}</strong><div>${escapeHtml(farm.crop)} · ${escapeHtml(farm.size)} hectares · ${escapeHtml(farm.location)}</div></div><button class="chip" type="button" aria-label="Remove ${escapeHtml(farm.name)}">Remove</button>`;
     item.querySelector('button').addEventListener('click', () => {
-      const farms = getFarms().filter(saved => saved.id !== farm.id);
-      localStorage.setItem(FARM_STORAGE_KEY, JSON.stringify(farms));
+      localStorage.setItem(FARM_STORAGE_KEY, JSON.stringify(getFarms().filter(saved => saved.id !== farm.id)));
       item.remove();
+      toast('Farm record removed');
     });
     farmList?.appendChild(item);
   };
@@ -144,11 +222,11 @@
     const data = new FormData(farmForm);
     const farm = {
       id: Date.now(),
-      name: data.get('farmName').trim(),
-      crop: data.get('crop'),
-      size: data.get('size'),
-      location: data.get('location').trim(),
-      notes: data.get('notes')?.trim() || ''
+      name: String(data.get('farmName') || '').trim(),
+      crop: String(data.get('crop') || ''),
+      size: String(data.get('size') || ''),
+      location: String(data.get('location') || '').trim(),
+      notes: String(data.get('notes') || '').trim()
     };
     if (!farm.name || !farm.crop || !farm.size || !farm.location) return;
     const farms = getFarms();
@@ -156,6 +234,7 @@
     localStorage.setItem(FARM_STORAGE_KEY, JSON.stringify(farms));
     renderFarm(farm);
     farmForm.reset();
+    toast('Farm record saved on this device');
   });
 
   document.querySelectorAll('[data-market-action]').forEach(button => {
@@ -163,8 +242,38 @@
       const original = button.textContent;
       button.textContent = 'Request saved';
       button.disabled = true;
+      toast('Marketplace request saved');
       setTimeout(() => { button.textContent = original; button.disabled = false; }, 1600);
     });
+  });
+
+  document.querySelectorAll('.quick-action').forEach(button => {
+    button.addEventListener('click', () => {
+      const label = button.textContent.toLowerCase();
+      if (label.includes('scan')) showView('scan');
+      else if (label.includes('weather')) showView('weather');
+      else if (label.includes('farm') || label.includes('field')) showView('farm');
+      else if (label.includes('market')) showView('marketplace');
+      else toast('This feature is being prepared for the next release');
+    });
+  });
+
+  document.querySelectorAll('.map-box').forEach(map => {
+    map.setAttribute('role', 'button');
+    map.setAttribute('tabindex', '0');
+    map.setAttribute('aria-label', 'Use current location for farm map');
+    const locate = () => {
+      if (!navigator.geolocation) return toast('Location services are not supported on this device');
+      toast('Requesting your location…');
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+        map.title = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+        localStorage.setItem('agrismart-last-location', JSON.stringify({ latitude, longitude }));
+        toast(`Farm location captured: ${latitude.toFixed(3)}, ${longitude.toFixed(3)}`);
+      }, () => toast('Location permission was not granted'));
+    };
+    map.addEventListener('click', locate);
+    map.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') locate(); });
   });
 
   const chatForm = document.querySelector('#ai-chat-form');
