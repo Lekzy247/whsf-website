@@ -1,0 +1,47 @@
+{
+  "name": "AgriSmart Connect by WHSF",
+  "short_name": "AgriSmart",
+  "description": "Digital agriculture tools for crop diagnostics, farm management, weather planning, learning, services and market access.",
+  "start_url": "/mobile-app.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f6f2e8",
+  "theme_color": "#0d4d35",
+  "lang": "en",
+  "categories": ["agriculture", "education", "business", "productivity"],
+  "icons": [
+    {
+      "src": "/assets/whsf-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/whsf-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scan Crop",
+      "short_name": "Scan",
+      "url": "/mobile-app.html#scan",
+      "icons": [{"src": "/assets/whsf-logo.jpg", "sizes": "192x192", "type": "image/jpeg"}]
+    },
+    {
+      "name": "My Farm",
+      "short_name": "Farm",
+      "url": "/mobile-app.html#farm",
+      "icons": [{"src": "/assets/whsf-logo.jpg", "sizes": "192x192", "type": "image/jpeg"}]
+    },
+    {
+      "name": "Marketplace",
+      "short_name": "Market",
+      "url": "/mobile-app.html#marketplace",
+      "icons": [{"src": "/assets/whsf-logo.jpg", "sizes": "192x192", "type": "image/jpeg"}]
+    }
+  ]
+}
