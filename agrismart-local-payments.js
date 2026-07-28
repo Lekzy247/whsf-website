@@ -15,7 +15,8 @@
       ['cash_delivery', 'Cash on Delivery', 'manual']
     ],
     GH: [['mobile_money','Mobile Money','gateway'],['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['cash_delivery','Cash on Delivery','manual']],
-    KE: [['mobile_money','M-Pesa / Mobile Money','gateway'],['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['cash_delivery','Cash on Delivery','manual']],
+    MW: [['mobile_money','Airtel Money / TNM Mpamba','gateway'],['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['cash_delivery','Cash on Delivery','manual']],
+    SL: [['mobile_money','Orange Money / Afrimoney','gateway'],['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['cash_delivery','Cash on Delivery','manual']],
     ZA: [['instant_eft','Instant EFT','gateway'],['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['cash_delivery','Cash on Delivery','manual']],
     SN: [['mobile_money','Mobile Money','gateway'],['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['cash_delivery','Cash on Delivery','manual']],
     CI: [['mobile_money','Mobile Money','gateway'],['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['cash_delivery','Cash on Delivery','manual']],
@@ -29,11 +30,11 @@
   const defaultMethods = [['card','Card','gateway'],['bank_transfer','Bank Transfer','manual'],['mobile_money','Mobile Money','gateway'],['cash_delivery','Cash on Delivery','manual']];
 
   const providerCatalog = Object.freeze({
-    paystack: { name:'Paystack', countries:['NG','GH','ZA','KE'], methods:['card','bank_transfer','ussd','mobile_money'] },
-    flutterwave: { name:'Flutterwave', countries:['NG','GH','KE','ZA','UG','TZ','RW'], methods:['card','bank_transfer','ussd','mobile_money'] },
+    paystack: { name:'Paystack', countries:['NG','GH','ZA'], methods:['card','bank_transfer','ussd','mobile_money'] },
+    flutterwave: { name:'Flutterwave', countries:['NG','GH','MW','SL','ZA','UG','TZ','RW'], methods:['card','bank_transfer','ussd','mobile_money'] },
     stripe: { name:'Stripe', countries:['US','CA','GB','IE','AU','ZA'], methods:['card','bank_transfer','digital_wallet'] },
-    paypal: { name:'PayPal', countries:['US','CA','GB','IE','AU','NG','GH','KE','ZA'], methods:['digital_wallet','card'] },
-    manual: { name:'Manual / Offline', countries:['*'], methods:['bank_transfer','cash_delivery'] }
+    paypal: { name:'PayPal', countries:['US','CA','GB','IE','AU','NG','GH','MW','SL','ZA'], methods:['digital_wallet','card'] },
+    manual: { name:'Manual / Offline', countries:['*'], methods:['bank_transfer','cash_delivery','mobile_money'] }
   });
 
   function readPayments() {
