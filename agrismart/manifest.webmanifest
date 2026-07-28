@@ -1,0 +1,45 @@
+{
+  "name": "WHSF AgriSmart Connect",
+  "short_name": "AgriSmart",
+  "description": "A practical digital workspace for farm records, finance, inventory, crop guidance and smart recommendations.",
+  "id": "/agrismart/app.html",
+  "start_url": "/agrismart/app.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4f7f3",
+  "theme_color": "#0d4d35",
+  "lang": "en-US",
+  "categories": ["agriculture", "productivity", "education"],
+  "icons": [
+    {
+      "src": "/assets/whsf-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/whsf-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Farm Dashboard",
+      "short_name": "Dashboard",
+      "url": "/agrismart/app.html#home"
+    },
+    {
+      "name": "Record Finance",
+      "short_name": "Finance",
+      "url": "/agrismart/app.html#finance"
+    },
+    {
+      "name": "Manage Inventory",
+      "short_name": "Inventory",
+      "url": "/agrismart/app.html#inventory"
+    }
+  ]
+}
