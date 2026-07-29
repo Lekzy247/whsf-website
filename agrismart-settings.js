@@ -161,7 +161,10 @@
       '/agrismart-marketplace-experience.js',
       '/agrismart-shopping-cart.js',
       '/agrismart-local-payments.js',
-      '/agrismart-livestock.js'
+      '/agrismart-livestock.js',
+      '/agrismart-warehouse.js',
+      '/agrismart-procurement.js',
+      '/agrismart-fleet.js'
     ];
 
     try {
