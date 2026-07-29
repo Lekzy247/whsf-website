@@ -1,4 +1,4 @@
-const CACHE_NAME = "agrismart-v4";
+const CACHE_NAME = "agrismart-v5-auth-fix";
 const APP_SHELL = [
   "/agrismart/",
   "/agrismart/app.html",
@@ -14,6 +14,7 @@ const APP_SHELL = [
   "/agrismart/sync-integration.js",
   "/agrismart-app.css",
   "/agrismart-app.js",
+  "/agrismart-auth-ui.js",
   "/agrismart-reports.js",
   "/agrismart-inventory.js",
   "/agrismart-ai-advisor.js",
@@ -38,13 +39,11 @@ async function cacheAppShell() {
   );
 
   const failed = results.filter(result => result.status === "rejected");
-  if (failed.length) {
-    console.warn(`AgriSmart cached with ${failed.length} optional asset failure(s).`);
-  }
+  if (failed.length) console.warn(`AgriSmart cached with ${failed.length} optional asset failure(s).`);
 }
 
 self.addEventListener("install", event => {
-  event.waitUntil(cacheAppShell());
+  event.waitUntil(cacheAppShell().then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", event => {
@@ -60,9 +59,7 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("message", event => {
-  if (event.data?.type === "AGRISMART_SKIP_WAITING") {
-    event.waitUntil(self.skipWaiting());
-  }
+  if (event.data?.type === "AGRISMART_SKIP_WAITING") event.waitUntil(self.skipWaiting());
   if (event.data?.type === "AGRISMART_SYNC_REQUEST") {
     event.waitUntil(notifyClients({ type: "AGRISMART_SYNC_REQUEST" }));
   }
@@ -101,6 +98,22 @@ self.addEventListener("fetch", event => {
 
   if (requestUrl.origin !== self.location.origin) return;
 
+  const isCodeAsset = /\.(?:js|css)$/.test(requestUrl.pathname);
+  if (isCodeAsset) {
+    event.respondWith(
+      fetch(event.request, { cache: "no-store" })
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then(cached => cached || Response.error()))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(cached => {
       const networkRequest = fetch(event.request)
@@ -112,7 +125,6 @@ self.addEventListener("fetch", event => {
           return response;
         })
         .catch(() => cached || Response.error());
-
       return cached || networkRequest;
     })
   );
