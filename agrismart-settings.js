@@ -108,13 +108,23 @@
   }
 
   function loadScript(src) {
-    if (document.querySelector(`script[src="${src}"]`)) return Promise.resolve();
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing?.dataset.loaded === 'true') return Promise.resolve();
+    if (existing) {
+      return new Promise((resolve, reject) => {
+        existing.addEventListener('load', resolve, { once: true });
+        existing.addEventListener('error', () => reject(new Error(`Unable to load ${src}`)), { once: true });
+      });
+    }
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = src;
       script.defer = true;
-      script.addEventListener('load', resolve, { once:true });
-      script.addEventListener('error', () => reject(new Error(`Unable to load ${src}`)), { once:true });
+      script.addEventListener('load', () => {
+        script.dataset.loaded = 'true';
+        resolve();
+      }, { once: true });
+      script.addEventListener('error', () => reject(new Error(`Unable to load ${src}`)), { once: true });
       document.head.appendChild(script);
     });
   }
@@ -122,6 +132,9 @@
   async function enableExtendedModules() {
     const marketplacePanel = document.querySelector('[data-view-panel="marketplace"]');
     if (marketplacePanel) marketplacePanel.dataset.marketplacePanel = '';
+
+    const operationsPanel = document.querySelector('[data-view-panel="operations"]');
+    if (operationsPanel) operationsPanel.dataset.operationsDashboard = '';
 
     const main = document.querySelector('.app-main');
     const nav = document.querySelector('.app-nav');
@@ -142,13 +155,21 @@
       nav.insertBefore(button, settingsButton || null);
     }
 
+    const modules = [
+      '/agrismart-analytics.js',
+      '/agrismart-marketplace-commerce.js',
+      '/agrismart-marketplace-experience.js',
+      '/agrismart-shopping-cart.js',
+      '/agrismart-local-payments.js',
+      '/agrismart-livestock.js'
+    ];
+
     try {
-      await loadScript('/agrismart-analytics.js');
-      await loadScript('/agrismart-marketplace-commerce.js');
-      await loadScript('/agrismart-local-payments.js');
-      window.dispatchEvent(new CustomEvent('agrismart:extendedmodulesready'));
+      for (const module of modules) await loadScript(module);
+      window.dispatchEvent(new CustomEvent('agrismart:extendedmodulesready', { detail: { modules } }));
     } catch (error) {
       console.error('AgriSmart extended modules failed to load.', error);
+      window.dispatchEvent(new CustomEvent('agrismart:extendedmoduleserror', { detail: { message: error.message } }));
     }
   }
 
