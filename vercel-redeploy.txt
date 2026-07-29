@@ -1,0 +1,1 @@
+Redeploy trigger created to publish the restored homepage.
