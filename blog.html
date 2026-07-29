@@ -3,16 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WHSF Blog | AI for Good, STEM, Digital Inclusion and Humanitarian Technology</title>
-    <meta
-      name="description"
-      content="WHSF Blog shares insights, opportunities, success stories and learning resources across AI, STEM, robotics, cybersecurity, digital inclusion, AgriTech and humanitarian technology."
-    />
+    <title>WHSF Blog | Women Empowerment, AgriTech and Community Impact</title>
+    <meta name="description" content="Read WHSF stories about women empowerment, sustainable agriculture, AgriTech, AI for Good, STEM, digital inclusion and humanitarian impact." />
     <link rel="canonical" href="https://www.worldhsfoundation.org/blog.html" />
     <link rel="icon" href="assets/whsf-logo.jpg" />
     <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .impact-story{background:linear-gradient(135deg,#f4fbf6,#fff8ea)}
+      .impact-story-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:36px;align-items:center}
+      .impact-story-copy h2{max-width:760px}.impact-story-copy p{font-size:1.04rem;line-height:1.75}
+      .impact-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+      .impact-points article{padding:18px;border-radius:16px;background:#fff;box-shadow:0 12px 30px rgba(23,74,43,.08)}
+      .impact-points strong{display:block;color:#17643a;margin-bottom:6px}
+      .community-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+      .community-gallery figure{margin:0;overflow:hidden;border-radius:18px;background:#fff;box-shadow:0 16px 38px rgba(22,62,39,.13)}
+      .community-gallery figure:first-child{grid-column:1/-1}
+      .community-gallery img{display:block;width:100%;height:250px;object-fit:cover}
+      .community-gallery figure:first-child img{height:330px}
+      .community-gallery figcaption{padding:13px 15px;font-size:.9rem;line-height:1.45}
+      .story-body{max-width:900px;margin:0 auto}
+      .story-body h3{margin-top:30px}.story-body p{line-height:1.8}
+      .story-quote{margin:28px 0;padding:24px;border-left:5px solid #1d8f5a;background:#f2faf5;border-radius:0 16px 16px 0;font-size:1.08rem}
+      .sdg-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.sdg-row span{padding:9px 13px;border-radius:999px;background:#e8f6ec;font-weight:700;color:#145b34}
+      @media(max-width:850px){.impact-story-grid{grid-template-columns:1fr}.impact-points{grid-template-columns:1fr}.community-gallery img,.community-gallery figure:first-child img{height:230px}}
+      @media(max-width:560px){.community-gallery{grid-template-columns:1fr}.community-gallery figure:first-child{grid-column:auto}}
+    </style>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -22,18 +39,11 @@
           <img src="assets/whsf-logo.jpg" width="56" height="56" alt="WHSF logo" />
           <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
         </a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-          Menu
-        </button>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">Menu</button>
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-          <a href="index.html">Home</a>
-          <a href="about.html">About Us</a>
-          <a href="programs.html">Programs</a>
-          <a href="blog.html" aria-current="page">Blog</a>
-          <a href="e-classroom.html">e-learning</a>
-          <a href="impact-dashboard.html">Impact</a>
-          <a href="partner-sponsor.html">Partner &amp; Sponsor</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html">Home</a><a href="about.html">About Us</a><a href="programs.html">Programs</a>
+          <a href="blog.html" aria-current="page">Blog</a><a href="e-classroom.html">e-learning</a>
+          <a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a>
         </nav>
       </div>
     </header>
@@ -42,273 +52,113 @@
       <section class="blog-hero section">
         <div class="shell blog-hero-grid">
           <div class="blog-hero-copy reveal">
-            <p class="eyebrow">WHSF Knowledge Hub</p>
-            <h1>AI for Good, STEM and humanitarian technology stories.</h1>
-            <p>
-              Explore original WHSF insights, learning resources, opportunities, success stories and
-              technology updates for students, girls in ICT, teachers, donors, partners and communities.
-            </p>
-            <div class="blog-hero-actions">
-              <a class="button" href="#latest">Read latest features</a>
-              <a class="button button-secondary" href="#opportunities">Explore opportunities</a>
-            </div>
+            <p class="eyebrow">WHSF Knowledge &amp; Impact Hub</p>
+            <h1>Community stories, women empowerment and technology for humanity.</h1>
+            <p>Explore authentic WHSF programme stories, AgriTech learning, community impact, AI for Good, STEM opportunities and practical resources for sustainable development.</p>
+            <div class="blog-hero-actions"><a class="button" href="#women-agriculture">Read the featured story</a><a class="button button-secondary" href="#topics">Explore topics</a></div>
           </div>
           <aside class="blog-hero-card reveal delay-one" aria-label="WHSF editorial focus">
-            <div class="blog-orbit" aria-hidden="true">
-              <span></span><span></span><span></span><span></span>
-            </div>
             <strong>WHSF Blog</strong>
-            <p>Original articles, project updates, technology explainers and opportunity alerts.</p>
-            <div class="blog-hero-stats">
-              <span><b>AI</b> tutorials</span>
-              <span><b>STEM</b> resources</span>
-              <span><b>Global</b> opportunities</span>
-            </div>
+            <p>Real people, practical solutions and measurable community impact.</p>
+            <div class="blog-hero-stats"><span><b>Women</b> empowered</span><span><b>AgriTech</b> promoted</span><span><b>SDGs</b> advanced</span></div>
           </aside>
         </div>
       </section>
 
-      <section class="section blog-control-panel" aria-label="Blog search and filters">
-        <div class="shell">
-          <div class="blog-search-card reveal">
-            <div>
-              <p class="eyebrow">Explore by topic</p>
-              <h2>Find WHSF stories, resources and opportunities.</h2>
+      <section class="section impact-story" id="women-agriculture">
+        <div class="shell impact-story-grid">
+          <div class="impact-story-copy reveal">
+            <p class="eyebrow">Featured Community Impact Story</p>
+            <h2>Empowering women through sustainable agriculture, enterprise and AgriTech.</h2>
+            <p>World Humanitarian Support Foundation works with women in underserved communities to strengthen livelihoods, improve food security and create pathways to economic independence. Through community-based training, women gain practical knowledge in sustainable agriculture, cooperative development, financial literacy, entrepreneurship and the use of accessible digital tools.</p>
+            <p>These programmes are designed to help participants move from vulnerability toward resilience—building the confidence, skills and networks needed to grow food, manage small enterprises, support their families and contribute to local development.</p>
+            <div class="impact-points">
+              <article><strong>Practical agricultural skills</strong><span>Climate-smart farming, crop planning, soil care, post-harvest handling and record keeping.</span></article>
+              <article><strong>Women's economic participation</strong><span>Enterprise skills, cooperative support and stronger access to livelihood opportunities.</span></article>
+              <article><strong>Digital inclusion</strong><span>Introducing mobile tools, market information and AgriSmart-enabled farm management.</span></article>
+              <article><strong>Community resilience</strong><span>Supporting households and local networks through sustainable food and income systems.</span></article>
             </div>
-            <label class="blog-search">
-              <span>Search blog topics</span>
-              <input id="blogSearch" type="search" placeholder="Search AI, robotics, scholarships, cybersecurity..." />
-            </label>
+            <div class="sdg-row"><span>SDG 1: No Poverty</span><span>SDG 2: Zero Hunger</span><span>SDG 5: Gender Equality</span><span>SDG 8: Decent Work</span></div>
           </div>
-          <div class="blog-filter-list" aria-label="Blog category filters">
-            <button type="button" class="blog-filter active" data-filter="all">All</button>
-            <button type="button" class="blog-filter" data-filter="ai">AI</button>
-            <button type="button" class="blog-filter" data-filter="stem">STEM</button>
-            <button type="button" class="blog-filter" data-filter="opportunities">Opportunities</button>
-            <button type="button" class="blog-filter" data-filter="impact">Impact</button>
-            <button type="button" class="blog-filter" data-filter="security">Cybersecurity</button>
-            <button type="button" class="blog-filter" data-filter="agritech">AgriTech</button>
+          <div class="community-gallery reveal delay-one" aria-label="WHSF women empowerment programme gallery">
+            <figure><img src="assets/blog/whsf-women-empowerment-2.jpg" alt="Large group of women participating in a WHSF women empowerment community programme" loading="eager" /><figcaption>Women participating in a WHSF community empowerment and livelihood programme.</figcaption></figure>
+            <figure><img src="assets/blog/whsf-women-empowerment-1.jpg" alt="WHSF women empowerment programme participants in branded shirts" loading="lazy" /><figcaption>Community participants building networks for sustainable livelihoods.</figcaption></figure>
+            <figure><img src="assets/blog/whsf-women-empowerment-3.jpg" alt="Women gathered during a WHSF community training and outreach activity" loading="lazy" /><figcaption>Local engagement focused on skills, resilience and shared opportunity.</figcaption></figure>
           </div>
         </div>
       </section>
 
-      <section class="section" id="latest">
+      <section class="section">
+        <div class="shell story-body reveal">
+          <p class="eyebrow">From training to transformation</p>
+          <h2>Why women-centered agricultural development matters</h2>
+          <p>Women play a central role in household nutrition, local food production and community wellbeing. Yet many women still face barriers to land, finance, training, technology and formal markets. WHSF programmes respond by combining practical education with community support and technology-enabled opportunities.</p>
+          <h3>Connecting grassroots programmes with AgriSmart</h3>
+          <p>WHSF's AgriSmart platform is being developed to support farmers and agricultural organizations with farm records, inventory, warehouse operations, procurement, analytics and decision support. The long-term goal is to make useful agricultural technology accessible to smallholder farmers, women-led enterprises and community cooperatives—not only to large commercial operations.</p>
+          <div class="story-quote">“Technology creates the greatest value when it strengthens the knowledge, confidence and economic power of people who have historically been excluded.”</div>
+          <h3>Building sustainable pathways</h3>
+          <p>Training alone is not enough. Sustainable impact requires continued mentoring, access to tools, stronger market connections, cooperative structures and reliable data. WHSF therefore promotes an integrated approach linking agricultural education, digital inclusion, entrepreneurship and community partnerships.</p>
+          <p><a class="button" href="agrismart-app.html">Explore AgriSmart</a> <a class="button button-secondary" href="partner-sponsor.html">Support this work</a></p>
+        </div>
+      </section>
+
+      <section class="section blog-control-panel" aria-label="Blog search and filters" id="topics">
         <div class="shell">
-          <div class="section-heading">
-            <p class="eyebrow">Featured editorial</p>
-            <h2>Stories that position WHSF as a technology-for-humanity platform.</h2>
+          <div class="blog-search-card reveal"><div><p class="eyebrow">Explore by topic</p><h2>Find WHSF stories, resources and opportunities.</h2></div><label class="blog-search"><span>Search blog topics</span><input id="blogSearch" type="search" placeholder="Search women, agriculture, AI, STEM, scholarships..." /></label></div>
+          <div class="blog-filter-list" aria-label="Blog category filters">
+            <button type="button" class="blog-filter active" data-filter="all">All</button><button type="button" class="blog-filter" data-filter="agritech">AgriTech</button><button type="button" class="blog-filter" data-filter="impact">Impact</button><button type="button" class="blog-filter" data-filter="women">Women</button><button type="button" class="blog-filter" data-filter="ai">AI</button><button type="button" class="blog-filter" data-filter="stem">STEM</button><button type="button" class="blog-filter" data-filter="opportunities">Opportunities</button>
           </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="section-heading"><p class="eyebrow">Featured editorial</p><h2>Stories connecting technology, learning and community transformation.</h2></div>
           <div class="blog-feature-grid">
-            <article class="blog-feature-card blog-post-card" data-category="ai stem impact">
-              <img src="assets/home/ai-robotics-for-good-live.jpg" alt="WHSF learners exploring AI and robotics technology" />
-              <div>
-                <span class="blog-tag">AI for Good</span>
-                <h3>How responsible AI can expand learning access for underserved communities</h3>
-                <p>
-                  Practical ways WHSF can use AI literacy, tutoring tools and safe digital skills to support
-                  girls, young women, teachers and community learners.
-                </p>
-                <a href="e-classroom.html">Open e-learning pathways →</a>
-              </div>
-            </article>
-            <article class="blog-feature-card blog-post-card" data-category="impact stem">
-              <img src="assets/programs/ict-girls-club-certificates.jpg" alt="Girls in ICT Club learners celebrating certificate achievement" />
-              <div>
-                <span class="blog-tag">Success Stories</span>
-                <h3>Girls in ICT: confidence, certificates and future-ready skills</h3>
-                <p>
-                  WHSF shares programme milestones, learner achievement stories and pathways into mentorship,
-                  entrepreneurship and digital careers.
-                </p>
-                <a href="programs.html">View programmes →</a>
-              </div>
-            </article>
+            <article class="blog-feature-card blog-post-card" data-category="women agritech impact"><img src="assets/blog/whsf-women-empowerment-2.jpg" alt="WHSF women empowerment initiative participants" /><div><span class="blog-tag">Women &amp; Agriculture</span><h3>Empowering women through sustainable agriculture and community enterprise</h3><p>How WHSF combines practical skills, community support and accessible technology to strengthen women's livelihoods.</p><a href="#women-agriculture">Read the impact story →</a></div></article>
+            <article class="blog-feature-card blog-post-card" data-category="ai stem impact"><img src="assets/home/ai-robotics-for-good-live.jpg" alt="WHSF learners exploring AI and robotics technology" /><div><span class="blog-tag">AI for Good</span><h3>Responsible AI can expand learning access for underserved communities</h3><p>Practical ways WHSF can use AI literacy and safe digital tools to support learners, teachers and communities.</p><a href="e-classroom.html">Open e-learning pathways →</a></div></article>
           </div>
         </div>
       </section>
 
       <section class="section blog-topics-section">
-        <div class="shell">
-          <div class="section-heading">
-            <p class="eyebrow">Editorial channels</p>
-            <h2>High-value categories for students, partners, donors and communities.</h2>
-          </div>
+        <div class="shell"><div class="section-heading"><p class="eyebrow">Editorial channels</p><h2>Resources for communities, students, partners and supporters.</h2></div>
           <div class="blog-topic-grid" id="blogTopics">
-            <article class="blog-topic-card blog-post-card" data-category="ai stem">
-              <span>🤖</span><h3>Artificial Intelligence</h3><p>AI tutorials, AI for Good, responsible AI and safe productivity skills.</p><a href="innovation.html#ai-assistant-suite">Explore AI tools</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="ai">
-              <span>💻</span><h3>Technology News</h3><p>Global technology updates translated into plain language for WHSF learners.</p><a href="#automation">View news model</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="impact stem">
-              <span>👩</span><h3>Girls in ICT</h3><p>Women in technology success stories, mentorship and confidence-building updates.</p><a href="programs.html">Read programme updates</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="stem">
-              <span>🤖</span><h3>Robotics</h3><p>Robotics projects, automation lessons, competitions and learner showcases.</p><a href="e-classroom-course.html?course=robotics-automation">Open robotics course</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="stem">
-              <span>🎓</span><h3>FutureTech Academy</h3><p>Student lessons, class activities, assignments and learning milestones.</p><a href="e-classroom.html">Visit e-learning</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="impact">
-              <span>🌍</span><h3>Digital Inclusion</h3><p>Bridging the digital divide through devices, learning access and community hubs.</p><a href="impact-dashboard.html">View impact</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="stem impact">
-              <span>💡</span><h3>Innovation Hub</h3><p>Youth inventions, prototypes, student-built projects and community solutions.</p><a href="student-projects.html">View projects</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="ai">
-              <span>📱</span><h3>Mobile Technology</h3><p>Apps, digital skills and mobile-first tools for collaboration and learning.</p><a href="mobile-app.html">Open mobile app</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="security">
-              <span>🔐</span><h3>Cybersecurity</h3><p>Online safety, scam awareness, privacy, password habits and cyber hygiene.</p><a href="e-classroom-course.html?course=digital-safety-cybersecurity">Learn cyber safety</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="agritech ai">
-              <span>🌱</span><h3>AgriTech</h3><p>Smart farming, AI in agriculture, weather awareness and rural innovation.</p><a href="e-classroom-course.html?course=ai-for-agriculture">Open AI agriculture</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="stem impact">
-              <span>🚁</span><h3>Drones &amp; GIS</h3><p>Mapping, drone safety, humanitarian technology and community data use.</p><a href="programs.html#community-impact">Explore drone impact</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="stem">
-              <span>📚</span><h3>STEM Education</h3><p>Learning resources for teachers, students, clubs and community classrooms.</p><a href="e-classroom.html">Browse courses</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="opportunities">
-              <span>💼</span><h3>Scholarships &amp; Grants</h3><p>Current opportunities, fellowships, grants and safe application guidance.</p><a href="opportunities.html">Find opportunities</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="opportunities">
-              <span>🌎</span><h3>Tech Conferences</h3><p>Global events calendar across Africa, Europe, North America and Asia.</p><a href="opportunities.html#conference-calendar">View calendar</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="impact">
-              <span>🤝</span><h3>Donor Spotlight</h3><p>Corporate partnerships, device donations and sponsorship stories.</p><a href="contact.html">Partner with WHSF</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="impact">
-              <span>🎉</span><h3>Success Stories</h3><p>Student achievement, community outcomes and programme progress.</p><a href="programs.html#success-stories">See stories</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="impact">
-              <span>📸</span><h3>Gallery</h3><p>Project photos and videos from WHSF technology and education activities.</p><a href="index.html#gallery">Open gallery</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="stem">
-              <span>🎥</span><h3>Video Library</h3><p>Course videos, webinars, tutorials and recorded programme sessions.</p><a href="e-classroom.html">Watch lessons</a>
-            </article>
-            <article class="blog-topic-card blog-post-card" data-category="impact">
-              <span>📰</span><h3>WHSF News</h3><p>Organization updates, programme announcements and institutional milestones.</p><a href="about.html">About WHSF</a>
-            </article>
+            <article class="blog-topic-card blog-post-card" data-category="women impact agritech"><span>🌾</span><h3>Women in Agriculture</h3><p>Livelihoods, food security, cooperative development and women-led enterprise.</p><a href="#women-agriculture">Read featured story</a></article>
+            <article class="blog-topic-card blog-post-card" data-category="agritech ai"><span>🌱</span><h3>AgriTech</h3><p>Smart farming, farm records, analytics, weather awareness and rural innovation.</p><a href="agrismart-app.html">Open AgriSmart</a></article>
+            <article class="blog-topic-card blog-post-card" data-category="ai stem"><span>🤖</span><h3>Artificial Intelligence</h3><p>AI tutorials, AI for Good, responsible AI and safe productivity skills.</p><a href="innovation.html#ai-assistant-suite">Explore AI tools</a></article>
+            <article class="blog-topic-card blog-post-card" data-category="impact stem women"><span>👩🏾‍💻</span><h3>Girls in ICT</h3><p>Women in technology success stories, mentorship and confidence building.</p><a href="programs.html">Read programme updates</a></article>
+            <article class="blog-topic-card blog-post-card" data-category="stem"><span>🎓</span><h3>FutureTech Academy</h3><p>Student lessons, class activities, assignments and learning milestones.</p><a href="e-classroom.html">Visit e-learning</a></article>
+            <article class="blog-topic-card blog-post-card" data-category="impact"><span>🌍</span><h3>Digital Inclusion</h3><p>Bridging the digital divide through devices, learning access and community hubs.</p><a href="impact-dashboard.html">View impact</a></article>
+            <article class="blog-topic-card blog-post-card" data-category="opportunities"><span>💼</span><h3>Scholarships &amp; Grants</h3><p>Opportunities, fellowships, grants and safe application guidance.</p><a href="opportunities.html">Find opportunities</a></article>
+            <article class="blog-topic-card blog-post-card" data-category="impact"><span>🤝</span><h3>Partnerships</h3><p>Corporate support, equipment, expertise and programme sponsorship.</p><a href="partner-sponsor.html">Partner with WHSF</a></article>
           </div>
         </div>
       </section>
 
-      <section class="section blog-platform-section" id="automation">
-        <div class="shell blog-platform-grid">
-          <div class="blog-platform-copy reveal">
-            <p class="eyebrow">Future publishing engine</p>
-            <h2>A professional blog designed to grow into a live technology opportunity hub.</h2>
-            <p>
-              WHSF can use this page as the public-facing home for AI-powered news aggregation, STEM updates,
-              humanitarian technology stories, grants, scholarships, fellowships, internships, hackathons and
-              global conference alerts.
-            </p>
-          </div>
-          <div class="blog-platform-stack reveal delay-one">
-            <article><b>AI-powered news aggregation</b><span>Curated updates for AI, STEM and humanitarian technology.</span></article>
-            <article><b>Automatic opportunities</b><span>Scholarships, grants, fellowships and competitions prepared for review.</span></article>
-            <article><b>Conference intelligence</b><span>Global events from Africa, Europe, North America and Asia.</span></article>
-            <article><b>Searchable project library</b><span>Robotics, STEM, drone, AI, AgriTech and student prototypes.</span></article>
-            <article><b>Multilingual publishing</b><span>English, French and major African-language readiness.</span></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section blog-showcase-section">
-        <div class="shell">
-          <div class="section-heading">
-            <p class="eyebrow">Platform features</p>
-            <h2>Built to support learning, funding, visibility and measurable impact.</h2>
-          </div>
-          <div class="blog-showcase-grid">
-            <article><span>01</span><h3>AI learning assistant</h3><p>Students can be guided toward lessons, definitions, course pathways and safe next steps.</p></article>
-            <article><span>02</span><h3>Donor and sponsorship portal</h3><p>Companies can contribute devices, equipment, expertise or funding to WHSF projects.</p></article>
-            <article><span>03</span><h3>Innovation showcase</h3><p>Student-built projects can be displayed with photos, videos, skills and outcomes.</p></article>
-            <article><span>04</span><h3>Impact maps</h3><p>Interactive maps can show countries served, programmes delivered and beneficiaries reached.</p></article>
-            <article><span>05</span><h3>Integrated e-learning</h3><p>Blog articles can connect directly to courses, certificates, assignments and learner dashboards.</p></article>
-            <article><span>06</span><h3>Tech Opportunities Hub</h3><p>Internships, remote jobs, hackathons, competitions and fellowships can be organized in one place.</p></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section blog-cta-section" id="opportunities">
-        <div class="shell blog-cta-panel reveal">
-          <div>
-            <p class="eyebrow">WHSF editorial mission</p>
-            <h2>Positioning WHSF as a leading AI for Good, STEM and digital inclusion platform.</h2>
-            <p>
-              This blog helps WHSF serve Africa and the global community with trusted learning resources,
-              practical technology stories, opportunity access and evidence of impact.
-            </p>
-          </div>
-          <div class="blog-cta-actions">
-            <a class="button" href="opportunities.html">Open opportunities</a>
-            <a class="button button-secondary" href="contact.html">Submit a story idea</a>
-          </div>
-        </div>
+      <section class="section blog-cta-section">
+        <div class="shell blog-cta-panel reveal"><div><p class="eyebrow">Help expand the impact</p><h2>Support women, farmers and underserved communities with skills and technology.</h2><p>Partnerships help WHSF provide training, agricultural tools, digital access, mentoring and sustainable livelihood opportunities.</p></div><div class="blog-cta-actions"><a class="button" href="partner-sponsor.html">Partner or sponsor</a><a class="button button-secondary" href="contact.html">Contact WHSF</a></div></div>
       </section>
     </main>
 
     <footer class="site-footer">
       <div class="shell footer-grid">
-        <div class="footer-brand">
-          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
-          <div>
-            <strong>World Humanitarian<br />Support Foundation</strong>
-            <p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p>
-          </div>
-        </div>
-        <div class="footer-links">
-          <div><strong>Explore</strong><a href="student-projects.html">Projects</a><a href="about.html">About Us</a><a href="index.html#gallery">Gallery</a><a href="programs.html">Programs</a><a href="blog.html">Blog</a><a href="programs.html#innovation">Innovation</a><a href="mobile-app.html">Mobile App</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="index.html#partners">Partners</a></div>
-          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Get involved</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
-        </div>
-        <div class="footer-award" aria-label="WHSF recognition">
-          <img src="assets/whsf-logo.jpg" alt="World Humanitarian Support Foundation logo" />
-          <span>2025 London Data Center World Award Winner</span>
-        </div>
+        <div class="footer-brand"><img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" /><div><strong>World Humanitarian<br />Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p></div></div>
+        <div class="footer-links"><div><strong>Explore</strong><a href="about.html">About Us</a><a href="programs.html">Programs</a><a href="blog.html">Blog</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a></div><div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div></div>
+        <div class="footer-award" aria-label="WHSF recognition"><img src="assets/whsf-logo.jpg" alt="World Humanitarian Support Foundation logo" /><span>2025 London Data Center World Award Winner</span></div>
       </div>
-      <div class="shell social-links" aria-label="WHSF social media">
-        <a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a>
-        <a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a>
-        <a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a>
-      </div>
-      <div class="shell footer-bottom">
-        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
-        <a href="#top">Back to top ↑</a>
-      </div>
+      <div class="shell social-links" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a></div>
+      <div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p><a href="#top">Back to top ↑</a></div>
     </footer>
 
     <script src="script.js"></script>
     <script>
-      const filters = document.querySelectorAll('.blog-filter');
-      const cards = document.querySelectorAll('.blog-post-card');
-      const search = document.getElementById('blogSearch');
-
-      function updateBlogCards() {
-        const active = document.querySelector('.blog-filter.active')?.dataset.filter || 'all';
-        const query = (search?.value || '').trim().toLowerCase();
-
-        cards.forEach((card) => {
-          const categories = card.dataset.category || '';
-          const text = card.textContent.toLowerCase();
-          const categoryMatch = active === 'all' || categories.includes(active);
-          const searchMatch = !query || text.includes(query);
-          card.hidden = !(categoryMatch && searchMatch);
-        });
-      }
-
-      filters.forEach((button) => {
-        button.addEventListener('click', () => {
-          filters.forEach((item) => item.classList.remove('active'));
-          button.classList.add('active');
-          updateBlogCards();
-        });
-      });
-
-      search?.addEventListener('input', updateBlogCards);
+      const filters=document.querySelectorAll('.blog-filter');
+      const cards=document.querySelectorAll('.blog-post-card');
+      const search=document.getElementById('blogSearch');
+      function updateBlogCards(){const active=document.querySelector('.blog-filter.active')?.dataset.filter||'all';const query=(search?.value||'').trim().toLowerCase();cards.forEach(card=>{const categories=card.dataset.category||'';const text=card.textContent.toLowerCase();card.hidden=!((active==='all'||categories.includes(active))&&(!query||text.includes(query)));});}
+      filters.forEach(button=>button.addEventListener('click',()=>{filters.forEach(item=>item.classList.remove('active'));button.classList.add('active');updateBlogCards();}));
+      search?.addEventListener('input',updateBlogCards);
     </script>
   </body>
 </html>
