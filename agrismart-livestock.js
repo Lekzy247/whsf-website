@@ -102,87 +102,83 @@
     return { herds, health, production, totalAnimals, species, upcomingCare };
   }
 
-  function ensureView() {
-    const main = document.querySelector('.app-main');
-    const nav = document.querySelector('.app-nav');
-    if (!main || !nav) return null;
+  function ensureAddon() {
+    document.querySelector('[data-view="livestock"]')?.remove();
+    document.querySelector('[data-view-panel="livestock"]')?.remove();
 
-    let panel = document.querySelector('[data-view-panel="livestock"]');
-    if (!panel) {
-      panel = document.createElement('section');
-      panel.className = 'view';
-      panel.dataset.viewPanel = 'livestock';
-      panel.innerHTML = `
-        <div class="section-heading"><p class="eyebrow">Animal agriculture</p><h2>Livestock farming</h2><p>Manage cattle, goats, poultry and other livestock that provide meat, milk, eggs and household income across Nigeria and Africa.</p></div>
-        <div data-livestock-panel></div>`;
-      const settingsPanel = document.querySelector('[data-view-panel="settings"]');
-      main.insertBefore(panel, settingsPanel || null);
-    }
+    const operationsRoot = document.querySelector('[data-operations-dashboard]');
+    const operationsView = operationsRoot?.closest('[data-view-panel]') || document.querySelector('[data-view-panel="operations"]');
+    const host = operationsRoot || operationsView;
+    if (!host) return null;
 
-    if (!nav.querySelector('[data-view="livestock"]')) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.dataset.view = 'livestock';
-      button.textContent = '🐄 Livestock';
-      const analyticsButton = nav.querySelector('[data-view="analytics"]');
-      nav.insertBefore(button, analyticsButton || nav.querySelector('[data-view="settings"]') || null);
+    let addon = host.querySelector('[data-livestock-addon]');
+    if (!addon) {
+      addon = document.createElement('section');
+      addon.className = 'panel';
+      addon.dataset.livestockAddon = '';
+      addon.style.marginTop = '18px';
+      host.appendChild(addon);
     }
-    return panel.querySelector('[data-livestock-panel]');
+    return addon;
   }
 
   function render() {
-    const root = ensureView();
+    const root = ensureAddon();
     if (!root) return;
     const data = summary();
     const herdOptions = data.herds.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.groupName || item.species)} — ${escapeHtml(item.species)}</option>`).join('');
-    const speciesCards = Object.entries(data.species).map(([species, quantity]) => `<article><strong>${quantity}</strong><p>${escapeHtml(species)}</p></article>`).join('');
+    const speciesSummary = Object.entries(data.species).map(([species, quantity]) => `${escapeHtml(species)}: ${quantity}`).join(' · ') || 'No livestock registered';
 
     root.innerHTML = `
+      <div class="panel-head"><div><h3>Livestock farming add-on</h3><p>Manage cattle, goats, poultry and other animals alongside crop and farm operations. Track meat, milk, eggs, health and household income activities across Nigeria and Africa.</p></div><span class="chip">Optional farm activity</span></div>
       <div class="result-list">
         <article><strong>${data.totalAnimals}</strong><p>Total animals and birds</p></article>
         <article><strong>${data.herds.length}</strong><p>Herds and flocks</p></article>
         <article><strong>${data.health.length}</strong><p>Health records</p></article>
         <article><strong>${data.production.length}</strong><p>Production entries</p></article>
-        ${speciesCards}
       </div>
-      <div class="dashboard-grid" style="margin-top:18px">
-        <section class="panel"><div class="panel-head"><div><h3>Register herd or flock</h3><p>Track livestock groups by species, breed, purpose and location.</p></div></div>
-          <form class="form-grid" data-livestock-herd-form>
-            <label class="field"><span>Species</span><select name="species">${SPECIES.map(item => `<option>${item}</option>`).join('')}</select></label>
-            <label class="field"><span>Breed</span><input name="breed" placeholder="e.g. White Fulani, Red Sokoto, Broiler"></label>
-            <label class="field"><span>Herd or flock name</span><input name="groupName" required></label>
-            <label class="field"><span>Number of animals</span><input name="quantity" type="number" min="0" required></label>
-            <label class="field"><span>Location</span><input name="location"></label>
-            <label class="field"><span>Purpose</span><select name="purpose"><option>Mixed production</option><option>Meat</option><option>Milk</option><option>Eggs</option><option>Breeding</option><option>Draft power</option></select></label>
-            <label class="field"><span>Acquired or established</span><input name="acquiredDate" type="date" value="${today()}"></label>
-            <button class="primary-btn" type="submit">Save livestock group</button>
-          </form>
-        </section>
-        <section class="panel"><div class="panel-head"><div><h3>Health and veterinary care</h3><p>Record vaccinations, treatments, checks and future care dates.</p></div></div>
-          <form class="form-grid" data-livestock-health-form>
-            <label class="field"><span>Herd or flock</span><select name="herdId" required><option value="">Select group</option>${herdOptions}</select></label>
-            <label class="field"><span>Event</span><select name="eventType"><option>Vaccination</option><option>Health check</option><option>Treatment</option><option>Deworming</option><option>Breeding</option><option>Mortality</option></select></label>
-            <label class="field"><span>Treatment or vaccine</span><input name="treatment"></label>
-            <label class="field"><span>Veterinarian</span><input name="veterinarian"></label>
-            <label class="field"><span>Date</span><input name="date" type="date" value="${today()}"></label>
-            <label class="field"><span>Next due date</span><input name="nextDueDate" type="date"></label>
-            <label class="field"><span>Notes</span><textarea name="notes"></textarea></label>
-            <button class="primary-btn" type="submit">Save health record</button>
-          </form>
-        </section>
-        <section class="panel"><div class="panel-head"><div><h3>Production records</h3><p>Capture milk, eggs, meat, liveweight and other outputs.</p></div></div>
-          <form class="form-grid" data-livestock-production-form>
-            <label class="field"><span>Herd or flock</span><select name="herdId" required><option value="">Select group</option>${herdOptions}</select></label>
-            <label class="field"><span>Product</span><select name="product"><option>Milk</option><option>Eggs</option><option>Meat</option><option>Liveweight</option><option>Manure</option><option>Hides and skins</option><option>Other</option></select></label>
-            <label class="field"><span>Quantity</span><input name="quantity" type="number" min="0" step="0.01" required></label>
-            <label class="field"><span>Unit</span><select name="unit"><option>litres</option><option>eggs</option><option>kg</option><option>tonnes</option><option>animals</option><option>bags</option></select></label>
-            <label class="field"><span>Date</span><input name="date" type="date" value="${today()}"></label>
-            <label class="field"><span>Notes</span><textarea name="notes"></textarea></label>
-            <button class="primary-btn" type="submit">Save production</button>
-          </form>
-        </section>
-        <section class="panel"><div class="panel-head"><div><h3>Livestock register</h3><p>Current herds and flocks.</p></div></div><div class="result-list">${data.herds.length ? data.herds.map(item => `<article><strong>${escapeHtml(item.groupName || item.species)} · ${item.quantity}</strong><p>${escapeHtml(item.species)} · ${escapeHtml(item.breed || 'Breed not specified')} · ${escapeHtml(item.location || 'Location not specified')}</p><button class="secondary-btn" type="button" data-remove-herd="${escapeHtml(item.id)}">Remove</button></article>`).join('') : '<div class="notice">No livestock groups registered yet.</div>'}</div></section>
-      </div>`;
+      <p style="margin:12px 0 0"><strong>Species:</strong> ${speciesSummary}</p>
+      <details style="margin-top:16px">
+        <summary class="secondary-btn" style="display:inline-block;cursor:pointer">Open livestock records</summary>
+        <div class="dashboard-grid" style="margin-top:18px">
+          <section class="panel"><div class="panel-head"><div><h3>Register herd or flock</h3><p>Track livestock groups by species, breed, purpose and location.</p></div></div>
+            <form class="form-grid" data-livestock-herd-form>
+              <label class="field"><span>Species</span><select name="species">${SPECIES.map(item => `<option>${item}</option>`).join('')}</select></label>
+              <label class="field"><span>Breed</span><input name="breed" placeholder="e.g. White Fulani, Red Sokoto, Broiler"></label>
+              <label class="field"><span>Herd or flock name</span><input name="groupName" required></label>
+              <label class="field"><span>Number of animals</span><input name="quantity" type="number" min="0" required></label>
+              <label class="field"><span>Location</span><input name="location"></label>
+              <label class="field"><span>Purpose</span><select name="purpose"><option>Mixed production</option><option>Meat</option><option>Milk</option><option>Eggs</option><option>Breeding</option><option>Draft power</option></select></label>
+              <label class="field"><span>Acquired or established</span><input name="acquiredDate" type="date" value="${today()}"></label>
+              <button class="primary-btn" type="submit">Save livestock group</button>
+            </form>
+          </section>
+          <section class="panel"><div class="panel-head"><div><h3>Health and veterinary care</h3><p>Record vaccinations, treatments, checks and future care dates.</p></div></div>
+            <form class="form-grid" data-livestock-health-form>
+              <label class="field"><span>Herd or flock</span><select name="herdId" required><option value="">Select group</option>${herdOptions}</select></label>
+              <label class="field"><span>Event</span><select name="eventType"><option>Vaccination</option><option>Health check</option><option>Treatment</option><option>Deworming</option><option>Breeding</option><option>Mortality</option></select></label>
+              <label class="field"><span>Treatment or vaccine</span><input name="treatment"></label>
+              <label class="field"><span>Veterinarian</span><input name="veterinarian"></label>
+              <label class="field"><span>Date</span><input name="date" type="date" value="${today()}"></label>
+              <label class="field"><span>Next due date</span><input name="nextDueDate" type="date"></label>
+              <label class="field"><span>Notes</span><textarea name="notes"></textarea></label>
+              <button class="primary-btn" type="submit">Save health record</button>
+            </form>
+          </section>
+          <section class="panel"><div class="panel-head"><div><h3>Production records</h3><p>Capture milk, eggs, meat, liveweight and other outputs.</p></div></div>
+            <form class="form-grid" data-livestock-production-form>
+              <label class="field"><span>Herd or flock</span><select name="herdId" required><option value="">Select group</option>${herdOptions}</select></label>
+              <label class="field"><span>Product</span><select name="product"><option>Milk</option><option>Eggs</option><option>Meat</option><option>Liveweight</option><option>Manure</option><option>Hides and skins</option><option>Other</option></select></label>
+              <label class="field"><span>Quantity</span><input name="quantity" type="number" min="0" step="0.01" required></label>
+              <label class="field"><span>Unit</span><select name="unit"><option>litres</option><option>eggs</option><option>kg</option><option>tonnes</option><option>animals</option><option>bags</option></select></label>
+              <label class="field"><span>Date</span><input name="date" type="date" value="${today()}"></label>
+              <label class="field"><span>Notes</span><textarea name="notes"></textarea></label>
+              <button class="primary-btn" type="submit">Save production</button>
+            </form>
+          </section>
+          <section class="panel"><div class="panel-head"><div><h3>Livestock register</h3><p>Current herds and flocks.</p></div></div><div class="result-list">${data.herds.length ? data.herds.map(item => `<article><strong>${escapeHtml(item.groupName || item.species)} · ${item.quantity}</strong><p>${escapeHtml(item.species)} · ${escapeHtml(item.breed || 'Breed not specified')} · ${escapeHtml(item.location || 'Location not specified')}</p><button class="secondary-btn" type="button" data-remove-herd="${escapeHtml(item.id)}">Remove</button></article>`).join('') : '<div class="notice">No livestock groups registered yet.</div>'}</div></section>
+        </div>
+      </details>`;
 
     root.querySelector('[data-livestock-herd-form]')?.addEventListener('submit', event => {
       event.preventDefault();
