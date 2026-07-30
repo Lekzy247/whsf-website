@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v123';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v124';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -8,6 +8,10 @@ const WHSF_CORE_ASSETS = [
   '/mobile-app.html',
   '/mobile-app-admin.html',
   '/programs.html',
+  '/ai-career-connect/',
+  '/ai-career-connect/index.html',
+  '/ai-career-connect/styles.css',
+  '/ai-career-connect/app.js',
   '/blog.html',
   '/innovation.html',
   '/contact.html',
@@ -24,7 +28,8 @@ const WHSF_CORE_ASSETS = [
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
   '/assets/whsf-logo.jpg',
-  '/assets/about/about-us-board.webp'
+  '/assets/about/about-us-board.webp',
+  '/assets/programs/ai-career-connect-social.png'
 ];
 
 self.addEventListener('install', (event) => {
