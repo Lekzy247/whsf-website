@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Practise interviews and receive instant coaching feedback with WHSF AI Career Connect." />
+    <meta name="theme-color" content="#071a35" />
+    <title>AI Interview Coach | WHSF Career Connect</title>
+    <link rel="icon" href="/assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/ai-career-connect/workspaces.css" />
+    <script src="/ai-career-connect/interview-coach.js" defer></script>
+  </head>
+  <body class="workspace-body">
+    <a class="ws-skip" href="#workspace">Skip to interview coach</a>
+    <header class="workspace-header">
+      <div class="workspace-nav">
+        <a class="workspace-brand" href="/ai-career-connect/" aria-label="AI Career Connect home">
+          <img src="/assets/whsf-logo.jpg" alt="WHSF emblem" />
+          <span><strong>WHSF</strong><small>AI Career Connect</small></span>
+        </a>
+        <button class="workspace-menu" type="button" aria-expanded="false" aria-controls="workspace-links"><span aria-hidden="true">☰</span><span class="ws-sr-only">Open navigation</span></button>
+        <nav class="workspace-links" id="workspace-links" aria-label="Career Connect tools">
+          <a href="/ai-career-connect/resume-builder.html">CV Builder</a>
+          <a href="/ai-career-connect/interview-coach.html" aria-current="page">Interview Coach</a>
+          <a href="/ai-career-connect/skills-passport.html">Skills Passport</a>
+          <a class="back-link" href="/ai-career-connect/">← Career Connect</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="workspace">
+      <section class="tool-hero">
+        <div class="ws-shell tool-hero-inner">
+          <div>
+            <p class="tool-kicker">Guided practice workspace</p>
+            <h1>AI Interview Coach</h1>
+            <p>Practise realistic role-specific questions, structure stronger answers and receive instant feedback on clarity, evidence and impact.</p>
+          </div>
+          <span class="privacy-chip">Answers stay on this device</span>
+        </div>
+      </section>
+
+      <section class="workspace-main">
+        <div class="ws-shell workspace-grid interview-grid">
+          <aside class="editor-column">
+            <section class="panel setup-card">
+              <div class="panel-heading"><div><h2>Practice setup</h2><span>Choose a session that matches your goal.</span></div><b class="step-badge">5 Q</b></div>
+              <div class="panel-body">
+                <div class="field"><label for="role">Target role</label><select id="role"><option value="data">Data or Business Analyst</option><option value="programme">Programme Coordinator</option><option value="healthcare">Healthcare Professional</option><option value="software">Software Developer</option><option value="communications">Communications &amp; Marketing</option><option value="graduate">Graduate / Entry Level</option></select></div>
+                <div class="field"><label for="interview-type">Interview focus</label><select id="interview-type"><option value="behavioural">Behavioural</option><option value="technical">Role-specific</option><option value="motivation">Motivation &amp; culture</option></select></div>
+                <div class="field"><label for="difficulty">Difficulty</label><select id="difficulty"><option value="foundation">Foundation</option><option value="standard" selected>Standard</option><option value="challenging">Challenging</option></select></div>
+                <div class="button-row"><button class="ws-button coral" id="start-session" type="button">Start practice</button><button class="ws-button ghost" id="restart-session" type="button" hidden>Restart</button></div>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-heading"><div><h3>Your practice record</h3><span>Stored only in this browser.</span></div></div>
+              <div class="panel-body">
+                <div class="field-grid">
+                  <article class="session-stat"><span>Completed</span><strong id="completed-count">0 questions</strong></article>
+                  <article class="session-stat"><span>Best score</span><strong id="best-score">—</strong></article>
+                </div>
+                <p class="form-note">Coaching scores are practice guidance, not employment assessments.</p>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-heading"><div><h3>Answer framework</h3><span>Use STAR for evidence-led answers.</span></div></div>
+              <div class="panel-body">
+                <p class="form-note"><strong>Situation:</strong> Set the context.<br /><strong>Task:</strong> Explain your responsibility.<br /><strong>Action:</strong> Describe what you personally did.<br /><strong>Result:</strong> Show the measurable outcome.</p>
+              </div>
+            </section>
+          </aside>
+
+          <section class="coach-stage" aria-live="polite">
+            <div class="coach-empty" id="coach-empty">
+              <div><span class="coach-symbol">AI</span><h2>Ready when you are.</h2><p>Choose your role and interview focus, then start a five-question practice session. You can answer in writing and improve each response before moving on.</p><button class="ws-button" id="empty-start" type="button">Start my session</button></div>
+            </div>
+
+            <div id="coach-session" hidden>
+              <div class="coach-top">
+                <div class="question-progress"><span id="session-label">Practice session</span><strong>Question <span id="question-number">1</span> of 5</strong></div>
+                <span class="timer" id="timer">00:00</span>
+              </div>
+              <div class="progress-track" aria-hidden="true"><span id="question-progress"></span></div>
+              <article class="question-card"><span id="question-type">Behavioural question</span><h2 id="question-text">Tell me about a time you solved a difficult problem.</h2></article>
+              <div class="answer-area" id="answer-area">
+                <label for="answer">Your answer</label>
+                <textarea id="answer" maxlength="2500" placeholder="Use the STAR framework and include your specific contribution and result."></textarea>
+                <div class="answer-meta"><span><span id="word-count">0</span> words</span><span>Recommended: 80–220 words</span></div>
+              </div>
+              <p class="coach-tip" id="coach-tip">Tip: Include a specific result, number or lesson to make your answer memorable.</p>
+              <div class="button-row"><button class="ws-button coral" id="get-feedback" type="button">Get coaching feedback</button><button class="ws-button" id="next-question" type="button" hidden>Next question →</button></div>
+              <section class="feedback-card" id="feedback-card" hidden>
+                <div class="feedback-head"><div><h3>Coaching feedback</h3><span id="feedback-summary">A promising answer with room to add evidence.</span></div><b class="feedback-score" id="feedback-score">72</b></div>
+                <div class="feedback-grid">
+                  <article><strong>Structure</strong><span id="feedback-structure">Add clearer Situation, Action and Result signals.</span></article>
+                  <article><strong>Evidence</strong><span id="feedback-evidence">Include a number, outcome or concrete change.</span></article>
+                  <article><strong>Ownership</strong><span id="feedback-ownership">Use “I” to make your contribution clear.</span></article>
+                  <article><strong>Clarity</strong><span id="feedback-clarity">Aim for a focused answer of 80–220 words.</span></article>
+                </div>
+              </section>
+              <section class="feedback-card" id="session-complete" hidden>
+                <div class="feedback-head"><div><h3>Practice complete</h3><span>You completed five questions. Review your score and repeat the session to strengthen your answers.</span></div><b class="feedback-score" id="session-score">0</b></div>
+                <div class="button-row"><button class="ws-button" id="complete-restart" type="button">Practise again</button><a class="ws-button ghost" href="/ai-career-connect/resume-builder.html">Improve my CV</a></div>
+              </section>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="workspace-footer"><div class="ws-shell"><p>WHSF AI Career Connect • Interview Coach</p><a href="/ai-career-connect/">Return to Career Connect</a></div></footer>
+  </body>
+</html>
