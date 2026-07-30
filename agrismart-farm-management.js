@@ -304,4 +304,9 @@
   buildWorkspace();
   renderFarms();
   renderActivities();
+  window.addEventListener('agrismart:farmchange', event => {
+    if (event.detail?.source !== 'cloud') return;
+    renderFarms();
+    renderActivities();
+  });
 })();

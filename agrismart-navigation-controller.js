@@ -7,6 +7,7 @@
     farm: ['Farms', 'Manage farm records, fields and production activities.'],
     finance: ['Finance', 'Record expenses, harvest revenue and farm performance.'],
     inventory: ['Inventory', 'Manage stock levels, movements and reorder alerts.'],
+    weather: ['Farm Weather', 'Plan irrigation, spraying and fieldwork with a live seven-day forecast.'],
     advisor: ['Smart Advisor', 'Generate practical recommendations from current farm conditions.'],
     marketplace: ['Marketplace', 'Request quotes and connect with agricultural suppliers and buyers.'],
     academy: ['AgriSmart Academy', 'Access practical agriculture and digital skills learning.'],
@@ -41,6 +42,7 @@
     if (!nav) return;
     const settings = nav.querySelector('[data-view="settings"]');
     const items = [
+      ['weather', '☀ Farm Weather'],
       ['analytics', '▥ Analytics'],
       ['warehouse', '▦ Warehouse'],
       ['procurement', '▤ Procurement'],

@@ -174,7 +174,7 @@
   }
 
   async function enableExtendedModules() {
-    const modules = ['/agrismart-analytics.js','/agrismart-marketplace-commerce.js','/agrismart-marketplace-experience.js','/agrismart-shopping-cart.js','/agrismart-local-payments.js','/agrismart-livestock.js','/agrismart-warehouse.js','/agrismart-procurement.js','/agrismart-fleet.js','/agrismart-approval-center.js','/agrismart-navigation-controller.js','/agrismart-enterprise-integration.js','/agrismart-administration.js','/agrismart-auth-ui.js'];
+    const modules = ['/agrismart-weather.js','/agrismart-analytics.js','/agrismart-marketplace-commerce.js','/agrismart-marketplace-experience.js','/agrismart-shopping-cart.js','/agrismart-local-payments.js','/agrismart-livestock.js','/agrismart-warehouse.js','/agrismart-procurement.js','/agrismart-fleet.js','/agrismart-approval-center.js','/agrismart-navigation-controller.js','/agrismart-enterprise-integration.js','/agrismart-administration.js','/agrismart-auth-ui.js'];
     try { for (const module of modules) await loadScript(module); window.dispatchEvent(new CustomEvent('agrismart:extendedmodulesready', { detail:{ modules } })); }
     catch (error) { console.error('AgriSmart extended modules failed to load.', error); window.dispatchEvent(new CustomEvent('agrismart:extendedmoduleserror', { detail:{ message:error.message } })); }
   }

@@ -159,7 +159,12 @@
     });
   }
 
-  window.AgriSmartAdvisor = Object.freeze({ recommend, getLiveAdvice, getLocation: getStoredLocation });
+  window.AgriSmartAdvisor = Object.freeze({
+    recommend,
+    getLiveAdvice,
+    getLocation: getStoredLocation,
+    getForecast: fetchWeather
+  });
   enhanceAdvisorForm();
   window.addEventListener('agrismart:extendedmodulesready', enhanceAdvisorForm);
 })();

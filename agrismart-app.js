@@ -220,6 +220,7 @@
   }
 
   function setupCropScanner() {
+    if (window.AgriSmartCropScanner?.init?.()) return;
     const input = document.querySelector('#crop-photo');
     const preview = document.querySelector('.scan-preview');
     const placeholder = document.querySelector('[data-scan-placeholder]');

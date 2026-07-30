@@ -1,10 +1,15 @@
-const CACHE_NAME = 'agrismart-connect-v4-country-crops';
+const CACHE_NAME = 'agrismart-connect-v5-production-features';
 const APP_SHELL = [
   '/mobile-app.html',
   '/agrismart/app.html',
   '/agrismart/market-alert-centre.js',
   '/agrismart-app.css',
+  '/agrismart-ui-fixes.css',
   '/agrismart-app.js',
+  '/agrismart-weather.js',
+  '/agrismart-analytics.js',
+  '/agrismart-farm-management.js',
+  '/agrismart-crop-scanner.js',
   '/agrismart-manifest.webmanifest',
   '/assets/whsf-logo.jpg',
   '/agrismart/index.html',

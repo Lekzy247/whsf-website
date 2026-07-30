@@ -39,7 +39,19 @@ Use this checklist before promoting the current offline-first MVP to a public pr
 - [ ] Restore rollback preserves existing data when a storage write fails.
 - [ ] A fresh backup is retained before any destructive production troubleshooting.
 
-## 5. Browser and device checks
+## 5. Account and cloud synchronization
+
+- [ ] `supabase/migrations/20260729_agrismart_core.sql` has been applied to the production Supabase project.
+- [ ] A new user can register, confirm their email when required, sign in, refresh a session, and sign out.
+- [ ] Row-level security prevents one account from reading or changing another account's records.
+- [ ] Farms, expenses, harvests, inventory items, inventory movements, and crop screening records restore after signing in on a second browser.
+- [ ] Crop screening photos are never placed in local storage or uploaded to cloud synchronization.
+- [ ] Deleting every record in a collection synchronizes the empty collection correctly.
+- [ ] Switching between two accounts on one browser does not expose the previous account's farm data.
+- [ ] Anonymous records remain local and migrate to the first cloud account used on that browser.
+- [ ] A failed cloud request leaves the latest collection snapshot queued for retry.
+
+## 6. Browser and device checks
 
 - [ ] Latest Chrome desktop check completed.
 - [ ] Latest Microsoft Edge desktop check completed.
@@ -48,27 +60,25 @@ Use this checklist before promoting the current offline-first MVP to a public pr
 - [ ] Mobile navigation, forms, tables, and notifications remain usable at narrow widths.
 - [ ] Keyboard navigation and visible focus states are acceptable.
 
-## 6. Deployment and security checks
+## 7. Deployment and security checks
 
 - [ ] Production domain and HTTPS certificate are active.
 - [ ] `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, and HSTS headers are present.
 - [ ] `service-worker.js` is configured for immediate cache revalidation.
 - [ ] The PWA manifest is served with the correct content type.
 - [ ] No secrets, passwords, API keys, or private data are committed to the repository.
-- [ ] Browser storage is understood to be local to the device and browser profile.
+- [ ] Supabase authentication, REST access, table grants, and row-level security policies have passed production review.
 
-## 7. Product and data limitations
+## 8. Product and data limitations
 
 The following limitations must be communicated before release:
 
-- [ ] Authentication is local-only and is not production identity management.
-- [ ] Cloud synchronization is an abstraction and does not use a production backend.
-- [ ] Data is primarily stored in browser local storage.
-- [ ] Clearing browser data or changing devices can remove access to local records unless the user exported a backup.
-- [ ] Multi-user collaboration and cross-device conflict resolution are not available.
+- [ ] Records are stored locally before sign-in; cloud backup requires an authenticated Supabase account.
+- [ ] Clearing browser data can remove anonymous records that have not been backed up or synchronized.
+- [ ] Synchronization uses last completed collection snapshots; simultaneous multi-device editing and collaborative conflict resolution are not available.
 - [ ] AI, weather, marketplace, academy, and scanner capabilities must not be represented as production integrations unless their external services are configured and verified.
 
-## 8. Operational readiness
+## 9. Operational readiness
 
 - [ ] Product owner has approved the release scope.
 - [ ] Support contact and escalation path are documented.
@@ -81,4 +91,4 @@ The following limitations must be communicated before release:
 
 A public production release should be approved only when all required technical, product, security, and operational checks are complete.
 
-Until production authentication, backend persistence, monitoring, and security review are implemented, describe AgriSmart Connect as a **feature-complete offline-first MVP approaching production readiness**, not as a fully production-ready SaaS platform.
+Until production database migration, cloud synchronization, monitoring, browser/device checks, and security review are verified, describe AgriSmart Connect as an **offline-first MVP approaching production readiness**, not as a fully production-ready SaaS platform.

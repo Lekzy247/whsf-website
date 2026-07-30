@@ -3,14 +3,43 @@
 
   const manager = window.AgriSmartSyncManager;
   const cloud = window.AgriSmartCloudSync;
-  if (!manager) return;
+  if (!manager || !cloud) return;
 
-  cloud?.configure?.({ provider: 'local-demo' }).then(() => manager.flush());
-
+  const collectionByKey = Object.freeze({
+    'agrismart-farms-v1': 'farms',
+    'agrismart-expenses-v1': 'expenses',
+    'agrismart-harvests-v1': 'harvests',
+    'agrismart-inventory-v1': 'inventory',
+    'agrismart-inventory-movements-v1': 'inventoryMovements',
+    'agrismart-crop-scans-v1': 'scans'
+  });
+  const keyByCollection = Object.fromEntries(Object.entries(collectionByKey).map(([key, collection]) => [collection, key]));
   const statusLabels = {
     idle: 'Ready', pending: 'Pending', syncing: 'Syncing', synced: 'Synced',
     error: 'Sync error', offline: 'Offline'
   };
+  let initializing = false;
+
+  function readCollection(collection) {
+    try {
+      const records = JSON.parse(localStorage.getItem(keyByCollection[collection]) || '[]');
+      return Array.isArray(records) ? records : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function enqueueCollection(collection) {
+    if (!keyByCollection[collection]) return;
+    manager.enqueue('collection.snapshot', {
+      collection,
+      records: readCollection(collection)
+    });
+  }
+
+  function enqueueAllCollections() {
+    Object.keys(keyByCollection).forEach(enqueueCollection);
+  }
 
   function ensureStatusBadge() {
     let badge = document.querySelector('[data-sync-status]');
@@ -20,58 +49,67 @@
     badge.className = 'chip';
     badge.dataset.syncStatus = '';
     badge.setAttribute('aria-live', 'polite');
-    badge.title = 'Select to retry synchronization';
     badge.addEventListener('click', () => manager.flush());
     document.querySelector('.top-actions')?.prepend(badge);
     return badge;
   }
 
-  function renderStatus(state) {
+  function renderStatus(syncState) {
     const badge = ensureStatusBadge();
-    const pending = Number(state.pending || 0);
-    const label = statusLabels[state.status] || state.status;
+    const cloudState = cloud.status();
+    const pending = Number(syncState.pending || 0);
+    const localOnly = cloudState.mode !== 'cloud';
+    const label = localOnly ? 'Saved locally' : (statusLabels[syncState.status] || syncState.status);
     badge.textContent = pending ? `${label} · ${pending}` : label;
-    badge.dataset.state = state.status;
-    badge.title = state.lastError
-      ? `${state.lastError}. Select to retry.`
-      : state.lastSync
-        ? `Last synchronized ${new Date(state.lastSync).toLocaleString()}`
-        : 'Offline-first synchronization status';
+    badge.dataset.state = localOnly ? 'local' : syncState.status;
+    badge.title = syncState.lastError
+      ? `${syncState.lastError}. Select to retry.`
+      : localOnly
+        ? 'Sign in to back up records securely to your AgriSmart cloud account.'
+        : syncState.lastSync
+          ? `Last cloud synchronization ${new Date(syncState.lastSync).toLocaleString()}`
+          : 'Cloud synchronization is ready.';
+  }
+
+  async function initializeCloud() {
+    if (initializing) return;
+    initializing = true;
+    try {
+      const configured = await cloud.configure({ provider: 'supabase', mode: 'cloud' });
+      if (configured.mode === 'cloud') {
+        await cloud.hydrateLocalData();
+        enqueueAllCollections();
+      }
+      await manager.flush();
+    } catch (error) {
+      console.warn('AgriSmart cloud initialization is waiting to retry.', error);
+      await manager.flush();
+    } finally {
+      initializing = false;
+      renderStatus(manager.status());
+    }
   }
 
   manager.subscribe(renderStatus);
 
-  function formPayload(form) {
-    return Object.fromEntries(new FormData(form));
-  }
+  window.addEventListener('agrismart:farmchange', event => {
+    if (event.detail?.source !== 'cloud') enqueueCollection('farms');
+  });
+  window.addEventListener('agrismart:datachange', event => {
+    if (event.detail?.source === 'cloud') return;
+    const collection = collectionByKey[event.detail?.key];
+    if (collection) enqueueCollection(collection);
+  });
+  window.addEventListener('agrismart:inventorychange', event => {
+    if (event.detail?.source === 'cloud') return;
+    const collection = collectionByKey[event.detail?.key];
+    if (collection) enqueueCollection(collection);
+  });
+  window.addEventListener('agrismart:scanchange', event => {
+    if (event.detail?.source !== 'cloud') enqueueCollection('scans');
+  });
+  window.addEventListener('agrismart:authchange', initializeCloud);
+  window.addEventListener('agrismart:restorecomplete', enqueueAllCollections);
 
-  document.addEventListener('submit', event => {
-    const form = event.target;
-    if (!(form instanceof HTMLFormElement)) return;
-    const payload = formPayload(form);
-
-    if (form.matches('#farm-form')) manager.enqueue('farm.create', payload);
-    if (form.matches('[data-expense-form]')) manager.enqueue('expense.create', payload);
-    if (form.matches('[data-harvest-form]')) manager.enqueue('harvest.create', payload);
-    if (form.matches('[data-inventory-form]')) manager.enqueue('inventory.create', payload);
-    if (form.matches('[data-movement-form]')) manager.enqueue('inventory.movement', payload);
-  }, true);
-
-  document.addEventListener('click', event => {
-    const expense = event.target.closest('[data-remove-expense]');
-    const harvest = event.target.closest('[data-remove-harvest]');
-    const item = event.target.closest('[data-remove-item]');
-    const farm = event.target.closest('[data-saved-farm] button');
-
-    if (expense) manager.enqueue('expense.delete', { id: expense.dataset.removeExpense });
-    if (harvest) manager.enqueue('harvest.delete', { id: harvest.dataset.removeHarvest });
-    if (item) manager.enqueue('inventory.delete', { id: item.dataset.removeItem });
-    if (farm) {
-      const row = farm.closest('[data-saved-farm]');
-      manager.enqueue('farm.delete', { name: row?.querySelector('strong')?.textContent || '' });
-    }
-  }, true);
-
-  window.addEventListener('agrismart:datachange', () => manager.flush());
-  window.addEventListener('agrismart:inventorychange', () => manager.flush());
+  initializeCloud();
 })();

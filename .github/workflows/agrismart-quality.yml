@@ -6,6 +6,8 @@ on:
     paths:
       - '*.js'
       - '*.html'
+      - '*.css'
+      - 'agrismart/**'
       - 'manifest.json'
       - 'manifest.webmanifest'
       - 'vercel.json'
@@ -16,6 +18,8 @@ on:
     paths:
       - '*.js'
       - '*.html'
+      - '*.css'
+      - 'agrismart/**'
       - 'manifest.json'
       - 'manifest.webmanifest'
       - 'vercel.json'
@@ -51,6 +55,9 @@ jobs:
 
       - name: Run AgriSmart release validator
         run: node scripts/validate-agrismart.mjs
+
+      - name: Test AgriSmart cloud synchronization
+        run: node scripts/test-agrismart-sync.mjs
 
       - name: Publish validation summary
         if: always()

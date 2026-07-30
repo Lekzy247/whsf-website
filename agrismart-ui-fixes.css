@@ -1,0 +1,147 @@
+[hidden] {
+  display: none !important;
+}
+
+.weather-toolbar {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.weather-toolbar form {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  gap: 10px;
+}
+
+.weather-toolbar input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--card);
+  color: var(--ink);
+}
+
+.weather-current {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.weather-current-icon {
+  width: 84px;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #e6f5df, #badcaa);
+  font-size: 2.5rem;
+}
+
+.weather-current strong {
+  display: block;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+}
+
+.weather-current p {
+  margin: 7px 0 0;
+  color: var(--muted);
+}
+
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(130px, 1fr));
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.forecast-card {
+  min-width: 130px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--card);
+}
+
+.forecast-card .forecast-icon {
+  display: block;
+  margin: 12px 0;
+  font-size: 2rem;
+}
+
+.forecast-card strong,
+.forecast-card span,
+.forecast-card small {
+  display: block;
+}
+
+.forecast-card span {
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.forecast-card small {
+  margin-top: 10px;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.weather-source {
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+@media (max-width: 720px) {
+  .weather-toolbar,
+  .weather-toolbar form {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-toolbar .secondary-btn,
+  .weather-toolbar .primary-btn {
+    width: 100%;
+  }
+}
+
+.scanner-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(13, 77, 53, .14);
+}
+
+.scanner-form textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.scanner-history {
+  margin-top: 18px;
+}
+
+.scanner-warning {
+  margin: 10px 0;
+  border-left: 4px solid #d9901a;
+}
+
+.scanner-signal-note {
+  margin: 14px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(13, 77, 53, .07);
+  color: var(--text, #17382c);
+  font-size: .88rem;
+}
+
+@media (max-width: 720px) {
+  .scanner-form {
+    grid-template-columns: 1fr;
+  }
+}

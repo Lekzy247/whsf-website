@@ -179,8 +179,31 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
+  function ensurePanel() {
+    let view = document.querySelector('[data-view-panel="analytics"]');
+    const main = document.querySelector('.app-content') || document.querySelector('.app-main main') || document.querySelector('.app-main');
+    if (!view && main) {
+      view = document.createElement('section');
+      view.className = 'view';
+      view.dataset.viewPanel = 'analytics';
+      view.innerHTML = '<div class="section-heading"><p class="eyebrow">Enterprise intelligence</p><h2>Analytics</h2><p>Review financial, farm, inventory and operational performance from one workspace.</p></div><div data-analytics-panel></div>';
+      const settings = document.querySelector('[data-view-panel="settings"]');
+      main.insertBefore(view, settings || null);
+    }
+
+    const nav = document.querySelector('.app-nav');
+    if (nav && !nav.querySelector('[data-view="analytics"]')) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.view = 'analytics';
+      button.textContent = '▥ Analytics';
+      nav.insertBefore(button, nav.querySelector('[data-view="settings"]') || null);
+    }
+    return view?.querySelector('[data-analytics-panel]') || null;
+  }
+
   function render() {
-    const root = document.querySelector('[data-analytics-panel]');
+    const root = ensurePanel();
     if (!root) return;
 
     const reports = window.AgriSmartReports;

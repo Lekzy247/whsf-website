@@ -20,8 +20,12 @@ const exists = async filePath => {
 
 const requiredFiles = [
   'agrismart-final-app.js',
+  'agrismart-crop-scanner.js',
+  'agrismart-weather.js',
   'agrismart-reports.js',
   'agrismart-inventory.js',
+  'agrismart/impact-centre.css',
+  'agrismart/impact-centre.js',
   'service-worker.js',
   'vercel.json',
   'docs/AGRISMART-RELEASE-CHECKLIST.md'
@@ -33,14 +37,23 @@ for (const file of requiredFiles) {
 }
 
 const rootEntries = await readdir(root, { withFileTypes: true });
-const javascriptFiles = rootEntries
+const nestedAgriSmartEntries = await readdir(path.join(root, 'agrismart'), { withFileTypes: true });
+const javascriptFiles = [
+  ...rootEntries
   .filter(entry => entry.isFile() && entry.name.endsWith('.js'))
-  .map(entry => entry.name)
-  .sort();
-const htmlFiles = rootEntries
+  .map(entry => entry.name),
+  ...nestedAgriSmartEntries
+    .filter(entry => entry.isFile() && entry.name.endsWith('.js'))
+    .map(entry => path.join('agrismart', entry.name))
+].sort();
+const htmlFiles = [
+  ...rootEntries
   .filter(entry => entry.isFile() && entry.name.endsWith('.html'))
-  .map(entry => entry.name)
-  .sort();
+  .map(entry => entry.name),
+  ...nestedAgriSmartEntries
+    .filter(entry => entry.isFile() && entry.name.endsWith('.html'))
+    .map(entry => path.join('agrismart', entry.name))
+].sort();
 
 for (const file of javascriptFiles) {
   const result = spawnSync(process.execPath, ['--check', file], {
@@ -100,7 +113,9 @@ if (htmlFiles.length === 0) {
       if (/^(?:https?:|data:|mailto:|tel:|#|\/\/)/i.test(reference)) continue;
       const cleanReference = reference.split(/[?#]/)[0];
       if (!cleanReference) continue;
-      const referencedPath = path.resolve(path.dirname(path.join(root, file)), cleanReference.replace(/^\//, ''));
+      const referencedPath = cleanReference.startsWith('/')
+        ? path.resolve(root, cleanReference.slice(1))
+        : path.resolve(path.dirname(path.join(root, file)), cleanReference);
       if (!(await exists(referencedPath))) fail(`${file} references a missing local asset: ${reference}`);
       if (/(?:^|\/)agrismart-(?:final-)?app\.js$/i.test(cleanReference)) appScriptLinked = true;
       if (manifestCandidates.some(candidate => cleanReference.endsWith(candidate))) manifestLinked = true;
