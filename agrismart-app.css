@@ -19,7 +19,7 @@
 .market-listing-layout{grid-template-columns:1fr 1fr;margin-top:18px}
 .market-board-head{align-items:flex-start}
 .market-freshness{padding:7px 10px;border-radius:999px;background:#e8f4ec;color:#266140;font-size:.75rem;font-weight:800;white-space:nowrap}
-.market-filters{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.market-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
 .market-filters label{display:grid;gap:6px;color:var(--muted);font-size:.75rem;font-weight:700}
 .market-filters select{width:100%;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
 .market-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}
@@ -34,6 +34,10 @@
 .market-trend.negative{background:#fae7e3;color:#943c31}
 .market-source{font-weight:700}
 .market-disclaimer{margin:13px 0 0;color:var(--muted);font-size:.76rem;line-height:1.5}
+.regional-crop-catalog{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.regional-crop-catalog>strong{display:block;margin-bottom:9px;font-size:.82rem}
+.regional-crop-catalog>div{display:flex;flex-wrap:wrap;gap:7px}
+.regional-crop-catalog span{padding:6px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:.72rem;font-weight:700}
 .market-centre .market-alert-form{grid-template-columns:1fr}
 .market-channels{margin:0;padding:0;border:0}
 .market-channels legend{margin-bottom:8px}
@@ -71,5 +75,5 @@
 .market-card-link:hover{text-decoration:underline}
 .dark-mode .market-freshness,.dark-mode .market-trend.positive{background:#234936;color:#c8f0d5}
 .dark-mode .market-trend.negative{background:#542e2b;color:#ffcec6}
-@media(max-width:1180px){.market-metric-grid{grid-template-columns:repeat(2,1fr)}.market-layout{grid-template-columns:1fr}.farmer-alert-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1180px){.market-metric-grid{grid-template-columns:repeat(2,1fr)}.market-layout{grid-template-columns:1fr}.market-filters{grid-template-columns:repeat(2,1fr)}.farmer-alert-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.market-hero{display:grid;align-items:start}.market-hero-actions{min-width:0;display:grid}.market-hero-actions button{width:100%}.market-metric-grid,.farmer-alert-grid,.market-filters{grid-template-columns:1fr}.market-board{padding:16px}.market-alert-feed .panel-head{align-items:flex-start;flex-direction:column}.market-alert-feed [data-speak-alerts]{display:inline-flex!important}.produce-listing-head{align-items:flex-start}.market-connections .market-grid{grid-template-columns:1fr}}

@@ -154,6 +154,7 @@
               <span class="market-freshness" data-market-freshness>Updated reference</span>
             </div>
             <div class="market-filters" aria-label="Filter market prices">
+              <label><span>Region</span><select data-market-region-filter></select></label>
               <label><span>Crop</span><select data-market-crop-filter></select></label>
               <label><span>Market area</span><select data-market-area-filter></select></label>
               <label><span>Sort</span><select data-market-sort><option value="best">Best price</option><option value="nearest">Nearest market</option><option value="trend">Strongest trend</option></select></label>
@@ -165,14 +166,16 @@
               </table>
             </div>
             <p class="market-disclaimer">Prices are planning references submitted for demonstration and may differ from an actual buyer’s offer. Confirm price, grade, quantity and payment terms before trading.</p>
+            <div class="regional-crop-catalog"><strong data-regional-crop-title>Popular crops</strong><div data-regional-crop-list></div></div>
           </section>
 
           <aside class="panel alert-panel" id="alert-profile">
             <div class="panel-head"><div><p class="market-overline">Personalized alerts</p><h3>My farmer profile</h3></div><span class="chip">On-device</span></div>
             <form class="form-grid market-alert-form" data-market-alert-form>
+              <label class="field"><span>Country or region</span><select name="region" data-alert-region required></select></label>
               <label class="field"><span>Main crop</span><select name="crop" data-alert-crop required></select></label>
               <label class="field"><span>Nearest market</span><select name="area" data-alert-area required></select></label>
-              <label class="field"><span>Target price (₦/kg)</span><input name="targetPrice" type="number" min="1" step="1" placeholder="e.g. 750"></label>
+              <label class="field"><span data-alert-price-label>Target price (₦/kg)</span><input name="targetPrice" type="number" min="0.01" step="0.01" placeholder="e.g. 750"></label>
               <label class="field"><span>Rain alert level</span><select name="rainThreshold"><option value="40">40% chance</option><option value="60" selected>60% chance</option><option value="80">80% chance</option></select></label>
               <fieldset class="market-channels field full"><legend>Delivery options</legend><label><input type="checkbox" name="channel" value="in-app" checked> In-app</label><label><input type="checkbox" name="channel" value="whatsapp"> WhatsApp share</label><label><input type="checkbox" name="channel" value="voice"> Voice playback</label></fieldset>
               <button class="primary-btn full" type="submit">Save and refresh alerts</button>
@@ -192,10 +195,11 @@
           <section class="panel" id="listing-form">
             <div class="panel-head"><div><p class="market-overline">Sell produce</p><h3>Create a produce listing</h3></div><span class="chip">Farmer controlled</span></div>
             <form class="form-grid" data-produce-listing-form>
+              <label class="field"><span>Country or region</span><select name="region" data-listing-region required></select></label>
               <label class="field"><span>Produce</span><select name="crop" data-listing-crop required></select></label>
               <label class="field"><span>Quantity</span><input name="quantity" type="number" min="1" step="0.1" required></label>
-              <label class="field"><span>Unit</span><select name="unit"><option>kg</option><option>bags</option><option>crates</option><option>tonnes</option></select></label>
-              <label class="field"><span>Asking price (₦)</span><input name="askingPrice" type="number" min="0" step="1" required></label>
+              <label class="field"><span>Unit</span><select name="unit"><option>kg</option><option>lb</option><option>bags</option><option>crates</option><option>tonnes</option><option>bushels</option></select></label>
+              <label class="field"><span data-listing-price-label>Asking price (₦)</span><input name="askingPrice" type="number" min="0" step="0.01" required></label>
               <label class="field"><span>Location</span><select name="area" data-listing-area required></select></label>
               <label class="field"><span>Available from</span><input name="availableDate" type="date" required></label>
               <label class="field full"><span>Quality or harvest notes</span><textarea name="notes" rows="3" maxlength="240" placeholder="Grade, variety, packaging or pickup notes"></textarea></label>
