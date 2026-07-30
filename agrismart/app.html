@@ -15,6 +15,7 @@
   <script src="/agrismart/cloud-sync-provider.js" defer></script>
   <script src="/agrismart/weather-provider.js" defer></script>
   <script src="/agrismart/market-provider.js" defer></script>
+  <script src="/agrismart/market-alert-centre.js" defer></script>
   <script src="/agrismart/sync-queue.js" defer></script>
   <script src="/agrismart/sync-manager.js" defer></script>
   <script src="/agrismart/sync-integration.js" defer></script>
@@ -41,7 +42,7 @@
         <button data-view="finance">$ Finance</button>
         <button data-view="inventory">▦ Inventory</button>
         <button data-view="advisor">✦ Smart Advisor</button>
-        <button data-view="marketplace">▣ Marketplace</button>
+        <button data-view="marketplace">▣ Market &amp; Alerts</button>
         <button data-view="academy">◫ Academy</button>
         <button data-view="settings">⚙ Settings</button>
       </nav>
@@ -126,7 +127,97 @@
         <div class="dashboard-grid"><section class="panel"><div class="panel-head"><h3>Smart farm advisor</h3><span class="chip">Decision support</span></div><form class="form-grid" data-advisor-form><label class="field"><span>Soil moisture (%)</span><input name="soilMoisture" type="number" min="0" max="100" value="45"></label><label class="field"><span>Temperature (°C)</span><input name="temperature" type="number" value="29"></label><label class="field"><span>Rain forecast (%)</span><input name="rainForecast" type="number" min="0" max="100" value="30"></label><label class="field"><span>Pest risk (%)</span><input name="pestRisk" type="number" min="0" max="100" value="20"></label><label class="field full"><span>Crop stage</span><select name="cropStage"><option>Planting</option><option>Vegetative</option><option>Flowering</option><option>Harvest</option></select></label><button class="primary-btn" type="submit">Generate advice</button></form></section><section class="panel"><div class="panel-head"><h3>Recommendations</h3></div><div class="result-list" data-advisor-results><div class="notice">Enter current farm conditions to generate practical recommendations.</div></div></section></div>
       </section>
 
-      <section class="view" data-view-panel="marketplace"><div class="panel-head"><div><h3>Marketplace opportunities</h3><p>Sample listings for farm inputs, produce and services.</p></div></div><div class="market-grid"><article class="market-card"><div class="market-visual">🌽</div><div class="body"><h4>Improved maize seed</h4><p>Quality seed from a verified input supplier.</p><div class="market-meta"><span>Input</span><strong>Request quote</strong></div></div></article><article class="market-card"><div class="market-visual">💧</div><div class="body"><h4>Solar irrigation kit</h4><p>Water-efficient pumping and drip irrigation package.</p><div class="market-meta"><span>Equipment</span><strong>Request quote</strong></div></div></article><article class="market-card"><div class="market-visual">🚚</div><div class="body"><h4>Produce logistics</h4><p>Pickup and delivery support for farmer groups.</p><div class="market-meta"><span>Service</span><strong>Connect</strong></div></div></article></div></section>
+      <section class="view market-centre" data-view-panel="marketplace" data-market-centre>
+        <div class="market-hero">
+          <div>
+            <p class="market-kicker">AGRISMART MARKET &amp; FARMER ALERT CENTRE</p>
+            <h2>Local market signals. Timely farm actions.</h2>
+            <p>Compare community reference prices, monitor field conditions and prepare produce for verified market connections.</p>
+          </div>
+          <div class="market-hero-actions">
+            <button class="primary-btn" type="button" data-market-jump="listing-form">List produce</button>
+            <button class="secondary-btn" type="button" data-market-jump="alert-profile">Set my alerts</button>
+          </div>
+        </div>
+
+        <div class="market-metric-grid" aria-label="Market overview">
+          <article><span>Best local signal</span><strong data-market-best>—</strong><small data-market-best-note>Select a crop and market</small></article>
+          <article><span>7-day movement</span><strong data-market-movement>—</strong><small>Reference trend</small></article>
+          <article><span>Field conditions</span><strong data-market-weather>Loading…</strong><small data-market-weather-note>Current location profile</small></article>
+          <article><span>Your active listings</span><strong data-market-listing-count>0</strong><small>Stored on this device</small></article>
+        </div>
+
+        <div class="market-layout">
+          <section class="panel market-board">
+            <div class="panel-head market-board-head">
+              <div><p class="market-overline">Community price board</p><h3>Reference prices near you</h3></div>
+              <span class="market-freshness" data-market-freshness>Updated reference</span>
+            </div>
+            <div class="market-filters" aria-label="Filter market prices">
+              <label><span>Crop</span><select data-market-crop-filter></select></label>
+              <label><span>Market area</span><select data-market-area-filter></select></label>
+              <label><span>Sort</span><select data-market-sort><option value="best">Best price</option><option value="nearest">Nearest market</option><option value="trend">Strongest trend</option></select></label>
+            </div>
+            <div class="market-table-wrap">
+              <table class="market-price-table">
+                <thead><tr><th>Crop &amp; market</th><th>Reference price</th><th>7-day trend</th><th>Freshness</th></tr></thead>
+                <tbody data-market-price-rows></tbody>
+              </table>
+            </div>
+            <p class="market-disclaimer">Prices are planning references submitted for demonstration and may differ from an actual buyer’s offer. Confirm price, grade, quantity and payment terms before trading.</p>
+          </section>
+
+          <aside class="panel alert-panel" id="alert-profile">
+            <div class="panel-head"><div><p class="market-overline">Personalized alerts</p><h3>My farmer profile</h3></div><span class="chip">On-device</span></div>
+            <form class="form-grid market-alert-form" data-market-alert-form>
+              <label class="field"><span>Main crop</span><select name="crop" data-alert-crop required></select></label>
+              <label class="field"><span>Nearest market</span><select name="area" data-alert-area required></select></label>
+              <label class="field"><span>Target price (₦/kg)</span><input name="targetPrice" type="number" min="1" step="1" placeholder="e.g. 750"></label>
+              <label class="field"><span>Rain alert level</span><select name="rainThreshold"><option value="40">40% chance</option><option value="60" selected>60% chance</option><option value="80">80% chance</option></select></label>
+              <fieldset class="market-channels field full"><legend>Delivery options</legend><label><input type="checkbox" name="channel" value="in-app" checked> In-app</label><label><input type="checkbox" name="channel" value="whatsapp"> WhatsApp share</label><label><input type="checkbox" name="channel" value="voice"> Voice playback</label></fieldset>
+              <button class="primary-btn full" type="submit">Save and refresh alerts</button>
+            </form>
+          </aside>
+        </div>
+
+        <section class="panel market-alert-feed">
+          <div class="panel-head">
+            <div><p class="market-overline">Today’s action feed</p><h3>What needs your attention</h3></div>
+            <button class="secondary-btn" type="button" data-speak-alerts>Read alerts aloud</button>
+          </div>
+          <div class="farmer-alert-grid" data-farmer-alerts aria-live="polite"></div>
+        </section>
+
+        <div class="market-layout market-listing-layout">
+          <section class="panel" id="listing-form">
+            <div class="panel-head"><div><p class="market-overline">Sell produce</p><h3>Create a produce listing</h3></div><span class="chip">Farmer controlled</span></div>
+            <form class="form-grid" data-produce-listing-form>
+              <label class="field"><span>Produce</span><select name="crop" data-listing-crop required></select></label>
+              <label class="field"><span>Quantity</span><input name="quantity" type="number" min="1" step="0.1" required></label>
+              <label class="field"><span>Unit</span><select name="unit"><option>kg</option><option>bags</option><option>crates</option><option>tonnes</option></select></label>
+              <label class="field"><span>Asking price (₦)</span><input name="askingPrice" type="number" min="0" step="1" required></label>
+              <label class="field"><span>Location</span><select name="area" data-listing-area required></select></label>
+              <label class="field"><span>Available from</span><input name="availableDate" type="date" required></label>
+              <label class="field full"><span>Quality or harvest notes</span><textarea name="notes" rows="3" maxlength="240" placeholder="Grade, variety, packaging or pickup notes"></textarea></label>
+              <label class="market-consent field full"><input type="checkbox" required> I will confirm the buyer, price and payment terms before release.</label>
+              <button class="primary-btn full" type="submit">Save produce listing</button>
+            </form>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><p class="market-overline">My produce</p><h3>Listings ready to share</h3></div><span class="chip" data-listing-status>0 active</span></div>
+            <div class="market-listings" data-produce-listings></div>
+          </section>
+        </div>
+
+        <section class="panel market-connections">
+          <div class="panel-head"><div><p class="market-overline">Trusted connections</p><h3>Request support before you trade</h3></div></div>
+          <div class="market-grid">
+            <article class="market-card"><div class="market-visual">✓</div><div class="body"><h4>Buyer verification</h4><p>Ask WHSF to review buyer details before sharing produce or payment information.</p><a class="market-card-link" href="/contact.html?subject=AgriSmart%20buyer%20verification">Request verification</a></div></article>
+            <article class="market-card"><div class="market-visual">↗</div><div class="body"><h4>Produce logistics</h4><p>Prepare a pickup request with crop, quantity, market location and timing.</p><a class="market-card-link" href="/contact.html?subject=AgriSmart%20produce%20logistics">Request logistics</a></div></article>
+            <article class="market-card"><div class="market-visual">?</div><div class="body"><h4>Ask an agronomist</h4><p>Escalate crop quality, storage or harvest-readiness questions to a specialist.</p><a class="market-card-link" href="/contact.html?subject=AgriSmart%20agronomist%20support">Ask for support</a></div></article>
+          </div>
+        </section>
+      </section>
 
       <section class="view" data-view-panel="academy"><div class="hero-panel"><p>AGRISMART ACADEMY</p><h2>Build practical skills for climate-smart and technology-enabled farming.</h2><div class="hero-actions"><a class="primary-btn" href="/agrismart/training.html" style="text-decoration:none">Open Training Centre</a><a class="secondary-btn" href="/agrismart/crop-guide.html" style="text-decoration:none">Crop Guide</a></div></div></section>
 

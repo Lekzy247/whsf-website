@@ -1,6 +1,8 @@
-const CACHE_NAME = 'agrismart-connect-v1';
+const CACHE_NAME = 'agrismart-connect-v2-market-alerts';
 const APP_SHELL = [
   '/mobile-app.html',
+  '/agrismart/app.html',
+  '/agrismart/market-alert-centre.js',
   '/agrismart-app.css',
   '/agrismart-app.js',
   '/agrismart-manifest.webmanifest',

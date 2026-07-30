@@ -13,7 +13,7 @@
     approvals: ['Approval Center', 'Review and authorize procurement and operational requests.'],
     analytics: ['Analytics', 'Review financial, inventory, procurement and operational performance.'],
     advisor: ['Smart Advisor', 'Generate practical recommendations from farm and enterprise data.'],
-    marketplace: ['Marketplace', 'Buy inputs, sell produce and connect with agricultural partners.'],
+    marketplace: ['Market & Farmer Alerts', 'Compare market signals, prepare produce listings and receive practical farm alerts.'],
     academy: ['AgriSmart Academy', 'Build practical skills through farmer-focused learning.'],
     administration: ['Administration', 'Manage users, roles, organization policies and audit activity.'],
     settings: ['Settings', 'Manage your profile, security, preferences and application data.'],
@@ -186,6 +186,10 @@
         const list = Array.isArray(approvals) ? approvals : approvals.requests || [];
         const pending = list.filter(item => String(item.status).toLowerCase() === 'pending').length;
         if (pending) items.push(`<article><strong>Pending approvals</strong><p>${pending} request${pending === 1 ? '' : 's'} awaiting review.</p></article>`);
+      } catch {}
+      try {
+        const marketAlerts = window.AgriSmartMarketAlerts?.getAlerts?.() || [];
+        marketAlerts.slice(0, 2).forEach(alert => items.push(`<article><strong>${escapeHtml(alert.title)}</strong><p>${escapeHtml(alert.message)}</p></article>`));
       } catch {}
       if (!items.length) items.push('<article><strong>No urgent alerts</strong><p>Your operations currently have no critical notifications.</p></article>');
       panel.querySelector('[data-live-notifications]').innerHTML = items.join('');

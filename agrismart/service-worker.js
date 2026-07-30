@@ -1,4 +1,4 @@
-const CACHE_NAME = "agrismart-v5-auth-fix";
+const CACHE_NAME = "agrismart-v6-market-alerts";
 const APP_SHELL = [
   "/agrismart/",
   "/agrismart/app.html",
@@ -9,6 +9,7 @@ const APP_SHELL = [
   "/agrismart/cloud-sync-provider.js",
   "/agrismart/weather-provider.js",
   "/agrismart/market-provider.js",
+  "/agrismart/market-alert-centre.js",
   "/agrismart/sync-queue.js",
   "/agrismart/sync-manager.js",
   "/agrismart/sync-integration.js",
