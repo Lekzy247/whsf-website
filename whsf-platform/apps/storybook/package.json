@@ -1,0 +1,25 @@
+{
+  "name": "@whsf/storybook",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "storybook dev -p 6006 --disable-telemetry",
+    "build": "storybook build --disable-telemetry",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@whsf/aurora-ui": "workspace:*",
+    "next": "16.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.5.5",
+    "@storybook/nextjs-vite": "10.5.5",
+    "@types/react": "19.2.14",
+    "storybook": "10.5.5",
+    "typescript": "5.9.3"
+  }
+}

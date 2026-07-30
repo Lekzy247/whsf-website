@@ -1,0 +1,61 @@
+name: WHSF Platform CI
+
+on:
+  pull_request:
+    paths: ["whsf-platform/**", ".github/workflows/whsf-platform-ci.yml"]
+  push:
+    branches: [main]
+    paths: ["whsf-platform/**", ".github/workflows/whsf-platform-ci.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: whsf-platform-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: whsf-platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10.15.1 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: whsf-platform/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: whsf-platform/services/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13", cache: pip }
+      - run: pip install -e ".[dev]" pip-audit
+      - run: ruff check app tests
+      - run: mypy app
+      - run: pytest
+      - run: pip-audit
+
+  compose:
+    runs-on: ubuntu-latest
+    needs: [frontend, api]
+    defaults:
+      run:
+        working-directory: whsf-platform
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet

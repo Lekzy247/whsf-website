@@ -1,0 +1,28 @@
+{
+  "name": "whsf-platform",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": "24.x",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r --if-present build",
+    "dev": "pnpm --parallel --filter @whsf/web --filter @whsf/admin --filter @whsf/docs dev",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "format:check": "prettier --check .",
+    "quality": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "next": "16.2.12"
+  },
+  "devDependencies": {
+    "@types/node": "24.3.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  }
+}
