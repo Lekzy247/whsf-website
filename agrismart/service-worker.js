@@ -1,4 +1,4 @@
-const CACHE_NAME = "agrismart-v7-regional-crops";
+const CACHE_NAME = "agrismart-v8-country-crops";
 const APP_SHELL = [
   "/agrismart/",
   "/agrismart/app.html",

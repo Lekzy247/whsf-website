@@ -1,4 +1,4 @@
-const CACHE_NAME = 'agrismart-connect-v3-regional-crops';
+const CACHE_NAME = 'agrismart-connect-v4-country-crops';
 const APP_SHELL = [
   '/mobile-app.html',
   '/agrismart/app.html',

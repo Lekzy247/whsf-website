@@ -9,16 +9,30 @@
     Nigeria: { label: 'Nigeria', locale: 'en-NG', currency: 'NGN', symbol: '₦', unit: 'kg' },
     USA: { label: 'United States', locale: 'en-US', currency: 'USD', symbol: '$', unit: 'lb' },
     Ghana: { label: 'Ghana', locale: 'en-GH', currency: 'GHS', symbol: 'GH₵', unit: 'kg' },
-    Kenya: { label: 'Kenya', locale: 'en-KE', currency: 'KES', symbol: 'KSh', unit: 'kg' },
-    India: { label: 'India', locale: 'en-IN', currency: 'INR', symbol: '₹', unit: 'kg' }
+    Malawi: { label: 'Malawi', locale: 'en-MW', currency: 'MWK', symbol: 'MK', unit: 'kg' },
+    SierraLeone: { label: 'Sierra Leone', locale: 'en-SL', currency: 'SLE', symbol: 'Le', unit: 'kg' },
+    UnitedKingdom: { label: 'United Kingdom', locale: 'en-GB', currency: 'GBP', symbol: '£', unit: 'kg' },
+    Ireland: { label: 'Ireland', locale: 'en-IE', currency: 'EUR', symbol: '€', unit: 'kg' },
+    France: { label: 'France', locale: 'fr-FR', currency: 'EUR', symbol: '€', unit: 'kg' },
+    Germany: { label: 'Germany', locale: 'de-DE', currency: 'EUR', symbol: '€', unit: 'kg' },
+    Spain: { label: 'Spain', locale: 'es-ES', currency: 'EUR', symbol: '€', unit: 'kg' },
+    Italy: { label: 'Italy', locale: 'it-IT', currency: 'EUR', symbol: '€', unit: 'kg' },
+    Netherlands: { label: 'Netherlands', locale: 'nl-NL', currency: 'EUR', symbol: '€', unit: 'kg' }
   };
 
   const CROP_CATALOG = {
     Nigeria: ['Maize', 'Cassava', 'Rice', 'Tomato', 'Yam', 'Pepper', 'Cowpea (beans)', 'Plantain', 'Sorghum', 'Millet', 'Groundnut', 'Okra', 'Cocoyam', 'Sweet potato', 'Soybean', 'Onion', 'Watermelon', 'Cocoa'],
     USA: ['Corn', 'Soybean', 'Wheat', 'Potato', 'Tomato', 'Apple', 'Peanut', 'Sweet corn', 'Lettuce', 'Strawberry', 'Orange', 'Rice', 'Cotton', 'Barley', 'Oats', 'Grapes'],
     Ghana: ['Maize', 'Cassava', 'Yam', 'Plantain', 'Cocoyam', 'Rice', 'Tomato', 'Pepper', 'Groundnut', 'Cowpea (beans)', 'Cocoa', 'Pineapple', 'Okra'],
-    Kenya: ['Maize', 'Beans', 'Potato', 'Tomato', 'Kale (sukuma wiki)', 'Tea', 'Coffee', 'Avocado', 'Banana', 'Rice', 'Sorghum', 'Millet', 'Onion'],
-    India: ['Rice', 'Wheat', 'Chickpea', 'Pigeon pea', 'Potato', 'Tomato', 'Onion', 'Millet', 'Sorghum', 'Groundnut', 'Cotton', 'Sugarcane', 'Mango', 'Banana', 'Lentil']
+    Malawi: ['Maize', 'Cassava', 'Rice', 'Groundnut', 'Pigeon pea', 'Soybean', 'Sorghum', 'Millet', 'Sweet potato', 'Potato', 'Beans', 'Tomato', 'Banana', 'Tea', 'Tobacco'],
+    SierraLeone: ['Rice', 'Cassava', 'Groundnut', 'Sweet potato', 'Yam', 'Plantain', 'Cocoa', 'Coffee', 'Palm fruit', 'Maize', 'Okra', 'Pepper', 'Ginger', 'Pineapple'],
+    UnitedKingdom: ['Wheat', 'Barley', 'Potato', 'Rapeseed', 'Sugar beet', 'Peas', 'Field beans', 'Carrot', 'Onion', 'Apple', 'Strawberry', 'Oats'],
+    Ireland: ['Barley', 'Wheat', 'Potato', 'Oats', 'Rapeseed', 'Mushroom', 'Cabbage', 'Carrot', 'Onion', 'Apple', 'Strawberry', 'Peas'],
+    France: ['Wheat', 'Barley', 'Maize', 'Rapeseed', 'Sugar beet', 'Potato', 'Grapes', 'Apple', 'Tomato', 'Sunflower', 'Peas'],
+    Germany: ['Wheat', 'Barley', 'Maize', 'Rapeseed', 'Sugar beet', 'Potato', 'Rye', 'Oats', 'Apple', 'Cabbage', 'Asparagus'],
+    Spain: ['Olives', 'Grapes', 'Wheat', 'Barley', 'Maize', 'Tomato', 'Pepper', 'Orange', 'Lemon', 'Almond', 'Strawberry'],
+    Italy: ['Grapes', 'Olives', 'Wheat', 'Maize', 'Tomato', 'Rice', 'Apple', 'Orange', 'Lemon', 'Peach', 'Potato'],
+    Netherlands: ['Potato', 'Onion', 'Sugar beet', 'Wheat', 'Barley', 'Tomato', 'Bell pepper', 'Cucumber', 'Carrot', 'Apple', 'Pear', 'Strawberry']
   };
 
   const AREAS = {
@@ -35,12 +49,33 @@
     'gh-accra': { region: 'Ghana', label: 'Accra', latitude: 5.6037, longitude: -0.1870 },
     'gh-kumasi': { region: 'Ghana', label: 'Kumasi', latitude: 6.6885, longitude: -1.6244 },
     'gh-tamale': { region: 'Ghana', label: 'Tamale', latitude: 9.4034, longitude: -0.8424 },
-    'ke-nairobi': { region: 'Kenya', label: 'Nairobi', latitude: -1.2921, longitude: 36.8219 },
-    'ke-nakuru': { region: 'Kenya', label: 'Nakuru', latitude: -0.3031, longitude: 36.0800 },
-    'ke-kisumu': { region: 'Kenya', label: 'Kisumu', latitude: -0.0917, longitude: 34.7680 },
-    'in-delhi': { region: 'India', label: 'Delhi', latitude: 28.6139, longitude: 77.2090 },
-    'in-mumbai': { region: 'India', label: 'Mumbai', latitude: 19.0760, longitude: 72.8777 },
-    'in-bengaluru': { region: 'India', label: 'Bengaluru', latitude: 12.9716, longitude: 77.5946 }
+    'mw-lilongwe': { region: 'Malawi', label: 'Lilongwe', latitude: -13.9626, longitude: 33.7741 },
+    'mw-blantyre': { region: 'Malawi', label: 'Blantyre', latitude: -15.7861, longitude: 35.0058 },
+    'mw-mzuzu': { region: 'Malawi', label: 'Mzuzu', latitude: -11.4656, longitude: 34.0207 },
+    'sl-freetown': { region: 'SierraLeone', label: 'Freetown', latitude: 8.4657, longitude: -13.2317 },
+    'sl-bo': { region: 'SierraLeone', label: 'Bo', latitude: 7.9647, longitude: -11.7383 },
+    'sl-kenema': { region: 'SierraLeone', label: 'Kenema', latitude: 7.8767, longitude: -11.1875 },
+    'uk-london': { region: 'UnitedKingdom', label: 'London', latitude: 51.5074, longitude: -0.1278 },
+    'uk-birmingham': { region: 'UnitedKingdom', label: 'Birmingham', latitude: 52.4862, longitude: -1.8904 },
+    'uk-leeds': { region: 'UnitedKingdom', label: 'Leeds', latitude: 53.8008, longitude: -1.5491 },
+    'ie-dublin': { region: 'Ireland', label: 'Dublin', latitude: 53.3498, longitude: -6.2603 },
+    'ie-cork': { region: 'Ireland', label: 'Cork', latitude: 51.8985, longitude: -8.4756 },
+    'ie-galway': { region: 'Ireland', label: 'Galway', latitude: 53.2707, longitude: -9.0568 },
+    'fr-paris': { region: 'France', label: 'Paris', latitude: 48.8566, longitude: 2.3522 },
+    'fr-lyon': { region: 'France', label: 'Lyon', latitude: 45.7640, longitude: 4.8357 },
+    'fr-bordeaux': { region: 'France', label: 'Bordeaux', latitude: 44.8378, longitude: -0.5792 },
+    'de-berlin': { region: 'Germany', label: 'Berlin', latitude: 52.5200, longitude: 13.4050 },
+    'de-hamburg': { region: 'Germany', label: 'Hamburg', latitude: 53.5511, longitude: 9.9937 },
+    'de-munich': { region: 'Germany', label: 'Munich', latitude: 48.1351, longitude: 11.5820 },
+    'es-madrid': { region: 'Spain', label: 'Madrid', latitude: 40.4168, longitude: -3.7038 },
+    'es-valencia': { region: 'Spain', label: 'Valencia', latitude: 39.4699, longitude: -0.3763 },
+    'es-seville': { region: 'Spain', label: 'Seville', latitude: 37.3891, longitude: -5.9845 },
+    'it-rome': { region: 'Italy', label: 'Rome', latitude: 41.9028, longitude: 12.4964 },
+    'it-milan': { region: 'Italy', label: 'Milan', latitude: 45.4642, longitude: 9.1900 },
+    'it-bologna': { region: 'Italy', label: 'Bologna', latitude: 44.4949, longitude: 11.3426 },
+    'nl-amsterdam': { region: 'Netherlands', label: 'Amsterdam', latitude: 52.3676, longitude: 4.9041 },
+    'nl-rotterdam': { region: 'Netherlands', label: 'Rotterdam', latitude: 51.9244, longitude: 4.4777 },
+    'nl-eindhoven': { region: 'Netherlands', label: 'Eindhoven', latitude: 51.4416, longitude: 5.4697 }
   };
 
   const PRICE_SIGNALS = [
@@ -67,16 +102,51 @@
     { region: 'Ghana', crop: 'Yam', area: 'gh-accra', market: 'Accra reference', price: 13.6, trend: 4.1 },
     { region: 'Ghana', crop: 'Plantain', area: 'gh-kumasi', market: 'Kumasi reference', price: 10.9, trend: -1.3 },
     { region: 'Ghana', crop: 'Cocoa', area: 'gh-kumasi', market: 'Ashanti reference', price: 58, trend: 3.9 },
-    { region: 'Kenya', crop: 'Maize', area: 'ke-nakuru', market: 'Nakuru reference', price: 72, trend: 3.1 },
-    { region: 'Kenya', crop: 'Beans', area: 'ke-nairobi', market: 'Nairobi reference', price: 168, trend: 4.6 },
-    { region: 'Kenya', crop: 'Potato', area: 'ke-nakuru', market: 'Nakuru reference', price: 64, trend: -2.2 },
-    { region: 'Kenya', crop: 'Tomato', area: 'ke-kisumu', market: 'Kisumu reference', price: 118, trend: 7.4 },
-    { region: 'Kenya', crop: 'Avocado', area: 'ke-nairobi', market: 'Nairobi reference', price: 142, trend: 2.6 },
-    { region: 'India', crop: 'Rice', area: 'in-delhi', market: 'Delhi reference', price: 49, trend: 1.8 },
-    { region: 'India', crop: 'Wheat', area: 'in-delhi', market: 'Delhi reference', price: 34, trend: 2.4 },
-    { region: 'India', crop: 'Potato', area: 'in-mumbai', market: 'Mumbai reference', price: 31, trend: -1.7 },
-    { region: 'India', crop: 'Tomato', area: 'in-bengaluru', market: 'Bengaluru reference', price: 46, trend: 6.2 },
-    { region: 'India', crop: 'Chickpea', area: 'in-delhi', market: 'Delhi reference', price: 91, trend: 3.3 }
+    { region: 'Malawi', crop: 'Maize', area: 'mw-lilongwe', market: 'Lilongwe reference', price: 900, trend: 2.5 },
+    { region: 'Malawi', crop: 'Groundnut', area: 'mw-mzuzu', market: 'Mzuzu reference', price: 4200, trend: 4.1 },
+    { region: 'Malawi', crop: 'Pigeon pea', area: 'mw-blantyre', market: 'Blantyre reference', price: 2100, trend: 3.3 },
+    { region: 'Malawi', crop: 'Tomato', area: 'mw-lilongwe', market: 'Lilongwe reference', price: 1800, trend: -1.6 },
+    { region: 'Malawi', crop: 'Rice', area: 'mw-blantyre', market: 'Blantyre reference', price: 3100, trend: 2.8 },
+    { region: 'SierraLeone', crop: 'Rice', area: 'sl-freetown', market: 'Freetown reference', price: 36, trend: 2.2 },
+    { region: 'SierraLeone', crop: 'Cassava', area: 'sl-bo', market: 'Bo reference', price: 14, trend: 1.4 },
+    { region: 'SierraLeone', crop: 'Groundnut', area: 'sl-kenema', market: 'Kenema reference', price: 52, trend: 3.7 },
+    { region: 'SierraLeone', crop: 'Cocoa', area: 'sl-kenema', market: 'Kenema reference', price: 68, trend: 4.5 },
+    { region: 'SierraLeone', crop: 'Pepper', area: 'sl-freetown', market: 'Freetown reference', price: 75, trend: -1.1 },
+    { region: 'UnitedKingdom', crop: 'Wheat', area: 'uk-leeds', market: 'Northern England reference', price: 0.24, trend: 1.3 },
+    { region: 'UnitedKingdom', crop: 'Potato', area: 'uk-birmingham', market: 'Midlands reference', price: 0.86, trend: 2.6 },
+    { region: 'UnitedKingdom', crop: 'Barley', area: 'uk-leeds', market: 'Northern England reference', price: 0.21, trend: -0.7 },
+    { region: 'UnitedKingdom', crop: 'Apple', area: 'uk-london', market: 'London produce reference', price: 1.35, trend: 2.1 },
+    { region: 'UnitedKingdom', crop: 'Strawberry', area: 'uk-london', market: 'London produce reference', price: 3.8, trend: 4.9 },
+    { region: 'Ireland', crop: 'Barley', area: 'ie-cork', market: 'Cork reference', price: 0.23, trend: 1.2 },
+    { region: 'Ireland', crop: 'Potato', area: 'ie-dublin', market: 'Dublin reference', price: 0.9, trend: 2.4 },
+    { region: 'Ireland', crop: 'Oats', area: 'ie-galway', market: 'Galway reference', price: 0.3, trend: -0.5 },
+    { region: 'Ireland', crop: 'Mushroom', area: 'ie-dublin', market: 'Dublin produce reference', price: 3.1, trend: 3.6 },
+    { region: 'Ireland', crop: 'Apple', area: 'ie-cork', market: 'Cork produce reference', price: 1.45, trend: 1.8 },
+    { region: 'France', crop: 'Wheat', area: 'fr-paris', market: 'Paris reference', price: 0.25, trend: 1.1 },
+    { region: 'France', crop: 'Potato', area: 'fr-lyon', market: 'Lyon reference', price: 0.72, trend: -0.9 },
+    { region: 'France', crop: 'Grapes', area: 'fr-bordeaux', market: 'Bordeaux reference', price: 1.4, trend: 3.2 },
+    { region: 'France', crop: 'Tomato', area: 'fr-lyon', market: 'Lyon produce reference', price: 1.8, trend: 4.1 },
+    { region: 'France', crop: 'Apple', area: 'fr-paris', market: 'Paris produce reference', price: 1.25, trend: 1.7 },
+    { region: 'Germany', crop: 'Wheat', area: 'de-berlin', market: 'Berlin reference', price: 0.26, trend: 1.4 },
+    { region: 'Germany', crop: 'Potato', area: 'de-hamburg', market: 'Hamburg reference', price: 0.8, trend: 2.1 },
+    { region: 'Germany', crop: 'Rapeseed', area: 'de-munich', market: 'Munich reference', price: 0.5, trend: -0.6 },
+    { region: 'Germany', crop: 'Apple', area: 'de-hamburg', market: 'Hamburg produce reference', price: 1.4, trend: 2.5 },
+    { region: 'Germany', crop: 'Asparagus', area: 'de-munich', market: 'Munich produce reference', price: 6.5, trend: 5.2 },
+    { region: 'Spain', crop: 'Olives', area: 'es-seville', market: 'Seville reference', price: 1.1, trend: 3.1 },
+    { region: 'Spain', crop: 'Grapes', area: 'es-madrid', market: 'Madrid reference', price: 1.3, trend: 2.6 },
+    { region: 'Spain', crop: 'Tomato', area: 'es-valencia', market: 'Valencia reference', price: 1.2, trend: 4.4 },
+    { region: 'Spain', crop: 'Orange', area: 'es-valencia', market: 'Valencia citrus reference', price: 0.75, trend: -1.3 },
+    { region: 'Spain', crop: 'Strawberry', area: 'es-seville', market: 'Andalusia reference', price: 2.4, trend: 5.1 },
+    { region: 'Italy', crop: 'Grapes', area: 'it-bologna', market: 'Bologna reference', price: 1.5, trend: 3.3 },
+    { region: 'Italy', crop: 'Olives', area: 'it-rome', market: 'Rome reference', price: 1.25, trend: 2.4 },
+    { region: 'Italy', crop: 'Tomato', area: 'it-milan', market: 'Milan produce reference', price: 1.35, trend: 4.7 },
+    { region: 'Italy', crop: 'Rice', area: 'it-milan', market: 'Northern Italy reference', price: 1.1, trend: 1.6 },
+    { region: 'Italy', crop: 'Apple', area: 'it-bologna', market: 'Bologna produce reference', price: 1.2, trend: -0.8 },
+    { region: 'Netherlands', crop: 'Potato', area: 'nl-rotterdam', market: 'Rotterdam reference', price: 0.78, trend: 1.9 },
+    { region: 'Netherlands', crop: 'Onion', area: 'nl-eindhoven', market: 'Eindhoven reference', price: 0.65, trend: 2.8 },
+    { region: 'Netherlands', crop: 'Tomato', area: 'nl-amsterdam', market: 'Amsterdam produce reference', price: 1.8, trend: 4.2 },
+    { region: 'Netherlands', crop: 'Bell pepper', area: 'nl-rotterdam', market: 'Rotterdam produce reference', price: 2.3, trend: 3.6 },
+    { region: 'Netherlands', crop: 'Pear', area: 'nl-eindhoven', market: 'Eindhoven produce reference', price: 1.4, trend: -1.1 }
   ];
 
   const state = {
@@ -129,7 +199,7 @@
 
   function formatPrice(value, region, unit) {
     const meta = REGIONS[region] || REGIONS.Nigeria;
-    const decimals = meta.currency === 'USD' ? 2 : 0;
+    const decimals = ['NGN', 'MWK'].includes(meta.currency) ? 0 : 2;
     return `${formatMoney(value, region, decimals)}/${unit || meta.unit}`;
   }
 
@@ -418,8 +488,9 @@
   }
 
   function listingShareText(item) {
-    const region = item.region || AREAS[item.area]?.region || 'Nigeria';
-    return `AgriSmart produce listing: ${item.quantity} ${item.unit} of ${item.crop}, available ${item.availableDate} in ${AREAS[item.area]?.label || item.area}, ${REGIONS[region].label}. Asking price: ${formatMoney(item.askingPrice, region, region === 'USA' ? 2 : 0)}. ${item.notes || ''} Please verify all trading terms before payment or collection.`;
+    const region = REGIONS[item.region] ? item.region : (AREAS[item.area]?.region || 'Nigeria');
+    const decimals = ['NGN', 'MWK'].includes(REGIONS[region].currency) ? 0 : 2;
+    return `AgriSmart produce listing: ${item.quantity} ${item.unit} of ${item.crop}, available ${item.availableDate} in ${AREAS[item.area]?.label || item.area}, ${REGIONS[region].label}. Asking price: ${formatMoney(item.askingPrice, region, decimals)}. ${item.notes || ''} Please verify all trading terms before payment or collection.`;
   }
 
   function renderListings() {
@@ -431,9 +502,10 @@
     if (status) status.textContent = `${active.length} active`;
     if (!root) return;
     root.innerHTML = active.length ? active.slice().reverse().map(item => {
-      const region = item.region || AREAS[item.area]?.region || 'Nigeria';
+      const region = REGIONS[item.region] ? item.region : (AREAS[item.area]?.region || 'Nigeria');
+      const decimals = ['NGN', 'MWK'].includes(REGIONS[region].currency) ? 0 : 2;
       return `<article class="produce-listing">
-      <div class="produce-listing-head"><div><span>${escapeHtml(item.crop)}</span><h4>${escapeHtml(item.quantity)} ${escapeHtml(item.unit)}</h4></div><strong>${formatMoney(item.askingPrice, region, region === 'USA' ? 2 : 0)}</strong></div>
+      <div class="produce-listing-head"><div><span>${escapeHtml(item.crop)}</span><h4>${escapeHtml(item.quantity)} ${escapeHtml(item.unit)}</h4></div><strong>${formatMoney(item.askingPrice, region, decimals)}</strong></div>
       <p>${escapeHtml(AREAS[item.area]?.label || item.area)}, ${escapeHtml(REGIONS[region].label)} · Available ${escapeHtml(item.availableDate)}</p>
       ${item.notes ? `<small>${escapeHtml(item.notes)}</small>` : ''}
       <div class="produce-listing-actions">
@@ -536,7 +608,7 @@
     speechSynthesis.cancel();
     const text = state.alerts.map(alert => `${alert.title}. ${alert.message}`).join(' ');
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = { Nigeria: 'en-NG', USA: 'en-US', Ghana: 'en-GH', Kenya: 'en-KE', India: 'en-IN' }[state.profile.region] || 'en';
+    utterance.lang = REGIONS[state.profile.region]?.locale || 'en';
     utterance.rate = 0.92;
     speechSynthesis.speak(utterance);
   }
