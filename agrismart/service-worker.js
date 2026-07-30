@@ -1,8 +1,9 @@
-const CACHE_NAME = "agrismart-v10-verified-accounts";
+const CACHE_NAME = "agrismart-v11-verified-accounts-whsf-home";
 const APP_SHELL = [
   "/agrismart/",
   "/agrismart/app.html",
   "/agrismart/offline.html",
+  "/agrismart/whsf-home.css",
   "/agrismart/manifest.webmanifest",
   "/agrismart/register-service-worker.js",
   "/agrismart/auth-provider.js",
