@@ -77,3 +77,33 @@
 .dark-mode .market-trend.negative{background:#542e2b;color:#ffcec6}
 @media(max-width:1180px){.market-metric-grid{grid-template-columns:repeat(2,1fr)}.market-layout{grid-template-columns:1fr}.market-filters{grid-template-columns:repeat(2,1fr)}.farmer-alert-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.market-hero{display:grid;align-items:start}.market-hero-actions{min-width:0;display:grid}.market-hero-actions button{width:100%}.market-metric-grid,.farmer-alert-grid,.market-filters{grid-template-columns:1fr}.market-board{padding:16px}.market-alert-feed .panel-head{align-items:flex-start;flex-direction:column}.market-alert-feed [data-speak-alerts]{display:inline-flex!important}.produce-listing-head{align-items:flex-start}.market-connections .market-grid{grid-template-columns:1fr}}
+
+/* Verified accounts */
+.verification-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;padding:30px;border-radius:28px;background:linear-gradient(135deg,#0b3d2d,#176b47 62%,#87aa45);color:#fff;box-shadow:var(--shadow)}
+.verification-hero h2{margin:5px 0 8px;font-size:clamp(2rem,4vw,3.8rem);letter-spacing:-.04em}
+.verification-hero p{margin:0;max-width:720px;color:#e7f5eb}
+.verification-hero .eyebrow{color:#dff5b2;font-weight:800;letter-spacing:.12em}
+.verification-filters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.verification-filters label{display:grid;gap:7px;font-size:.86rem;color:var(--muted)}
+.verification-filters input,.verification-filters select{border:1px solid var(--line);border-radius:13px;padding:11px;background:var(--card);color:var(--ink)}
+.verification-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.verification-card{padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.verification-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.verification-card h4{margin:0;font-size:1.05rem}
+.verification-card-head p,.verification-address{margin:5px 0;color:var(--muted)}
+.verification-card dl{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0}
+.verification-card dl div{padding:10px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.verification-card dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.verification-card dd{margin:4px 0 0;font-weight:700;text-transform:capitalize}
+.verification-evidence{margin:10px 0 14px;font-size:.9rem}
+.verification-evidence a{color:var(--green);font-weight:700}
+.verification-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.verification-badge{display:inline-flex;padding:7px 10px;border-radius:999px;font-size:.76rem;font-weight:800;text-transform:capitalize;background:#e8ecea;color:#44524c}
+.verification-badge.status-pending{background:#fff0bd;color:#795600}
+.verification-badge.status-verified{background:#d9f3df;color:#126334}
+.verification-badge.status-rejected,.verification-badge.status-suspended{background:#f8d9d5;color:#8d2c23}
+.danger-btn{color:#9f2f2f;border-color:#e6b8b2}
+.verification-error{background:#fde8e5;color:#862c24}
+.account-verification-panel{grid-column:1/-1}
+@media(max-width:900px){.verification-list{grid-template-columns:1fr}}
+@media(max-width:760px){.verification-hero{display:grid;padding:22px}.verification-filters,.verification-card dl{grid-template-columns:1fr}.verification-metrics{grid-template-columns:repeat(2,1fr)}}

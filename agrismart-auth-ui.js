@@ -49,6 +49,9 @@
         <label class="field"><span>Full name</span><input name="name" autocomplete="name" required></label>
         <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
         <label class="field"><span>Phone</span><input name="phone" autocomplete="tel"></label>
+        <label class="field"><span>Account type</span><select name="accountType"><option value="farmer">Farmer</option><option value="buyer">Buyer</option><option value="supplier">Supplier</option><option value="agronomist">Agronomist</option><option value="cooperative">Cooperative</option></select></label>
+        <label class="field"><span>Country</span><input name="country" value="Nigeria" required></label>
+        <label class="field"><span>Business or farm name</span><input name="businessName"></label>
         <label class="field"><span>Organization</span><input name="organization" value="WHSF"></label>
         <label class="field full"><span>Password</span><input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
         <button class="primary-btn" type="submit">Create account</button>
@@ -140,6 +143,9 @@
     const wrapper = document.createElement('div');
     wrapper.dataset.accountSettings = '';
     wrapper.style.marginBottom = '18px';
+    const verificationLabel = user?.verificationStatus
+      ? user.verificationStatus.charAt(0).toUpperCase() + user.verificationStatus.slice(1)
+      : 'Draft';
     wrapper.innerHTML = user ? `
       <div class="dashboard-grid">
         <section class="panel"><div class="panel-head"><div><h3>User profile</h3><p>Manage your account details.</p></div><span class="chip">${esc(user.role)}</span></div>
@@ -149,6 +155,18 @@
             <label class="field"><span>Phone</span><input name="phone" value="${esc(user.phone || '')}"></label>
             <label class="field"><span>Organization</span><input name="organization" value="${esc(user.organization || '')}"></label>
             <button class="primary-btn" type="submit">Save profile</button>
+          </form>
+        </section>
+        <section class="panel account-verification-panel"><div class="panel-head"><div><h3>Trusted account</h3><p>Submit business or farm details for administrator review.</p></div><span class="verification-badge status-${esc(user.verificationStatus || 'draft')}">${esc(verificationLabel)}</span></div>
+          ${user.verificationNote ? `<p class="notice">${esc(user.verificationNote)}</p>` : ''}
+          <form class="form-grid" data-verification-form>
+            <label class="field"><span>Account type</span><select name="accountType"><option value="farmer">Farmer</option><option value="buyer">Buyer</option><option value="supplier">Supplier</option><option value="agronomist">Agronomist</option><option value="cooperative">Cooperative</option></select></label>
+            <label class="field"><span>Country</span><input name="country" value="${esc(user.country || '')}" required></label>
+            <label class="field"><span>Business or farm name</span><input name="businessName" value="${esc(user.businessName || '')}"></label>
+            <label class="field"><span>Registration number</span><input name="registrationNumber" value="${esc(user.registrationNumber || '')}"></label>
+            <label class="field full"><span>Business or farm address</span><textarea name="address" rows="2">${esc(user.address || '')}</textarea></label>
+            <label class="field full"><span>Evidence link (optional)</span><input name="evidenceUrl" type="url" value="${esc(user.verificationEvidenceUrl || '')}" placeholder="https://..."></label>
+            <button class="primary-btn full" type="submit">${user.verificationStatus === 'pending' ? 'Update pending application' : 'Submit for verification'}</button>
           </form>
         </section>
         <section class="panel"><div class="panel-head"><h3>Account security</h3></div>
@@ -161,6 +179,8 @@
       </div>` : '<section class="panel"><h3>Account</h3><p>You are not signed in.</p><button class="primary-btn" data-open-signin>Sign in</button></section>';
 
     root.prepend(wrapper);
+    const accountType = wrapper.querySelector('[data-verification-form] [name="accountType"]');
+    if (accountType) accountType.value = user.accountType || 'farmer';
     wrapper.querySelector('[data-profile-form]')?.addEventListener('submit', async event => {
       event.preventDefault();
       try {
@@ -176,6 +196,18 @@
         event.currentTarget.reset();
         toast('Password changed.');
       } catch (error) { toast(error.message, true); }
+    });
+    wrapper.querySelector('[data-verification-form]')?.addEventListener('submit', async event => {
+      event.preventDefault();
+      setBusy(event.currentTarget, true, 'Submitting...');
+      try {
+        await auth().submitVerification(Object.fromEntries(new FormData(event.currentTarget)));
+        toast('Verification application submitted.');
+      } catch (error) {
+        toast(error.message, true);
+      } finally {
+        setBusy(event.currentTarget, false);
+      }
     });
     wrapper.querySelector('[data-sign-out]')?.addEventListener('click', async () => {
       await auth().signOut();
@@ -195,7 +227,8 @@
     badge.type = 'button';
     badge.className = 'secondary-btn';
     badge.dataset.userBadge = '';
-    badge.textContent = `${user.name} · ${user.role}`;
+    const badgeRole = user.verificationStatus === 'verified' ? 'Verified' : user.role;
+    badge.textContent = `${user.name} · ${badgeRole}`;
     badge.addEventListener('click', () => window.AgriSmartNavigation?.showView?.('settings'));
     top.prepend(badge);
   }

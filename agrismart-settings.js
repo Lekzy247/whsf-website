@@ -143,8 +143,8 @@
   }
 
   function renderReadiness(root) {
-    const requiredViews = ['home','finance','inventory','warehouse','procurement','approvals','analytics','advisor','administration','settings'];
-    const requiredApis = ['AgriSmartAuth','AgriSmartWarehouse','AgriSmartProcurement','AgriSmartApprovals','AgriSmartAnalytics','AgriSmartAdministration'];
+    const requiredViews = ['home','finance','inventory','warehouse','procurement','approvals','analytics','advisor','administration','verification','settings'];
+    const requiredApis = ['AgriSmartAuth','AgriSmartWarehouse','AgriSmartProcurement','AgriSmartApprovals','AgriSmartAnalytics','AgriSmartAdministration','AgriSmartVerification'];
     const missingViews = requiredViews.filter(view => !document.querySelector(`[data-view-panel="${view}"]`));
     const missingApis = requiredApis.filter(api => !window[api]);
     const results = root.querySelector('[data-system-results]');
@@ -174,7 +174,7 @@
   }
 
   async function enableExtendedModules() {
-    const modules = ['/agrismart-weather.js','/agrismart-analytics.js','/agrismart-marketplace-commerce.js','/agrismart-marketplace-experience.js','/agrismart-shopping-cart.js','/agrismart-local-payments.js','/agrismart-livestock.js','/agrismart-warehouse.js','/agrismart-procurement.js','/agrismart-fleet.js','/agrismart-approval-center.js','/agrismart-navigation-controller.js','/agrismart-enterprise-integration.js','/agrismart-administration.js','/agrismart-auth-ui.js'];
+    const modules = ['/agrismart-weather.js','/agrismart-analytics.js','/agrismart-marketplace-commerce.js','/agrismart-marketplace-experience.js','/agrismart-shopping-cart.js','/agrismart-local-payments.js','/agrismart-livestock.js','/agrismart-warehouse.js','/agrismart-procurement.js','/agrismart-fleet.js','/agrismart-approval-center.js','/agrismart-navigation-controller.js','/agrismart-enterprise-integration.js','/agrismart-administration.js','/agrismart-auth-ui.js','/agrismart-verification.js'];
     try { for (const module of modules) await loadScript(module); window.dispatchEvent(new CustomEvent('agrismart:extendedmodulesready', { detail:{ modules } })); }
     catch (error) { console.error('AgriSmart extended modules failed to load.', error); window.dispatchEvent(new CustomEvent('agrismart:extendedmoduleserror', { detail:{ message:error.message } })); }
   }

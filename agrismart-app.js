@@ -16,12 +16,13 @@
     marketplace: ['Market & Farmer Alerts', 'Compare market signals, prepare produce listings and receive practical farm alerts.'],
     academy: ['AgriSmart Academy', 'Build practical skills through farmer-focused learning.'],
     administration: ['Administration', 'Manage users, roles, organization policies and audit activity.'],
+    verification: ['Account Verification', 'Review and verify farmer, buyer, supplier, agronomist and cooperative accounts.'],
     settings: ['Settings', 'Manage your profile, security, preferences and application data.'],
     services: ['Agricultural Services', 'Find trusted equipment, logistics and technical support.'],
     assistant: ['AgriSmart AI Assistant', 'Ask questions and receive practical farming guidance.']
   };
 
-  const restrictedViews = new Set(['administration']);
+  const restrictedViews = new Set(['administration', 'verification']);
   const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, character => ({
     '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'
   }[character]));
@@ -46,9 +47,14 @@
     return window.AgriSmartAuth?.getCurrentUser?.() || null;
   }
 
+  function isAdmin() {
+    const user = currentUser();
+    return user?.rawRole === 'admin' || user?.rawRole === 'super_admin' || user?.role === 'Administrator';
+  }
+
   function canOpen(view) {
     if (!restrictedViews.has(view)) return true;
-    return currentUser()?.role === 'Administrator';
+    return isAdmin();
   }
 
   function findPanel(name) {
@@ -90,6 +96,7 @@
       procurement: () => window.AgriSmartProcurement?.render?.(),
       approvals: () => window.AgriSmartApprovals?.render?.(),
       administration: () => window.AgriSmartAdministration?.render?.(),
+      verification: () => window.AgriSmartVerification?.load?.(),
       settings: () => window.dispatchEvent(new CustomEvent('agrismart:settingsrenderrequest'))
     };
     try { calls[view]?.(); } catch (error) { console.error(`Unable to refresh ${view}`, error); }
@@ -288,15 +295,15 @@
   }
 
   function applyRoleVisibility() {
-    const admin = currentUser()?.role === 'Administrator';
-    document.querySelectorAll('[data-view="administration"]').forEach(button => button.hidden = !admin);
+    const admin = isAdmin();
+    document.querySelectorAll('[data-view="administration"],[data-view="verification"]').forEach(button => button.hidden = !admin);
   }
 
   function registerLifecycle() {
     ['agrismart:datachange','agrismart:inventorychange','agrismart:warehousechange','agrismart:procurementchange','agrismart:approvalchange','agrismart:fleetchange'].forEach(name => {
       window.addEventListener(name, () => window.AgriSmartEnterprise?.refresh?.());
     });
-    window.addEventListener('agrismart:authchange', () => { applyRoleVisibility(); const active = location.hash.slice(1); if (active === 'administration' && !canOpen(active)) showView('home'); });
+    window.addEventListener('agrismart:authchange', () => { applyRoleVisibility(); const active = location.hash.slice(1); if (restrictedViews.has(active) && !canOpen(active)) showView('home'); });
     window.addEventListener('agrismart:extendedmodulesready', () => { applyRoleVisibility(); showView(location.hash.slice(1) || 'home', false); });
   }
 
