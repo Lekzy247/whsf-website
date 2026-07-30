@@ -184,18 +184,6 @@
     if (target) target.innerHTML = results.map(item => `<article><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.action)}</p><span class="chip">${escapeHtml(item.level)}</span></article>`).join('');
   });
 
-  document.querySelector('[data-use-location]')?.addEventListener('click', () => {
-    const status = document.querySelector('[data-location-status]');
-    if (!navigator.geolocation) { if (status) status.textContent = 'Location is not supported by this browser.'; return; }
-    if (status) status.textContent = 'Requesting location permission...';
-    navigator.geolocation.getCurrentPosition(position => {
-      const { latitude, longitude } = position.coords;
-      localStorage.setItem('agrismart-last-location', JSON.stringify({ latitude, longitude, capturedAt:new Date().toISOString() }));
-      if (status) status.textContent = `Location saved: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-      toast('Farm location saved.');
-    }, () => { if (status) status.textContent = 'Location permission was denied or unavailable.'; }, { enableHighAccuracy:true, timeout:10000 });
-  });
-
   const connectivity = document.querySelector('[data-connectivity]');
   function updateConnectivity() {
     if (!connectivity) return;

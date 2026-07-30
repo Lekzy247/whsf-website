@@ -145,3 +145,59 @@
     grid-template-columns: 1fr;
   }
 }
+
+.approval-dialog {
+  width: min(520px, calc(100vw - 28px));
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 28px 90px rgba(5, 28, 19, .32);
+}
+
+.approval-dialog::backdrop {
+  background: rgba(5, 28, 19, .58);
+  backdrop-filter: blur(3px);
+}
+
+.approval-dialog form {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+}
+
+.approval-dialog-head,
+.approval-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.approval-dialog-head h3 {
+  margin: 8px 0 0;
+}
+
+.approval-dialog textarea {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+}
+
+.approval-dialog-help {
+  margin: -6px 0 0;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.approval-dialog-actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 520px) {
+  .approval-dialog-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'agrismart-connect-v6-verified-accounts';
+const CACHE_NAME = 'agrismart-connect-v8-responsive-approvals';
 const APP_SHELL = [
   '/mobile-app.html',
   '/agrismart/app.html',

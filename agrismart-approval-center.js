@@ -13,6 +13,62 @@
     window.dispatchEvent(new CustomEvent('agrismart:approvalchange'));
     return items;
   };
+  const notify = (message, error = false) => window.AgriSmartApp?.toast?.(message, error);
+
+  function ensureDecisionDialog() {
+    let dialog = document.querySelector('[data-approval-dialog]');
+    if (dialog) return dialog;
+    dialog = document.createElement('dialog');
+    dialog.className = 'approval-dialog';
+    dialog.dataset.approvalDialog = 'true';
+    dialog.innerHTML = `
+      <form method="dialog">
+        <div class="approval-dialog-head">
+          <div><span class="chip">Approval review</span><h3 data-approval-dialog-title>Review request</h3></div>
+          <button class="icon-btn" type="submit" value="cancel" formnovalidate aria-label="Close approval dialog">×</button>
+        </div>
+        <label class="field"><span data-approval-dialog-label>Comment</span><textarea name="comment" rows="4"></textarea></label>
+        <p class="approval-dialog-help" data-approval-dialog-help></p>
+        <div class="approval-dialog-actions">
+          <button class="secondary-btn" type="submit" value="cancel" formnovalidate>Cancel</button>
+          <button class="primary-btn" type="submit" value="confirm" data-approval-dialog-confirm>Confirm</button>
+        </div>
+      </form>`;
+    document.body.appendChild(dialog);
+    return dialog;
+  }
+
+  function requestDecision(action) {
+    const dialog = ensureDecisionDialog();
+    const textarea = dialog.querySelector('textarea');
+    const title = dialog.querySelector('[data-approval-dialog-title]');
+    const label = dialog.querySelector('[data-approval-dialog-label]');
+    const help = dialog.querySelector('[data-approval-dialog-help]');
+    const confirm = dialog.querySelector('[data-approval-dialog-confirm]');
+    const requiresComment = action !== 'Approved';
+    const copy = action === 'Approved'
+      ? { title: 'Approve this request?', label: 'Approval comment (optional)', help: 'The request will be marked as approved.', confirm: 'Approve request' }
+      : action === 'Rejected'
+        ? { title: 'Reject this request?', label: 'Rejection reason', help: 'Add a reason so the requester knows what must change.', confirm: 'Reject request' }
+        : { title: 'Return this request?', label: 'Revision requested', help: 'Describe the revision needed before another review.', confirm: 'Return request' };
+
+    title.textContent = copy.title;
+    label.textContent = copy.label;
+    help.textContent = copy.help;
+    confirm.textContent = copy.confirm;
+    textarea.value = '';
+    textarea.required = requiresComment;
+    dialog.returnValue = 'cancel';
+
+    return new Promise(resolve => {
+      dialog.addEventListener('close', () => {
+        const confirmed = dialog.returnValue === 'confirm';
+        resolve(confirmed ? textarea.value.trim() : null);
+      }, { once: true });
+      dialog.showModal();
+      requestAnimationFrame(() => textarea.focus());
+    });
+  }
 
   function submit(input) {
     const items = read();
@@ -111,6 +167,7 @@
           <label class="field"><span>Requester</span><input name="requester"></label>
           <label class="field"><span>Priority</span><select name="priority"><option>Low</option><option selected>Normal</option><option>High</option><option>Critical</option></select></label>
           <button class="primary-btn" type="submit">Submit request</button>
+          <p class="notice field full" data-approval-status hidden></p>
         </form>
       </section>
       <section class="panel" style="margin-top:18px"><div class="panel-head"><h3>Approval queue</h3></div><div class="result-list">
@@ -119,12 +176,37 @@
 
     root.querySelector('[data-approval-form]')?.addEventListener('submit', event => {
       event.preventDefault();
-      try { submit(Object.fromEntries(new FormData(event.currentTarget))); event.currentTarget.reset(); }
-      catch (error) { alert(error.message); }
+      const status = event.currentTarget.querySelector('[data-approval-status]');
+      try {
+        submit(Object.fromEntries(new FormData(event.currentTarget)));
+        event.currentTarget.reset();
+        notify('Approval request submitted.');
+      } catch (error) {
+        if (status) {
+          status.hidden = false;
+          status.textContent = error.message;
+        }
+      }
     });
-    root.querySelectorAll('[data-approve-id]').forEach(button => button.addEventListener('click', () => act(button.dataset.approveId, 'Approved', prompt('Approval comment (optional):', '') || '')));
-    root.querySelectorAll('[data-reject-id]').forEach(button => button.addEventListener('click', () => act(button.dataset.rejectId, 'Rejected', prompt('Rejection reason:', '') || '')));
-    root.querySelectorAll('[data-return-id]').forEach(button => button.addEventListener('click', () => act(button.dataset.returnId, 'Returned', prompt('Revision requested:', '') || '')));
+    [
+      ['[data-approve-id]', 'approveId', 'Approved'],
+      ['[data-reject-id]', 'rejectId', 'Rejected'],
+      ['[data-return-id]', 'returnId', 'Returned']
+    ].forEach(([selector, key, action]) => {
+      root.querySelectorAll(selector).forEach(button => button.addEventListener('click', async () => {
+        const comment = await requestDecision(action);
+        if (comment === null) return;
+        button.disabled = true;
+        await new Promise(resolve => setTimeout(resolve, 0));
+        try {
+          act(button.dataset[key], action, comment);
+          notify(`Request ${action.toLowerCase()}.`);
+        } catch (error) {
+          button.disabled = false;
+          notify(error.message, true);
+        }
+      }));
+    });
   }
 
   window.AgriSmartApprovals = Object.freeze({ read, submit, act, importProcurement });

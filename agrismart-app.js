@@ -276,21 +276,91 @@
   }
 
   function setupLocation() {
-    const locate = status => {
-      if (!navigator.geolocation) return toast('Location services are not supported on this device.', true);
-      if (status) status.textContent = 'Requesting location permission…';
-      navigator.geolocation.getCurrentPosition(position => {
-        const { latitude, longitude } = position.coords;
-        localStorage.setItem('agrismart-last-location', JSON.stringify({ latitude, longitude }));
-        if (status) status.textContent = `Location captured: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-        toast('Farm location captured.');
-      }, () => { if (status) status.textContent = 'Location permission was not granted.'; });
+    const button = document.querySelector('[data-use-location]');
+    let locating = false;
+
+    const errorMessage = error => {
+      if (error?.code === 1) return 'Location access is blocked. Allow Location in your browser site settings, then try again.';
+      if (error?.code === 2) return 'Your device could not determine its location. Turn on GPS or Location Services, then try again.';
+      if (error?.code === 3) return 'The location request timed out. Move to an open area or turn on GPS, then try again.';
+      return 'The current location could not be retrieved. Check your device location settings and try again.';
     };
-    document.querySelector('[data-use-location]')?.addEventListener('click', () => locate(document.querySelector('[data-location-status]')));
+
+    const locate = async status => {
+      if (locating) return;
+      if (!window.isSecureContext) {
+        if (status) status.textContent = 'Current location requires a secure HTTPS connection.';
+        return toast('Open the secure HTTPS version of AgriSmart to use GPS.', true);
+      }
+      if (!navigator.geolocation) {
+        if (status) status.textContent = 'Location services are not supported by this browser.';
+        return toast('Location services are not supported on this device.', true);
+      }
+
+      locating = true;
+      if (button) {
+        button.disabled = true;
+        button.setAttribute('aria-busy', 'true');
+        button.textContent = 'Finding location…';
+      }
+
+      try {
+        if (navigator.permissions?.query) {
+          try {
+            const permission = await navigator.permissions.query({ name: 'geolocation' });
+            if (permission.state === 'denied') {
+              const denied = new Error('Location permission denied');
+              denied.code = 1;
+              throw denied;
+            }
+          } catch (error) {
+            if (error?.code === 1) throw error;
+          }
+        }
+
+        if (status) status.textContent = 'Waiting for your device location…';
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: false,
+            timeout: 20000,
+            maximumAge: 300000
+          });
+        });
+        const { latitude, longitude, accuracy } = position.coords;
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) throw new Error('Invalid location coordinates');
+
+        const capturedAt = new Date().toISOString();
+        localStorage.setItem('agrismart-last-location', JSON.stringify({ latitude, longitude, accuracy, capturedAt }));
+        const locationInput = document.querySelector('#farm-form [name="location"]');
+        if (locationInput) {
+          locationInput.value = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+          locationInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        const accuracyText = Number.isFinite(accuracy) ? ` (within about ${Math.round(accuracy)} m)` : '';
+        if (status) status.textContent = `Location captured: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}${accuracyText}`;
+        toast('Farm location captured.');
+      } catch (error) {
+        const message = errorMessage(error);
+        if (status) status.textContent = message;
+        toast(message, true);
+      } finally {
+        locating = false;
+        if (button) {
+          button.disabled = false;
+          button.removeAttribute('aria-busy');
+          button.textContent = 'Use current location';
+        }
+      }
+    };
+    button?.addEventListener('click', () => locate(document.querySelector('[data-location-status]')));
     document.querySelectorAll('.map-box').forEach(map => {
       map.setAttribute('role', 'button'); map.setAttribute('tabindex', '0');
       map.addEventListener('click', () => locate(document.querySelector('[data-location-status]')));
-      map.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') locate(document.querySelector('[data-location-status]')); });
+      map.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        locate(document.querySelector('[data-location-status]'));
+      });
     });
   }
 
