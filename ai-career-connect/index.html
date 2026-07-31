@@ -274,7 +274,7 @@
               <p class="eyebrow dark"><span></span> Opportunity discovery</p>
               <h2 id="opportunities-title">Global opportunities, one clear view.</h2>
             </div>
-            <p>Explore a sample of how the platform will organise relevant scholarships, internships, exchanges and remote roles.</p>
+            <p>Fetch current information directly from official programme websites and employers' published job boards.</p>
           </div>
           <div class="opportunity-tabs" role="tablist" aria-label="Opportunity types">
             <button id="tab-scholarships" role="tab" aria-selected="true" aria-controls="panel-scholarships" tabindex="0" data-tab="scholarships">Scholarships</button>
@@ -287,7 +287,8 @@
               <span id="opportunity-kicker">Scholarships</span>
               <h3 id="opportunity-heading">Funding pathways matched to your profile</h3>
               <p id="opportunity-copy">Compare eligibility, requirements and deadlines for leading international scholarship programmes.</p>
-              <button class="button button-navy" type="button" data-demo="Opportunity finder">Open opportunity finder <span aria-hidden="true">→</span></button>
+              <button class="button button-navy" id="opportunity-fetch-button" type="button" aria-controls="opportunity-list"><span data-opportunity-button-label>Open live opportunity finder</span> <span aria-hidden="true">→</span></button>
+              <p class="opportunity-status" id="opportunity-status" role="status" aria-live="polite">Select a category, then fetch current results from the source.</p>
             </div>
             <div class="opportunity-list" id="opportunity-list"></div>
           </div>

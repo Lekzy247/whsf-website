@@ -78,60 +78,141 @@
     scholarships: {
       kicker: "Scholarships",
       heading: "Funding pathways matched to your profile",
-      copy: "Compare eligibility, requirements and deadlines for leading international scholarship programmes.",
+      copy: "Check current funding information on official scholarship programme websites.",
       items: [
-        ["FL", "Fulbright Foreign Student Program", "United States • Postgraduate", "High fit"],
-        ["CM", "Commonwealth Master’s Scholarships", "United Kingdom • Master’s", "Eligible"],
-        ["DA", "DAAD Development-Related Courses", "Germany • Postgraduate", "82% fit"]
+        { title: "Commonwealth Master's Scholarships", organisation: "Commonwealth Scholarship Commission", location: "United Kingdom", summary: "Open the official programme page for eligibility and the current application window.", url: "https://cscuk.fcdo.gov.uk/scholarships/commonwealth-masters-scholarships/", tag: "Official portal" },
+        { title: "Fulbright Foreign Student Program", organisation: "U.S. Department of State", location: "United States", summary: "Country-specific application information from the official Fulbright programme.", url: "https://foreign.fulbrightonline.org/about/foreign-fulbright", tag: "Official portal" },
+        { title: "DAAD Scholarship Database", organisation: "DAAD", location: "Germany", summary: "Official scholarship search for international students, graduates and researchers.", url: "https://www.daad.de/en/studying-in-germany/scholarships/daad-scholarship-database/", tag: "Official portal" }
       ]
     },
     internships: {
       kicker: "Internships",
       heading: "Experience that moves your career forward",
-      copy: "Find structured placements across health, technology, development, research and business.",
+      copy: "Fetch published internships and early-career roles directly from participating employers' job boards.",
       items: [
-        ["WH", "Global Health Programme Internship", "Hybrid • 6 months", "88% fit"],
-        ["UN", "Youth Innovation Internship", "Remote • 4 months", "New"],
-        ["ST", "Sustainable Technology Fellowship", "On-site • 12 weeks", "84% fit"]
+        { title: "Erasmus+ traineeships abroad", organisation: "European Union", location: "Eligible international placements", summary: "Official guidance for students and recent graduates seeking supported traineeships.", url: "https://erasmus-plus.ec.europa.eu/opportunities/individuals/students/traineeships-abroad-for-students", tag: "Official portal" },
+        { title: "Cloudflare early-career opportunities", organisation: "Cloudflare", location: "Multiple locations", summary: "Fetch current internship postings from the employer's public job board.", url: "https://www.cloudflare.com/careers/jobs/", tag: "Employer portal" },
+        { title: "Canonical graduate careers", organisation: "Canonical", location: "Global", summary: "Fetch current graduate and early-career roles from the employer's public job board.", url: "https://canonical.com/careers/all", tag: "Employer portal" }
       ]
     },
     remote: {
       kicker: "Remote work",
       heading: "Work globally from where you are",
-      copy: "Discover verified remote, contract and freelance roles with skills-based matching.",
+      copy: "Fetch remote and distributed roles directly from employers' published job boards.",
       items: [
-        ["DA", "Junior Data Analyst", "Remote • Full time", "91% fit"],
-        ["PC", "Programme Coordinator", "Remote • Contract", "Strong fit"],
-        ["UX", "Research Assistant", "Remote • Part time", "New"]
+        { title: "GitLab remote careers", organisation: "GitLab", location: "Distributed", summary: "Current roles from GitLab's public employer job board.", url: "https://about.gitlab.com/jobs/", tag: "Employer portal" },
+        { title: "Wikimedia Foundation careers", organisation: "Wikimedia Foundation", location: "Remote", summary: "Current remote roles from the Foundation's public employer job board.", url: "https://wikimediafoundation.org/about/jobs/", tag: "Employer portal" },
+        { title: "Mozilla careers", organisation: "Mozilla", location: "Multiple remote locations", summary: "Current roles from Mozilla's public employer job board.", url: "https://www.mozilla.org/careers/", tag: "Employer portal" }
       ]
     },
     exchange: {
       kicker: "Student exchange",
       heading: "Turn global study into a practical plan",
-      copy: "Explore exchanges, summer programmes and research opportunities with deadline and budget guidance.",
+      copy: "Check participation and application guidance directly on official exchange programme websites.",
       items: [
-        ["ER", "Erasmus+ Exchange Pathway", "Europe • One semester", "Eligible"],
-        ["SU", "Global Summer Research Programme", "Canada • 10 weeks", "86% fit"],
-        ["GX", "Social Innovation Exchange", "Ireland • One semester", "High fit"]
+        { title: "Erasmus+ studying abroad", organisation: "European Union", location: "Programme and partner countries", summary: "Official participation, duration and funding guidance for student exchanges.", url: "https://erasmus-plus.ec.europa.eu/opportunities/individuals/students/studying-abroad", tag: "Official portal" },
+        { title: "Erasmus+ Youth Exchanges", organisation: "European Union", location: "Europe and partner countries", summary: "Official information about short international learning exchanges for young people.", url: "https://erasmus-plus.ec.europa.eu/opportunities/individuals/youth-exchanges", tag: "Official portal" },
+        { title: "Exchange Programs for non-U.S. participants", organisation: "U.S. Department of State", location: "United States and participating countries", summary: "Official academic, professional and cultural exchange programme finder.", url: "https://exchanges.state.gov/non-us/program", tag: "Official portal" }
       ]
     }
+  };
+
+  const opportunityPanel = document.querySelector("#opportunity-panel");
+  const opportunityList = document.querySelector("#opportunity-list");
+  const opportunityStatus = document.querySelector("#opportunity-status");
+  const opportunityButton = document.querySelector("#opportunity-fetch-button");
+  const opportunityButtonLabel = opportunityButton?.querySelector("[data-opportunity-button-label]");
+  const liveOpportunityCache = new Map();
+  let activeOpportunityKey = "scholarships";
+  let opportunityRequest;
+
+  const escapeHTML = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;"
+  })[character]);
+
+  const sourceInitials = (item) => (item.organisation || item.title || "OP")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+
+  const formatSourceDate = (value) => {
+    if (!value) return "";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "" : `Updated ${date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}`;
+  };
+
+  const renderOpportunityItems = (items) => {
+    opportunityList.innerHTML = items.map((item) => {
+      const sourceDate = formatSourceDate(item.sourceUpdatedAt);
+      const supportingText = item.applicationStatus || item.summary || "Review the source for full requirements and application details.";
+      return `
+        <a class="opportunity-item" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
+          <span class="opportunity-logo" aria-hidden="true">${escapeHTML(sourceInitials(item))}</span>
+          <div>
+            <strong>${escapeHTML(item.title)}</strong>
+            <small>${escapeHTML(item.organisation)} &bull; ${escapeHTML(item.location)}</small>
+            <em>${escapeHTML(supportingText)}</em>
+            ${sourceDate ? `<small>${escapeHTML(sourceDate)}</small>` : ""}
+          </div>
+          <span class="opportunity-tag">${escapeHTML(item.tag || item.sourceStatus || "Direct source")}</span>
+        </a>
+      `;
+    }).join("");
   };
 
   const renderOpportunity = (key) => {
     const data = opportunityData[key];
     if (!data) return;
+    activeOpportunityKey = key;
     document.querySelector("#opportunity-kicker").textContent = data.kicker;
     document.querySelector("#opportunity-heading").textContent = data.heading;
     document.querySelector("#opportunity-copy").textContent = data.copy;
-    document.querySelector("#opportunity-list").innerHTML = data.items.map(([logo, name, meta, fit]) => `
-      <article class="opportunity-item">
-        <span class="opportunity-logo" aria-hidden="true">${logo}</span>
-        <div><strong>${name}</strong><small>${meta}</small></div>
-        <span>${fit}</span>
-      </article>
-    `).join("");
-    const panel = document.querySelector("#opportunity-panel");
-    panel.setAttribute("aria-labelledby", `tab-${key}`);
+    renderOpportunityItems(liveOpportunityCache.get(key)?.items || data.items);
+    opportunityPanel.setAttribute("aria-labelledby", `tab-${key}`);
+    if (liveOpportunityCache.has(key)) {
+      const cached = liveOpportunityCache.get(key);
+      opportunityStatus.textContent = `${cached.items.length} live results fetched from ${cached.sourceKind}. Checked ${new Date(cached.fetchedAt).toLocaleString()}.`;
+      if (opportunityButtonLabel) opportunityButtonLabel.textContent = "Refresh live results";
+    } else {
+      opportunityStatus.textContent = "Showing trusted source links. Fetch live opportunities for current listings and source status.";
+      if (opportunityButtonLabel) opportunityButtonLabel.textContent = "Open live opportunity finder";
+    }
+  };
+
+  const fetchOpportunities = async (key = activeOpportunityKey) => {
+    opportunityRequest?.abort();
+    opportunityRequest = new AbortController();
+    opportunityButton.disabled = true;
+    opportunityPanel.setAttribute("aria-busy", "true");
+    if (opportunityButtonLabel) opportunityButtonLabel.textContent = "Fetching live results...";
+    opportunityStatus.classList.remove("error");
+    opportunityStatus.textContent = `Connecting to live ${opportunityData[key].kicker.toLowerCase()} sources...`;
+    opportunityList.innerHTML = '<div class="opportunity-loading" aria-hidden="true"><span></span><span></span><span></span></div>';
+
+    try {
+      const response = await fetch(`/api/opportunities?type=${encodeURIComponent(key)}`, {
+        signal: opportunityRequest.signal,
+        headers: { Accept: "application/json" }
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Live sources did not respond.");
+      liveOpportunityCache.set(key, payload);
+      if (activeOpportunityKey === key) renderOpportunity(key);
+    } catch (error) {
+      if (error.name === "AbortError") return;
+      opportunityStatus.classList.add("error");
+      opportunityStatus.textContent = `${error.message} Trusted direct-source links are shown below; try again shortly.`;
+      renderOpportunityItems(opportunityData[key].items);
+    } finally {
+      if (activeOpportunityKey === key) {
+        opportunityButton.disabled = false;
+        opportunityPanel.removeAttribute("aria-busy");
+        if (opportunityButtonLabel) opportunityButtonLabel.textContent = liveOpportunityCache.has(key) ? "Refresh live results" : "Try live search again";
+      }
+    }
   };
 
   const tabs = [...document.querySelectorAll("[data-tab]")];
@@ -143,6 +224,7 @@
         item.tabIndex = active ? 0 : -1;
       });
       renderOpportunity(tab.dataset.tab);
+      if (!liveOpportunityCache.has(tab.dataset.tab)) fetchOpportunities(tab.dataset.tab);
     });
     tab.addEventListener("keydown", (event) => {
       if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
@@ -152,6 +234,8 @@
       tabs[(index + direction + tabs.length) % tabs.length].click();
     });
   });
+
+  opportunityButton?.addEventListener("click", () => fetchOpportunities(activeOpportunityKey));
 
   const showToast = (title) => {
     if (!toast) return;
