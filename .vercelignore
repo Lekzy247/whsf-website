@@ -1,0 +1,2 @@
+# Database migrations are deployment inputs, not public website assets.
+supabase/
