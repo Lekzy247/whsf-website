@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v130-live-connect-admin-email';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v131-content-cleanup';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -25,7 +25,6 @@ const WHSF_CORE_ASSETS = [
   '/ai-career-connect/interview-coach.js',
   '/ai-career-connect/skills-passport.html',
   '/ai-career-connect/skills-passport.js',
-  '/blog.html',
   '/innovation.html',
   '/contact.html',
   '/privacy-policy.html',
