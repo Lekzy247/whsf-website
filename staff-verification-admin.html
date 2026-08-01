@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Private WHSF staff verification administration." />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="theme-color" content="#6d1024" />
+    <title>Staff Verification Admin | WHSF</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Private WHSF administration</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html#top" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+        </button>
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html#top">Home</a>
+          <a href="verify-certificate.html#staff-verification">Public verification</a>
+          <a href="contact.html">Contact &amp; Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="admin-hero staff-admin-hero" aria-labelledby="staff-admin-title">
+        <div class="shell admin-hero-grid">
+          <div class="classroom-copy reveal">
+            <p class="eyebrow">Restricted administration</p>
+            <h1 id="staff-admin-title">Staff verification directory</h1>
+            <p class="hero-lead">Add or update employee records used by WHSF public identity verification. Private contact details remain available only inside this authenticated workspace.</p>
+            <div class="staff-admin-security-note">
+              <strong>Authorized administrator only</strong>
+              <span>Access is restricted to info@worldhsfoundation.org.</span>
+            </div>
+          </div>
+
+          <div class="student-login-card staff-admin-auth-card reveal delay-one" id="staff-admin-auth-card">
+            <p class="eyebrow">Admin sign-in</p>
+            <h2>Secure access</h2>
+            <form id="staff-admin-login-form">
+              <label>
+                Administrator email
+                <input name="email" type="email" value="info@worldhsfoundation.org" readonly autocomplete="username" />
+              </label>
+              <label>
+                Password
+                <input name="password" type="password" minlength="12" autocomplete="current-password" required />
+              </label>
+              <button class="button" type="submit">Sign in</button>
+            </form>
+            <button class="text-button staff-admin-password-link" id="staff-admin-password-request" type="button">Create or reset admin password</button>
+            <p id="staff-admin-auth-status" role="status">Use the authorized WHSF administrator account.</p>
+          </div>
+
+          <div class="student-login-card staff-admin-auth-card reveal delay-one" id="staff-admin-password-card" hidden>
+            <p class="eyebrow">Secure password</p>
+            <h2>Create a new password</h2>
+            <p>This form becomes available only after opening the secure recovery link sent to the WHSF administrator email.</p>
+            <form id="staff-admin-password-form">
+              <label>
+                New password
+                <input name="password" type="password" minlength="12" autocomplete="new-password" required />
+              </label>
+              <label>
+                Confirm new password
+                <input name="confirm_password" type="password" minlength="12" autocomplete="new-password" required />
+              </label>
+              <button class="button" type="submit">Save admin password</button>
+            </form>
+            <p id="staff-admin-password-status" role="status"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section admin-dashboard-section staff-admin-dashboard" id="staff-admin-dashboard" hidden>
+        <div class="shell">
+          <div class="staff-admin-toolbar">
+            <div>
+              <p class="eyebrow">Authenticated workspace</p>
+              <h2>Manage employee verification records</h2>
+            </div>
+            <button class="button button-secondary" id="staff-admin-signout" type="button">Sign out</button>
+          </div>
+
+          <div class="admin-panel-grid">
+            <article class="admin-panel">
+              <div class="admin-panel-heading">
+                <div>
+                  <h2>Add or update an employee</h2>
+                  <p>Submitting an existing employee name updates that record. Leave the employee number blank to generate the next WHSF number automatically.</p>
+                </div>
+              </div>
+              <form class="admin-form staff-admin-form" id="staff-admin-employee-form">
+                <label>First name<input name="first_name" type="text" autocomplete="off" required /></label>
+                <label>Last name<input name="last_name" type="text" autocomplete="off" required /></label>
+                <label>Employee number <small>(optional)</small><input name="employee_number" type="text" autocomplete="off" /></label>
+                <label>Official email<input name="official_email" type="email" pattern="^[^@]+@worldhsfoundation\.org$" autocomplete="off" required /></label>
+                <label>Country code
+                  <select name="country_code">
+                    <option value="+1">United States / Canada (+1)</option>
+                    <option value="+234">Nigeria (+234)</option>
+                    <option value="+233">Ghana (+233)</option>
+                    <option value="+265">Malawi (+265)</option>
+                    <option value="+263">Zimbabwe (+263)</option>
+                    <option value="+232">Sierra Leone (+232)</option>
+                    <option value="+44">United Kingdom (+44)</option>
+                  </select>
+                </label>
+                <label>Phone number <small>(optional)</small><input name="phone" type="tel" pattern="[0-9\s\-()]{6,}" autocomplete="off" /></label>
+                <label class="staff-admin-active-control"><input name="is_active" type="checkbox" checked /> Active for public verification</label>
+                <button class="button" type="submit">Save employee</button>
+              </form>
+              <p class="admin-form-status" id="staff-admin-form-status" role="status"></p>
+            </article>
+
+            <article class="admin-panel">
+              <div class="admin-panel-heading">
+                <div><h2>Employee directory</h2><p>Private contact fields are shown only to the authenticated WHSF administrator.</p></div>
+                <button class="button button-secondary" id="staff-admin-refresh" type="button">Refresh</button>
+              </div>
+              <div class="admin-table-wrap">
+                <table>
+                  <thead><tr><th>Employee</th><th>Employee #</th><th>Official email</th><th>Phone</th><th>Status</th></tr></thead>
+                  <tbody id="staff-admin-table-body"><tr><td colspan="5">Loading employee records…</td></tr></tbody>
+                </table>
+              </div>
+              <p class="staff-admin-privacy-note">Private information on this page is protected by WHSF administrator authentication and is never returned by the public verification endpoint.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="74" height="74" alt="WHSF emblem" />
+          <div><strong>World Humanitarian Support Foundation</strong><p>Private staff verification administration.</p></div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Verification</strong><a href="verify-certificate.html#staff-verification">Public staff verification</a><a href="verify-certificate.html">Certificate verification</a></div>
+          <div><strong>Website</strong><a href="index.html#top">Home</a><a href="contact.html">Contact &amp; Support</a></div>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+      const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
+      const ADMIN_EMAIL = 'info@worldhsfoundation.org';
+      const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
+
+      const authCard = document.querySelector('#staff-admin-auth-card');
+      const passwordCard = document.querySelector('#staff-admin-password-card');
+      const dashboard = document.querySelector('#staff-admin-dashboard');
+      const authStatus = document.querySelector('#staff-admin-auth-status');
+      const passwordStatus = document.querySelector('#staff-admin-password-status');
+      const formStatus = document.querySelector('#staff-admin-form-status');
+      const tableBody = document.querySelector('#staff-admin-table-body');
+      const employeeForm = document.querySelector('#staff-admin-employee-form');
+
+      const setStatus = (element, message, isError = false) => {
+        element.textContent = message;
+        element.classList.toggle('is-error', isError);
+      };
+
+      const isAuthorizedSession = (session) =>
+        Boolean(session?.user?.email) && session.user.email.toLowerCase() === ADMIN_EMAIL;
+
+      const showSignedOut = () => {
+        dashboard.hidden = true;
+        passwordCard.hidden = true;
+        authCard.hidden = false;
+      };
+
+      const showDashboard = async (session) => {
+        if (!isAuthorizedSession(session)) {
+          if (session) await whsfSupabase.auth.signOut();
+          showSignedOut();
+          setStatus(authStatus, 'Access is restricted to the authorized WHSF administrator.', true);
+          return false;
+        }
+        authCard.hidden = true;
+        passwordCard.hidden = true;
+        dashboard.hidden = false;
+        await loadEmployees();
+        return true;
+      };
+
+      const createCell = (value) => {
+        const cell = document.createElement('td');
+        cell.textContent = value || '—';
+        return cell;
+      };
+
+      async function loadEmployees() {
+        tableBody.replaceChildren();
+        const loadingRow = document.createElement('tr');
+        const loadingCell = createCell('Loading employee records…');
+        loadingCell.colSpan = 5;
+        loadingRow.append(loadingCell);
+        tableBody.append(loadingRow);
+
+        const { data, error } = await whsfSupabase.rpc('admin_list_whsf_staff');
+        if (error) {
+          loadingCell.textContent = 'Employee records could not be loaded.';
+          setStatus(formStatus, error.message, true);
+          return;
+        }
+
+        tableBody.replaceChildren();
+        if (!data?.length) {
+          const emptyRow = document.createElement('tr');
+          const emptyCell = createCell('No employee records found.');
+          emptyCell.colSpan = 5;
+          emptyRow.append(emptyCell);
+          tableBody.append(emptyRow);
+          return;
+        }
+
+        data.forEach((employee) => {
+          const row = document.createElement('tr');
+          row.append(
+            createCell(employee.full_name),
+            createCell(employee.employee_number),
+            createCell(employee.official_email),
+            createCell(employee.phone),
+            createCell(employee.is_active ? 'Active' : 'Inactive')
+          );
+          tableBody.append(row);
+        });
+      }
+
+      document.querySelector('#staff-admin-login-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        setStatus(authStatus, 'Signing in…');
+        const { data, error } = await whsfSupabase.auth.signInWithPassword({
+          email: ADMIN_EMAIL,
+          password: String(formData.get('password') || '')
+        });
+        if (error) {
+          setStatus(authStatus, 'Sign-in failed. Check the password or create a new one using the secure email link.', true);
+          return;
+        }
+        await showDashboard(data.session);
+      });
+
+      document.querySelector('#staff-admin-password-request').addEventListener('click', async () => {
+        setStatus(authStatus, 'Sending a secure password link to the WHSF administrator…');
+        const redirectTo = `${window.location.origin}${window.location.pathname}`;
+        const { error } = await whsfSupabase.auth.resetPasswordForEmail(ADMIN_EMAIL, { redirectTo });
+        setStatus(
+          authStatus,
+          error ? 'The secure password email could not be sent. Please try again.' : 'A secure password link was sent to info@worldhsfoundation.org.',
+          Boolean(error)
+        );
+      });
+
+      document.querySelector('#staff-admin-password-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const password = String(formData.get('password') || '');
+        const confirmation = String(formData.get('confirm_password') || '');
+        if (password.length < 12 || password !== confirmation) {
+          setStatus(passwordStatus, 'Use at least 12 characters and make sure both passwords match.', true);
+          return;
+        }
+        const { data, error } = await whsfSupabase.auth.updateUser({ password });
+        if (error) {
+          setStatus(passwordStatus, error.message, true);
+          return;
+        }
+        setStatus(passwordStatus, 'Admin password saved securely.');
+        await showDashboard(data.user ? { user: data.user } : null);
+      });
+
+      employeeForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const localPhone = String(formData.get('phone') || '').trim();
+        const countryCode = String(formData.get('country_code') || '').trim();
+        const phone = localPhone ? `${countryCode} ${localPhone}`.trim() : '';
+        setStatus(formStatus, 'Saving employee record…');
+        const { error } = await whsfSupabase.rpc('admin_upsert_whsf_staff', {
+          p_first_name: String(formData.get('first_name') || '').trim(),
+          p_last_name: String(formData.get('last_name') || '').trim(),
+          p_employee_number: String(formData.get('employee_number') || '').trim(),
+          p_phone: phone,
+          p_official_email: String(formData.get('official_email') || '').trim().toLowerCase(),
+          p_is_active: formData.get('is_active') === 'on'
+        });
+        if (error) {
+          setStatus(formStatus, error.message, true);
+          return;
+        }
+        event.currentTarget.reset();
+        event.currentTarget.elements.is_active.checked = true;
+        setStatus(formStatus, 'Employee record saved successfully.');
+        await loadEmployees();
+      });
+
+      document.querySelector('#staff-admin-refresh').addEventListener('click', loadEmployees);
+      document.querySelector('#staff-admin-signout').addEventListener('click', async () => {
+        await whsfSupabase.auth.signOut();
+        showSignedOut();
+        setStatus(authStatus, 'Signed out successfully.');
+      });
+
+      whsfSupabase.auth.onAuthStateChange((event, session) => {
+        window.setTimeout(async () => {
+          if (event === 'PASSWORD_RECOVERY') {
+            authCard.hidden = true;
+            dashboard.hidden = true;
+            passwordCard.hidden = false;
+            setStatus(passwordStatus, 'Enter a new password for the WHSF administrator account.');
+            return;
+          }
+          if (event === 'SIGNED_OUT') {
+            showSignedOut();
+            return;
+          }
+          if (session) await showDashboard(session);
+        }, 0);
+      });
+
+      whsfSupabase.auth.getSession().then(({ data }) => {
+        if (data.session) showDashboard(data.session);
+        else showSignedOut();
+      });
+    </script>
+  </body>
+</html>

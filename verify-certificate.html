@@ -409,10 +409,6 @@
                 <dd id="staff-result-name">—</dd>
               </div>
               <div>
-                <dt>Employee #</dt>
-                <dd id="staff-result-number">—</dd>
-              </div>
-              <div>
                 <dt>Verification method</dt>
                 <dd id="staff-result-method">—</dd>
               </div>
@@ -438,7 +434,7 @@
         </div>
         <div class="footer-links">
           <div><strong>Classroom</strong><a href="e-classroom.html">All courses</a><a href="e-classroom-admin.html">Teacher/Admin</a></div>
-          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="staff-verification-admin.html">Staff verification admin</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
         </div>
       </div>
       <div class="shell footer-bottom">
@@ -477,20 +473,6 @@
       const setStaffStatus = (message) => {
         staffStatus.textContent = message;
       };
-
-      function normalizeStaffName(value) {
-        return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
-      }
-
-      const knownWhsfStaffNames = new Set([
-        'olalekan okunola',
-        'oluwaseun okunola',
-        'donald lalude',
-        'segun adekeye',
-        'abayomi okunola',
-        'funmilayo esho',
-        'toluwanimi okunola'
-      ]);
 
       const contactMismatchMessage = 'The submitted contact information did not match WHSF staff records. Please review the phone number or official email and try again.';
 
@@ -697,7 +679,6 @@
         const employeeFirstName = String(formData.get('employee_first_name') || '').trim();
         const employeeLastName = String(formData.get('employee_last_name') || '').trim();
         const employeeName = `${employeeFirstName} ${employeeLastName}`.trim().replace(/\s+/g, ' ');
-        const employeeNameFound = knownWhsfStaffNames.has(normalizeStaffName(employeeName));
         const employeeOfficialEmail = String(formData.get('employee_official_email') || '').trim().toLowerCase();
         const employeeCountryCode = String(formData.get('employee_country_code') || '').trim();
         const employeePhoneLocal = String(formData.get('employee_phone') || '').trim();
@@ -724,36 +705,19 @@
         setStaffStatus('Checking WHSF staff records…');
         staffResult.hidden = true;
 
-        let { data, error } = await whsfSupabase.rpc('verify_whsf_staff_contact', {
+        const { data, error } = await whsfSupabase.rpc('verify_whsf_staff_contact', {
           p_full_name: employeeName,
           p_phone: employeePhone,
           p_official_email: employeeOfficialEmail
         });
 
-        if (error?.code === 'PGRST202' && employeePhoneLocal) {
-          ({ data, error } = await whsfSupabase.rpc('verify_whsf_staff', {
-            p_full_name: employeeName,
-            p_employee_number: '',
-            p_phone: employeePhone,
-            p_gender: ''
-          }));
-        }
-
         if (error) {
-          const message = employeeOfficialEmail && !employeePhoneLocal && error.code === 'PGRST202'
-            ? 'Official email verification is being connected to the WHSF staff directory. Please use a phone number for now or contact WHSF.'
-            : 'Staff verification is temporarily unavailable. Please try again later or contact WHSF.';
-          setStaffStatus(message);
+          setStaffStatus('Staff verification is temporarily unavailable. Please try again later or contact WHSF.');
           return;
         }
 
         if (!data?.length) {
-          if (employeeNameFound) {
-            setStaffStatus(contactMismatchMessage);
-            return;
-          }
-          setStaffStatus('This person is not a staff of WHSF.');
-          alert('This person is not a staff of WHSF.');
+          setStaffStatus(contactMismatchMessage);
           return;
         }
 
@@ -764,7 +728,6 @@
         }
 
         setText('#staff-result-name', verifiedStaff.full_name);
-        setText('#staff-result-number', verifiedStaff.employee_number);
         setText('#staff-result-method', verificationMethod);
         setText('#staff-result-status', verifiedStaff.verification_status || 'Verified WHSF staff');
 

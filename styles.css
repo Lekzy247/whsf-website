@@ -2402,6 +2402,22 @@ p, li { text-wrap: pretty; }
 .staff-contact-divider::before, .staff-contact-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .staff-contact-divider span { padding: 0 2px; }
 .staff-email-field { display: grid; gap: 8px; }
+.staff-admin-hero .admin-hero-grid { min-height: 600px; }
+.staff-admin-security-note { display: grid; gap: 5px; max-width: 560px; margin-top: 24px; padding: 18px 20px; border: 1px solid rgba(255,255,255,.24); border-radius: 16px; background: rgba(255,255,255,.1); backdrop-filter: blur(10px); }
+.staff-admin-security-note strong { color: #fff; }
+.staff-admin-security-note span { color: rgba(255,255,255,.82); }
+.staff-admin-auth-card h2 { margin-bottom: 18px; color: var(--ink); }
+.staff-admin-auth-card[hidden], .staff-admin-dashboard[hidden] { display: none; }
+.staff-admin-auth-card .button { width: 100%; justify-content: center; }
+.staff-admin-password-link { margin-top: 18px; color: var(--red); font-weight: 900; text-decoration: underline; text-underline-offset: 3px; }
+.staff-admin-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+.staff-admin-toolbar h2 { margin: 5px 0 0; font-size: clamp(2rem, 4vw, 3.2rem); }
+.staff-admin-form label { display: grid; gap: 7px; color: var(--ink); font-size: .82rem; font-weight: 900; }
+.staff-admin-form label small { color: var(--muted); font: inherit; font-weight: 700; }
+.staff-admin-form .staff-admin-active-control { display: flex; align-items: center; align-self: center; gap: 9px; min-height: 48px; }
+.staff-admin-form .staff-admin-active-control input { width: 19px; height: 19px; margin: 0; accent-color: var(--red); }
+.staff-admin-privacy-note { margin: 18px 0 0; color: var(--muted); font-size: .82rem; font-weight: 750; }
+.staff-admin-dashboard .is-error, .staff-admin-auth-card .is-error { color: #a11823; }
 .native-country-select { position: absolute; inline-size: 1px !important; block-size: 1px !important; opacity: 0; pointer-events: none; }
 .country-picker { position: relative; z-index: 30; min-width: 0; }
 .country-picker-toggle { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: center; width: 100%; min-height: 38px; padding: 0; border: 0; color: var(--ink); background: transparent; font: inherit; font-size: .92rem; font-weight: 850; text-align: left; cursor: pointer; }

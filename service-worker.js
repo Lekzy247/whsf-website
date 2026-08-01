@@ -1,4 +1,4 @@
-const WHSF_CACHE_NAME = 'whsf-pwa-v132-employee-verification';
+const WHSF_CACHE_NAME = 'whsf-pwa-v133-private-staff-admin';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
