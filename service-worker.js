@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v131-content-cleanup';
+const WHSF_CACHE_NAME = 'whsf-pwa-v132-employee-verification';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [

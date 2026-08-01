@@ -153,11 +153,11 @@
             <p class="eyebrow">Employee / Staff verification</p>
             <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
             <p>
-              Use this form to confirm WHSF staff identity details. First name, last name and phone number are required.
+              Enter the employee's first and last name, then provide either a phone number or an official email address.
             </p>
             <ul class="staff-verify-notes">
               <li>Enter the employee first name and last name exactly as provided by WHSF.</li>
-              <li>Select the country code first, then enter the staff phone number.</li>
+              <li>Only one contact method is needed: phone number or official email.</li>
             </ul>
           </div>
 
@@ -165,17 +165,21 @@
             <div class="staff-name-grid">
               <label>
                 First name
-                <input id="employee-first-name" name="employee_first_name" type="text" placeholder="Example: Olalekan" autocomplete="given-name" required />
+                <input id="employee-first-name" name="employee_first_name" type="text" autocomplete="given-name" required />
               </label>
               <label>
                 Last name
-                <input id="employee-last-name" name="employee_last_name" type="text" placeholder="Example: Okunola" autocomplete="family-name" required />
+                <input id="employee-last-name" name="employee_last_name" type="text" autocomplete="family-name" required />
               </label>
+            </div>
+            <div class="staff-contact-heading">
+              <strong>Contact for verification</strong>
+              <span>Provide either option below.</span>
             </div>
             <div class="staff-phone-field">
               <div class="staff-phone-control">
-                <span>Country code</span>
-                <select id="employee-country-code" name="employee_country_code" autocomplete="tel-country-code" required>
+                <span>Country code <small>(optional)</small></span>
+                <select id="employee-country-code" name="employee_country_code" autocomplete="tel-country-code">
                   <option value="+1">United States / Canada (+1)</option>
                   <option value="+234">Nigeria (+234)</option>
                   <option value="+233">Ghana (+233)</option>
@@ -375,12 +379,17 @@
                 </select>
               </div>
               <label>
-                <span>Phone #</span>
-                <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: (424)-(396)-(9671)" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code, for example (424)-(396)-(9671)" autocomplete="tel-national" required />
+                <span>Phone number <small>(optional)</small></span>
+                <input id="employee-phone" name="employee_phone" type="tel" pattern="[0-9\s\-()]{6,}" title="Enter at least six digits using numbers, spaces, brackets or hyphens." autocomplete="tel-national" />
               </label>
             </div>
+            <div class="staff-contact-divider" aria-hidden="true"><span>or</span></div>
+            <label class="staff-email-field">
+              <span>Official email <small>(optional)</small></span>
+              <input id="employee-official-email" name="employee_official_email" type="email" autocomplete="email" />
+            </label>
             <button class="button" type="submit">Verify staff details</button>
-            <p id="staff-verify-status" role="status">Enter staff details to begin verification review.</p>
+            <p id="staff-verify-status" role="status">First name, last name and one contact method are required.</p>
           </form>
         </div>
 
@@ -404,8 +413,8 @@
                 <dd id="staff-result-number">—</dd>
               </div>
               <div>
-                <dt>Phone #</dt>
-                <dd id="staff-result-phone">—</dd>
+                <dt>Verification method</dt>
+                <dd id="staff-result-method">—</dd>
               </div>
               <div>
                 <dt>Status</dt>
@@ -454,7 +463,6 @@
       const staffForm = document.querySelector('#staff-verification-form');
       const staffStatus = document.querySelector('#staff-verify-status');
       const staffResult = document.querySelector('#staff-verify-result');
-      const employeeNumberInput = document.querySelector('#employee-number');
       const employeeCountryCodeInput = document.querySelector('#employee-country-code');
       const employeePhoneInput = document.querySelector('#employee-phone');
 
@@ -484,14 +492,7 @@
         'toluwanimi okunola'
       ]);
 
-      const phoneMismatchMessage = 'Name found, but the phone number did not match WHSF staff records. Please select the correct country code and enter the phone number in this format: +234 - Country code + (xxx)-(xxx)-(xxxx). Example: select +234 and enter (803)-(574)-(0987).';
-
-      function formatEmployeeNumber(value) {
-        const cleaned = String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
-        if (/^\d+$/.test(cleaned)) return `WHSF-${cleaned.padStart(3, '0')}`;
-        if (/^WHSF\d+$/.test(cleaned)) return `WHSF-${cleaned.replace('WHSF', '').padStart(3, '0')}`;
-        return String(value || '').trim().toUpperCase();
-      }
+      const contactMismatchMessage = 'The submitted contact information did not match WHSF staff records. Please review the phone number or official email and try again.';
 
       function hasCountryCode(phoneNumber) {
         return /^\+[0-9][0-9\s\-()]{6,}$/.test(String(phoneNumber || '').trim());
@@ -697,18 +698,23 @@
         const employeeLastName = String(formData.get('employee_last_name') || '').trim();
         const employeeName = `${employeeFirstName} ${employeeLastName}`.trim().replace(/\s+/g, ' ');
         const employeeNameFound = knownWhsfStaffNames.has(normalizeStaffName(employeeName));
-        const employeeNumber = '';
+        const employeeOfficialEmail = String(formData.get('employee_official_email') || '').trim().toLowerCase();
         const employeeCountryCode = String(formData.get('employee_country_code') || '').trim();
         const employeePhoneLocal = String(formData.get('employee_phone') || '').trim();
-        const employeePhone = buildEmployeePhone(employeeCountryCode, employeePhoneLocal);
-        if (!employeeFirstName || !employeeLastName || !employeeCountryCode || !employeePhoneLocal) {
-          setStaffStatus('Enter first name, last name, country code and phone number to verify staff details.');
+        const employeePhone = employeePhoneLocal ? buildEmployeePhone(employeeCountryCode, employeePhoneLocal) : '';
+        const verificationMethod = employeePhoneLocal ? 'Phone number' : 'Official email';
+        if (!employeeFirstName || !employeeLastName) {
+          setStaffStatus('Enter the employee first name and last name.');
           return;
         }
 
-        if (!hasCountryCode(employeePhone)) {
-          setStaffStatus('Select a valid country code and enter the phone number in this format: +234 - Country code + (xxx)-(xxx)-(xxxx). Example: select +234 and enter (803)-(574)-(0987).');
-          alert('Select a valid country code and enter the phone number in this format: +234 - Country code + (xxx)-(xxx)-(xxxx).');
+        if (!employeePhoneLocal && !employeeOfficialEmail) {
+          setStaffStatus('Provide either a phone number or an official email address.');
+          return;
+        }
+
+        if (employeePhoneLocal && !hasCountryCode(employeePhone)) {
+          setStaffStatus('Select the correct country code and enter a valid phone number.');
           return;
         }
 
@@ -718,23 +724,32 @@
         setStaffStatus('Checking WHSF staff records…');
         staffResult.hidden = true;
 
-        const { data, error } = await whsfSupabase.rpc('verify_whsf_staff', {
+        let { data, error } = await whsfSupabase.rpc('verify_whsf_staff_contact', {
           p_full_name: employeeName,
-          p_employee_number: employeeNumber,
           p_phone: employeePhone,
-          p_gender: ''
+          p_official_email: employeeOfficialEmail
         });
 
+        if (error?.code === 'PGRST202' && employeePhoneLocal) {
+          ({ data, error } = await whsfSupabase.rpc('verify_whsf_staff', {
+            p_full_name: employeeName,
+            p_employee_number: '',
+            p_phone: employeePhone,
+            p_gender: ''
+          }));
+        }
+
         if (error) {
-          setStaffStatus('Staff verification is temporarily unavailable. Please try again later or contact WHSF.');
-          alert('Staff verification is temporarily unavailable. Please try again later or contact WHSF.');
+          const message = employeeOfficialEmail && !employeePhoneLocal && error.code === 'PGRST202'
+            ? 'Official email verification is being connected to the WHSF staff directory. Please use a phone number for now or contact WHSF.'
+            : 'Staff verification is temporarily unavailable. Please try again later or contact WHSF.';
+          setStaffStatus(message);
           return;
         }
 
         if (!data?.length) {
           if (employeeNameFound) {
-            setStaffStatus(phoneMismatchMessage);
-            alert(phoneMismatchMessage);
+            setStaffStatus(contactMismatchMessage);
             return;
           }
           setStaffStatus('This person is not a staff of WHSF.');
@@ -743,15 +758,14 @@
         }
 
         const verifiedStaff = data[0];
-        if ((verifiedStaff.verification_status || '').toLowerCase().includes('phone')) {
-          setStaffStatus(phoneMismatchMessage);
-          alert(phoneMismatchMessage);
+        if ((verifiedStaff.verification_status || '').toLowerCase().includes('mismatch')) {
+          setStaffStatus(contactMismatchMessage);
           return;
         }
 
         setText('#staff-result-name', verifiedStaff.full_name);
         setText('#staff-result-number', verifiedStaff.employee_number);
-        setText('#staff-result-phone', verifiedStaff.phone);
+        setText('#staff-result-method', verificationMethod);
         setText('#staff-result-status', verifiedStaff.verification_status || 'Verified WHSF staff');
 
         staffResult.hidden = false;
@@ -759,41 +773,6 @@
         staffResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     </script>
-  <script>
-    (() => {
-      const cleanStaffVerificationExamples = () => {
-        ["staff-first-name", "staff-last-name", "staff-phone-number"].forEach((id) => {
-          const field = document.getElementById(id);
-          if (field) {
-            field.setAttribute("placeholder", "");
-          }
-        });
-
-        const phoneLabel = document.querySelector('label[for="staff-phone-number"]');
-        if (phoneLabel) {
-          phoneLabel.textContent = "Phone number";
-        }
-
-        document.querySelectorAll(".field-hint, .form-hint, small").forEach((node) => {
-          const text = node.textContent.trim();
-          if (
-            text === "Example: Olalekan" ||
-            text === "Example: Okunola" ||
-            text === "Example: (424) (396) 9671" ||
-            text === "Phone # Example"
-          ) {
-            node.textContent = "";
-          }
-        });
-      };
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", cleanStaffVerificationExamples);
-      } else {
-        cleanStaffVerificationExamples();
-      }
-    })();
-  </script>
 </body>
 </html>
 

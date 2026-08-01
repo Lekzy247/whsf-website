@@ -2388,12 +2388,20 @@ p, li { text-wrap: pretty; }
 .staff-verify-notes li { position: relative; padding-left: 28px; }
 .staff-verify-notes li::before { content: "✓"; position: absolute; left: 0; color: var(--red); font-weight: 900; }
 .staff-name-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.staff-contact-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 4px 0 -2px; }
+.staff-contact-heading strong { color: var(--ink); font-size: .94rem; }
+.staff-contact-heading span { color: var(--muted); font-size: .78rem; }
 .staff-phone-field { position: relative; z-index: 5; display: grid; grid-template-columns: minmax(230px, .9fr) minmax(0, 1fr); gap: 0; align-items: stretch; overflow: visible; border: 1px solid rgba(109,16,36,.16); border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.65); }
 .staff-phone-field label, .staff-phone-control { display: grid; gap: 6px; min-width: 0; margin: 0; padding: 11px 12px 12px; color: var(--muted); font-size: .78rem; font-weight: 900; letter-spacing: .04em; }
 .staff-phone-control { border-right: 1px solid rgba(109,16,36,.12); }
 .staff-phone-field label span, .staff-phone-control > span { display: block; }
 .staff-phone-field select, .staff-phone-field input { width: 100%; min-height: 38px; margin: 0; padding: 0; border: 0; border-radius: 0; color: var(--ink); background: transparent; font-size: .95rem; font-weight: 850; box-shadow: none; }
 .staff-phone-field select:focus, .staff-phone-field input:focus { outline: 2px solid rgba(143,31,36,.18); outline-offset: 2px; }
+.staff-phone-field small, .staff-email-field small { color: var(--muted); font: inherit; font-weight: 700; letter-spacing: 0; }
+.staff-contact-divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: .75rem; font-weight: 900; text-transform: uppercase; }
+.staff-contact-divider::before, .staff-contact-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.staff-contact-divider span { padding: 0 2px; }
+.staff-email-field { display: grid; gap: 8px; }
 .native-country-select { position: absolute; inline-size: 1px !important; block-size: 1px !important; opacity: 0; pointer-events: none; }
 .country-picker { position: relative; z-index: 30; min-width: 0; }
 .country-picker-toggle { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: center; width: 100%; min-height: 38px; padding: 0; border: 0; color: var(--ink); background: transparent; font: inherit; font-size: .92rem; font-weight: 850; text-align: left; cursor: pointer; }

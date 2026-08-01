@@ -1414,7 +1414,7 @@ const whsfAssistantAnswers = [
   {
     keys: ['employee', 'staff', 'staff verification', 'employee verification', 'identity', 'phone number'],
     title: 'Employee / Staff verification',
-    answer: 'Use Employee / Staff verification to confirm WHSF staff identity. First name, last name and phone number with country code are required. The portal checks the submitted details against WHSF records and shows whether the person is verified.',
+    answer: 'Use Employee / Staff verification to confirm WHSF staff identity. Enter the first and last name, then provide either a phone number or an official email address. The portal checks the submitted details against WHSF records and shows whether the person is verified.',
     link: 'verify-certificate.html#staff-verification',
     linkText: 'Open staff verification'
   },
