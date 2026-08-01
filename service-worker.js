@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v126-live-opportunities';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v127-live-connect';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -12,6 +12,7 @@ const WHSF_CORE_ASSETS = [
   '/ai-career-connect/index.html',
   '/ai-career-connect/styles.css',
   '/ai-career-connect/app.js',
+  '/ai-career-connect/live-connect.js',
   '/ai-career-connect/workspaces.css',
   '/ai-career-connect/resume-builder.html',
   '/ai-career-connect/resume-builder.js',

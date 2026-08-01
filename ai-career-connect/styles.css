@@ -18,6 +18,56 @@
   --shadow: 0 24px 70px rgba(6, 22, 45, .13);
 }
 
+/* Live Connect */
+.live-connect-section { background: #f3f7fb; }
+.live-connect-heading { align-items: end; }
+.live-connect-trust { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0 2rem; }
+.live-connect-trust span { display: inline-flex; align-items: center; gap: .55rem; padding: .65rem .9rem; border: 1px solid #d9e3ee; border-radius: 999px; background: #fff; color: #29435e; font-size: .84rem; font-weight: 700; }
+.live-connect-trust b { display: grid; place-items: center; width: 1.45rem; height: 1.45rem; border-radius: 50%; background: #ddf6ee; color: #08765d; }
+.live-connect-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 1.5rem; align-items: start; }
+.live-calendar-card, .live-request-card { border: 1px solid #dbe4ed; border-radius: 24px; background: #fff; box-shadow: 0 18px 50px rgba(7, 26, 53, .08); }
+.live-calendar-card { padding: 1.5rem; position: sticky; top: 6.5rem; }
+.live-request-card { padding: 1.65rem; }
+.live-card-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; padding-bottom: 1.1rem; border-bottom: 1px solid #e8eef4; }
+.live-card-heading span { display: block; color: #197661; font-size: .76rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.live-card-heading h3 { margin: .32rem 0 0; color: #071a35; font-size: 1.25rem; }
+.live-card-heading > b { padding: .4rem .65rem; border-radius: 999px; background: #eef4f9; color: #486079; font-size: .72rem; white-space: nowrap; }
+.live-card-heading label { color: #50677e; font-size: .72rem; font-weight: 700; }
+.live-card-heading input[type="month"] { display: block; min-width: 9.2rem; margin-top: .35rem; padding: .55rem .65rem; border: 1px solid #ccd8e4; border-radius: 10px; color: #071a35; font: inherit; }
+.live-calendar-intro { margin: 1rem 0; color: #587087; font-size: .88rem; line-height: 1.65; }
+.live-session-list { display: grid; gap: .75rem; min-height: 12rem; }
+.live-session { display: grid; grid-template-columns: 3.4rem 1fr; gap: .85rem; padding: 1rem; border: 1px solid #e0e8f0; border-radius: 16px; background: #fbfdff; }
+.live-session-date { display: grid; place-items: center; align-content: center; min-height: 3.4rem; border-radius: 12px; background: #071a35; color: #fff; line-height: 1; }
+.live-session-date strong { font-size: 1.25rem; }.live-session-date small { margin-top: .25rem; color: #a7f0df; font-size: .66rem; font-weight: 800; text-transform: uppercase; }
+.live-session h4 { margin: 0; color: #071a35; font-size: .98rem; }.live-session p { margin: .35rem 0; color: #526b82; font-size: .8rem; line-height: 1.5; }
+.live-session-meta { display: flex; flex-wrap: wrap; gap: .35rem .75rem; color: #197661; font-size: .72rem; font-weight: 700; }
+.live-session-actions { display: flex; gap: .5rem; margin-top: .7rem; }.live-session-actions a, .live-session-actions button { border: 0; background: transparent; color: #c63d5a; font: inherit; font-size: .76rem; font-weight: 800; text-decoration: none; cursor: pointer; }
+.live-empty { display: grid; place-items: center; align-content: center; min-height: 12rem; padding: 1.5rem; border: 1px dashed #ccd9e5; border-radius: 16px; text-align: center; color: #536c82; }.live-empty strong { display: block; margin-bottom: .35rem; color: #071a35; }
+.live-session-loading { display: grid; grid-template-columns: repeat(3, .55rem); justify-content: center; align-content: center; gap: .35rem; min-height: 12rem; color: #526b82; text-align: center; }.live-session-loading span { width: .55rem; height: .55rem; border-radius: 50%; background: #c63d5a; animation: livePulse 1s infinite alternate; }.live-session-loading span:nth-child(2) { animation-delay: .2s; }.live-session-loading span:nth-child(3) { animation-delay: .4s; }.live-session-loading p { grid-column: 1 / -1; margin: .5rem 0 0; font-size: .82rem; }
+@keyframes livePulse { to { opacity: .25; transform: translateY(-4px); } }
+.text-button { margin-top: 1rem; padding: 0; border: 0; background: transparent; color: #153d67; font: inherit; font-size: .8rem; font-weight: 800; cursor: pointer; }
+.live-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .95rem; margin-top: 1.25rem; }
+.live-form-grid label { color: #29435e; font-size: .76rem; font-weight: 800; }
+.live-form-grid input, .live-form-grid select, .live-form-grid textarea { display: block; width: 100%; margin-top: .4rem; padding: .75rem .8rem; border: 1px solid #ccd8e4; border-radius: 11px; background: #fbfdff; color: #071a35; font: inherit; font-size: .86rem; transition: border-color .2s, box-shadow .2s; }
+.live-form-grid textarea { min-height: 6rem; resize: vertical; }.live-form-grid input:focus, .live-form-grid select:focus, .live-form-grid textarea:focus { outline: 0; border-color: #1b8b73; box-shadow: 0 0 0 3px rgba(27, 139, 115, .13); }
+.full-field { grid-column: 1 / -1; }
+.live-consent { display: flex; gap: .7rem; align-items: start; margin: 1rem 0; color: #536b82; font-size: .76rem; line-height: 1.5; }.live-consent input { flex: 0 0 auto; margin-top: .2rem; accent-color: #1b8b73; }
+.live-submit { width: 100%; justify-content: center; border: 0; }.live-submit:disabled { opacity: .6; cursor: wait; }
+.live-form-status { margin: .85rem 0 0; color: #597086; font-size: .76rem; line-height: 1.55; }.live-form-status.success { color: #08765d; font-weight: 700; }.live-form-status.error { color: #a32842; font-weight: 700; }
+.hp-field { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+
+@media (max-width: 900px) {
+  .live-connect-grid { grid-template-columns: 1fr; }
+  .live-calendar-card { position: static; }
+}
+@media (max-width: 600px) {
+  .live-form-grid { grid-template-columns: 1fr; }
+  .full-field { grid-column: auto; }
+  .live-card-heading { flex-direction: column; }
+  .live-card-heading label, .live-card-heading input[type="month"] { width: 100%; }
+  .live-calendar-card, .live-request-card { padding: 1.1rem; border-radius: 18px; }
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; color: var(--ink); background: #fff; font-family: "DM Sans", Arial, sans-serif; line-height: 1.6; }

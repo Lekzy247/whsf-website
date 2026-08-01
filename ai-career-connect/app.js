@@ -114,6 +114,16 @@
         { title: "Erasmus+ Youth Exchanges", organisation: "European Union", location: "Europe and partner countries", summary: "Official information about short international learning exchanges for young people.", url: "https://erasmus-plus.ec.europa.eu/opportunities/individuals/youth-exchanges", tag: "Official portal" },
         { title: "Exchange Programs for non-U.S. participants", organisation: "U.S. Department of State", location: "United States and participating countries", summary: "Official academic, professional and cultural exchange programme finder.", url: "https://exchanges.state.gov/non-us/program", tag: "Official portal" }
       ]
+    },
+    conferences: {
+      kicker: "Conferences",
+      heading: "Current technology and global-impact events",
+      copy: "Explore official conference pages, with priority given to AI, cloud, cybersecurity and digital skills useful to WHSF employees.",
+      items: [
+        { title: "Microsoft Ignite 2026", organisation: "Microsoft", location: "San Francisco + online", detail: "17–20 November 2026 • AI, cloud and practical technology skills for IT professionals, developers and leaders.", url: "https://ignite.microsoft.com/", tag: "WHSF staff priority" },
+        { title: "AWS re:Invent 2026", organisation: "Amazon Web Services", location: "Las Vegas + selected livestreams", detail: "30 November–4 December 2026 • Cloud, AI, security, architecture and hands-on technical learning.", url: "https://aws.amazon.com/events/reinvent/", tag: "Cloud & AI" },
+        { title: "Google Cloud events", organisation: "Google Cloud", location: "Global + online", detail: "Official live and on-demand events across AI, data, security, infrastructure and collaboration.", url: "https://cloud.google.com/events", tag: "Official event hub" }
+      ]
     }
   };
 
@@ -147,7 +157,7 @@
   const renderOpportunityItems = (items) => {
     opportunityList.innerHTML = items.map((item) => {
       const sourceDate = formatSourceDate(item.sourceUpdatedAt);
-      const supportingText = item.applicationStatus || item.summary || "Review the source for full requirements and application details.";
+      const supportingText = item.detail || item.applicationStatus || item.summary || "Review the source for full requirements and participation details.";
       return `
         <a class="opportunity-item" href="${escapeHTML(item.url)}" target="_blank" rel="noopener noreferrer">
           <span class="opportunity-logo" aria-hidden="true">${escapeHTML(sourceInitials(item))}</span>

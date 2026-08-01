@@ -66,6 +66,78 @@ const OFFICIAL_PROGRAMMES = {
       summary: "Supported work placements for students and recent graduates at eligible organisations.",
       url: "https://erasmus-plus.ec.europa.eu/opportunities/individuals/students/traineeships-abroad-for-students"
     }
+  ],
+  conferences: [
+    {
+      id: "microsoft-ignite-2026",
+      title: "Microsoft Ignite 2026",
+      organisation: "Microsoft",
+      location: "San Francisco + online",
+      detail: "17–20 November 2026 • Frontier AI, cloud and practical skills for IT professionals, developers and leaders.",
+      url: "https://ignite.microsoft.com/",
+      tag: "WHSF staff priority",
+      kind: "conference"
+    },
+    {
+      id: "aws-reinvent-2026",
+      title: "AWS re:Invent 2026",
+      organisation: "Amazon Web Services",
+      location: "Las Vegas + selected livestreams",
+      detail: "30 November–4 December 2026 • Cloud, AI, cybersecurity, architecture and hands-on technical learning.",
+      url: "https://aws.amazon.com/events/reinvent/",
+      tag: "Cloud & AI",
+      kind: "conference"
+    },
+    {
+      id: "google-cloud-events",
+      title: "Google Cloud events",
+      organisation: "Google Cloud",
+      location: "Global + online",
+      detail: "Current official events and on-demand sessions in AI, data, security, infrastructure and collaboration.",
+      url: "https://cloud.google.com/events",
+      tag: "Tech learning",
+      kind: "conference"
+    },
+    {
+      id: "un-general-assembly-81",
+      title: "UN General Assembly 81 High-Level Week",
+      organisation: "United Nations",
+      location: "New York + UN Web TV",
+      detail: "22–28 September 2026 • Global policy, partnerships, sustainable development and humanitarian priorities.",
+      url: "https://www.un.org/en/ga/81/meetings/",
+      tag: "UN & partnerships",
+      kind: "conference"
+    },
+    {
+      id: "un-cop31",
+      title: "UN Climate Change Conference (COP31)",
+      organisation: "United Nations Framework Convention on Climate Change",
+      location: "Antalya, Türkiye",
+      detail: "9–20 November 2026 • Climate action, innovation, resilience and sustainable technology.",
+      url: "https://www.un.org/en/academic-impact/2026-calendar-selected-united-nations-events",
+      tag: "Climate technology",
+      kind: "conference"
+    },
+    {
+      id: "itu-ai-for-good-events",
+      title: "AI for Good events",
+      organisation: "International Telecommunication Union",
+      location: "Geneva + online",
+      detail: "Ongoing official events connecting responsible AI and emerging technology with the UN Sustainable Development Goals.",
+      url: "https://aiforgood.itu.int/events/",
+      tag: "AI for SDGs",
+      kind: "conference"
+    },
+    {
+      id: "ieee-conferences",
+      title: "IEEE conference search",
+      organisation: "Institute of Electrical and Electronics Engineers",
+      location: "Global + hybrid",
+      detail: "Search current technical conferences across AI, computing, engineering, communications and humanitarian technology.",
+      url: "https://www.ieee.org/conferences/index.html",
+      tag: "Research & engineering",
+      kind: "conference"
+    }
   ]
 };
 
@@ -85,7 +157,7 @@ const JOB_BOARDS = {
   ]
 };
 
-const ALLOWED_TYPES = new Set(["scholarships", "internships", "remote", "exchange"]);
+const ALLOWED_TYPES = new Set(["scholarships", "internships", "remote", "exchange", "conferences"]);
 const INTERNSHIP_PATTERN = /\b(intern(ship)?|student|graduate|trainee|apprentice)\b/i;
 const REMOTE_PATTERN = /\b(remote|home[ -]based|distributed|anywhere)\b/i;
 
@@ -126,17 +198,17 @@ const fetchOfficialProgramme = async (programme) => {
     const html = await response.text();
     return {
       ...programme,
-      tag: "Official source",
+      tag: programme.tag || "Official source",
       sourceStatus: "Live",
-      applicationStatus: findApplicationStatus(html),
+      applicationStatus: programme.kind === "conference" ? undefined : findApplicationStatus(html),
       sourceUpdatedAt: response.headers.get("last-modified") || null
     };
   } catch {
     return {
       ...programme,
-      tag: "Official source",
+      tag: programme.tag || "Official source",
       sourceStatus: "Link available",
-      applicationStatus: "Open the official page to confirm the current application window.",
+      applicationStatus: programme.kind === "conference" ? undefined : "Open the official page to confirm the current application window.",
       sourceUpdatedAt: null
     };
   }
@@ -181,7 +253,7 @@ const fetchJobs = async (type) => {
 module.exports = async (request, response) => {
   const type = String(request.query?.type || "scholarships").toLowerCase();
   if (!ALLOWED_TYPES.has(type)) {
-    return response.status(400).json({ error: "Choose scholarships, internships, remote or exchange." });
+    return response.status(400).json({ error: "Choose scholarships, internships, remote, exchange or conferences." });
   }
 
   try {

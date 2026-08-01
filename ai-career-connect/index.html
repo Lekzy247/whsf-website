@@ -21,6 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/ai-career-connect/styles.css" />
     <script src="/ai-career-connect/app.js" defer></script>
+    <script src="/ai-career-connect/live-connect.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -38,6 +39,7 @@
           <a href="#career-gps">Career GPS</a>
           <a href="#tools">AI tools</a>
           <a href="#opportunities">Opportunities</a>
+          <a href="#live-connect">Live Connect</a>
           <a href="#for-organisations">For organisations</a>
           <a class="whsf-link" href="/programs.html">← WHSF programmes</a>
         </nav>
@@ -277,10 +279,11 @@
             <p>Fetch current information directly from official programme websites and employers' published job boards.</p>
           </div>
           <div class="opportunity-tabs" role="tablist" aria-label="Opportunity types">
-            <button id="tab-scholarships" role="tab" aria-selected="true" aria-controls="panel-scholarships" tabindex="0" data-tab="scholarships">Scholarships</button>
-            <button id="tab-internships" role="tab" aria-selected="false" aria-controls="panel-internships" tabindex="-1" data-tab="internships">Internships</button>
-            <button id="tab-remote" role="tab" aria-selected="false" aria-controls="panel-remote" tabindex="-1" data-tab="remote">Remote work</button>
-            <button id="tab-exchange" role="tab" aria-selected="false" aria-controls="panel-exchange" tabindex="-1" data-tab="exchange">Student exchange</button>
+            <button id="tab-scholarships" role="tab" aria-selected="true" aria-controls="opportunity-panel" tabindex="0" data-tab="scholarships">Scholarships</button>
+            <button id="tab-internships" role="tab" aria-selected="false" aria-controls="opportunity-panel" tabindex="-1" data-tab="internships">Internships</button>
+            <button id="tab-remote" role="tab" aria-selected="false" aria-controls="opportunity-panel" tabindex="-1" data-tab="remote">Remote work</button>
+            <button id="tab-exchange" role="tab" aria-selected="false" aria-controls="opportunity-panel" tabindex="-1" data-tab="exchange">Student exchange</button>
+            <button id="tab-conferences" role="tab" aria-selected="false" aria-controls="opportunity-panel" tabindex="-1" data-tab="conferences">Conferences</button>
           </div>
           <div class="opportunity-panel" id="opportunity-panel" role="tabpanel" aria-labelledby="tab-scholarships">
             <div class="opportunity-summary">
@@ -291,6 +294,75 @@
               <p class="opportunity-status" id="opportunity-status" role="status" aria-live="polite">Select a category, then fetch current results from the source.</p>
             </div>
             <div class="opportunity-list" id="opportunity-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section live-connect-section" id="live-connect" aria-labelledby="live-connect-title">
+        <div class="shell">
+          <div class="section-heading live-connect-heading">
+            <div>
+              <p class="eyebrow dark"><span></span> WHSF Live Connect</p>
+              <h2 id="live-connect-title">Meet the right people, at the right time.</h2>
+            </div>
+            <p>Request an approved live session with students, mentors, tutors, employers, universities and WHSF partners for practical learning and professional connection.</p>
+          </div>
+
+          <div class="live-connect-trust" aria-label="Live Connect safeguards">
+            <span><b aria-hidden="true">✓</b> WHSF-admin approved</span>
+            <span><b aria-hidden="true">⌁</b> Calendar coordinated</span>
+            <span><b aria-hidden="true">◉</b> Private joining details</span>
+          </div>
+
+          <div class="live-connect-grid">
+            <div class="live-calendar-card">
+              <div class="live-card-heading">
+                <div><span>Approved calendar</span><h3>Upcoming Live Connect sessions</h3></div>
+                <label for="live-connect-month">View month
+                  <input id="live-connect-month" type="month" aria-controls="live-session-list" />
+                </label>
+              </div>
+              <p class="live-calendar-intro">Only sessions approved for public registration appear here. Private meeting links are shared securely with confirmed participants.</p>
+              <div class="live-session-list" id="live-session-list" aria-live="polite" aria-busy="true">
+                <div class="live-session-loading"><span></span><span></span><span></span><p>Checking the approved calendar…</p></div>
+              </div>
+              <button class="text-button" id="live-calendar-refresh" type="button">Refresh approved calendar <span aria-hidden="true">↻</span></button>
+            </div>
+
+            <form class="live-request-card" id="live-connect-form">
+              <div class="live-card-heading">
+                <div><span>Connection request</span><h3>Ask WHSF to arrange a session</h3></div>
+                <b>Step 1 of 1</b>
+              </div>
+              <div class="live-form-grid">
+                <label>Full name<input name="fullName" autocomplete="name" maxlength="100" required /></label>
+                <label>Email address<input name="email" type="email" autocomplete="email" maxlength="160" required /></label>
+                <label>Your role
+                  <select name="role" required>
+                    <option value="">Select your role</option><option>Student</option><option>Job seeker</option><option>Mentor</option><option>Tutor</option><option>Employer</option><option>University</option><option>WHSF employee</option><option>Partner organisation</option>
+                  </select>
+                </label>
+                <label>Connection type
+                  <select name="connectionType" required>
+                    <option value="">Choose a session</option><option>Mentorship</option><option>Professional networking</option><option>Tutoring</option><option>Career talk</option><option>University advising</option><option>Employer information session</option><option>Project review</option>
+                  </select>
+                </label>
+                <label>Organisation or school<input name="organisation" autocomplete="organization" maxlength="140" /></label>
+                <label>Country<input name="country" autocomplete="country-name" maxlength="80" required /></label>
+                <label>Preferred date<input name="preferredDate" type="date" required /></label>
+                <label>Preferred time<input name="preferredTime" type="time" required /></label>
+                <label>Time zone<input name="timezone" maxlength="80" required /></label>
+                <label>Meeting format
+                  <select name="deliveryMode" required><option value="Video meeting">Video meeting</option><option value="Phone call">Phone call</option><option value="In person">In person</option></select>
+                </label>
+                <label class="full-field">Topic or goal<input name="topic" maxlength="180" placeholder="Example: mentoring for a first data analyst role" required /></label>
+                <label class="full-field">Additional context<textarea name="notes" maxlength="1200" rows="4" placeholder="Tell WHSF who you hope to meet and what a useful outcome would be."></textarea></label>
+              </div>
+              <label class="live-consent"><input name="consent" type="checkbox" required /><span>I agree that WHSF may use these details to review and coordinate this request. I understand that submission does not guarantee approval.</span></label>
+              <div class="hp-field" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+              <button class="button button-coral live-submit" type="submit">Submit for WHSF approval <span aria-hidden="true">→</span></button>
+              <p class="live-form-status" id="live-connect-status" role="status" aria-live="polite">Requests remain pending until a WHSF administrator reviews them. Contact details and joining links are never placed on the public calendar.</p>
+            </form>
           </div>
         </div>
       </section>
