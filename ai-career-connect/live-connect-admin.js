@@ -1,8 +1,8 @@
 (() => {
   const SUPABASE_URL = "https://ophymlgqnfilgxsuzcuz.supabase.co";
   const SUPABASE_KEY = "sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh";
+  const ADMIN_EMAIL = "info@worldhsfoundation.org";
   const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
-  const loginForm = document.querySelector("#admin-login-form");
   const scheduleForm = document.querySelector("#schedule-form");
   const loginStatus = document.querySelector("#admin-login-status");
   const requestStatus = document.querySelector("#request-status");
@@ -17,46 +17,59 @@
 
   const renderRequests = (items) => {
     const list = document.querySelector("#request-list"); list.innerHTML = ""; requests.clear();
-    requestSelect.innerHTML = '<option value="">Choose a pending request</option>';
+    requestSelect.innerHTML = '<option value="">Choose a request</option>';
     items.forEach((item) => {
       requests.set(item.id, item);
       const card = document.createElement("button"); card.type = "button"; card.className = "request-item"; card.dataset.requestId = item.id;
       const title = document.createElement("strong"); title.textContent = `${item.requester_name} — ${item.connection_type}`;
       const detail = document.createElement("small"); detail.textContent = `${item.requester_role} • ${item.country} • ${new Date(item.preferred_start).toLocaleString()}`;
-      card.append(title, detail); card.addEventListener("click", () => { requestSelect.value = item.id; requestSelect.dispatchEvent(new Event("change")); }); list.append(card);
-      const option = document.createElement("option"); option.value = item.id; option.textContent = `${item.requester_name} — ${item.connection_type}`; requestSelect.append(option);
+      const state = document.createElement("span"); state.className = `request-state ${item.status}`; state.textContent = item.status;
+      card.append(title, detail, state); card.addEventListener("click", () => { requestSelect.value = item.id; requestSelect.dispatchEvent(new Event("change")); }); list.append(card);
+      const option = document.createElement("option"); option.value = item.id; option.textContent = `${item.status === "approved" ? "Approved" : "Pending"} — ${item.requester_name} — ${item.connection_type}`; requestSelect.append(option);
     });
-    setStatus(requestStatus, items.length ? `${items.length} request${items.length === 1 ? "" : "s"} awaiting WHSF review.` : "No pending Live Connect requests.", items.length ? "" : "success");
+    setStatus(requestStatus, items.length ? `${items.length} request${items.length === 1 ? "" : "s"} awaiting approval or scheduling.` : "No Live Connect requests require action.", items.length ? "" : "success");
     const requestedId = new URLSearchParams(location.search).get("request");
     if (requestedId && requests.has(requestedId)) { requestSelect.value = requestedId; requestSelect.dispatchEvent(new Event("change")); }
   };
 
   const loadRequests = async () => {
-    setStatus(requestStatus, "Loading pending requests…");
-    const { data, error } = await client.from("ai_career_live_connect_requests").select("*").eq("status", "pending").order("created_at", { ascending: true });
+    setStatus(requestStatus, "Loading approval and scheduling requests…");
+    const { data, error } = await client.from("ai_career_live_connect_requests").select("*").in("status", ["pending", "approved"]).is("public_session_id", null).order("created_at", { ascending: true });
     if (error) return setStatus(requestStatus, error.message, "error");
     renderRequests(data || []);
   };
 
   const enterWorkspace = async (session) => {
     if (!session?.user) return;
-    const { data: profile, error } = await client.from("profiles").select("role").eq("id", session.user.id).single();
-    if (error || !["admin", "super_admin"].includes(String(profile?.role))) { await client.auth.signOut(); return setStatus(loginStatus, "This account does not have WHSF administrator access.", "error"); }
+    const signedInEmail = String(session.user.email || "").toLowerCase();
+    const { data: profile } = await client.from("profiles").select("role").eq("id", session.user.id).maybeSingle();
+    const isAdmin = signedInEmail === ADMIN_EMAIL || ["admin", "super_admin"].includes(String(profile?.role));
+    if (!isAdmin) { await client.auth.signOut(); return setStatus(loginStatus, `Access is restricted to ${ADMIN_EMAIL}.`, "error"); }
     adminUser = session.user;
     document.querySelector("#admin-login-card").hidden = true; document.querySelector("#admin-workspace").hidden = false;
     await loadRequests();
+    const params = new URLSearchParams(location.search); const requestedId = params.get("request");
+    if (params.get("approve") === "1" && requestedId && requests.get(requestedId)?.status === "pending") {
+      setStatus(scheduleStatus, "Confirming the email approval securely…");
+      const { error: approveError } = await client.rpc("ai_career_quick_approve_request", { p_request_id: requestedId });
+      if (approveError) return setStatus(scheduleStatus, approveError.message, "error");
+      history.replaceState({}, "", `${location.pathname}?request=${encodeURIComponent(requestedId)}`);
+      await loadRequests();
+      setStatus(scheduleStatus, "Approved from the WHSF email. Add the Google Meet link and publish the scheduled session.", "success");
+    } else if (requestedId && requests.get(requestedId)?.status === "approved") {
+      setStatus(scheduleStatus, "This request is approved. Complete its schedule and secure meeting link.", "success");
+    }
   };
 
-  loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault(); if (!loginForm.reportValidity() || !client) return;
-    const button = loginForm.querySelector("[type=submit]"); button.disabled = true;
-    const { data, error } = await client.auth.signInWithPassword({ email: loginForm.elements.email.value.trim(), password: loginForm.elements.password.value }); button.disabled = false;
-    if (error) return setStatus(loginStatus, error.message, "error");
-    await enterWorkspace(data.session);
+  document.querySelector("#admin-email-login").addEventListener("click", async () => {
+    setStatus(loginStatus, `Sending a secure sign-in link to ${ADMIN_EMAIL}…`);
+    const { error } = await client.auth.signInWithOtp({ email: ADMIN_EMAIL, options: { emailRedirectTo: location.href, shouldCreateUser: true } });
+    setStatus(loginStatus, error ? error.message : `Check ${ADMIN_EMAIL} for the secure sign-in link.`, error ? "error" : "success");
   });
 
   requestSelect.addEventListener("change", () => {
     const item = selectedRequest(); if (!item) return;
+    document.querySelectorAll(".request-item").forEach((card) => card.classList.toggle("active", card.dataset.requestId === item.id));
     scheduleForm.elements.title.value = `${item.connection_type}: ${item.topic}`.slice(0, 180);
     scheduleForm.elements.description.value = `WHSF-approved ${item.connection_type.toLowerCase()} session focused on ${item.topic}.`;
     scheduleForm.elements.deliveryMode.value = ["Google Meet", "WHSF Live Connect", "Microsoft Teams", "Zoom", "Phone call", "In person"].includes(item.delivery_mode) ? item.delivery_mode : "Google Meet";

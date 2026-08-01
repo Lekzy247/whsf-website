@@ -4,6 +4,7 @@ const SUPPORT_EMAIL = "info@worldhsfoundation.org";
 
 const clean = (value, max = 200) => String(value || "").trim().slice(0, max);
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const escapeHTML = (value) => String(value || "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]);
 
 const callRpc = async (name, body, accessToken = SUPABASE_ANON_KEY) => {
   const controller = new AbortController();
@@ -26,6 +27,7 @@ const callRpc = async (name, body, accessToken = SUPABASE_ANON_KEY) => {
 
 const buildApprovalEmail = (data, result) => {
   const requestId = result.requestId || result.request_id || "pending";
+  const approvalUrl = `https://www.worldhsfoundation.org/ai-career-connect/live-connect-admin.html?request=${encodeURIComponent(requestId)}&approve=1`;
   const subject = `Live Connect approval request — ${clean(data.connectionType, 60)} — ${requestId}`;
   const body = [
     "A new WHSF Live Connect request is awaiting admin review.", "",
@@ -40,9 +42,11 @@ const buildApprovalEmail = (data, result) => {
     `Preferred date/time: ${clean(data.preferredDate, 10)} ${clean(data.preferredTime, 5)} ${clean(data.timezone, 80)}`,
     `Topic: ${clean(data.topic, 180)}`,
     `Notes: ${clean(data.notes, 1200) || "None"}`, "",
-    `Review securely: https://www.worldhsfoundation.org/ai-career-connect/live-connect-admin.html?request=${encodeURIComponent(requestId)}`
+    `Approve securely: ${approvalUrl}`,
+    "Sign in as info@worldhsfoundation.org. The request will move into the approved scheduling queue."
   ].join("\n");
-  return { requestId, subject, body, replyTo: clean(data.email, 160), mailto: `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
+  const html = `<!doctype html><html><body style="margin:0;background:#f3f7fb;font-family:Arial,sans-serif;color:#071a35"><div style="max-width:640px;margin:0 auto;padding:32px 18px"><div style="padding:28px;border-radius:18px;background:#fff;border:1px solid #dbe4ed"><p style="margin:0 0 8px;color:#1b8b73;font-size:12px;font-weight:700;text-transform:uppercase">WHSF Live Connect</p><h1 style="margin:0 0 16px;font-size:25px">New request awaiting approval</h1><p style="line-height:1.6"><strong>${escapeHTML(clean(data.fullName, 100))}</strong> requested a ${escapeHTML(clean(data.connectionType, 60))} session about ${escapeHTML(clean(data.topic, 180))}.</p><p style="line-height:1.6"><strong>Preferred:</strong> ${escapeHTML(clean(data.preferredDate, 10))} ${escapeHTML(clean(data.preferredTime, 5))} ${escapeHTML(clean(data.timezone, 80))}<br><strong>Platform:</strong> ${escapeHTML(clean(data.deliveryMode, 40))}<br><strong>Request ID:</strong> ${escapeHTML(requestId)}</p><a href="${escapeHTML(approvalUrl)}" style="display:inline-block;margin:12px 0;padding:14px 20px;border-radius:10px;background:#1b8b73;color:#fff;text-decoration:none;font-weight:700">Approve and open scheduling →</a><p style="color:#587087;font-size:13px;line-height:1.6">For security, sign in with <strong>info@worldhsfoundation.org</strong>. Approval does not expose a meeting link publicly; complete the Google Meet schedule in the admin workspace.</p></div></div></body></html>`;
+  return { requestId, subject, body, html, replyTo: clean(data.email, 160), mailto: `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` };
 };
 
 const sendApprovalEmail = async (email) => {
@@ -55,7 +59,8 @@ const sendApprovalEmail = async (email) => {
       to: [SUPPORT_EMAIL],
       reply_to: email.replyTo,
       subject: email.subject,
-      text: email.body
+      text: email.body,
+      html: email.html
     })
   });
   return { delivered: upstream.ok, reason: upstream.ok ? "sent" : `provider-${upstream.status}` };

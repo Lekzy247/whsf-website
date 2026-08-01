@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v128-live-connect-access';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v129-live-connect-admin';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [

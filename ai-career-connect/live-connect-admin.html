@@ -18,25 +18,24 @@
   <main class="portal-main">
     <section class="portal-intro"><p class="portal-eyebrow">Restricted WHSF administration</p><h1>Review, schedule and approve.</h1><p>Only authenticated WHSF administrators can see applicant details, approve requests or publish sessions to the read-only calendar.</p></section>
     <section class="portal-card" id="admin-login-card">
-      <h2>Administrator sign-in</h2><p>Use an approved WHSF administrator account.</p>
-      <form class="portal-form" id="admin-login-form">
-        <label>Email address<input name="email" type="email" autocomplete="email" required /></label>
-        <label>Password<input name="password" type="password" autocomplete="current-password" required /></label>
-        <button class="portal-button secondary" type="submit">Open approval queue</button>
-        <p class="portal-status" id="admin-login-status" role="status">Admin role verification is required.</p>
-      </form>
+      <p class="portal-eyebrow">Approved administrator</p><h2>Continue as info@worldhsfoundation.org</h2>
+      <p>Access is restricted to the official WHSF Google Mail inbox. Personal email accounts cannot open the approval queue.</p>
+      <div class="portal-form" id="admin-login-actions">
+        <button class="portal-button google-button" id="admin-email-login" type="button"><span aria-hidden="true">G</span> Send secure login to WHSF Google Mail</button>
+        <p class="portal-status" id="admin-login-status" role="status">A one-time login link will be sent only to info@worldhsfoundation.org.</p>
+      </div>
     </section>
 
     <div class="portal-grid" id="admin-workspace" hidden>
       <section class="portal-card">
-        <div class="portal-toolbar"><div><p class="portal-eyebrow">Pending requests</p><h2>Approval queue</h2></div><button class="portal-button ghost" id="admin-sign-out" type="button">Sign out</button></div>
+        <div class="portal-toolbar"><div><p class="portal-eyebrow">Pending and approved</p><h2>Approval queue</h2></div><button class="portal-button ghost" id="admin-sign-out" type="button">Sign out</button></div>
         <div class="request-list" id="request-list"></div>
         <p class="portal-status" id="request-status" role="status">Loading pending requests…</p>
       </section>
       <section class="portal-card">
-        <h2>Schedule approved connection</h2><p>Google Meet is the default. Teams, Zoom and other approved platforms remain available.</p>
+        <h2>Schedule approved connection</h2><p>Email approval moves a request into this scheduling queue. Add a Google Meet link and publish when the date is confirmed.</p>
         <form class="portal-form admin-fields" id="schedule-form">
-          <label class="wide">Request<select name="requestId" required><option value="">Choose a pending request</option></select></label>
+          <label class="wide">Request<select name="requestId" required><option value="">Choose a request</option></select></label>
           <label class="wide">Session title<input name="title" maxlength="180" required /></label>
           <label>Starts<input name="startsAt" type="datetime-local" required /></label>
           <label>Ends<input name="endsAt" type="datetime-local" required /></label>

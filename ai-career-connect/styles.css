@@ -56,11 +56,17 @@
 .live-submit { width: 100%; justify-content: center; border: 0; }.live-submit:disabled { opacity: .6; cursor: wait; }
 .live-form-status { margin: .85rem 0 0; color: #597086; font-size: .76rem; line-height: 1.55; }.live-form-status.success { color: #08765d; font-weight: 700; }.live-form-status.error { color: #a32842; font-weight: 700; }
 .live-email-link { margin-top: .65rem; display: inline-flex; color: #a32842; font-size: .8rem; font-weight: 850; text-decoration: none; }
-.live-access-links { margin-top: 1.25rem; display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .75rem; }.live-access-links a { padding: .7rem .9rem; border: 1px solid #d4e0ea; border-radius: 999px; color: #153d67; background: #fff; font-size: .78rem; font-weight: 800; text-decoration: none; }
+.live-access-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0 0 1.5rem; }
+.live-access-card { min-height: 126px; padding: 1.15rem 1.25rem; display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center; overflow: hidden; border: 1px solid #cbd9e5; border-radius: 20px; color: #fff; background: linear-gradient(135deg, #0a203f, #174875); box-shadow: 0 15px 38px rgba(7,26,53,.14); text-decoration: none; transition: transform .2s ease, box-shadow .2s ease; }
+.live-access-card.admin { background: linear-gradient(135deg, #123f37, #1b8b73); }
+.live-access-card:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(7,26,53,.2); }
+.live-access-icon { width: 2.8rem; height: 2.8rem; display: grid; place-items: center; border-radius: 14px; color: #071a35; background: #fff; font-size: 1.05rem; font-weight: 900; }
+.live-access-card > span:nth-child(2) { display: grid; gap: .18rem; }.live-access-card small { color: #a9dfd5; font-size: .66rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }.live-access-card strong { font-size: 1rem; }.live-access-card em { color: rgba(255,255,255,.72); font-size: .72rem; font-style: normal; line-height: 1.4; }.live-access-card > b { font-size: 1.4rem; }
 .hp-field { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 
 @media (max-width: 900px) {
   .live-connect-grid { grid-template-columns: 1fr; }
+  .live-access-panel { grid-template-columns: 1fr; }
   .live-calendar-card { position: static; }
 }
 @media (max-width: 600px) {
