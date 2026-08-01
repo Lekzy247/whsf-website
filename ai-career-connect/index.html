@@ -322,7 +322,8 @@
                   <input id="live-connect-month" type="month" aria-controls="live-session-list" />
                 </label>
               </div>
-              <p class="live-calendar-intro">Only sessions approved for public registration appear here. Private meeting links are shared securely with confirmed participants.</p>
+              <p class="live-calendar-intro">Only WHSF-approved sessions appear here. Private meeting links are available only after participant authentication.</p>
+              <p class="live-readonly-note"><strong>Read-only schedule.</strong> Sign in through WHSF Live Connect to enter an approved session.</p>
               <div class="live-session-list" id="live-session-list" aria-live="polite" aria-busy="true">
                 <div class="live-session-loading"><span></span><span></span><span></span><p>Checking the approved calendar…</p></div>
               </div>
@@ -352,8 +353,8 @@
                 <label>Preferred date<input name="preferredDate" type="date" required /></label>
                 <label>Preferred time<input name="preferredTime" type="time" required /></label>
                 <label>Time zone<input name="timezone" maxlength="80" required /></label>
-                <label>Meeting format
-                  <select name="deliveryMode" required><option value="Video meeting">Video meeting</option><option value="Phone call">Phone call</option><option value="In person">In person</option></select>
+                <label>Preferred connection platform
+                  <select name="deliveryMode" required><option value="Google Meet">Google Meet (default)</option><option value="WHSF Live Connect">WHSF Live Connect</option><option value="Microsoft Teams">Microsoft Teams</option><option value="Zoom">Zoom</option><option value="Phone call">Phone call</option><option value="In person">In person</option></select>
                 </label>
                 <label class="full-field">Topic or goal<input name="topic" maxlength="180" placeholder="Example: mentoring for a first data analyst role" required /></label>
                 <label class="full-field">Additional context<textarea name="notes" maxlength="1200" rows="4" placeholder="Tell WHSF who you hope to meet and what a useful outcome would be."></textarea></label>
@@ -362,7 +363,12 @@
               <div class="hp-field" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
               <button class="button button-coral live-submit" type="submit">Submit for WHSF approval <span aria-hidden="true">→</span></button>
               <p class="live-form-status" id="live-connect-status" role="status" aria-live="polite">Requests remain pending until a WHSF administrator reviews them. Contact details and joining links are never placed on the public calendar.</p>
+              <a class="live-email-link" id="live-email-notification" href="mailto:info@worldhsfoundation.org" hidden>Email WHSF for approval <span aria-hidden="true">→</span></a>
             </form>
+          </div>
+          <div class="live-access-links">
+            <a href="/ai-career-connect/live-connect-room.html">Participant sign-in &amp; live room <span aria-hidden="true">→</span></a>
+            <a href="/ai-career-connect/live-connect-admin.html">WHSF admin scheduling <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </section>

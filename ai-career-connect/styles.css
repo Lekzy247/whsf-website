@@ -35,6 +35,7 @@
 .live-card-heading label { color: #50677e; font-size: .72rem; font-weight: 700; }
 .live-card-heading input[type="month"] { display: block; min-width: 9.2rem; margin-top: .35rem; padding: .55rem .65rem; border: 1px solid #ccd8e4; border-radius: 10px; color: #071a35; font: inherit; }
 .live-calendar-intro { margin: 1rem 0; color: #587087; font-size: .88rem; line-height: 1.65; }
+.live-readonly-note { margin: -.35rem 0 1rem; padding: .7rem .8rem; border-left: 3px solid #1b8b73; background: #eff8f5; color: #41685f; font-size: .76rem; line-height: 1.5; }
 .live-session-list { display: grid; gap: .75rem; min-height: 12rem; }
 .live-session { display: grid; grid-template-columns: 3.4rem 1fr; gap: .85rem; padding: 1rem; border: 1px solid #e0e8f0; border-radius: 16px; background: #fbfdff; }
 .live-session-date { display: grid; place-items: center; align-content: center; min-height: 3.4rem; border-radius: 12px; background: #071a35; color: #fff; line-height: 1; }
@@ -54,6 +55,8 @@
 .live-consent { display: flex; gap: .7rem; align-items: start; margin: 1rem 0; color: #536b82; font-size: .76rem; line-height: 1.5; }.live-consent input { flex: 0 0 auto; margin-top: .2rem; accent-color: #1b8b73; }
 .live-submit { width: 100%; justify-content: center; border: 0; }.live-submit:disabled { opacity: .6; cursor: wait; }
 .live-form-status { margin: .85rem 0 0; color: #597086; font-size: .76rem; line-height: 1.55; }.live-form-status.success { color: #08765d; font-weight: 700; }.live-form-status.error { color: #a32842; font-weight: 700; }
+.live-email-link { margin-top: .65rem; display: inline-flex; color: #a32842; font-size: .8rem; font-weight: 850; text-decoration: none; }
+.live-access-links { margin-top: 1.25rem; display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .75rem; }.live-access-links a { padding: .7rem .9rem; border: 1px solid #d4e0ea; border-radius: 999px; color: #153d67; background: #fff; font-size: .78rem; font-weight: 800; text-decoration: none; }
 .hp-field { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 
 @media (max-width: 900px) {

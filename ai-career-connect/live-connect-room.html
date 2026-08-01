@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Secure authenticated access to approved WHSF Live Connect sessions." />
+  <title>Live Connect Room | WHSF AI Career Connect</title>
+  <link rel="icon" href="/assets/whsf-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/ai-career-connect/live-connect-portal.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="/ai-career-connect/live-connect-room.js" defer></script>
+</head>
+<body>
+  <header class="portal-header"><nav class="portal-nav">
+    <a class="portal-brand" href="/ai-career-connect/"><img src="/assets/whsf-logo.jpg" alt="WHSF emblem" /><span><strong>WHSF</strong><small>Authenticated Live Connect</small></span></a>
+    <a href="/ai-career-connect/#live-connect">← Public calendar</a>
+  </nav></header>
+  <main class="portal-main">
+    <section class="portal-intro"><p class="portal-eyebrow">Private participant access</p><h1>Your approved live connection.</h1><p>Sign in with a WHSF account to access joining information. Meeting links are never exposed on the public calendar.</p></section>
+    <div class="portal-grid">
+      <section class="portal-card" id="auth-card">
+        <h2>Sign in to continue</h2><p>Use your WHSF account or create one before entering an approved session.</p>
+        <form class="portal-form" id="room-auth-form">
+          <label>Email address<input name="email" type="email" autocomplete="email" required /></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" minlength="8" required /></label>
+          <div class="portal-actions"><button class="portal-button secondary" type="submit">Sign in</button><button class="portal-button ghost" id="create-account" type="button">Create account</button></div>
+          <p class="portal-status" id="auth-status" role="status">Authentication protects participant and meeting information.</p>
+        </form>
+      </section>
+      <section class="portal-card portal-session" id="room-card">
+        <div id="room-placeholder"><h2>Select an approved session</h2><p>Open this page from an approved calendar event. After sign-in, the meeting platform and secure join button will appear here.</p></div>
+        <div id="room-session" hidden>
+          <div class="portal-toolbar"><span class="portal-eyebrow">Approved by WHSF</span><button class="portal-button ghost" id="sign-out" type="button">Sign out</button></div>
+          <h2 id="room-title"></h2><p id="room-description"></p>
+          <div class="portal-session-meta" id="room-meta"></div>
+          <a class="portal-button join-button" id="room-join" href="#" target="_blank" rel="noopener noreferrer">Join approved session →</a>
+          <p class="security-note">The external meeting opens only after WHSF authentication. Do not forward the joining link or record a session without permission.</p>
+        </div>
+        <p class="portal-status" id="room-status" role="status">Waiting for sign-in.</p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

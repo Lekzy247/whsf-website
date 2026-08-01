@@ -4,6 +4,7 @@
   const list = document.querySelector("#live-session-list");
   const monthInput = document.querySelector("#live-connect-month");
   const refreshButton = document.querySelector("#live-calendar-refresh");
+  const emailNotificationLink = document.querySelector("#live-email-notification");
   if (!form || !status || !list || !monthInput) return;
 
   const escapeHTML = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" })[character]);
@@ -55,7 +56,7 @@
         <div class="live-session-date"><strong>${starts.getDate()}</strong><small>${starts.toLocaleDateString([], { month: "short" })}</small></div>
         <div><h4>${escapeHTML(session.title)}</h4><p>${escapeHTML(session.description || "WHSF-approved connection session.")}</p>
         <div class="live-session-meta"><span>${escapeHTML(time)}</span><span>${escapeHTML(session.connection_type)}</span><span>${escapeHTML(session.delivery_mode)}</span></div>
-        <div class="live-session-actions">${session.registration_url ? `<a href="${escapeHTML(session.registration_url)}" target="_blank" rel="noopener noreferrer">Request a place →</a>` : ""}<button type="button" data-calendar-id="${escapeHTML(session.id)}">Add to calendar</button></div></div>
+        <div class="live-session-actions"><a href="/ai-career-connect/live-connect-room.html?session=${encodeURIComponent(session.id)}">Sign in to access live room →</a><button type="button" data-calendar-id="${escapeHTML(session.id)}">Add to calendar</button></div></div>
       </article>`;
     }).join("");
     list.querySelectorAll("[data-calendar-id]").forEach((button) => button.addEventListener("click", () => downloadCalendar(sessions.find((session) => session.id === button.dataset.calendarId))));
@@ -91,12 +92,19 @@
       if (!response.ok) throw new Error(payload.error || "Your request could not be submitted.");
       status.classList.add("success");
       status.textContent = payload.message || "Request received. WHSF will review it before any session is scheduled.";
+      if (emailNotificationLink && payload.approvalMailto) {
+        emailNotificationLink.href = payload.approvalMailto;
+        emailNotificationLink.hidden = false;
+        emailNotificationLink.textContent = payload.emailDelivered ? `WHSF notified • Request ${payload.requestId}` : `Email WHSF for approval • Request ${payload.requestId} →`;
+        if (!payload.emailDelivered) window.setTimeout(() => { window.location.href = payload.approvalMailto; }, 350);
+      }
       form.reset();
       form.elements.preferredDate.min = new Date().toISOString().slice(0, 10);
       form.elements.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     } catch (error) {
       status.classList.add("error");
       status.textContent = `${error.message} You may also email info@worldhsfoundation.org.`;
+      if (emailNotificationLink) emailNotificationLink.hidden = true;
     } finally { button.disabled = false; }
   });
 
