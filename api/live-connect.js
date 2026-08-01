@@ -1,6 +1,7 @@
 const SUPABASE_URL = process.env.SUPABASE_URL || "https://ophymlgqnfilgxsuzcuz.supabase.co";
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh";
 const SUPPORT_EMAIL = "info@worldhsfoundation.org";
+const ADMIN_LOGIN_URL = "https://www.worldhsfoundation.org/ai-career-connect/live-connect-admin.html";
 
 const clean = (value, max = 200) => String(value || "").trim().slice(0, max);
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -66,6 +67,19 @@ const sendApprovalEmail = async (email) => {
   return { delivered: upstream.ok, reason: upstream.ok ? "sent" : `provider-${upstream.status}` };
 };
 
+const sendAdminLoginEmail = async () => {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+  try {
+    return await fetch(`${SUPABASE_URL}/auth/v1/otp?redirect_to=${encodeURIComponent(ADMIN_LOGIN_URL)}`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ email: SUPPORT_EMAIL, create_user: true })
+    });
+  } finally { clearTimeout(timer); }
+};
+
 const serviceUnavailable = (response) => response.status(503).json({
   error: "Live Connect is being configured. Please try again shortly or contact WHSF directly.",
   supportEmail: SUPPORT_EMAIL,
@@ -118,6 +132,17 @@ module.exports = async (request, response) => {
 
   if (request.method === "POST") {
     const data = request.body || {};
+    if (data.action === "admin_login") {
+      try {
+        const loginEmail = await sendAdminLoginEmail();
+        if (!loginEmail.ok) return response.status(loginEmail.status === 429 ? 429 : 502).json({ error: loginEmail.status === 429 ? "Please wait before requesting another admin login email." : "The secure admin email could not be sent." });
+        response.setHeader("Cache-Control", "no-store");
+        return response.status(202).json({ ok: true, message: `Secure login sent to ${SUPPORT_EMAIL}.` });
+      } catch (error) {
+        console.error("Live Connect admin login email failed", { message: error.message });
+        return response.status(504).json({ error: "The secure admin email service timed out. Please try again." });
+      }
+    }
     const fullName = clean(data.fullName, 100);
     const email = clean(data.email, 160).toLowerCase();
     const preferredStart = new Date(`${clean(data.preferredDate, 10)}T${clean(data.preferredTime, 5)}:00`);

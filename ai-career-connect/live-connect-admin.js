@@ -63,8 +63,12 @@
 
   document.querySelector("#admin-email-login").addEventListener("click", async () => {
     setStatus(loginStatus, `Sending a secure sign-in link to ${ADMIN_EMAIL}…`);
-    const { error } = await client.auth.signInWithOtp({ email: ADMIN_EMAIL, options: { emailRedirectTo: location.href, shouldCreateUser: true } });
-    setStatus(loginStatus, error ? error.message : `Check ${ADMIN_EMAIL} for the secure sign-in link.`, error ? "error" : "success");
+    try {
+      const response = await fetch("/api/live-connect", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ action: "admin_login" }) });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "The secure login email could not be sent.");
+      setStatus(loginStatus, `Check ${ADMIN_EMAIL} for the secure one-time login link.`, "success");
+    } catch (error) { setStatus(loginStatus, error.message, "error"); }
   });
 
   requestSelect.addEventListener("change", () => {
