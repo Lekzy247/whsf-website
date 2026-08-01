@@ -1,0 +1,11 @@
+:root { font-family: Inter, Arial, sans-serif; color: #10251d; background: #f4f7f4; }
+body { margin: 0; }
+main { max-width: 72rem; margin: auto; padding: clamp(3rem, 8vw, 8rem) 1.5rem; }
+.badge { color: #0f6b4d; font-size: .75rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+h1 { max-width: 10ch; margin: 1rem 0; font-size: clamp(3rem, 8vw, 7rem); line-height: .9; letter-spacing: -.07em; }
+.lede { max-width: 42rem; color: #5c6e66; font-size: 1.15rem; line-height: 1.7; }
+section { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 4rem; }
+section a { min-height: 15rem; padding: 2rem; border: 1px solid #d9e4de; border-radius: 1rem; color: inherit; background: white; text-decoration: none; }
+section span { color: #0f6b4d; font-size: .7rem; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; }
+section h2 { font-size: 1.6rem; } section p { color: #5c6e66; line-height: 1.6; } section strong { display: block; margin-top: 2rem; }
+@media (max-width: 650px) { section { grid-template-columns: 1fr; } }

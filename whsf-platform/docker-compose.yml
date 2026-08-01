@@ -1,0 +1,95 @@
+name: whsf-platform
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: whsf
+      POSTGRES_USER: whsf
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-development-only}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U whsf -d whsf"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [data]
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [data]
+
+  api:
+    build:
+      context: services/api
+      dockerfile: Dockerfile
+    environment:
+      WHSF_ENVIRONMENT: development
+      WHSF_DATABASE_URL: postgresql+asyncpg://whsf:${POSTGRES_PASSWORD:-local-development-only}@postgres:5432/whsf
+      WHSF_REDIS_URL: redis://redis:6379/0
+      WHSF_CORS_ORIGINS: '["http://localhost:3000","http://localhost:3001"]'
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    read_only: true
+    tmpfs: [/tmp]
+    networks: [edge, data]
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost/api
+    depends_on: [api]
+    read_only: true
+    tmpfs: [/tmp, /app/apps/web/.next/cache]
+    networks: [edge]
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+    depends_on: [api]
+    read_only: true
+    tmpfs: [/tmp, /app/apps/admin/.next/cache]
+    networks: [edge]
+
+  nginx:
+    image: nginx:1.29-alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on: [web, admin, api]
+    read_only: true
+    tmpfs: [/var/cache/nginx, /var/run]
+    networks: [edge]
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.retention.time=7d"]
+    volumes:
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks: [edge]
+    profiles: [observability]
+
+volumes:
+  postgres-data:
+  redis-data:
+  prometheus-data:
+
+networks:
+  edge:
+  data:
+    internal: true

@@ -1,0 +1,21 @@
+{
+  "name": "@whsf/docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": { "next": "16.2.12", "react": "19.2.8", "react-dom": "19.2.8" },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.1",
+    "eslint-config-next": "16.2.12",
+    "typescript": "5.9.3"
+  }
+}

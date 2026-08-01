@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v123';
+const WHSF_CACHE_NAME = 'whsf-pwa-v133-private-staff-admin';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -8,7 +8,23 @@ const WHSF_CORE_ASSETS = [
   '/mobile-app.html',
   '/mobile-app-admin.html',
   '/programs.html',
-  '/blog.html',
+  '/ai-career-connect/',
+  '/ai-career-connect/index.html',
+  '/ai-career-connect/styles.css',
+  '/ai-career-connect/app.js',
+  '/ai-career-connect/live-connect.js',
+  '/ai-career-connect/live-connect-portal.css',
+  '/ai-career-connect/live-connect-room.html',
+  '/ai-career-connect/live-connect-room.js',
+  '/ai-career-connect/live-connect-admin.html',
+  '/ai-career-connect/live-connect-admin.js',
+  '/ai-career-connect/workspaces.css',
+  '/ai-career-connect/resume-builder.html',
+  '/ai-career-connect/resume-builder.js',
+  '/ai-career-connect/interview-coach.html',
+  '/ai-career-connect/interview-coach.js',
+  '/ai-career-connect/skills-passport.html',
+  '/ai-career-connect/skills-passport.js',
   '/innovation.html',
   '/contact.html',
   '/privacy-policy.html',
@@ -24,7 +40,8 @@ const WHSF_CORE_ASSETS = [
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
   '/assets/whsf-logo.jpg',
-  '/assets/about/about-us-board.webp'
+  '/assets/about/about-us-board.webp',
+  '/assets/programs/ai-career-connect-social.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -52,6 +69,10 @@ self.addEventListener('fetch', (event) => {
 
   const requestUrl = new URL(event.request.url);
   if (requestUrl.origin !== self.location.origin) return;
+  if (requestUrl.pathname.startsWith('/api/')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
   const shouldRefreshFirst =
     event.request.destination === 'script' ||
     event.request.destination === 'style' ||

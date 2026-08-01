@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" /><title>Live Connect Admin | WHSF</title>
+  <link rel="icon" href="/assets/whsf-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/ai-career-connect/live-connect-portal.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="/ai-career-connect/live-connect-admin.js" defer></script>
+</head>
+<body>
+  <header class="portal-header"><nav class="portal-nav">
+    <a class="portal-brand" href="/ai-career-connect/"><img src="/assets/whsf-logo.jpg" alt="WHSF emblem" /><span><strong>WHSF</strong><small>Live Connect administration</small></span></a>
+    <a href="/ai-career-connect/#live-connect">← Public calendar</a>
+  </nav></header>
+  <main class="portal-main">
+    <section class="portal-intro"><p class="portal-eyebrow">Restricted WHSF administration</p><h1>Review, schedule and approve.</h1><p>Only authenticated WHSF administrators can see applicant details, approve requests or publish sessions to the read-only calendar.</p></section>
+    <section class="portal-card" id="admin-login-card">
+      <p class="portal-eyebrow">Approved administrator</p><h2>Continue as info@worldhsfoundation.org</h2>
+      <p>Access is restricted to the official WHSF Google Mail inbox. Personal email accounts cannot open the approval queue.</p>
+      <div class="portal-form" id="admin-login-actions">
+        <button class="portal-button google-button" id="admin-email-login" type="button"><span aria-hidden="true">G</span> Send secure login to WHSF Google Mail</button>
+        <p class="portal-status" id="admin-login-status" role="status">A one-time login link will be sent only to info@worldhsfoundation.org.</p>
+      </div>
+    </section>
+
+    <div class="portal-grid" id="admin-workspace" hidden>
+      <section class="portal-card">
+        <div class="portal-toolbar"><div><p class="portal-eyebrow">Pending and approved</p><h2>Approval queue</h2></div><button class="portal-button ghost" id="admin-sign-out" type="button">Sign out</button></div>
+        <div class="request-list" id="request-list"></div>
+        <p class="portal-status" id="request-status" role="status">Loading pending requests…</p>
+      </section>
+      <section class="portal-card">
+        <h2>Schedule approved connection</h2><p>Email approval moves a request into this scheduling queue. Add a Google Meet link and publish when the date is confirmed.</p>
+        <form class="portal-form admin-fields" id="schedule-form">
+          <label class="wide">Request<select name="requestId" required><option value="">Choose a request</option></select></label>
+          <label class="wide">Session title<input name="title" maxlength="180" required /></label>
+          <label>Starts<input name="startsAt" type="datetime-local" required /></label>
+          <label>Ends<input name="endsAt" type="datetime-local" required /></label>
+          <label>Platform<select name="deliveryMode" required><option>Google Meet</option><option>WHSF Live Connect</option><option>Microsoft Teams</option><option>Zoom</option><option>Phone call</option><option>In person</option></select></label>
+          <label>Secure meeting link<input name="meetingUrl" type="url" placeholder="https://meet.google.com/..." required /></label>
+          <label>Host name<input name="hostName" maxlength="100" required /></label>
+          <label>Host organisation<input name="hostOrganisation" maxlength="140" value="WHSF" required /></label>
+          <label>Public location<input name="publicLocation" maxlength="120" value="Authenticated WHSF Live Connect" required /></label>
+          <label>Capacity<input name="capacity" type="number" min="1" max="10000" value="100" /></label>
+          <label class="wide">Public description<textarea name="description" maxlength="1000" required></textarea></label>
+          <label class="wide">Private admin note<textarea name="adminNotes" maxlength="1200"></textarea></label>
+          <button class="portal-button wide" type="submit">Approve, publish and prepare participant email →</button>
+          <div class="portal-actions wide"><button class="portal-button ghost" id="needs-changes" type="button">Request changes</button><button class="portal-button ghost" id="reject-request" type="button">Reject request</button></div>
+          <p class="portal-status wide" id="schedule-status" role="status">Select a pending request to schedule it.</p>
+        </form>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

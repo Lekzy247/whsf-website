@@ -16,6 +16,31 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.worldhsfoundation.org/programs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.worldhsfoundation.org/ai-career-connect/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.worldhsfoundation.org/ai-career-connect/resume-builder.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.worldhsfoundation.org/ai-career-connect/interview-coach.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.worldhsfoundation.org/ai-career-connect/skills-passport.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.worldhsfoundation.org/impact-dashboard</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>

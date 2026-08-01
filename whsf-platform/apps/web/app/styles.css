@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+:root { font-family: var(--font-body), Arial, sans-serif; }
+body { min-height: 100vh; background: #f4f7f4; }
+.skip-link { position: fixed; z-index: 99; left: 1rem; top: -5rem; background: #fff; padding: .75rem 1rem; }
+.skip-link:focus { top: 1rem; }
+.site-header { min-height: 6rem; padding: 1.25rem clamp(1.25rem, 4vw, 5rem); display: flex; align-items: center; justify-content: space-between; gap: 2rem; background: #f8faf8; border-bottom: 1px solid var(--aurora-border); }
+.brand { display: flex; gap: .8rem; align-items: center; text-decoration: none; font-family: var(--font-display); font-size: .74rem; font-weight: 800; line-height: 1.1; letter-spacing: .02em; text-transform: uppercase; }
+.brand-mark { display: grid; place-items: center; width: 2.65rem; height: 2.65rem; border-radius: 50% 50% 50% 8%; color: white; background: var(--aurora-brand); font-size: 1.2rem; }
+nav ul { display: flex; gap: clamp(1rem, 2.5vw, 2.5rem); list-style: none; padding: 0; margin: 0; }
+nav a, .portal-link { font-size: .88rem; font-weight: 700; text-decoration: none; }
+nav a:hover { color: var(--aurora-brand); }
+.portal-link { padding: .8rem 1rem; color: white; background: var(--aurora-ink); border-radius: 999px; }
+.hero { overflow: hidden; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(20rem, .65fr); min-height: 38rem; color: white; background: var(--aurora-brand-strong); }
+.hero-copy { padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 7vw, 8rem); background: radial-gradient(circle at 85% 20%, rgba(245,185,66,.12), transparent 32%), linear-gradient(135deg, #0c5c43, #073b2c); }
+.eyebrow { color: #187052; font-size: .76rem; font-weight: 850; text-transform: uppercase; letter-spacing: .16em; }
+.hero .eyebrow { color: #c8e5d5; }
+.eyebrow span { display: inline-block; width: 2rem; height: 1px; margin: 0 .5rem .25rem 0; background: var(--aurora-accent); }
+h1, h2, h3 { font-family: var(--font-display), sans-serif; }
+h1 { max-width: 14ch; margin: 1.5rem 0; font-size: clamp(3.2rem, 7.3vw, 6.9rem); line-height: .92; letter-spacing: -.065em; }
+h1 em { color: var(--aurora-accent); font-style: normal; }
+.hero-lede { max-width: 42rem; color: #d5e6de; font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.75; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin-top: 2.5rem; }
+.primary-link { border-radius: 999px; padding: 1rem 1.3rem; color: #10251d; background: var(--aurora-accent); font-weight: 850; text-decoration: none; }
+.text-link { color: white; font-weight: 750; text-underline-offset: .35rem; }
+.hero-panel { display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(2rem, 5vw, 5rem); color: #dfeae5; background: #10251d; }
+.panel-kicker { color: var(--aurora-accent); font-size: .72rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+.hero-panel h2 { color: white; font-size: clamp(2rem, 3vw, 3.2rem); line-height: 1.05; letter-spacing: -.04em; }
+.hero-panel p { line-height: 1.7; }
+.signal-row { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-top: 1px solid #385047; font-size: .86rem; }
+.signal-row strong { color: white; }
+.metrics, .principles { padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 7vw, 8rem); }
+.section-heading { display: flex; justify-content: space-between; gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
+.section-heading h2, .principles h2 { max-width: 18ch; margin: 0; font-size: clamp(2.2rem, 4vw, 4rem); line-height: 1.05; letter-spacing: -.05em; }
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.metric-card { padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: none; }
+.metric-card > strong { color: var(--aurora-brand); font: 850 clamp(3rem, 6vw, 5rem)/1 var(--font-display); letter-spacing: -.07em; }
+.metric-card h3 { margin-bottom: .4rem; font-size: 1.1rem; }
+.metric-card p { color: var(--aurora-muted); line-height: 1.6; }
+.principles { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(3rem, 8vw, 8rem); color: white; background: #10251d; }
+.principles .eyebrow { color: #9ccdb8; }
+.principle-list p { display: grid; grid-template-columns: 3rem 1fr; padding: 1.4rem 0; margin: 0; border-top: 1px solid #385047; }
+.principle-list span { color: var(--aurora-accent); }
+.principle-list small { grid-column: 2; margin-top: .4rem; color: #a9bbb3; line-height: 1.5; }
+footer { display: flex; justify-content: space-between; padding: 2rem clamp(1.25rem, 7vw, 8rem); color: #5b6c64; font-size: .8rem; background: #e8eeea; }
+.interior { min-height: 100vh; padding: clamp(2rem, 6vw, 6rem) clamp(1.25rem, 8vw, 9rem); background: linear-gradient(155deg, #f7faf8 55%, #e7f0ea); }
+.back-link { display: inline-block; margin-bottom: clamp(3rem, 8vw, 7rem); color: var(--aurora-brand); font-size: .85rem; font-weight: 800; text-underline-offset: .3rem; }
+.interior header { max-width: 68rem; }
+.interior h1 { max-width: 14ch; color: var(--aurora-ink); font-size: clamp(3rem, 7vw, 6.5rem); }
+.interior-lede { max-width: 48rem; color: var(--aurora-muted); font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.7; }
+.interior-content { margin-top: clamp(3rem, 7vw, 6rem); }
+.content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.content-grid .aurora-card, .prose-block { padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: none; }
+.content-grid p, .prose-block p { color: var(--aurora-muted); line-height: 1.7; }
+.prose-block { max-width: 48rem; border-left: 3px solid var(--aurora-accent); background: white; }
+.prose-block .primary-link { display: inline-block; margin-top: 1rem; }
+@media (max-width: 850px) {
+  .site-header nav { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .metric-grid, .principles { grid-template-columns: 1fr; }
+  .content-grid { grid-template-columns: 1fr; }
+  .section-heading { display: block; }
+}
+@media (max-width: 520px) {
+  .brand { font-size: .62rem; }
+  .portal-link { font-size: .75rem; padding: .7rem .8rem; }
+  .hero-panel { min-height: 28rem; }
+  footer { flex-direction: column; gap: .75rem; }
+}
