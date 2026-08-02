@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v126';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v127';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -21,7 +21,6 @@ const WHSF_CORE_ASSETS = [
   '/ai-career-connect/interview-coach.js',
   '/ai-career-connect/skills-passport.html',
   '/ai-career-connect/skills-passport.js',
-  '/blog.html',
   '/innovation.html',
   '/contact.html',
   '/privacy-policy.html',
