@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v138';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v139';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -39,7 +39,7 @@ const WHSF_CORE_ASSETS = [
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
   '/assets/whsf-logo.jpg',
-  '/assets/awards/london-data-center-world-award-2025-winner.jpg',
+  '/assets/awards/london-data-center-world-award-2025-winner-transparent.png',
   '/assets/about/about-us-board.webp',
   '/assets/programs/ai-career-connect-social.png',
   '/assets/programs/agrismart-ai-programme.png',

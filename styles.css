@@ -7172,19 +7172,29 @@ body {
   background-color:transparent !important;
   box-shadow:none;
 }
+.home-page .footer-award-image{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
 .home-page .footer-award-image img{
-  width:158px;
-  height:158px;
+  display:block;
+  width:168px;
+  height:auto;
   object-fit:contain;
   object-position:center;
-  border-radius:50%;
-  padding:5px;
-  border:2px solid rgba(246,202,88,.7);
-  background:#fff;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
 }
 .home-page .footer-award-image figcaption{
   max-width:190px;
-  margin:.65rem auto 0;
+  margin:.18rem auto 0;
   color:#f5ce6e;
   font-size:.76rem;
+  line-height:1.15;
+  text-align:center;
 }
