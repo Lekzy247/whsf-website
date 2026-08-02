@@ -7382,3 +7382,8 @@ body {
   .contact-page .address-list { grid-template-columns: 1fr; }
   .contact-page .address-list > a { grid-column: auto; }
 }
+
+.footer-grid > .footer-award:nth-child(n+4){
+  grid-column:-2 / -1;
+  justify-self:end;
+}

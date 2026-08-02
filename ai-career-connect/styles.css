@@ -207,7 +207,7 @@ img { max-width: 100%; }
 .text-link { color: var(--navy-700); font-size: .77rem; font-weight: 800; }
 
 .site-footer { padding: 52px 0 22px; color: rgba(255,255,255,.7); background: #041225; }
-.footer-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 45px; align-items: center; }
+.footer-grid { display: grid; grid-template-columns: 1fr 1fr auto 180px; gap: 34px; align-items: center; }
 .footer-brand small { max-width: 220px; }
 .footer-grid > p { margin: 0; font-size: .78rem; }
 .footer-links { display: flex; gap: 18px; }
@@ -288,4 +288,38 @@ img { max-width: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+.programme-footer-award{
+  width:168px;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-self:end;
+  text-align:center;
+}
+.programme-footer-award img{
+  display:block;
+  width:168px;
+  height:auto;
+  padding:5px;
+  border:0;
+  border-radius:0;
+  background:#fff;
+  box-shadow:none;
+  object-fit:contain;
+}
+.programme-footer-award figcaption{
+  max-width:190px;
+  margin:.18rem auto 0;
+  color:#f3dfac;
+  font-size:.66rem;
+  font-weight:900;
+  line-height:1.18;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+@media(max-width:1040px){
+  .programme-footer-award{justify-self:start;}
 }
