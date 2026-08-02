@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v135';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v136';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -39,6 +39,7 @@ const WHSF_CORE_ASSETS = [
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
   '/assets/whsf-logo.jpg',
+  '/assets/awards/data-centre-world-awards-2026-shortlist.jpg',
   '/assets/about/about-us-board.webp',
   '/assets/programs/ai-career-connect-social.png',
   '/assets/programs/agrismart-ai-programme.png',

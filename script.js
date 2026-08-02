@@ -333,7 +333,7 @@ const pathContent = {
   programme: {
     label: 'Programme pathway',
     title: 'Find a WHSF programme that fits your goals.',
-    copy: 'Explore ICT Girls Club, TechWomen, robotics, drone technology, cybersecurity, AI, STEM, agriculture and accessibility technology pathways.',
+    copy: 'Explore AgriSmart AI, AI Career Connect, Media Information Library, the STEM Robotic & Drone Programme, ICT Girls Club, TechWomen and Tech Excursions & Events.',
     primaryText: 'View programmes',
     primaryHref: 'programs.html',
     secondaryText: 'Request programme info',
@@ -1456,7 +1456,7 @@ const whsfAssistantAnswers = [
   {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-learning',
-    answer: 'The WHSF e-learning supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM, accessibility technology, AI for Agriculture, AI for Healthcare, Girls in AI Africa, AI Rapid Response and AI Media & Information Communication. Learners can view lessons, submit assignments, track progress and receive certificates.',
+    answer: 'WHSF e-learning provides accessible courses connected to robotics, cybersecurity, drone technology, AI, data centre management, project management, eHealth, STEM, accessibility technology, agriculture, healthcare and media literacy. Learners can view lessons, submit assignments, track progress and receive certificates.',
     link: 'e-classroom.html',
     linkText: 'Open e-learning'
   },
@@ -1489,11 +1489,46 @@ const whsfAssistantAnswers = [
     linkText: 'Contact WHSF'
   },
   {
-    keys: ['program', 'programme', 'programs', 'girls in ict', 'techwomen', 'robotics', 'drone', 'stem', 'cybersecurity', 'ai'],
-    title: 'Technology programmes',
-    answer: 'WHSF programmes include Girls in ICT Club, TechWomen, robotics, drone technology, AI and digital skills, cybersecurity, STEM, climate-smart technology and practical pathways for girls and young women.',
+    keys: ['program', 'programme', 'programs', 'technology programmes', 'join programme'],
+    title: 'WHSF technology programmes',
+    answer: 'Current WHSF programmes include AgriSmart AI, AI Career Connect, Media Information Library, the STEM Robotic & Drone Programme, Girls in ICT Club and TechWomen pathways, and Tech Excursions & Events. Each programme has a dedicated page with practical learning, resources and next steps.',
     link: 'programs.html',
-    linkText: 'Explore programmes'
+    linkText: 'Explore all programmes'
+  },
+  {
+    keys: ['agrismart', 'agriculture', 'climate smart', 'farming', 'rural girls'],
+    title: 'AgriSmart AI',
+    answer: 'AgriSmart AI equips rural and peri-urban girls and young women with climate-smart agriculture, sustainability, digital tools and applied technology skills.',
+    link: 'agrismart/',
+    linkText: 'Explore AgriSmart AI'
+  },
+  {
+    keys: ['career connect', 'ai career', 'career guidance', 'jobs', 'resume', 'interview', 'skills passport'],
+    title: 'AI Career Connect',
+    answer: 'AI Career Connect helps learners and professionals explore career pathways, build job-ready skills, prepare resumes and interviews, connect with mentors and discover global opportunities.',
+    link: 'ai-career-connect/',
+    linkText: 'Open AI Career Connect'
+  },
+  {
+    keys: ['media information library', 'mil', 'media literacy', 'fact checking', 'responsible ai', 'cyber safety', 'podcast'],
+    title: 'Media Information Library',
+    answer: 'The Media Information Library develops digital and information literacy, responsible AI, fact-checking, creative media, cybersecurity awareness, digital storytelling and community leadership.',
+    link: 'media-information-library/',
+    linkText: 'Explore Media Information Library'
+  },
+  {
+    keys: ['robotic drone', 'robotics', 'drone', 'stem', 'girls in ict', 'ict girls', 'techwomen'],
+    title: 'STEM Robotic & Drone Programme',
+    answer: 'This programme connects hands-on robotics, drone technology and digital skills with ICT Girls Club learning and TechWomen mentorship. It helps girls build confidence, engineering thinking and pathways back into education and opportunity.',
+    link: 'robotic-drone-programme.html',
+    linkText: 'Explore the STEM programme'
+  },
+  {
+    keys: ['tech excursion', 'excursion', 'robotic automation', 'technology event', 'events'],
+    title: 'Tech Excursions & Events',
+    answer: 'WHSF Tech Excursions & Events give Girls in ICT Club and TechWomen participants guided exposure to robotics, industrial automation, engineering environments and practical technology experiences.',
+    link: 'girls-in-ict-tech-excursion.html',
+    linkText: 'Explore Tech Experience'
   },
   {
     keys: ['mobile app', 'app', 'volunteer hub', 'donor hub', 'member dashboard', 'chat', 'community'],
@@ -1558,7 +1593,7 @@ function getAssistantAnswer(question) {
 
   return {
     title: 'WHSF support',
-    answer: 'I can help with WHSF public information including programmes, e-learning, certificate verification, employee/staff verification, partnerships, donations, volunteering, mobile app support and impact reporting. For a personal case, please contact WHSF directly.',
+    answer: 'Welcome to WHSF. Ask me about AgriSmart AI, AI Career Connect, Media Information Library, the STEM Robotic & Drone Programme, Tech Excursions, e-learning, certificate or staff verification, partnerships, donations, volunteering and impact. For a personal case, please contact WHSF directly.',
     link: 'contact.html',
     linkText: 'Chat with WHSF support'
   };
@@ -1610,11 +1645,12 @@ function initWhsfAssistant() {
       </div>
       <div class="whsf-chatbot-messages" aria-live="polite"></div>
       <div class="whsf-chat-quick" aria-label="Quick questions">
-        <button type="button" data-question="How do I verify a certificate?">Certificate</button>
-        <button type="button" data-question="How do I verify WHSF staff?">Staff</button>
+        <button type="button" data-question="What programmes does WHSF offer?">Programmes</button>
+        <button type="button" data-question="Tell me about the STEM Robotic and Drone Programme">STEM</button>
+        <button type="button" data-question="Tell me about AI Career Connect">Careers</button>
+        <button type="button" data-question="Tell me about the Media Information Library">MIL</button>
         <button type="button" data-question="How do I join e-learning?">e-learning</button>
-        <button type="button" data-question="How can I partner with WHSF?">Partner</button>
-        <button type="button" data-question="How can I donate?">Donate</button>
+        <button type="button" data-question="How do I verify a certificate?">Verify</button>
       </div>
       <form class="whsf-chat-form">
         <input type="text" name="question" placeholder="Ask about WHSF..." autocomplete="off" />
