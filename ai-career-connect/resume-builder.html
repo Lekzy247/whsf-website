@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Build an ATS-friendly CV with WHSF AI Career Connect." />
+    <meta name="theme-color" content="#071a35" />
+    <title>AI CV Builder | WHSF Career Connect</title>
+    <link rel="icon" href="/assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/ai-career-connect/workspaces.css" />
+    <script src="/ai-career-connect/resume-builder.js" defer></script>
+  </head>
+  <body class="workspace-body">
+    <a class="ws-skip" href="#workspace">Skip to CV builder</a>
+    <header class="workspace-header">
+      <div class="workspace-nav">
+        <a class="workspace-brand" href="/ai-career-connect/" aria-label="AI Career Connect home">
+          <img src="/assets/whsf-logo.jpg" alt="WHSF emblem" />
+          <span><strong>WHSF</strong><small>AI Career Connect</small></span>
+        </a>
+        <button class="workspace-menu" type="button" aria-expanded="false" aria-controls="workspace-links"><span aria-hidden="true">☰</span><span class="ws-sr-only">Open navigation</span></button>
+        <nav class="workspace-links" id="workspace-links" aria-label="Career Connect tools">
+          <a href="/ai-career-connect/resume-builder.html" aria-current="page">CV Builder</a>
+          <a href="/ai-career-connect/interview-coach.html">Interview Coach</a>
+          <a href="/ai-career-connect/skills-passport.html">Skills Passport</a>
+          <a class="back-link" href="/ai-career-connect/">← Career Connect</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="workspace">
+      <section class="tool-hero">
+        <div class="ws-shell tool-hero-inner">
+          <div>
+            <p class="tool-kicker">Career readiness tool</p>
+            <h1>ATS-ready CV Builder</h1>
+            <p>Build a clear, professional CV with measurable experience, relevant skills and a live preview you can print or save as PDF.</p>
+          </div>
+          <span class="privacy-chip">Draft saves on this device</span>
+        </div>
+      </section>
+
+      <section class="workspace-main">
+        <div class="ws-shell">
+          <div class="workspace-actions">
+            <span class="save-state" id="save-state" role="status" aria-live="polite">Ready to build</span>
+            <div>
+              <label class="field" for="template">
+                <span class="ws-sr-only">CV template</span>
+                <select id="template" aria-label="CV template">
+                  <option value="modern">Modern template</option>
+                  <option value="classic">Classic template</option>
+                </select>
+              </label>
+              <button class="ws-button ghost" id="download-cv" type="button">Download text</button>
+              <button class="ws-button" id="print-cv" type="button">Print / Save PDF</button>
+            </div>
+          </div>
+
+          <div class="workspace-grid">
+            <div class="editor-column">
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Personal details</h2><span>Use contact information you check regularly.</span></div><b class="step-badge">1</b></div>
+                <div class="panel-body">
+                  <div class="field-grid">
+                    <div class="field"><label for="full-name">Full name *</label><input id="full-name" autocomplete="name" required placeholder="Amara Okafor" /></div>
+                    <div class="field"><label for="professional-title">Professional title *</label><input id="professional-title" placeholder="Health Data Analyst" required /></div>
+                    <div class="field"><label for="email">Email *</label><input id="email" type="email" autocomplete="email" placeholder="amara@example.com" required /></div>
+                    <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel" placeholder="+234 800 000 0000" /></div>
+                    <div class="field"><label for="location">Location</label><input id="location" autocomplete="address-level2" placeholder="Lagos, Nigeria" /></div>
+                    <div class="field"><label for="portfolio">LinkedIn or portfolio</label><input id="portfolio" type="url" placeholder="https://linkedin.com/in/your-name" /></div>
+                    <div class="field field-span"><label for="summary">Professional summary *</label><textarea id="summary" maxlength="700" placeholder="Write 3–4 lines describing your experience, strengths and the value you bring." required></textarea><small><span id="summary-count">0</span>/700 characters</small></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Core skills</h2><span>Add role-relevant skills separated by commas.</span></div><b class="step-badge">2</b></div>
+                <div class="panel-body">
+                  <div class="field"><label for="skills">Skills *</label><input id="skills" placeholder="Data analysis, SQL, Power BI, Research, Stakeholder engagement" required /><small>Use specific tools and capabilities rather than broad phrases.</small></div>
+                </div>
+              </section>
+
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Experience</h2><span>Lead with action and show measurable outcomes.</span></div><b class="count-badge" id="experience-count">0</b></div>
+                <div class="panel-body">
+                  <form id="experience-form">
+                    <div class="field-grid">
+                      <div class="field"><label for="experience-role">Role *</label><input id="experience-role" placeholder="Programme Assistant" required /></div>
+                      <div class="field"><label for="experience-company">Organisation *</label><input id="experience-company" placeholder="WHSF" required /></div>
+                      <div class="field"><label for="experience-start">Start date</label><input id="experience-start" type="month" /></div>
+                      <div class="field"><label for="experience-end">End date</label><input id="experience-end" type="month" /></div>
+                      <div class="field field-span"><label for="experience-detail">Achievements *</label><textarea id="experience-detail" placeholder="Example: Analysed programme data for 500 participants and improved monthly reporting time by 30%." required></textarea></div>
+                    </div>
+                    <div class="button-row"><button class="ws-button ghost" type="submit">+ Add experience</button></div>
+                  </form>
+                  <div class="entry-list" id="experience-list"><p class="empty-state">No experience added yet. Projects, volunteering and internships also count.</p></div>
+                </div>
+              </section>
+
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Education</h2><span>Add degrees, diplomas or relevant professional study.</span></div><b class="count-badge" id="education-count">0</b></div>
+                <div class="panel-body">
+                  <form id="education-form">
+                    <div class="field-grid">
+                      <div class="field"><label for="education-award">Qualification *</label><input id="education-award" placeholder="BSc Public Health" required /></div>
+                      <div class="field"><label for="education-school">Institution *</label><input id="education-school" placeholder="University of Lagos" required /></div>
+                      <div class="field"><label for="education-year">Completion year</label><input id="education-year" inputmode="numeric" maxlength="4" placeholder="2026" /></div>
+                      <div class="field"><label for="education-detail">Details</label><input id="education-detail" placeholder="First Class • Research focus" /></div>
+                    </div>
+                    <div class="button-row"><button class="ws-button ghost" type="submit">+ Add education</button></div>
+                  </form>
+                  <div class="entry-list" id="education-list"><p class="empty-state">No education added yet.</p></div>
+                </div>
+              </section>
+
+              <div class="button-row">
+                <button class="ws-button coral" id="save-cv" type="button">Save CV draft</button>
+                <button class="ws-button danger" id="clear-cv" type="button">Clear draft</button>
+              </div>
+            </div>
+
+            <aside class="preview-column" aria-label="CV preview">
+              <div class="completion-card">
+                <div class="completion-row"><strong>ATS readiness</strong><b id="ats-score">0%</b></div>
+                <div class="progress-track" aria-hidden="true"><span id="ats-progress"></span></div>
+              </div>
+              <article class="resume-paper" id="resume-preview">
+                <header class="resume-head">
+                  <h2 id="preview-name">Your Name</h2>
+                  <h3 id="preview-title">Professional title</h3>
+                  <div class="resume-contact" id="preview-contact"><span>email@example.com</span><span>City, Country</span></div>
+                </header>
+                <section class="resume-section"><h3>Professional summary</h3><p id="preview-summary">Your professional summary will appear here.</p></section>
+                <section class="resume-section"><h3>Core skills</h3><div class="skill-tags" id="preview-skills"><span>Add your strongest skills</span></div></section>
+                <section class="resume-section"><h3>Experience</h3><div class="resume-list" id="preview-experience"><p>No experience added yet.</p></div></section>
+                <section class="resume-section"><h3>Education</h3><div class="resume-list" id="preview-education"><p>No education added yet.</p></div></section>
+              </article>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="workspace-footer"><div class="ws-shell"><p>WHSF AI Career Connect • CV Builder</p><a href="/ai-career-connect/">Return to Career Connect</a></div></footer>
+    <div class="ws-toast" id="ws-toast" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="Close notification">×</button></div>
+  </body>
+</html>

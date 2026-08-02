@@ -9,6 +9,7 @@ const WHSF_CORE_ASSETS = [
   '/mobile-app-admin.html',
   '/programs.html',
   '/media-information-library.html',
+  '/media-information-library/',
   '/ai-career-connect/',
   '/ai-career-connect/index.html',
   '/ai-career-connect/styles.css',

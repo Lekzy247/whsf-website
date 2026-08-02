@@ -1,6 +1,16 @@
 {
   "cleanUrls": false,
   "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/media-information-library",
+      "destination": "/media-information-library.html"
+    },
+    {
+      "source": "/media-information-library/",
+      "destination": "/media-information-library.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Create a portable skills, credentials and projects record with WHSF AI Career Connect." />
+    <meta name="theme-color" content="#071a35" />
+    <title>AI Skills Passport | WHSF Career Connect</title>
+    <link rel="icon" href="/assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/ai-career-connect/workspaces.css" />
+    <script src="/ai-career-connect/skills-passport.js" defer></script>
+  </head>
+  <body class="workspace-body">
+    <a class="ws-skip" href="#workspace">Skip to Skills Passport</a>
+    <header class="workspace-header">
+      <div class="workspace-nav">
+        <a class="workspace-brand" href="/ai-career-connect/" aria-label="AI Career Connect home">
+          <img src="/assets/whsf-logo.jpg" alt="WHSF emblem" />
+          <span><strong>WHSF</strong><small>AI Career Connect</small></span>
+        </a>
+        <button class="workspace-menu" type="button" aria-expanded="false" aria-controls="workspace-links"><span aria-hidden="true">☰</span><span class="ws-sr-only">Open navigation</span></button>
+        <nav class="workspace-links" id="workspace-links" aria-label="Career Connect tools">
+          <a href="/ai-career-connect/resume-builder.html">CV Builder</a>
+          <a href="/ai-career-connect/interview-coach.html">Interview Coach</a>
+          <a href="/ai-career-connect/skills-passport.html" aria-current="page">Skills Passport</a>
+          <a class="back-link" href="/ai-career-connect/">← Career Connect</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="workspace">
+      <section class="tool-hero">
+        <div class="ws-shell tool-hero-inner">
+          <div>
+            <p class="tool-kicker">Portable achievement record</p>
+            <h1>AI Skills Passport</h1>
+            <p>Bring your skills, credentials and projects into one professional record that can grow with every stage of your career.</p>
+          </div>
+          <span class="privacy-chip">Passport saves on this device</span>
+        </div>
+      </section>
+
+      <section class="workspace-main">
+        <div class="ws-shell">
+          <div class="workspace-actions">
+            <span class="save-state" id="passport-save-state" role="status" aria-live="polite">Ready to create</span>
+            <div><button class="ws-button ghost" id="download-passport" type="button">Download data</button><button class="ws-button" id="print-passport" type="button">Print / Save PDF</button></div>
+          </div>
+
+          <div class="workspace-grid">
+            <div class="editor-column">
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Passport profile</h2><span>Introduce the person behind the achievements.</span></div><b class="step-badge">1</b></div>
+                <div class="panel-body">
+                  <div class="field-grid">
+                    <div class="field"><label for="passport-name">Full name *</label><input id="passport-name" autocomplete="name" placeholder="Amara Okafor" required /></div>
+                    <div class="field"><label for="passport-title">Career focus *</label><input id="passport-title" placeholder="Public Health &amp; Data" required /></div>
+                    <div class="field"><label for="passport-location">Location</label><input id="passport-location" placeholder="Lagos, Nigeria" /></div>
+                    <div class="field"><label for="passport-link">Portfolio or LinkedIn</label><input id="passport-link" type="url" placeholder="https://linkedin.com/in/your-name" /></div>
+                    <div class="field field-span"><label for="passport-summary">Professional statement</label><textarea id="passport-summary" maxlength="700" placeholder="Describe the strengths, interests and impact that define your career direction."></textarea></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Skills</h2><span>Add technical, professional and transferable skills.</span></div><b class="count-badge" id="skill-count">0</b></div>
+                <div class="panel-body">
+                  <form id="skill-form">
+                    <div class="field-grid three">
+                      <div class="field"><label for="skill-name">Skill *</label><input id="skill-name" placeholder="Data analysis" required /></div>
+                      <div class="field"><label for="skill-category">Category</label><select id="skill-category"><option>Technical</option><option>Professional</option><option>Leadership</option><option>Language</option><option>Creative</option></select></div>
+                      <div class="field"><label for="skill-level">Level</label><select id="skill-level"><option value="1">Foundation</option><option value="2">Developing</option><option value="3" selected>Proficient</option><option value="4">Advanced</option><option value="5">Expert</option></select></div>
+                    </div>
+                    <div class="button-row"><button class="ws-button ghost" type="submit">+ Add skill</button></div>
+                  </form>
+                  <div class="entry-list" id="skill-list"><p class="empty-state">No skills added yet.</p></div>
+                </div>
+              </section>
+
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Credentials</h2><span>Add degrees, certificates, licences or badges.</span></div><b class="count-badge" id="credential-count">0</b></div>
+                <div class="panel-body">
+                  <form id="credential-form">
+                    <div class="field-grid">
+                      <div class="field"><label for="credential-name">Credential *</label><input id="credential-name" placeholder="Google Data Analytics Certificate" required /></div>
+                      <div class="field"><label for="credential-issuer">Issuer *</label><input id="credential-issuer" placeholder="Google / Coursera" required /></div>
+                      <div class="field"><label for="credential-year">Year</label><input id="credential-year" inputmode="numeric" maxlength="4" placeholder="2026" /></div>
+                      <div class="field"><label for="credential-evidence">Evidence link</label><input id="credential-evidence" type="url" placeholder="https://credential.example.com/..." /><small>Records with a link are marked “Evidence linked”, not independently verified by WHSF.</small></div>
+                    </div>
+                    <div class="button-row"><button class="ws-button ghost" type="submit">+ Add credential</button></div>
+                  </form>
+                  <div class="entry-list" id="credential-list-editor"><p class="empty-state">No credentials added yet.</p></div>
+                </div>
+              </section>
+
+              <section class="panel">
+                <div class="panel-heading"><div><h2>Projects &amp; impact</h2><span>Show where you applied your skills.</span></div><b class="count-badge" id="project-count">0</b></div>
+                <div class="panel-body">
+                  <form id="project-form">
+                    <div class="field-grid">
+                      <div class="field"><label for="project-name">Project *</label><input id="project-name" placeholder="Community Health Data Dashboard" required /></div>
+                      <div class="field"><label for="project-link">Project link</label><input id="project-link" type="url" placeholder="https://..." /></div>
+                      <div class="field field-span"><label for="project-impact">What you did and the result *</label><textarea id="project-impact" placeholder="Built a dashboard covering 12 communities and reduced monthly reporting time by 30%." required></textarea></div>
+                    </div>
+                    <div class="button-row"><button class="ws-button ghost" type="submit">+ Add project</button></div>
+                  </form>
+                  <div class="entry-list" id="project-list-editor"><p class="empty-state">No projects added yet.</p></div>
+                </div>
+              </section>
+
+              <div class="button-row"><button class="ws-button coral" id="save-passport" type="button">Save passport</button><button class="ws-button danger" id="clear-passport" type="button">Clear passport</button></div>
+            </div>
+
+            <aside class="preview-column" aria-label="Skills Passport preview">
+              <div class="completion-card">
+                <div class="completion-row"><strong>Passport completion</strong><b id="passport-score">0%</b></div>
+                <div class="progress-track" aria-hidden="true"><span id="passport-progress"></span></div>
+              </div>
+              <article class="passport-paper" id="passport-preview">
+                <header class="passport-head">
+                  <div><h2 id="passport-preview-name">Your Name</h2><h3 id="passport-preview-title">Career focus</h3><p id="passport-preview-meta">Location • Portfolio</p></div>
+                  <span class="passport-id" id="passport-id">AICC-000000</span>
+                </header>
+                <p class="passport-summary" id="passport-preview-summary">Your professional statement will appear here.</p>
+                <section class="passport-section"><h3>Skills profile</h3><div class="passport-skill-grid" id="passport-preview-skills"><p>No skills added yet.</p></div></section>
+                <section class="passport-section"><h3>Credentials</h3><div class="credential-list" id="passport-preview-credentials"><p>No credentials added yet.</p></div></section>
+                <section class="passport-section"><h3>Projects &amp; impact</h3><div class="project-list" id="passport-preview-projects"><p>No projects added yet.</p></div></section>
+              </article>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="workspace-footer"><div class="ws-shell"><p>WHSF AI Career Connect • Skills Passport</p><a href="/ai-career-connect/">Return to Career Connect</a></div></footer>
+    <div class="ws-toast" id="passport-toast" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="Close notification">×</button></div>
+  </body>
+</html>
