@@ -266,3 +266,8 @@ a { color: inherit; }
 @media(max-width:760px){
   .programme-footer-award{margin-left:0;}
 }
+
+/* Award recognition — reference layout */
+.programme-footer-award{width:150px;max-width:150px}
+.programme-footer-award img{display:block;width:105px;height:auto;margin:0 auto;padding:0;border:0;border-radius:0;background:#fff;box-shadow:none;object-fit:contain}
+.programme-footer-award figcaption{width:142px;max-width:142px;margin:8px auto 0;color:#fff;font-family:"DM Sans",Arial,sans-serif;font-size:15px;font-weight:900;line-height:1.02;letter-spacing:.01em;text-align:center;text-transform:uppercase}
