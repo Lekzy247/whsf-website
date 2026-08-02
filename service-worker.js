@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v127';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v128';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -32,6 +32,7 @@ const WHSF_CORE_ASSETS = [
   '/impact-dashboard.html',
   '/verify-certificate.html',
   '/styles.css',
+  '/mil-platform.js',
   '/script.js',
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
