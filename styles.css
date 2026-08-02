@@ -1385,7 +1385,7 @@ p, li { text-wrap: pretty; }
 .footer-links a { width: fit-content; color: #f7dfe5; font-size: .82rem; text-decoration: none; }
 .footer-links a:hover { color: #fff; }
 .footer-award { justify-self: end; max-width: 180px; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 0; border: 0; border-radius: 0; background: transparent; text-align: center; }
-.footer-award img { display: block; width: 168px; max-width: 100%; height: auto; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; object-fit: contain; }
+.footer-award img { display: block; width: 168px; max-width: 100%; height: auto; margin: 0; padding: 5px; border: 0; border-radius: 12px; background: #fff; box-shadow: none; object-fit: contain; }
 .footer-award figcaption, .footer-award span { display: block; max-width: 190px; margin: .18rem auto 0; color: #f3dfac; font-size: .68rem; font-weight: 900; line-height: 1.18; text-transform: uppercase; letter-spacing: .055em; }
 .social-links { padding: 12px 0; display: flex; flex-wrap: wrap; gap: 18px; border-top: 1px solid rgba(255,255,255,.12); }
 .social-links a { color: #f7dfe5; font-size: .76rem; font-weight: 700; text-decoration: none; }
@@ -7184,10 +7184,10 @@ body {
   height:auto;
   object-fit:contain;
   object-position:center;
-  padding:0;
+  padding:5px;
   border:0;
-  border-radius:0;
-  background:transparent;
+  border-radius:12px;
+  background:#fff;
   box-shadow:none;
 }
 .home-page .footer-award-image figcaption{
