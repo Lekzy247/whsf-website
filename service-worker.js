@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v130';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v131';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -8,6 +8,7 @@ const WHSF_CORE_ASSETS = [
   '/mobile-app.html',
   '/mobile-app-admin.html',
   '/programs.html',
+  '/girls-in-ict-tech-excursion.html',
   '/media-information-library.html',
   '/media-information-library/',
   '/ai-career-connect/',
