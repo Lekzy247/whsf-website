@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="WHSF Media Information Library empowers communities with digital literacy, responsible AI, trusted information, creative media and cybersecurity skills." />
     <meta name="theme-color" content="#6d1024" />
-    <title>Media Information Library | World Humanitarian Support Foundation</title>
+    <title>Media & Information Literacy Programme | WHSF</title>
     <link rel="icon" href="assets/whsf-logo.jpg" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
@@ -17,7 +17,6 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
-    <script src="mil-platform.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -37,7 +36,7 @@
         <a class="brand" href="index.html" aria-label="WHSF home"><img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" /><span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span></a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span></button>
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-          <a href="index.html">Home</a><a href="about.html">About Us</a><a href="programs.html">WHSF Programmes</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a>
+          <a href="index.html">Home</a><a href="about.html">About Us</a><a href="programs.html">Programs</a><a href="blog.html">Blog</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a>
         </nav>
       </div>
     </header>
@@ -47,7 +46,7 @@
         <div class="shell mil-hero-grid">
           <div class="mil-hero-copy reveal">
             <p class="eyebrow eyebrow-light">WHSF flagship digital education programme</p>
-            <h1 id="mil-title">Media Information Library <span>(MIL)</span></h1>
+          <h1 id="mil-title">Media &amp; Information Literacy Programme <span>(MIL)</span></h1>
             <p class="mil-tagline">Empowering Communities with Digital Knowledge, Responsible AI and Trusted Information</p>
             <p>MIL equips children, young people, educators, women, community leaders, journalists and civil society organisations to access, evaluate, create and share trustworthy information in the digital age.</p>
             <div class="hero-actions"><a class="button" href="#programme-pillars">Explore the programme</a><a class="button button-secondary" href="contact.html">Partner with MIL</a></div>
@@ -102,116 +101,29 @@
         </div>
       </section>
 
-
-      <section class="section mil-gateway-section" id="digital-platform" aria-labelledby="digital-platform-title">
+      <section class="section section-tint">
         <div class="shell">
-          <div class="section-heading centered reveal">
-            <p class="eyebrow">Future digital platform</p>
-            <h2 id="digital-platform-title">A connected learning experience that grows with every participant.</h2>
-            <p>The MIL gateway now connects learners to practical WHSF services, trusted international resources, guided research and a personal learning pathway.</p>
-          </div>
-
-          <div class="mil-action-grid" aria-label="MIL participant services">
-            <a class="mil-action-card" href="e-classroom-login.html" data-mil-track="Online registration"><span>01</span><strong>Online registration</strong><small>Create or access your learner account.</small><b>Register now →</b></a>
-            <a class="mil-action-card" href="#knowledge-hubs" data-mil-track="Learning resources"><span>02</span><strong>Learning resources</strong><small>Open trusted toolkits, courses and guides.</small><b>Browse resources →</b></a>
-            <a class="mil-action-card" href="events.html" data-mil-track="Courses and workshops"><span>03</span><strong>Courses &amp; live workshops</strong><small>Find WHSF learning events and activities.</small><b>View sessions →</b></a>
-            <a class="mil-action-card" href="student-projects.html" data-mil-track="Digital portfolios"><span>04</span><strong>Digital portfolios</strong><small>See projects and build evidence of your skills.</small><b>Open portfolios →</b></a>
-            <a class="mil-action-card" href="verify-certificate.html" data-mil-track="Badges and certificates"><span>05</span><strong>Badges &amp; certificates</strong><small>Verify recognised WHSF learning achievements.</small><b>Verify achievement →</b></a>
-            <a class="mil-action-card" href="contact.html" data-mil-track="Project submissions"><span>06</span><strong>Project submissions</strong><small>Submit a community idea or completed project.</small><b>Submit a project →</b></a>
-            <a class="mil-action-card" href="contact.html" data-mil-track="Mentor connections"><span>07</span><strong>Mentor connections</strong><small>Request guidance from a WHSF mentor.</small><b>Request a mentor →</b></a>
-            <a class="mil-action-card" href="partner-sponsor.html" data-mil-track="Alumni and ambassadors"><span>08</span><strong>Alumni &amp; ambassadors</strong><small>Join a network for service and leadership.</small><b>Join the network →</b></a>
-            <a class="mil-action-card" href="#mil-pathway" data-mil-track="Learning progress"><span>09</span><strong>Learning progress</strong><small>Build and save a practical personal pathway.</small><b>Build my pathway →</b></a>
-          </div>
-
-          <div class="mil-research-lab reveal" id="trusted-research">
-            <div class="mil-research-copy">
-              <p class="eyebrow eyebrow-light">Trusted web research</p>
-              <h2>Turn a question into current, source-aware research.</h2>
-              <p>Search trusted organisations on the live internet, or generate a structured brief to use with an AI research assistant. Always review dates, authors and original sources before sharing.</p>
-              <div class="mil-progress-meter" aria-live="polite"><span id="mil-progress-count">0</span><small>activities explored on this device</small></div>
-            </div>
-            <div class="mil-research-controls">
-              <form id="mil-research-form">
-                <label for="mil-research-query">What do you want to learn or verify?</label>
-                <textarea id="mil-research-query" rows="3" required placeholder="Example: How can young people identify AI-generated misinformation during an election?"></textarea>
-                <label for="mil-research-topic">Choose a trusted research area</label>
-                <select id="mil-research-topic">
-                  <option value="mil">Media and information literacy</option>
-                  <option value="ai">Responsible artificial intelligence</option>
-                  <option value="journalism">Digital journalism</option>
-                  <option value="factcheck">Fact-checking and verification</option>
-                  <option value="cyber">Cyber safety</option>
-                  <option value="innovation">Youth innovation</option>
-                  <option value="gender">Women’s digital leadership</option>
-                  <option value="policy">Digital research and policy</option>
-                </select>
-                <div class="mil-research-actions">
-                  <button class="button" type="submit">Search trusted internet</button>
-                  <button class="button button-secondary" id="mil-build-brief" type="button">Generate AI research brief</button>
-                </div>
-              </form>
-              <div class="mil-brief-panel" id="mil-brief-panel" hidden>
-                <strong>Your AI-ready research brief</strong>
-                <p id="mil-brief-text"></p>
-                <button class="text-button" id="mil-copy-brief" type="button">Copy research brief</button>
-                <span id="mil-copy-status" role="status"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mil-pathway-builder reveal" id="mil-pathway">
-            <div>
-              <p class="eyebrow">My MIL pathway</p>
-              <h2>Choose a role and outcome. Get a practical next-step plan.</h2>
-              <p>Your selection is saved only on this device and can be updated at any time.</p>
-            </div>
-            <form id="mil-path-form">
-              <label for="mil-role">I am a…</label>
-              <select id="mil-role"><option value="learner">Young learner</option><option value="educator">Educator</option><option value="journalist">Journalist or creator</option><option value="leader">Community leader</option><option value="entrepreneur">Entrepreneur</option></select>
-              <label for="mil-goal">My priority is…</label>
-              <select id="mil-goal"><option value="verify">Verify information</option><option value="ai">Use AI responsibly</option><option value="create">Create trusted media</option><option value="safe">Improve digital safety</option><option value="impact">Lead a community project</option></select>
-              <button class="button" type="submit">Build my learning plan</button>
-            </form>
-            <div class="mil-path-result" id="mil-path-result" aria-live="polite">
-              <p>Select your role and priority to receive a three-step learning plan.</p>
-            </div>
+          <div class="section-heading centered reveal"><p class="eyebrow">Future digital platform</p><h2>A connected learning experience that grows with every participant.</h2><p>The MIL roadmap supports accessible learning, mentoring, recognition and lifelong participation.</p></div>
+          <div class="mil-platform-grid reveal">
+            <span>Online registration</span><span>Learning resources</span><span>Courses &amp; live workshops</span><span>Digital portfolios</span><span>Badges &amp; certificates</span><span>Project submissions</span><span>Mentor connections</span><span>Alumni &amp; ambassadors</span><span>Learning progress</span>
           </div>
         </div>
       </section>
 
-      <section class="section mil-hubs-section" id="knowledge-hubs" aria-labelledby="knowledge-hubs-title">
+      <section class="section mil-expansion-section">
         <div class="shell">
-          <div class="section-heading centered reveal">
-            <p class="eyebrow eyebrow-light">Global knowledge ecosystem</p>
-            <h2 id="knowledge-hubs-title">Trusted learning, creation and leadership hubs.</h2>
-            <p>Each hub combines a verified starting resource with a live search for current guidance, courses and evidence.</p>
-          </div>
-          <div class="mil-hub-grid">
-            <article class="mil-hub-card"><span>AI</span><h3>AI Learning Centre</h3><p>Build AI literacy, prompt skills and ethical decision-making.</p><div><a href="https://skillsbuild.org/adult-learners/explore-learning/artificial-intelligence" target="_blank" rel="noreferrer" data-mil-track="IBM AI learning">Start free AI learning ↗</a><button type="button" data-mil-search="responsible AI literacy courses ethics prompt engineering" data-mil-topic="ai">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>DJ</span><h3>Digital Journalism Hub</h3><p>Strengthen reporting, source evaluation and public-interest storytelling.</p><div><a href="https://www.unesco.org/en/media-information-literacy/resources" target="_blank" rel="noreferrer" data-mil-track="UNESCO MIL resources">Open UNESCO resources ↗</a><button type="button" data-mil-search="digital journalism training source verification community reporting" data-mil-topic="journalism">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>FC</span><h3>Fact-Checking Centre</h3><p>Verify claims, images and sources before publishing or sharing.</p><div><a href="https://toolbox.google.com/factcheck/explorer" target="_blank" rel="noreferrer" data-mil-track="Fact Check Explorer">Open Fact Check Explorer ↗</a><button type="button" data-mil-search="fact checking verification misinformation tools" data-mil-topic="factcheck">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>CP</span><h3>Community Podcast Studio</h3><p>Plan, record, publish and grow an ethical community podcast.</p><div><a href="https://creators.spotify.com/resources" target="_blank" rel="noreferrer" data-mil-track="Podcast resources">Open creator resources ↗</a><button type="button" data-mil-search="community podcast production storytelling guide" data-mil-topic="journalism">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>DC</span><h3>Digital Content Creation Studio</h3><p>Create accessible graphics, video, animation and publications.</p><div><a href="https://www.canva.com/designschool/" target="_blank" rel="noreferrer" data-mil-track="Design School">Open Design School ↗</a><button type="button" data-mil-search="accessible digital content design video storytelling training" data-mil-topic="mil">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>OK</span><h3>Open Knowledge Repository</h3><p>Discover adaptable open educational resources and teaching materials.</p><div><a href="https://oercommons.org/" target="_blank" rel="noreferrer" data-mil-track="Open education resources">Explore OER Commons ↗</a><button type="button" data-mil-search="open educational resources digital literacy curriculum" data-mil-topic="mil">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>CS</span><h3>Cyber Safety Academy</h3><p>Practise privacy, password safety, scam awareness and cyber hygiene.</p><div><a href="https://www.skillsforall.com/catalog?category=course&subject+areas=cybersecurity" target="_blank" rel="noreferrer" data-mil-track="Cyber safety learning">Start cyber learning ↗</a><button type="button" data-mil-search="cyber safety privacy scam awareness free courses" data-mil-topic="cyber">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>YI</span><h3>Youth Innovation Hub</h3><p>Turn community problems into inclusive, sustainable solutions.</p><div><a href="https://www.unicef.org/innovation/" target="_blank" rel="noreferrer" data-mil-track="Youth innovation resources">Explore UNICEF Innovation ↗</a><button type="button" data-mil-search="youth digital innovation community challenge toolkit" data-mil-topic="innovation">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>WL</span><h3>Women’s Digital Leadership Programme</h3><p>Advance confidence, safety, enterprise and leadership in digital spaces.</p><div><a href="https://www.unwomen.org/en/digital-library" target="_blank" rel="noreferrer" data-mil-track="Women's digital leadership">Open UN Women library ↗</a><button type="button" data-mil-search="women digital leadership inclusion entrepreneurship training" data-mil-topic="gender">Find latest resources</button></div></article>
-            <article class="mil-hub-card"><span>RP</span><h3>Digital Research &amp; Policy Centre</h3><p>Use evidence to shape responsible technology and community policy.</p><div><a href="https://oecd.ai/en/" target="_blank" rel="noreferrer" data-mil-track="AI policy research">Explore OECD.AI ↗</a><button type="button" data-mil-search="responsible AI digital policy evidence research" data-mil-topic="policy">Find latest resources</button></div></article>
-          </div>
-          <div class="mil-final-cta"><div><strong>Ready to use MIL in your community?</strong><p>Partner with WHSF to deliver practical learning, mentorship and measurable community projects.</p></div><a class="button" href="partner-sponsor.html">Become a programme partner</a></div>
+          <div class="section-heading centered reveal"><p class="eyebrow eyebrow-light">Future expansion</p><h2>A global ecosystem for trusted knowledge and digital leadership.</h2></div>
+          <div class="mil-expansion-grid reveal"><span>AI Learning Centre</span><span>Digital Journalism Hub</span><span>Fact-Checking Centre</span><span>Community Podcast Studio</span><span>Digital Content Creation Studio</span><span>Open Knowledge Repository</span><span>Cyber Safety Academy</span><span>Youth Innovation Hub</span><span>Women’s Digital Leadership Programme</span><span>Digital Research &amp; Policy Centre</span></div>
+          <div class="mil-final-cta"><div><strong>Help build a world-leading Media Information Library.</strong><p>Partner with WHSF to expand trusted information, responsible AI and inclusive digital opportunity.</p></div><a class="button" href="partner-sponsor.html">Become a programme partner</a></div>
         </div>
       </section>
-
     </main>
 
     <footer class="site-footer">
       <div class="shell footer-grid">
         <div class="footer-brand"><img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" /><div><strong>World Humanitarian<br />Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p></div></div>
-        <div class="footer-links"><div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="about.html">About Us</a><a href="programs.html">WHSF Programmes</a><a href="media-information-library/">Media Information Library</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a></div><div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div></div>
-        <figure class="footer-award footer-award-image" aria-label="WHSF recognition">
-          <img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" />
-          <figcaption><strong>2025 London Data Center World Award Winner</strong></figcaption>
-        </figure>
+        <div class="footer-links"><div><strong>Explore</strong><a href="programs.html">Programmes</a><a href="media-information-library.html">Media &amp; Information Literacy</a><a href="blog.html">Blog</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a></div><div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div></div>
+        <div class="footer-award" aria-label="WHSF recognition"><img src="assets/whsf-logo.jpg" alt="World Humanitarian Support Foundation logo" /><span>2025 London Data Center World Award Winner</span></div>
       </div>
       <div class="shell social-links" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a></div>
       <div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p><a href="#top">Back to top ↑</a></div>

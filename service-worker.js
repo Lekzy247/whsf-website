@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v145';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v126';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -8,10 +8,7 @@ const WHSF_CORE_ASSETS = [
   '/mobile-app.html',
   '/mobile-app-admin.html',
   '/programs.html',
-  '/robotic-drone-programme.html',
-  '/girls-in-ict-tech-excursion.html',
   '/media-information-library.html',
-  '/media-information-library/',
   '/ai-career-connect/',
   '/ai-career-connect/index.html',
   '/ai-career-connect/styles.css',
@@ -23,6 +20,7 @@ const WHSF_CORE_ASSETS = [
   '/ai-career-connect/interview-coach.js',
   '/ai-career-connect/skills-passport.html',
   '/ai-career-connect/skills-passport.js',
+  '/blog.html',
   '/innovation.html',
   '/contact.html',
   '/privacy-policy.html',
@@ -32,14 +30,19 @@ const WHSF_CORE_ASSETS = [
   '/student-projects.html',
   '/e-classroom.html',
   '/impact-dashboard.html',
+  '/impact-methodology.html',
+  '/leadership-governance.html',
+  '/recognition.html',
+  '/events.html',
+  '/donate.html',
+  '/responsible-ai.html',
+  '/gallery.html',
   '/verify-certificate.html',
   '/styles.css',
-  '/mil-platform.js',
   '/script.js',
   '/manifest.webmanifest',
   WHSF_OFFLINE_URL,
   '/assets/whsf-logo.jpg',
-  '/assets/awards/london-data-center-world-award-2025-winner.jpg',
   '/assets/about/about-us-board.webp',
   '/assets/programs/ai-career-connect-social.png',
   '/assets/programs/agrismart-ai-programme.png',
