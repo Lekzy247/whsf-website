@@ -55,7 +55,7 @@
 
         <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
           <a href="e-classroom.html">e-learning</a>
-          <a href="blog.html">Blog</a>
+          
           <a href="#students">Students</a>
           <a href="#courses">Courses</a>
           <a href="#lessons">Lessons</a>
@@ -208,8 +208,12 @@
         </div>
         <div class="footer-links">
           <div><strong>Classroom</strong><a href="e-classroom.html">Student classroom</a><a href="#students">Students</a><a href="#courses">Courses</a></div>
-          <div><strong>Website</strong><a href="index.html#top">Home</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+          <div><strong>Website</strong><a href="index.html#top">Home</a><a href="contact.html">Contact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
         </div>
+        <figure class="footer-award footer-award-image" aria-label="WHSF recognition">
+          <img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" />
+          <figcaption><strong>2025 London Data Center World Award Winner</strong></figcaption>
+        </figure>
       </div>
       <div class="shell footer-bottom">
         <p>Â© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
@@ -441,7 +445,7 @@
         doc.setFontSize(11);
         doc.text(`Certificate No: ${certificateNumber}`, 86, height - 134);
         doc.text(`Issued: ${issuedDate}`, 86, height - 112);
-      doc.text('World Humanitarian Support Foundation', width / 2, height - 114, { align: 'center' });
+        doc.text('Special consultative status with ECOSOC since 2026', width / 2, height - 114, { align: 'center' });
         const verificationUrl = verifyCertificateUrl(certificateNumber);
         doc.text(`Verify: ${verificationUrl}`, width / 2, height - 92, { align: 'center' });
 

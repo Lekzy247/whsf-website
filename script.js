@@ -67,44 +67,7 @@ function initClassroomMenuDropdown() {
 initClassroomMenuDropdown();
 
 function initMobileNavigationFallback() {
-const nav = document.querySelector('#primary-navigation, .primary-nav');
-if (nav?.id === 'primary-navigation') {
-  const currentFile = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  const navigationItems = [
-    ['index.html', 'Home'],
-    ['about.html', 'About'],
-    ['programs.html', 'Programmes'],
-    ['impact-dashboard.html', 'Impact'],
-    ['leadership-governance.html', 'Governance'],
-    ['events.html', 'News & Events'],
-    ['contact.html', 'Contact']
-  ];
-  nav.innerHTML = navigationItems.map(([href, label]) =>
-    `<a href="${href}"${currentFile === href ? ' aria-current="page"' : ''}>${label}</a>`
-  ).join('');
-}
-document.querySelectorAll('a').forEach((link) => {
-  if (link.textContent.trim() === 'Programs') link.textContent = 'Programmes';
-  if (link.matches('.utility-donate')) link.setAttribute('href', 'donate.html');
-  const redirectMap = {
-    'index.html#projects': 'programs.html',
-    'index.html#about': 'about.html',
-    'index.html#gallery': 'programs.html#impact-stories',
-    'index.html#partners': 'partner-sponsor.html',
-    'index.html#more': 'contact.html'
-  };
-  const href = link.getAttribute('href');
-  if (redirectMap[href]) link.setAttribute('href', redirectMap[href]);
-  if (href === 'https://paypal.com/us/fundraiser/charity/1450337' && link.textContent.trim() === 'Donate') {
-    link.setAttribute('href', 'donate.html');
-    link.removeAttribute('target');
-  }
-});
-document.querySelectorAll('.footer-award span').forEach((label) => {
-  if (label.textContent.includes('2025 London Data Center World Award Winner')) {
-    label.textContent = '2025 Data Centre World Award — Resilience Through Innovation';
-  }
-});
+  const nav = document.querySelector('#primary-navigation, .primary-nav');
   const toggle = document.querySelector('.menu-toggle');
 
   nav?.querySelectorAll('a[href]').forEach((link) => {
@@ -370,7 +333,7 @@ const pathContent = {
   programme: {
     label: 'Programme pathway',
     title: 'Find a WHSF programme that fits your goals.',
-    copy: 'Explore ICT Girls Club, TechWomen, robotics, drone technology, cybersecurity, AI, STEM, agriculture and accessibility technology pathways.',
+    copy: 'Explore AgriSmart AI, AI Career Connect, Media Information Library, the STEM Robotic & Drone Programme, ICT Girls Club, TechWomen and Tech Excursions & Events.',
     primaryText: 'View programmes',
     primaryHref: 'programs.html',
     secondaryText: 'Request programme info',
@@ -621,7 +584,7 @@ function updateContactGuidance(value) {
 interestSelect?.addEventListener('change', () => updateContactGuidance(interestSelect.value));
 updateContactGuidance(interestSelect?.value);
 
-form?.addEventListener('submit', async (event) => {
+form?.addEventListener('submit', (event) => {
   event.preventDefault();
   if (!form.reportValidity()) return;
 
@@ -632,7 +595,7 @@ form?.addEventListener('submit', async (event) => {
   const message = String(data.get('message') || '');
   const financialAidRequest = isPublicFinancialAidRequest(interest, message);
   const fraudConcern = !financialAidRequest && isFraudConcern(interest, message);
-  const subject = (
+  const subject = encodeURIComponent(
     fraudConcern ? 'WHSF fraud/scam report' :
     financialAidRequest ? 'WHSF enquiry: financial assistance information' :
     `WHSF enquiry: ${interest}`
@@ -641,35 +604,20 @@ form?.addEventListener('submit', async (event) => {
     ? `FRAUD / SCAM AWARENESS AUTO-REPLY\n\nThank you for contacting WHSF. Based on your enquiry, please be aware:\n\n${fraudAwarenessMessage}\n\nWHSF is not offering financial promotions, investment payments, WhatsApp cash grants, Facebook promotions or unofficial aid through personal numbers. If someone is using a WhatsApp number, fake Facebook page, fake employee name or fake phone number to request money or promise benefits, it does not come from WHSF.\n\nPlease do not send money or share personal, banking or identity information. Report the matter to your local authorities, the platform involved, and your bank or mobile-money provider if any payment details were shared.\n\n---\n\n`
     : '';
   const financialAidAutoReply = financialAidRequest
-    ? `PUBLIC ASSISTANCE NOTICE\n\nThank you for contacting World Humanitarian Support Foundation. WHSF is committed to helping communities through technology education, digital inclusion, e-learning, skills development, mentorship, innovation programmes and community capacity building.\n\nPlease note that WHSF does not provide direct financial assistance to the public for personal bills, medical bills, school fees, rent, cash requests or individual emergency payments. Our support model focuses on expanding access to learning, technology skills, digital tools, verified certificates, youth empowerment, women-in-technology pathways and community development programmes.\n\nIf you need urgent medical, welfare, school-fee or emergency financial support, please contact appropriate local government agencies, registered social services, verified community charities, hospitals, schools, faith/community support organisations or emergency authorities in your area.\n\nYou are welcome to explore WHSF e-learning, technology programmes, digital literacy opportunities and public learning resources through our official website.\n\n---\n\n`
+    ? `PUBLIC ASSISTANCE NOTICE\n\nThank you for contacting World Humanitarian Support Foundation. WHSF is committed to helping communities through technology education, digital inclusion, e-learning learning, skills development, mentorship, innovation programmes and community capacity building.\n\nPlease note that WHSF does not provide direct financial assistance to the public for personal bills, medical bills, school fees, rent, cash requests or individual emergency payments. Our support model focuses on expanding access to learning, technology skills, digital tools, verified certificates, youth empowerment, women-in-technology pathways and community development programmes.\n\nIf you need urgent medical, welfare, school-fee or emergency financial support, please contact appropriate local government agencies, registered social services, verified community charities, hospitals, schools, faith/community support organisations or emergency authorities in your area.\n\nYou are welcome to explore WHSF e-learning, technology programmes, digital literacy opportunities and public learning resources through our official website.\n\n---\n\n`
     : '';
-  const body = `${fraudAutoReply}${financialAidAutoReply}Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`;
+  const body = encodeURIComponent(
+    `${fraudAutoReply}${financialAidAutoReply}Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`
+  );
 
   if (formStatus) {
     formStatus.textContent = fraudConcern
-      ? 'Fraud awareness: WHSF is not offering financial promotions. Do not send money or personal information. Sending your report securely…'
+      ? 'Fraud awareness: WHSF is not offering financial promotions. Do not send money or personal information. Please report suspicious activity to the appropriate authorities. Opening your email application now.'
       : financialAidRequest
-      ? 'WHSF does not provide direct financial assistance for personal bills, medical bills or school fees. Sending your enquiry securely…'
-      : 'Sending your enquiry securely…';
+      ? 'WHSF does not provide direct financial assistance for personal bills, medical bills or school fees. WHSF supports the public through technology education, digital inclusion and learning programmes. Opening your email application now.'
+      : 'Opening your email application. Please review and send the prepared message to WHSF.';
   }
-  const submitButton = form.querySelector('button[type="submit"]');
-  if (submitButton) submitButton.disabled = true;
-  try {
-    const response = await fetch(form.action || '/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.fromEntries(data.entries()))
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || payload.ok === false) throw new Error(payload.message || 'The enquiry could not be sent.');
-    if (formStatus) formStatus.textContent = payload.message || 'Thank you. Your enquiry has been sent.';
-    form.reset();
-    updateContactGuidance('');
-  } catch (error) {
-    if (formStatus) formStatus.textContent = `${error.message} You can also email info@worldhsfoundation.org directly.`;
-  } finally {
-    if (submitButton) submitButton.disabled = false;
-  }
+  window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
 });
 
 const techbridgeDonationForm = document.querySelector('#techbridge-donation-form');
@@ -1508,7 +1456,7 @@ const whsfAssistantAnswers = [
   {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
     title: 'WHSF e-learning',
-    answer: 'The WHSF e-learning supports training in robotics, cybersecurity, drone technology, AI, data center management, project management, eHealth, STEM, accessibility technology, AI for Agriculture, AI for Healthcare, Girls in AI Africa, AI Rapid Response and AI Media & Information Communication. Learners can view lessons, submit assignments, track progress and receive certificates.',
+    answer: 'WHSF e-learning provides accessible courses connected to robotics, cybersecurity, drone technology, AI, data centre management, project management, eHealth, STEM, accessibility technology, agriculture, healthcare and media literacy. Learners can view lessons, submit assignments, track progress and receive certificates.',
     link: 'e-classroom.html',
     linkText: 'Open e-learning'
   },
@@ -1541,11 +1489,46 @@ const whsfAssistantAnswers = [
     linkText: 'Contact WHSF'
   },
   {
-    keys: ['program', 'programme', 'programs', 'girls in ict', 'techwomen', 'robotics', 'drone', 'stem', 'cybersecurity', 'ai'],
-    title: 'Technology programmes',
-    answer: 'WHSF programmes include Girls in ICT Club, TechWomen, robotics, drone technology, AI and digital skills, cybersecurity, STEM, climate-smart technology and practical pathways for girls and young women.',
+    keys: ['program', 'programme', 'programs', 'technology programmes', 'join programme'],
+    title: 'WHSF technology programmes',
+    answer: 'Current WHSF programmes include AgriSmart AI, AI Career Connect, Media Information Library, the STEM Robotic & Drone Programme, Girls in ICT Club and TechWomen pathways, and Tech Excursions & Events. Each programme has a dedicated page with practical learning, resources and next steps.',
     link: 'programs.html',
-    linkText: 'Explore programmes'
+    linkText: 'Explore all programmes'
+  },
+  {
+    keys: ['agrismart', 'agriculture', 'climate smart', 'farming', 'rural girls'],
+    title: 'AgriSmart AI',
+    answer: 'AgriSmart AI equips rural and peri-urban girls and young women with climate-smart agriculture, sustainability, digital tools and applied technology skills.',
+    link: 'agrismart/',
+    linkText: 'Explore AgriSmart AI'
+  },
+  {
+    keys: ['career connect', 'ai career', 'career guidance', 'jobs', 'resume', 'interview', 'skills passport'],
+    title: 'AI Career Connect',
+    answer: 'AI Career Connect helps learners and professionals explore career pathways, build job-ready skills, prepare resumes and interviews, connect with mentors and discover global opportunities.',
+    link: 'ai-career-connect/',
+    linkText: 'Open AI Career Connect'
+  },
+  {
+    keys: ['media information library', 'mil', 'media literacy', 'fact checking', 'responsible ai', 'cyber safety', 'podcast'],
+    title: 'Media Information Library',
+    answer: 'The Media Information Library develops digital and information literacy, responsible AI, fact-checking, creative media, cybersecurity awareness, digital storytelling and community leadership.',
+    link: 'media-information-library/',
+    linkText: 'Explore Media Information Library'
+  },
+  {
+    keys: ['robotic drone', 'robotics', 'drone', 'stem', 'girls in ict', 'ict girls', 'techwomen'],
+    title: 'STEM Robotic & Drone Programme',
+    answer: 'This programme connects hands-on robotics, drone technology and digital skills with ICT Girls Club learning and TechWomen mentorship. It helps girls build confidence, engineering thinking and pathways back into education and opportunity.',
+    link: 'robotic-drone-programme.html',
+    linkText: 'Explore the STEM programme'
+  },
+  {
+    keys: ['tech excursion', 'excursion', 'robotic automation', 'technology event', 'events'],
+    title: 'Tech Excursions & Events',
+    answer: 'WHSF Tech Excursions & Events give Girls in ICT Club and TechWomen participants guided exposure to robotics, industrial automation, engineering environments and practical technology experiences.',
+    link: 'girls-in-ict-tech-excursion.html',
+    linkText: 'Explore Tech Experience'
   },
   {
     keys: ['mobile app', 'app', 'volunteer hub', 'donor hub', 'member dashboard', 'chat', 'community'],
@@ -1610,7 +1593,7 @@ function getAssistantAnswer(question) {
 
   return {
     title: 'WHSF support',
-    answer: 'I can help with WHSF public information including programmes, e-learning, certificate verification, employee/staff verification, partnerships, donations, volunteering, mobile app support and impact reporting. For a personal case, please contact WHSF directly.',
+    answer: 'Welcome to WHSF. Ask me about AgriSmart AI, AI Career Connect, Media Information Library, the STEM Robotic & Drone Programme, Tech Excursions, e-learning, certificate or staff verification, partnerships, donations, volunteering and impact. For a personal case, please contact WHSF directly.',
     link: 'contact.html',
     linkText: 'Chat with WHSF support'
   };
@@ -1662,11 +1645,12 @@ function initWhsfAssistant() {
       </div>
       <div class="whsf-chatbot-messages" aria-live="polite"></div>
       <div class="whsf-chat-quick" aria-label="Quick questions">
-        <button type="button" data-question="How do I verify a certificate?">Certificate</button>
-        <button type="button" data-question="How do I verify WHSF staff?">Staff</button>
+        <button type="button" data-question="What programmes does WHSF offer?">Programmes</button>
+        <button type="button" data-question="Tell me about the STEM Robotic and Drone Programme">STEM</button>
+        <button type="button" data-question="Tell me about AI Career Connect">Careers</button>
+        <button type="button" data-question="Tell me about the Media Information Library">MIL</button>
         <button type="button" data-question="How do I join e-learning?">e-learning</button>
-        <button type="button" data-question="How can I partner with WHSF?">Partner</button>
-        <button type="button" data-question="How can I donate?">Donate</button>
+        <button type="button" data-question="How do I verify a certificate?">Verify</button>
       </div>
       <form class="whsf-chat-form">
         <input type="text" name="question" placeholder="Ask about WHSF..." autocomplete="off" />
@@ -1723,7 +1707,7 @@ function initWhsfAssistant() {
     });
   });
 
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', (event) => {
     event.preventDefault();
     ask(input.value);
   });
@@ -2078,104 +2062,6 @@ function initWhsfCookieConsent() {
 
 initWhsfCookieConsent();
 
-const WHSF_NEWSLETTER_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
-const WHSF_NEWSLETTER_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
-
-function initWhsfNewsletterSubscribe() {
-  const footer = document.querySelector('.site-footer');
-  if (!footer) return;
-
-  const currentPage = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  let newsletter = footer.querySelector('[data-whsf-newsletter]');
-  if (!newsletter && currentPage !== 'index.html') {
-    newsletter = document.createElement('div');
-    newsletter.className = 'shell footer-newsletter';
-    newsletter.setAttribute('data-whsf-newsletter', 'true');
-    newsletter.innerHTML = `
-    <div class="footer-newsletter-copy">
-      <span>WHSF newsletter</span>
-      <h2>Stay connected to technology, learning and opportunity updates.</h2>
-      <p>Subscribe for WHSF e-learning news, STEM opportunities, AI and digital inclusion updates, safe online learning guidance and community impact stories. New subscriptions are reviewed by WHSF before communication is sent.</p>
-    </div>
-    <form class="footer-newsletter-form" data-whsf-newsletter-form>
-      <label>
-        <span>First name</span>
-        <input type="text" name="first_name" autocomplete="given-name" placeholder="Your first name" />
-      </label>
-      <label>
-        <span>Email address</span>
-        <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
-      </label>
-      <label>
-        <span>Country</span>
-        <input type="text" name="country" autocomplete="country-name" placeholder="Country" />
-      </label>
-      <button class="button" type="submit">Subscribe</button>
-      <p class="newsletter-status" data-whsf-newsletter-status aria-live="polite"></p>
-    </form>
-    `;
-    const socialLinks = footer.querySelector('.social-links');
-    const footerBottom = footer.querySelector('.footer-bottom');
-    footer.insertBefore(newsletter, socialLinks || footerBottom || null);
-  }
-
-  if (!newsletter) return;
-
-  const form = newsletter.querySelector('[data-whsf-newsletter-form]');
-  const status = newsletter.querySelector('[data-whsf-newsletter-status]');
-  if (!form || form.dataset.bound === 'true') return;
-  form.dataset.bound = 'true';
-
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const data = new FormData(form);
-    const firstName = String(data.get('first_name') || '').trim();
-    const email = String(data.get('email') || '').trim();
-    const country = String(data.get('country') || '').trim();
-
-    if (!email) {
-      status.textContent = 'Please enter your email address.';
-      status.className = 'newsletter-status is-error';
-      return;
-    }
-
-    status.textContent = 'Submitting your newsletter request...';
-    status.className = 'newsletter-status';
-
-    try {
-      const response = await fetch(`${WHSF_NEWSLETTER_SUPABASE_URL}/rest/v1/rpc/whsf_newsletter_subscribe`, {
-        method: 'POST',
-        headers: {
-          apikey: WHSF_NEWSLETTER_SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${WHSF_NEWSLETTER_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          p_first_name: firstName,
-          p_last_name: '',
-          p_email: email,
-          p_country: country,
-          p_phone_number: ''
-        })
-      });
-
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok || payload.ok === false) {
-        throw new Error(payload.message || 'The newsletter request could not be saved yet.');
-      }
-
-      status.textContent = payload.message || 'Thank you. Your WHSF newsletter request has been received for administrator review.';
-      status.className = 'newsletter-status is-success';
-      form.reset();
-    } catch (error) {
-        status.textContent = 'Newsletter signup is temporarily unavailable. Please try again later or contact WHSF support.';
-      status.className = 'newsletter-status is-error';
-    }
-  });
-}
-
-initWhsfNewsletterSubscribe();
-
 function initSponsorImpactCalculator() {
   const form = document.querySelector('#sponsor-impact-form');
   const supportType = document.querySelector('#impact-support-type');
@@ -2187,6 +2073,14 @@ function initSponsorImpactCalculator() {
   const addButton = document.querySelector('#impact-add-to-enquiry');
 
   if (!form || !supportType || !supportValue || !valueLabel || !primaryResult || !secondaryResult || !contextResult || !addButton) return;
+
+  const money = (amount) => new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(amount);
+
+  const plural = (count, singular, pluralLabel) => `${count} ${count === 1 ? singular : pluralLabel}`;
 
   const supportLabels = {
     learners: 'Learner access & certificates',
@@ -2200,14 +2094,56 @@ function initSponsorImpactCalculator() {
   function calculateImpact() {
     const type = supportType.value;
     const rawValue = Math.max(1, Number(supportValue.value || 1));
-    const isDevices = type === 'devices';
-    const inputLabel = isDevices ? 'Proposed number of devices' : 'Proposed amount in USD';
-    const inputDisplay = isDevices ? `${Math.floor(rawValue)} device(s)` : `$${Math.floor(rawValue).toLocaleString('en-US')}`;
+    let primary = '';
+    let secondary = '';
+    let context = '';
+    let inputLabel = 'Amount in USD';
+    let inputDisplay = money(rawValue);
+
+    if (type === 'devices') {
+      const devices = Math.floor(rawValue);
+      const learners = devices * 3;
+      const classrooms = Math.max(1, Math.floor(devices / 20));
+      inputLabel = 'Number of devices';
+      inputDisplay = plural(devices, 'device', 'devices');
+      primary = `${plural(devices, 'device', 'devices')} can support about ${plural(learners, 'learner', 'learners')}`;
+      secondary = `A donation of ${inputDisplay} can help equip learning spaces, e-learning access points and community technology hubs.`;
+      context = `${plural(classrooms, 'classroom or hub', 'classrooms or hubs')} could receive practical device support, depending on device type and condition.`;
+    } else if (type === 'classroom') {
+      const classrooms = Math.max(1, Math.floor(rawValue / 2500));
+      const learners = classrooms * 30;
+      primary = `${plural(classrooms, 'digital classroom', 'digital classrooms')} supported`;
+      secondary = `${money(rawValue)} can help provide classroom technology access, learning tools and setup support.`;
+      context = `Estimated reach: about ${plural(learners, 'learner', 'learners')} through school, hub or partner learning spaces.`;
+    } else if (type === 'bootcamp') {
+      const bootcamps = Math.max(1, Math.floor(rawValue / 2500));
+      const learners = bootcamps * 40;
+      primary = `${plural(bootcamps, 'AI/STEM bootcamp', 'AI/STEM bootcamps')} estimated`;
+      secondary = `${money(rawValue)} can support practical training days, learning materials and facilitator coordination.`;
+      context = `Estimated reach: about ${plural(learners, 'participant', 'participants')} through WHSF technology training.`;
+    } else if (type === 'certificates') {
+      const certificates = Math.floor(rawValue / 10);
+      primary = `About ${plural(certificates, 'certificate', 'certificates')} supported`;
+      secondary = `${money(rawValue)} can help cover certificate preparation, verification and learner recognition support.`;
+      context = 'Best for sponsors who want to help learners document skills for schools, employers, partners and future opportunities.';
+    } else if (type === 'outreach') {
+      const activities = Math.max(1, Math.floor(rawValue / 1000));
+      const people = activities * 100;
+      primary = `${plural(activities, 'community outreach activity', 'community outreach activities')} estimated`;
+      secondary = `${money(rawValue)} can support planning, learning materials, local coordination and awareness activities.`;
+      context = `Estimated community reach: about ${plural(people, 'person', 'people')}, depending on location and programme model.`;
+    } else {
+      const learners = Math.floor(rawValue / 50);
+      primary = `About ${plural(learners, 'learner', 'learners')} supported`;
+      secondary = `${money(rawValue)} can support learner access, e-learning participation, materials and certificate readiness.`;
+      context = 'Best for student scholarships, ICT Girls Club learners, TechWomen participants and community learning cohorts.';
+    }
+
     valueLabel.textContent = inputLabel;
-    primaryResult.textContent = 'Budget validation required';
-    secondaryResult.textContent = `${supportLabels[type]} proposal recorded: ${inputDisplay}. No participant reach or programme outcome is calculated before delivery costs are confirmed.`;
-    contextResult.textContent = 'WHSF should confirm location, activities, approved costs, participant targets, safeguarding and reporting commitments in a written partnership plan.';
-    addButton.dataset.impactNote = `Partnership planning selection: ${supportLabels[type]}; proposed support: ${inputDisplay}. Please provide a validated budget and results framework.`;
+    primaryResult.textContent = primary;
+    secondaryResult.textContent = secondary;
+    contextResult.textContent = context;
+    addButton.dataset.impactNote = `Sponsor impact calculator selection: ${supportLabels[type]}; input: ${inputDisplay}; estimated impact: ${primary}. ${secondary}`;
   }
 
   form.addEventListener('submit', (event) => event.preventDefault());
@@ -2245,7 +2181,7 @@ function initPartnerSponsorEnquiryForm() {
   const status = document.querySelector('#partner-enquiry-status');
   if (!form || !status) return;
 
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', (event) => {
     event.preventDefault();
 
     const data = new FormData(form);
@@ -2282,36 +2218,10 @@ function initPartnerSponsorEnquiryForm() {
       'Consent: The sender agreed that WHSF may use this information to respond to the partnership enquiry.'
     ].join('\n');
 
-    const submitButton = form.querySelector('button[type="submit"]');
-    if (submitButton) submitButton.disabled = true;
-    status.textContent = 'Sending your partnership enquiry securely…';
-    status.className = 'form-status';
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: organization,
-          lastName: 'Partnership enquiry',
-          email,
-          phone: '',
-          interest: subject,
-          message: body,
-          consent: 'yes',
-          website: ''
-        })
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok || payload.ok === false) throw new Error(payload.message || 'The enquiry could not be sent.');
-      status.textContent = payload.message || 'Thank you. Your partnership enquiry has been sent.';
-      status.className = 'form-status is-success';
-      form.reset();
-    } catch (error) {
-      status.textContent = `${error.message} You can also email info@worldhsfoundation.org.`;
-      status.className = 'form-status is-error';
-    } finally {
-      if (submitButton) submitButton.disabled = false;
-    }
+    const mailto = `mailto:info@worldhsfoundation.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    status.textContent = 'Thank you. Your enquiry is ready to send to WHSF. Please send the prepared email from your mail app.';
+    status.className = 'form-status is-success';
+    window.location.href = mailto;
   });
 }
 
