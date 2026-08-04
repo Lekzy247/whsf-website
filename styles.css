@@ -7455,3 +7455,74 @@ body {
   line-height:1.15;
   letter-spacing:.01em;
 }
+
+
+/* Consolidated Gallery and translated pages */
+.gallery-preview-heading{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:2rem;
+  margin-bottom:1.6rem;
+}
+.gallery-preview-heading > div{max-width:720px}
+.gallery-preview-grid,
+.story-gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1.25rem;
+}
+.gallery-preview-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gallery-preview-card,
+.story-gallery-card{
+  overflow:hidden;
+  margin:0;
+  border:1px solid rgba(109,16,36,.12);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 12px 34px rgba(32,19,23,.08);
+}
+.gallery-preview-card img,
+.story-gallery-card img{
+  display:block;
+  width:100%;
+  height:250px;
+  object-fit:cover;
+}
+.gallery-preview-card figcaption,
+.story-gallery-card figcaption{
+  display:grid;
+  gap:.45rem;
+  padding:1.15rem;
+}
+.gallery-preview-card figcaption > span{
+  color:#7f1730;
+  font-size:.74rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.gallery-preview-card figcaption > strong,
+.story-gallery-card figcaption > strong{
+  color:#30141d;
+  font-family:"Playfair Display",serif;
+  font-size:1.25rem;
+  line-height:1.15;
+}
+.gallery-preview-card figcaption p,
+.story-gallery-card figcaption span{margin:0;color:#66545a;line-height:1.6}
+.gallery-hero{background:linear-gradient(135deg,#4d0b1c,#8e203c)}
+.gallery-collection .section-heading{max-width:760px;margin-bottom:1.5rem}
+.story-gallery-grid-single{grid-template-columns:minmax(0,720px)}
+.story-gallery-card-contain img{object-fit:contain;padding:2rem;background:#fff}
+.gallery-cta .policy-card{max-width:850px;margin:0 auto;text-align:center}
+.fr-page .content-hero{background:linear-gradient(135deg,#4d0b1c,#8e203c)}
+.fr-page .focus-stat-grid{margin-top:1.5rem}
+@media(max-width:900px){
+  .gallery-preview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .gallery-preview-heading{align-items:start;flex-direction:column}
+  .gallery-preview-grid,.story-gallery-grid{grid-template-columns:1fr}
+  .gallery-preview-card img,.story-gallery-card img{height:220px}
+}

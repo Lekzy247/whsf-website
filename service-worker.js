@@ -1,10 +1,15 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v147';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v148';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
   '/',
   '/index.html',
   '/about.html',
+  '/gallery.html',
+  '/fr/index.html',
+  '/fr/programmes.html',
+  '/fr/impact.html',
+  '/fr/contact.html',
   '/mobile-app.html',
   '/mobile-app-admin.html',
   '/programs.html',
