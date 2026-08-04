@@ -7441,3 +7441,17 @@ body {
   cursor:wait;
   opacity:.72;
 }
+
+
+/* Homepage award caption — compact and understated */
+.home-page .footer-award-image figcaption,
+.home-page .footer-award span,
+.home-page .footer-award-image figcaption strong{
+  width:132px;
+  max-width:132px;
+  margin-top:6px;
+  font-size:11px;
+  font-weight:400;
+  line-height:1.15;
+  letter-spacing:.01em;
+}
