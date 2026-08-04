@@ -96,6 +96,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.worldhsfoundation.org/reports-financials</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.worldhsfoundation.org/gallery</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

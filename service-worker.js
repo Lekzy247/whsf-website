@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v126';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v146';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -36,6 +36,7 @@ const WHSF_CORE_ASSETS = [
   '/events.html',
   '/donate.html',
   '/responsible-ai.html',
+  '/reports-financials.html',
   '/gallery.html',
   '/verify-certificate.html',
   '/styles.css',
