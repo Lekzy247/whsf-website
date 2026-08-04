@@ -508,6 +508,8 @@ const formStatus = document.querySelector('#form-status');
 const interestSelect = document.querySelector('#contact-form select[name="interest"]');
 const messageField = document.querySelector('#contact-form textarea[name="message"]');
 const contactGuidance = document.querySelector('#contact-guidance');
+const contactStartedAt = document.querySelector('#contact-started-at');
+if (contactStartedAt) contactStartedAt.value = String(Date.now());
 
 const fraudAwarenessMessage = 'Fraud awareness: Scammers have misused the WHSF name, logo and images to create fraudulent Facebook pages and WhatsApp groups. WHSF is not offering financial promotions. Please report suspicious activity to your local authorities.';
 const fraudConcernPattern = /(fraud|scam|fake|whatsapp|facebook|promotion|employee|number|impersonat|telegram|investment|cash grant|payment request|financial promotion)/i;
@@ -584,40 +586,57 @@ function updateContactGuidance(value) {
 interestSelect?.addEventListener('change', () => updateContactGuidance(interestSelect.value));
 updateContactGuidance(interestSelect?.value);
 
-form?.addEventListener('submit', (event) => {
+form?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!form.reportValidity()) return;
 
+  const submitButton = form.querySelector('button[type="submit"]');
   const data = new FormData(form);
-  const name = `${data.get('firstName')} ${data.get('lastName')}`.trim();
-  const phone = String(data.get('phone') || '').trim();
-  const interest = String(data.get('interest') || 'General enquiry');
-  const message = String(data.get('message') || '');
-  const financialAidRequest = isPublicFinancialAidRequest(interest, message);
-  const fraudConcern = !financialAidRequest && isFraudConcern(interest, message);
-  const subject = encodeURIComponent(
-    fraudConcern ? 'WHSF fraud/scam report' :
-    financialAidRequest ? 'WHSF enquiry: financial assistance information' :
-    `WHSF enquiry: ${interest}`
-  );
-  const fraudAutoReply = fraudConcern
-    ? `FRAUD / SCAM AWARENESS AUTO-REPLY\n\nThank you for contacting WHSF. Based on your enquiry, please be aware:\n\n${fraudAwarenessMessage}\n\nWHSF is not offering financial promotions, investment payments, WhatsApp cash grants, Facebook promotions or unofficial aid through personal numbers. If someone is using a WhatsApp number, fake Facebook page, fake employee name or fake phone number to request money or promise benefits, it does not come from WHSF.\n\nPlease do not send money or share personal, banking or identity information. Report the matter to your local authorities, the platform involved, and your bank or mobile-money provider if any payment details were shared.\n\n---\n\n`
-    : '';
-  const financialAidAutoReply = financialAidRequest
-    ? `PUBLIC ASSISTANCE NOTICE\n\nThank you for contacting World Humanitarian Support Foundation. WHSF is committed to helping communities through technology education, digital inclusion, e-learning learning, skills development, mentorship, innovation programmes and community capacity building.\n\nPlease note that WHSF does not provide direct financial assistance to the public for personal bills, medical bills, school fees, rent, cash requests or individual emergency payments. Our support model focuses on expanding access to learning, technology skills, digital tools, verified certificates, youth empowerment, women-in-technology pathways and community development programmes.\n\nIf you need urgent medical, welfare, school-fee or emergency financial support, please contact appropriate local government agencies, registered social services, verified community charities, hospitals, schools, faith/community support organisations or emergency authorities in your area.\n\nYou are welcome to explore WHSF e-learning, technology programmes, digital literacy opportunities and public learning resources through our official website.\n\n---\n\n`
-    : '';
-  const body = encodeURIComponent(
-    `${fraudAutoReply}${financialAidAutoReply}Name: ${name}\nEmail: ${data.get('email')}\nPhone / WhatsApp: ${phone || 'Not provided'}\nInterest: ${interest}\n\nMessage:\n${message}`
-  );
+  const payload = {
+    firstName: String(data.get('firstName') || '').trim(),
+    lastName: String(data.get('lastName') || '').trim(),
+    email: String(data.get('email') || '').trim(),
+    phone: String(data.get('phone') || '').trim(),
+    interest: String(data.get('interest') || '').trim(),
+    message: String(data.get('message') || '').trim(),
+    consent: data.get('consent') === 'on',
+    startedAt: Number(data.get('startedAt') || 0),
+    website: String(data.get('website') || '')
+  };
 
-  if (formStatus) {
-    formStatus.textContent = fraudConcern
-      ? 'Fraud awareness: WHSF is not offering financial promotions. Do not send money or personal information. Please report suspicious activity to the appropriate authorities. Opening your email application now.'
-      : financialAidRequest
-      ? 'WHSF does not provide direct financial assistance for personal bills, medical bills or school fees. WHSF supports the public through technology education, digital inclusion and learning programmes. Opening your email application now.'
-      : 'Opening your email application. Please review and send the prepared message to WHSF.';
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending…';
   }
-  window.location.href = `mailto:info@worldhsfoundation.org?subject=${subject}&body=${body}`;
+  if (formStatus) formStatus.textContent = 'Sending your enquiry securely to WHSF…';
+
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'The enquiry could not be sent.');
+
+    form.reset();
+    const startedAtField = document.querySelector('#contact-started-at');
+    if (startedAtField) startedAtField.value = String(Date.now());
+    updateContactGuidance('');
+    if (formStatus) {
+      formStatus.textContent = result.message || 'Thank you. Your enquiry was sent successfully. We normally respond within three business days.';
+      formStatus.focus?.();
+    }
+  } catch (error) {
+    if (formStatus) {
+      formStatus.textContent = String(error.message || 'The enquiry could not be sent.') + ' Please try again, or email info@worldhsfoundation.org if the problem continues.';
+    }
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Send enquiry';
+    }
+  }
 });
 
 const techbridgeDonationForm = document.querySelector('#techbridge-donation-form');

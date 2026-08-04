@@ -84,6 +84,8 @@
             </section>
           </div>
           <form class="contact-form reveal delay-one" id="contact-form">
+            <input type="hidden" name="startedAt" id="contact-started-at" />
+            <label hidden>Website<input name="website" tabindex="-1" autocomplete="off" /></label>
             <div class="field-row">
               <label>First name<input name="firstName" autocomplete="given-name" required /></label>
               <label>Last name<input name="lastName" autocomplete="family-name" required /></label>
@@ -112,14 +114,15 @@
             </label>
             <p class="form-guidance" id="contact-guidance">Choose an interest area and share a short message. WHSF will review your enquiry and respond by email.</p>
             <label>Message<textarea name="message" rows="4" required placeholder="Tell us what you need and how WHSF can help."></textarea></label>
+            <label class="contact-consent"><input type="checkbox" name="consent" required /><span>I consent to WHSF using this information to respond to my enquiry and retaining the submission record for follow-up.</span></label>
             <div class="contact-next-steps" aria-label="What happens next">
               <strong>What happens next?</strong>
-              <span>1. Your email app opens with the message prepared.</span>
-              <span>2. You review and send it to WHSF.</span>
-              <span>3. WHSF follows up through the right programme or support team.</span>
+              <span>1. Your enquiry is sent securely to the appropriate WHSF team.</span>
+              <span>2. An acknowledgement is sent to your email address.</span>
+              <span>3. We normally respond within three business days.</span>
             </div>
-            <button class="button button-light" type="submit">Prepare message</button>
-            <p class="form-note" id="form-status" role="status">This form prepares an email in your device’s email application. No personal WhatsApp number is published on this website.</p>
+            <button class="button button-light" type="submit">Send enquiry</button>
+            <p class="form-note" id="form-status" role="status" aria-live="polite" tabindex="-1">Your enquiry will be submitted directly to WHSF. We normally respond within three business days.</p>
           </form>
         </div>
 
