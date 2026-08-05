@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v161';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v162';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -47,6 +47,7 @@ const WHSF_CORE_ASSETS = [
   '/media-library.html',
   '/donor-portal.html',
   '/corporate-partnerships.html',
+  '/partner-reference.css',
   '/content-data.js',
   '/content-hub.js',
   '/verify-certificate.html',
@@ -61,6 +62,7 @@ const WHSF_CORE_ASSETS = [
   WHSF_OFFLINE_URL,
   '/assets/whsf-logo.jpg',
   '/assets/impact/whsf-girls-certificates-2026.jpg',
+  '/assets/partners/whsf-partnership-recognition.jpg',
   '/assets/awards/london-data-center-world-award-2025-winner.jpg',
   '/assets/about/about-us-board.webp',
   '/assets/programs/ai-career-connect-social.png',
