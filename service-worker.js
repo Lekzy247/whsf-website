@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v147';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v148';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -32,6 +32,15 @@ const WHSF_CORE_ASSETS = [
   '/student-projects.html',
   '/e-classroom.html',
   '/impact-dashboard.html',
+  '/impact-data.js',
+  '/impact-experience.js',
+  '/milestone.css',
+  '/programme-girls-in-ict.html',
+  '/programme-robotics-drones.html',
+  '/programme-agrismart-ai.html',
+  '/programme-ai-career-connect.html',
+  '/governance.html',
+  '/transparency.html',
   '/verify-certificate.html',
   '/styles.css',
   '/mil-platform.js',

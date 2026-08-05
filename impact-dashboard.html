@@ -1,187 +1,26 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="WHSF public impact dashboard showing technology training, certificates, programmes and UN SDG alignment."
-    />
-    <meta name="theme-color" content="#6d1024" />
-    <meta property="og:title" content="WHSF Impact Dashboard" />
-    <meta
-      property="og:description"
-      content="Transparent impact reporting for WHSF technology, education, disability inclusion and community programmes."
-    />
-    <meta property="og:type" content="website" />
-    <title>Impact Dashboard | World Humanitarian Support Foundation</title>
-    <link rel="icon" href="assets/whsf-logo.jpg" />
-    <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="WHSF" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to main content</a>
-
-    <div class="utility-bar">
-      <div class="shell utility-inner">
-        <p>Transparent impact reporting for WHSF programmes</p>
-        <div class="utility-actions" aria-label="Accessibility controls">
-          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
-          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
-          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
-        </div>
-      </div>
-    </div>
-
-    <header class="site-header" id="top">
-      <div class="shell nav-wrap">
-        <a class="brand" href="index.html#top" aria-label="WHSF home">
-          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
-          <span>
-            <strong>WHSF</strong>
-            <small>Impact Dashboard</small>
-          </span>
-        </a>
-
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-          <span class="menu-lines" aria-hidden="true"></span>
-          <span class="sr-only">Open menu</span>
-        </button>
-
-        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-          <a href="index.html#top">Home</a>
-          <a href="about.html">About Us</a>
-          <a href="programs.html">Programs</a>
-          <a href="e-classroom.html">e-learning</a>
-          <a href="impact-dashboard.html">Impact</a>
-          <a href="contact.html">Contact &amp; Support</a>
-        </nav>
-      </div>
-    </header>
-
-    <main id="main">
-      <section class="impact-dashboard-hero" aria-labelledby="impact-title">
-        <div class="shell impact-dashboard-grid">
-          <div class="classroom-copy reveal">
-            <p class="eyebrow">Public impact dashboard</p>
-            <h1 id="impact-title">Measuring dignity, access and opportunity through technology.</h1>
-            <p class="hero-lead">
-              WHSF tracks programme reach, digital learning, certificates, community engagement and inclusion outcomes so partners, donors and communities can see progress clearly.
-            </p>
-            <div class="hero-actions">
-              <a class="button" href="#impact-metrics">View metrics</a>
-              <a class="button button-light" href="e-classroom.html">Open e-learning</a>
-            </div>
-          </div>
-
-          <aside class="impact-dashboard-card reveal delay-one">
-            <span>Reporting snapshot</span>
-            <strong>Impact-ready</strong>
-            <p>Designed for grant applications, partner reporting, donor updates and public transparency.</p>
-          </aside>
-        </div>
-      </section>
-
-      <section class="section impact-metric-section" id="impact-metrics">
-        <div class="shell section-heading centered reveal">
-          <p class="eyebrow">Key indicators</p>
-          <h2>WHSF impact at a glance.</h2>
-          <p>These public indicators highlight WHSF programme milestones, learning outcomes and community impact.</p>
-        </div>
-
-        <div class="shell impact-metric-grid">
-          <article class="impact-metric-card reveal"><span>7,500+</span><strong>Girls impacted</strong><p>Girls impacted through WHSF technology and education programmes.</p></article>
-          <article class="impact-metric-card reveal delay-one"><span>12</span><strong>e-learning course tracks</strong><p>Robotics, cybersecurity, drones, AI, STEM, eHealth, accessibility technology and more.</p></article>
-          <article class="impact-metric-card reveal delay-two"><span>550</span><strong>Career advancement</strong><p>Young women empowered through entrepreneurship and career advancement.</p></article>
-          <article class="impact-metric-card reveal delay-two"><span>550+</span><strong>Young women empowered</strong><p>Entrepreneurship, mentorship, networking and job-opportunity pathways for young women around the world.</p></article>
-          <article class="impact-metric-card reveal"><span>120</span><strong>Scholarship awards supported</strong><p>Professional development opportunities through WHSF partnership pathways.</p></article>
-          <article class="impact-metric-card reveal delay-two"><span>2026</span><strong>ECOSOC consultative status</strong><p>Special consultative status with the United Nations Economic and Social Council.</p></article>
-        </div>
-      </section>
-
-      <section class="section impact-insight-section">
-        <div class="shell impact-insight-grid">
-          <div class="section-heading reveal">
-            <p class="eyebrow">Programme performance</p>
-            <h2>Where WHSF creates measurable value.</h2>
-            <p>WHSF programmes sit at the intersection of girls’ education, digital inclusion, employability, disability inclusion, sustainability and community resilience.</p>
-          </div>
-
-          <div class="impact-chart-panel reveal delay-one" aria-label="Impact focus chart">
-            <div class="impact-bar"><span>Digital inclusion</span><strong style="--value: 92%">92%</strong></div>
-            <div class="impact-bar"><span>Girls in STEM</span><strong style="--value: 88%">88%</strong></div>
-            <div class="impact-bar"><span>Community outreach</span><strong style="--value: 82%">82%</strong></div>
-            <div class="impact-bar"><span>Accessibility readiness</span><strong style="--value: 74%">74%</strong></div>
-            <div class="impact-bar"><span>Climate-smart innovation</span><strong style="--value: 68%">68%</strong></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section impact-sdg-section">
-        <div class="shell section-heading centered reveal">
-          <p class="eyebrow">UN SDG alignment</p>
-          <h2>Programmes connected to global development goals.</h2>
-        </div>
-        <div class="shell sdg-grid">
-          <article><strong>SDG 4</strong><span>Quality Education</span></article>
-          <article><strong>SDG 5</strong><span>Gender Equality</span></article>
-          <article><strong>SDG 8</strong><span>Decent Work & Skills</span></article>
-          <article><strong>SDG 9</strong><span>Innovation & Infrastructure</span></article>
-          <article><strong>SDG 10</strong><span>Reduced Inequalities</span></article>
-          <article><strong>SDG 13</strong><span>Climate Action</span></article>
-        </div>
-      </section>
-
-      <section class="section impact-report-section">
-        <div class="shell impact-report-card reveal">
-          <div>
-            <p class="eyebrow">Reporting roadmap</p>
-            <h2>Next: live data and downloadable impact reports.</h2>
-            <p>
-              The dashboard helps visitors, donors and partners understand WHSF’s reach, learning activities and measurable community outcomes.
-            </p>
-          </div>
-          <div class="impact-report-actions">
-            <a class="button" href="contact.html">Contact WHSF support</a>
-            <a class="button button-light" href="mailto:info@worldhsfoundation.org">Request impact report</a>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="shell footer-grid">
-        <div class="footer-brand">
-          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
-          <div>
-            <strong>World Humanitarian Support Foundation</strong>
-            <p>Transparent impact reporting for inclusive technology, education and community development.</p>
-          </div>
-        </div>
-        <div class="footer-links">
-          <div><strong>Impact</strong><a href="#impact-metrics">Metrics</a><a href="e-classroom.html">e-learning</a><a href="verify-certificate.html">Verify certificate</a></div>
-          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
-        </div>
-        <figure class="footer-award footer-award-image" aria-label="WHSF recognition">
-          <img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" />
-          <figcaption><strong>2025 London Data Center World Award Winner</strong></figcaption>
-        </figure>
-      </div>
-      <div class="shell footer-bottom">
-        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
-        <a href="#top">Back to top ↑</a>
-      </div>
-    </footer>
-  </body>
-</html>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Explore published WHSF programme statistics, project locations and measurable outcomes.">
+  <meta name="theme-color" content="#6d1024"><title>Impact Dashboard | World Humanitarian Support Foundation</title>
+  <link rel="icon" href="assets/whsf-logo.jpg"><link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="milestone.css">
+  <script src="script.js" defer></script><script src="impact-data.js" defer></script><script src="impact-experience.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="utility-bar"><div class="shell utility-inner"><p>Published programme evidence and accountable reporting</p><div class="utility-actions" aria-label="Accessibility controls"><button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button><button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button><a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a></div></div></div>
+<header class="site-header" id="top"><div class="shell nav-wrap"><a class="brand" href="index.html" aria-label="WHSF home"><img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem"><span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span></button><nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="programs.html">Programs</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html" aria-current="page">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a></nav></div></header>
+<main id="main">
+<section class="milestone-hero"><div class="shell milestone-hero-grid"><div><p class="eyebrow">Live from published programme records</p><h1>Impact that can be explored, understood and improved.</h1><p class="hero-lead">Filter WHSF’s published indicators, explore where programmes operate and open programme-specific outcome pages. Every figure includes context so visitors can distinguish verified records from measures still awaiting publication.</p><div class="hero-actions"><a class="button button-light" href="#dashboard">Explore the data</a><a class="button" href="transparency.html">Reports &amp; transparency</a></div></div><aside class="data-note-card"><span class="live-status">Data-backed dashboard</span><strong data-data-scope>Published WHSF website programme records</strong><p>Publication date: <time data-publication-date>4 August 2026</time></p><p>Figures are not added together where participants may overlap.</p></aside></div></section>
+<section class="dashboard-controls" id="dashboard"><div class="shell filter-panel" aria-label="Impact dashboard filters"><label>Programme<select id="impact-programme-filter"><option value="all">All programmes</option><option value="girls-in-ict">Girls in ICT</option><option value="career-pathways">Career pathways</option><option value="digital-learning">Digital learning</option></select></label><label>Region<select id="impact-region-filter"><option value="all">All regions</option><option value="africa">Africa</option><option value="global">Global and online</option></select></label><label>Reporting period<select id="impact-period-filter"><option value="all">All periods</option><option value="since-2015">Since 2015</option><option value="current">Current published records</option></select></label></div></section>
+<section class="section"><div class="shell"><div class="section-heading"><p class="eyebrow">Published indicators</p><h2>Programme statistics with context.</h2><p><span data-result-count>6 published indicators</span>. Use the filters above to focus the evidence.</p></div><div class="metric-grid" data-impact-metrics aria-live="polite"></div><p class="source-note"><strong>Reading the figures:</strong> these are aggregate public records. A participant may appear in more than one activity, so the figures should not be combined into a single beneficiary total without deduplication.</p></div></section>
+<section class="section section-tint" id="map"><div class="shell"><div class="section-heading centered"><p class="eyebrow">Project map</p><h2>Where published WHSF activities reach people.</h2><p>The map uses aggregate locations because country-by-country beneficiary totals have not yet been published.</p></div><div class="filter-panel" style="margin:1.5rem 0"><label>Show programme<select id="map-programme-filter"><option value="all">All mapped programmes</option><option value="girls-in-ict">Girls in ICT</option><option value="robotics-drones">Robotics &amp; Drones</option><option value="agrismart-ai">AgriSmart AI</option><option value="career-pathways">AI Career Connect</option><option value="digital-learning">Digital learning</option></select></label><div></div><p class="live-status">Select a map marker</p></div><div class="map-layout"><div class="map-panel"><svg class="impact-map" data-impact-map viewBox="0 0 1000 500" role="img" aria-labelledby="map-title map-desc"><title id="map-title">Interactive WHSF project map</title><desc id="map-desc">A simplified world map with selectable markers for Nigeria, regional Africa and global online programmes.</desc><g aria-hidden="true"><path class="map-land" d="M70 105l80-55 130 20 45 70-35 70-75 20-30 105-50-35-15-100-65-35z"/><path class="map-land" d="M270 285l72 25 40 85-25 95-48-35-30-95z"/><path class="map-land" d="M430 95l95-42 105 28 45 55-30 40-95-15-40 35-80-35z"/><path class="map-land" d="M500 205l110-20 65 70-28 145-72 50-45-95-48-70z"/><path class="map-land" d="M650 105l190-55 105 55-35 95-105 12-55 75-100-30-45-80z"/><path class="map-land" d="M820 330l75-25 65 55-40 70-80-20z"/><path class="map-graticule" d="M0 125h1000M0 250h1000M0 375h1000M250 0v500M500 0v500M750 0v500"/></g><g data-marker-layer></g></svg></div><aside class="map-detail" data-map-detail aria-live="polite"><span>Project location</span><h3>Select a marker</h3><p>Choose a location to explore programmes and published beneficiary information.</p></aside></div></div></section>
+<section class="section" id="programmes"><div class="shell"><div class="section-heading centered"><p class="eyebrow">Programme outcomes</p><h2>From headline totals to measurable change.</h2><p>Each programme page separates published results from the indicators WHSF should collect next.</p></div><div class="programme-outcome-grid" data-programme-outcomes></div></div></section>
+<section class="section section-tint"><div class="shell trust-link-grid"><article class="evidence-card"><p class="eyebrow">Leadership &amp; governance</p><h3>How WHSF is directed and held accountable</h3><p>Review the governance structure, leadership publication standard, policies and accountability commitments.</p><a class="arrow-link" href="governance.html">Open governance section <span>→</span></a></article><article class="evidence-card"><p class="eyebrow">Reports &amp; transparency</p><h3>A public register for reports and financial information</h3><p>See what is available, what is pending publication and how to request supporting documents.</p><a class="arrow-link" href="transparency.html">Open transparency register <span>→</span></a></article></div></section>
+</main>
+<footer class="site-footer"><div class="shell footer-grid"><div class="footer-brand"><img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem"><div><strong>World Humanitarian<br>Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>WHSF is a 501(c)(3) charity. Donations are tax deductible.</p></div></div><div class="footer-links"><div><strong>Evidence</strong><a href="#dashboard">Impact metrics</a><a href="#map">Project map</a><a href="#programmes">Programme outcomes</a></div><div><strong>Accountability</strong><a href="governance.html">Governance</a><a href="transparency.html">Reports &amp; transparency</a><a href="contact.html">Contact WHSF</a></div></div></div><div class="shell footer-bottom"><p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p><a href="#top">Back to top ↑</a></div></footer>
+</body></html>
