@@ -6,17 +6,17 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.worldhsfoundation.org/about</loc>
+    <loc>https://www.worldhsfoundation.org/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.worldhsfoundation.org/e-classroom</loc>
+    <loc>https://www.worldhsfoundation.org/e-classroom.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.worldhsfoundation.org/programs</loc>
+    <loc>https://www.worldhsfoundation.org/programs.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -46,17 +46,17 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.worldhsfoundation.org/impact-dashboard</loc>
+    <loc>https://www.worldhsfoundation.org/impact-dashboard.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.worldhsfoundation.org/partner-sponsor</loc>
+    <loc>https://www.worldhsfoundation.org/partner-sponsor.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.worldhsfoundation.org/verify-certificate</loc>
+    <loc>https://www.worldhsfoundation.org/verify-certificate.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
