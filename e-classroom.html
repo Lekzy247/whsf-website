@@ -167,7 +167,7 @@ const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
       const authLoginLinks = document.querySelectorAll('[data-auth-login]');
       const authSignoutButtons = document.querySelectorAll('[data-auth-signout]');
 
-      const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+      const academyEscapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
 
       const localAiCourseTracks = [
         { title: 'AI for Agriculture', slug: 'ai-for-agriculture', category: 'AI Agriculture', summary: 'Develop practical tools for crop disease detection, soil analysis, weather intelligence, pest monitoring, market prices and smart irrigation guidance.', level: 'Beginner', duration_weeks: 6, delivery_mode: 'Animated + project-based' },
@@ -261,12 +261,12 @@ const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
 
         courseGrid.innerHTML = mergedCourses
           .map((course) => `
-            <article class="course-card reveal visible" data-code="${escapeHtml(String(course.title || 'WHSF COURSE').toUpperCase())}" data-cartoon="${escapeHtml(getCourseCartoon(course))}">
-              <span>${escapeHtml(course.category)}</span>
-              <h3>${escapeHtml(course.title)}</h3>
-              <p>${escapeHtml(course.summary)}</p>
-              <small>${escapeHtml(course.level)} • ${escapeHtml(course.duration_weeks)} weeks • ${escapeHtml(course.delivery_mode)}</small>
-              <a class="arrow-link course-open-link" href="e-classroom-course.html?course=${escapeHtml(course.slug)}${course.slug === 'ai-for-agriculture' ? '#video-modules' : ''}">Open course <span>→</span></a>
+            <article class="course-card reveal visible" data-code="${academyEscapeHtml(String(course.title || 'WHSF COURSE').toUpperCase())}" data-cartoon="${academyEscapeHtml(getCourseCartoon(course))}">
+              <span>${academyEscapeHtml(course.category)}</span>
+              <h3>${academyEscapeHtml(course.title)}</h3>
+              <p>${academyEscapeHtml(course.summary)}</p>
+              <small>${academyEscapeHtml(course.level)} • ${academyEscapeHtml(course.duration_weeks)} weeks • ${academyEscapeHtml(course.delivery_mode)}</small>
+              <a class="arrow-link course-open-link" href="e-classroom-course.html?course=${academyEscapeHtml(course.slug)}${course.slug === 'ai-for-agriculture' ? '#video-modules' : ''}">Open course <span>→</span></a>
             </article>
           `)
           .join('');
