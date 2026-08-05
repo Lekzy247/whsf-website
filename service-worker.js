@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v151';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v152';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -50,6 +50,7 @@ const WHSF_CORE_ASSETS = [
   '/content-hub.js',
   '/verify-certificate.html',
   '/styles.css',
+  '/homepage-reference.css',
   '/mil-platform.js',
   '/script.js',
   '/manifest.webmanifest',
