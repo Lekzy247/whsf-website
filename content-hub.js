@@ -10,7 +10,7 @@
     const type = newsFilter?.value || 'all';
     const query = (newsSearch?.value || '').trim().toLowerCase();
     const items = data.newsroom.filter(item => (type === 'all' || item.type === type) && (!query || (item.title + ' ' + item.summary).toLowerCase().includes(query)));
-    newsroomGrid.innerHTML = items.length ? items.map(item => `<article class="content-card"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.alt)}" loading="lazy"><div><span>${escapeHtml(item.type)} · ${escapeHtml(item.date || 'Programme story')}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p><a class="arrow-link" href="${escapeHtml(item.url)}">Read more <span>→</span></a></div></article>`).join('') : '<p class="dashboard-empty">No newsroom item matches this search.</p>';
+    newsroomGrid.innerHTML = items.length ? items.map(item => `<article class="content-card"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.alt)}" loading="lazy"><div><span>${escapeHtml(item.type)} · ${escapeHtml(item.date || 'Date not published')}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p><a class="arrow-link" href="${escapeHtml(item.url)}">Read more <span>→</span></a></div></article>`).join('') : '<p class="dashboard-empty">No newsroom item matches this search.</p>';
     document.querySelector('[data-news-count]')?.replaceChildren(document.createTextNode(`${items.length} item${items.length === 1 ? '' : 's'}`));
   };
   [newsFilter, newsSearch].filter(Boolean).forEach(node => node.addEventListener(node.tagName === 'INPUT' ? 'input' : 'change', renderNews));
