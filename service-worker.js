@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v148';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v149';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -41,6 +41,13 @@ const WHSF_CORE_ASSETS = [
   '/programme-ai-career-connect.html',
   '/governance.html',
   '/transparency.html',
+  '/responsible-ai.html',
+  '/newsroom.html',
+  '/media-library.html',
+  '/donor-portal.html',
+  '/corporate-partnerships.html',
+  '/content-data.js',
+  '/content-hub.js',
   '/verify-certificate.html',
   '/styles.css',
   '/mil-platform.js',

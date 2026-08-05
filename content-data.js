@@ -1,0 +1,22 @@
+window.WHSF_CONTENT_DATA = {
+  newsroom: [
+    { type:"Website update", date:"2026-08-04", title:"WHSF publishes a data-backed impact dashboard", summary:"The new dashboard brings published programme indicators, aggregate project locations and programme measurement frameworks into one accountable public view.", url:"impact-dashboard.html", image:"assets/home/data-cloud-infrastructure-skills.jpg", alt:"Technology and data learning at WHSF" },
+    { type:"Website update", date:"2026-08-04", title:"Governance and transparency registers added", summary:"Visitors can now see WHSF’s public governance standard, report availability and clear routes for due-diligence requests.", url:"governance.html", image:"assets/whsf-logo.jpg", alt:"WHSF emblem" },
+    { type:"Success story", date:null, title:"Girls building digital confidence through ICT", summary:"Girls in ICT Club learners gain practical exposure, mentorship, skills recognition and confidence to continue exploring technology.", url:"programme-girls-in-ict.html", image:"assets/programs/ict-girls-club-certificates.jpg", alt:"Girls in ICT Club learners celebrating certificates" },
+    { type:"Programme story", date:"2025", title:"Technology excursions make robotics tangible", summary:"Participants explored robotics, automation and practical engineering through guided, hands-on exposure.", url:"girls-in-ict-tech-excursion.html", image:"assets/experiences/girls-in-ict-tech-excursion/robot-control-experience.webp", alt:"Participant controlling a mobile robot" },
+    { type:"Success story", date:null, title:"Hands-on robotics reconnects curiosity and learning", summary:"Robotics and drone activities help underserved learners build STEM confidence, engineering thinking and problem-solving skills.", url:"programme-robotics-drones.html", image:"assets/gallery/project-17.jpg", alt:"Drone technology programme for girls and communities" },
+    { type:"Programme story", date:null, title:"Climate-smart learning connects technology and livelihoods", summary:"AgriSmart AI introduces girls to sustainability, climate-smart agriculture and practical digital tools.", url:"programme-agrismart-ai.html", image:"assets/programs/agrismart-ai-programme.png", alt:"Climate-smart agriculture and analytics" }
+  ],
+  resources: [
+    { category:"Programme", title:"Media Information Library programme", description:"Digital literacy, creative media, cybersecurity, trusted information and community leadership.", url:"media-information-library.html", format:"Interactive programme" },
+    { category:"Ethics", title:"Responsible AI & Ethics", description:"WHSF principles, human oversight, safeguarding and an ethical AI lifecycle.", url:"responsible-ai.html", format:"Policy framework" },
+    { category:"Evidence", title:"Impact Dashboard", description:"Published programme indicators, aggregate project map and measurement frameworks.", url:"impact-dashboard.html", format:"Interactive data" },
+    { category:"Media", title:"WHSF Newsroom", description:"Verified website updates, programme news and success stories.", url:"newsroom.html", format:"News and stories" },
+    { category:"Learning", title:"Fact-Checking Centre", description:"Tools and guidance for assessing sources, claims and digital information.", url:"fact-checking.html", format:"Learning tool" },
+    { category:"Safety", title:"Child Safeguarding Policy", description:"WHSF’s public child-safeguarding commitments and reporting route.", url:"child-safeguarding-policy.html", format:"Policy" },
+    { category:"Privacy", title:"Privacy Policy", description:"How WHSF handles personal information and website privacy.", url:"privacy-policy.html", format:"Policy" },
+    { category:"Careers", title:"AI Career Connect", description:"Education, mentorship, skills profiles and opportunity pathways.", url:"ai-career-connect/", format:"Digital platform" },
+    { category:"Agriculture", title:"AgriSmart AI", description:"Climate-smart agriculture, sustainability and applied technology.", url:"agrismart/", format:"Digital platform" },
+    { category:"Media", title:"WHSF YouTube channel", description:"Programme videos, community activities and public media.", url:"https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ", format:"External media" }
+  ]
+};
