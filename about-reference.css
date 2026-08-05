@@ -1,3 +1,4 @@
+.about-reference h1,.about-reference h2,.about-reference h3{font-family:"DM Sans",Arial,sans-serif}
 .about-reference{--ab-wine:#8f1f3d;--ab-wine-dark:#6d1024;--ab-wine-deep:#3b0711;--ab-rose:#f8e9ed;--ab-ink:#111a36;--ab-muted:#566179;--ab-line:#eadce1;background:#fff;color:var(--ab-ink)}
 .about-reference main{overflow:hidden}
 .ab-eyebrow,.ab-section-kicker{margin:0 0 .55rem;color:var(--ab-wine);font-size:.74rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
