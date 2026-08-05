@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v158';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v159';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -53,6 +53,7 @@ const WHSF_CORE_ASSETS = [
   '/homepage-reference.css',
   '/about-reference.css',
   '/programs-reference.css',
+  '/e-learning-reference.css',
   '/mil-platform.js',
   '/script.js',
   '/manifest.webmanifest',

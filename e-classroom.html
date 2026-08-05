@@ -1,125 +1,121 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="WHSF e-learning provides accessible technology training pathways for ICT Girls Club, TechWomen and community learners."
-    />
-    <meta name="theme-color" content="#6d1024" />
-    <meta property="og:title" content="WHSF e-learning" />
-    <meta
-      property="og:description"
-      content="Accessible technology training in robotics, cybersecurity, drone technology, AI, STEM, eHealth and digital leadership."
-    />
-    <meta property="og:type" content="website" />
-    <title>WHSF e-learning</title>
-    <link rel="icon" href="assets/whsf-logo.jpg" />
-    <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="WHSF" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to main content</a>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="WHSF FutureTech Academy offers accessible e-learning in digital skills, responsible AI, robotics, cybersecurity, data, climate innovation and inclusive technology.">
+  <meta name="theme-color" content="#6d1024">
+  <meta property="og:title" content="WHSF FutureTech Academy">
+  <meta property="og:description" content="Flexible, practical technology learning with WHSF certificates and learner pathways.">
+  <meta property="og:type" content="website"><meta property="og:url" content="https://www.worldhsfoundation.org/e-classroom.html">
+  <title>WHSF e-learning</title>
+  <link rel="icon" href="assets/whsf-logo.jpg"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/whsf-logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=152"><link rel="stylesheet" href="homepage-reference.css?v=3"><link rel="stylesheet" href="e-learning-reference.css?v=1">
+  <script src="script.js" defer></script>
+</head>
+<body class="reference-home elearning-reference">
+  <a class="skip-link" href="#main">Skip to main content</a>
 
-    <div class="utility-bar">
-      <div class="shell utility-inner">
-        <p>Accessible learning for girls, women and community innovators</p>
-        <div class="utility-actions" aria-label="Accessibility controls">
-          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
-          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
-          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
-        </div>
-      </div>
+  <header class="rf-header" id="top">
+    <div class="rf-shell rf-header-inner">
+      <a class="rf-brand" href="index.html" aria-label="WHSF home">
+        <img src="assets/whsf-logo.jpg" width="56" height="56" alt="WHSF emblem">
+        <span class="rf-brand-copy"><strong>World Humanitarian Support Foundation</strong><span>Humanity. Inclusion. Sustainability.</span></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span></button>
+      <nav id="primary-navigation" class="primary-nav rf-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a><a href="about.html">About Us</a><a href="programs.html">Programs</a><a href="e-classroom.html" aria-current="page">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a><a class="rf-donate-nav" href="donor-portal.html">Donate Now ♡</a>
+      </nav>
     </div>
+  </header>
 
-    <header class="site-header" id="top">
-      <div class="shell nav-wrap">
-        <a class="brand" href="index.html#top" aria-label="WHSF home">
-          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
-          <span>
-            <strong>WHSF</strong>
-            <small>World Humanitarian Support Foundation</small>
-          </span>
-        </a>
+  <div class="el-context-bar" aria-label="e-learning account links">
+    <div class="rf-shell el-context-inner">
+      <strong>WHSF FutureTech Academy</strong>
+      <nav><a href="e-classroom-login.html" data-auth-login>Login / SignUp</a><a href="verify-certificate.html">Verify Certificate</a><a href="e-classroom-admin.html">Teacher/Admin</a><button type="button" data-auth-signout hidden>Sign out</button></nav>
+    </div>
+  </div>
 
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-          <span class="menu-lines" aria-hidden="true"></span>
-          <span class="sr-only">Open menu</span>
-        </button>
-
-        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-          <a href="index.html#top">Home</a>
-          <a href="about.html">About Us</a>
-          <div class="nav-dropdown classroom-nav-dropdown">
-            <button type="button" class="nav-dropdown-toggle" data-classroom-menu-toggle aria-expanded="false">
-              e-learning Menu <span aria-hidden="true">⌄</span>
-            </button>
-            <div class="nav-dropdown-panel" data-classroom-menu-panel hidden>
-              <a href="index.html#top">Home</a>
-              <a href="about.html">About Us</a>
-              <a href="#courses">Courses</a>
-              <a href="e-classroom-login.html" data-auth-login>Login / SignUp</a>
-              <a href="e-classroom-admin.html">Teacher/Admin</a>
-              <a href="verify-certificate.html">Verify Certificate</a>
-              
-              <a href="impact-dashboard.html">Impact Dashboard</a>
-              <a href="contact.html">Contact &amp; Support</a>
-            </div>
-          </div>
-          <a href="e-classroom-login.html" data-auth-login>Login / SignUp</a>
-          <a href="verify-certificate.html">Verify Certificate</a>
-          
-          <a href="impact-dashboard.html">Impact</a>
-          <a href="e-classroom-admin.html">Teacher/Admin</a>
-        </nav>
+  <main id="main">
+    <section class="el-hero" aria-labelledby="el-title">
+      <div class="el-hero-media"><img src="assets/home/data-cloud-infrastructure-skills.jpg" alt="Young women building data, cloud and digital infrastructure skills with WHSF"></div>
+      <div class="rf-shell el-hero-inner">
+        <div class="el-hero-copy">
+          <p class="el-eyebrow">WHSF e-learning platform</p>
+          <h1 id="el-title">Learn today.<span>Lead tomorrow.</span></h1>
+          <h2>Accessible. Flexible. Practical.</h2>
+          <p>FutureTech Academy provides self-paced technology learning designed to build digital skills, confidence and responsible innovation for education, work and community impact.</p>
+          <div class="el-actions"><a class="rf-button el-button-light" href="#learning-tracks">Explore learning tracks ↓</a><a class="rf-button el-button-outline" href="e-classroom-login.html" data-auth-login>Login / SignUp</a><button class="rf-button el-button-outline" type="button" data-auth-signout hidden>Sign out</button></div>
+          <div class="el-hero-features"><span>◷ Self-paced learning</span><span>◎ Learn from anywhere</span><span>◇ Certificate pathways</span></div>
+        </div>
+        <aside class="el-academy-card" aria-label="WHSF FutureTech Academy overview">
+          <p>FutureTech Academy</p>
+          <strong>12</strong><span>published learning tracks</span>
+          <div class="el-academy-progress"><i></i></div>
+          <dl><div><dt>Course enrolments</dt><dd>1,200</dd></div><div><dt>Certificates issued</dt><dd>950</dd></div></dl>
+          <a href="verify-certificate.html">Verify a certificate →</a>
+        </aside>
       </div>
-    </header>
+    </section>
 
-    <main id="main">
-      <section class="futuretech-academy-portal" aria-labelledby="futuretech-title">
-        <div class="futuretech-auth-top">
-          <a href="e-classroom-login.html" data-auth-login>Login / SignUp</a>
-          <button class="course-top-signout" type="button" data-auth-signout hidden>Sign out</button>
-        </div>
-        <div class="shell futuretech-academy-grid">
-          <div class="futuretech-copy reveal">
-            <h1 id="futuretech-title">Welcome to <strong>WHSF FutureTech Academy</strong></h1>
-            <p>
-              Practical online and hybrid technology training in robotics, artificial intelligence,
-              digital inclusion, cybersecurity, STEM and responsible innovation.
-            </p>
-            <div class="hero-actions">
-              <a class="button academy-register-button" href="e-classroom-login.html?mode=signup" data-auth-login>Register</a>
-              <a class="button button-light" href="e-classroom-login.html" data-auth-login>Login</a>
-            </div>
-          </div>
-          <div class="futuretech-video-panel reveal delay-one" aria-label="WHSF FutureTech Academy welcome video">
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/QjVZSWX7IQY?rel=0&modestbranding=1&playsinline=1"
-              title="WHSF FutureTech Academy welcome video"
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen>
-            </iframe>
+    <section class="el-categories" aria-label="Learning categories">
+      <div class="rf-shell el-category-grid">
+        <a href="#learning-tracks"><span>D</span>Digital foundations</a>
+        <a href="#learning-tracks"><span>AI</span>AI &amp; data</a>
+        <a href="#learning-tracks"><span>R</span>Robotics &amp; drones</a>
+        <a href="#learning-tracks"><span>S</span>Cybersecurity</a>
+        <a href="#learning-tracks"><span>C</span>Climate technology</a>
+        <a href="#learning-tracks"><span>A</span>Accessibility</a>
+        <a href="#learning-tracks"><span>H</span>Health technology</a>
+        <a href="#learning-tracks"><span>P</span>Projects &amp; careers</a>
+      </div>
+    </section>
+
+    <section class="el-tracks" id="learning-tracks" aria-labelledby="tracks-title">
+      <div class="rf-shell el-tracks-layout">
+        <div>
+          <div class="el-section-heading el-section-heading-left"><p class="el-section-kicker">Explore learning</p><h2 id="tracks-title">Popular WHSF learning tracks</h2><p>Start with practical foundations, then continue into responsible AI, data, automation and applied technology.</p></div>
+          <div class="el-preview-grid">
+            <article class="el-preview-card"><img src="assets/home/girls-in-ai-africa.jpg" alt="Learners building digital confidence"><div><span>Digital foundations</span><h3>Digital Literacy &amp; Productivity</h3><p>Computer basics, email, documents, spreadsheets, presentations and responsible online learning.</p><small>Foundation pathway</small><a href="e-classroom-course.html?course=digital-literacy-productivity">Open track →</a></div></article>
+            <article class="el-preview-card"><img src="assets/home/data-cloud-infrastructure-skills.jpg" alt="Young women exploring AI and data skills"><div><span>Artificial intelligence</span><h3>AI &amp; Integration</h3><p>AI literacy, prompts, responsible AI, automation workflows and practical tools for learning and work.</p><small>Beginner · 5 weeks · online</small><a href="e-classroom-course.html?course=robotics-automation">Open track →</a></div></article>
+            <article class="el-preview-card"><img src="assets/home/ai-and-robotics.jpg" alt="Learners exploring robotics and automation"><div><span>STEM maker pathway</span><h3>Robotics &amp; Automation</h3><p>Sensors, motors, simple machines, robotics logic and practical automation projects.</p><small>Beginner · 6 weeks · hybrid</small><a href="e-classroom-course.html?course=ai-integration">Open track →</a></div></article>
+            <article class="el-preview-card"><img src="gallery/data-center-techwomen.jpg" alt="Women exploring data and technology careers"><div><span>Data skills</span><h3>Data Analytics &amp; Visualization</h3><p>Use data to tell stories, measure impact and support better decisions with evidence.</p><small>Practical data pathway</small><a href="e-classroom-course.html?course=data-analytics-visualization">Open track →</a></div></article>
           </div>
         </div>
-      </section>
+        <aside class="el-paths" aria-labelledby="paths-title">
+          <p class="el-section-kicker">Learning paths</p><h2 id="paths-title">Choose your pathway</h2><p>Build skills step by step through connected topics.</p>
+          <a href="e-classroom-login.html?mode=signup"><span>01</span><div><strong>Digital confidence</strong><small>Foundations, productivity and safety</small></div><b>→</b></a>
+          <a href="e-classroom-login.html?mode=signup"><span>02</span><div><strong>AI &amp; data</strong><small>Responsible AI, analytics and information</small></div><b>→</b></a>
+          <a href="e-classroom-login.html?mode=signup"><span>03</span><div><strong>STEM maker</strong><small>Robotics, automation and drones</small></div><b>→</b></a>
+          <a href="e-classroom-login.html?mode=signup"><span>04</span><div><strong>Community technology</strong><small>Climate, agriculture, health and accessibility</small></div><b>→</b></a>
+          <a class="el-paths-button" href="e-classroom-login.html?mode=signup">Create a learner account →</a>
+        </aside>
+      </div>
+    </section>
 
-      <section class="section classroom-courses" id="courses" hidden>
-        <div class="shell course-grid" id="course-grid">
+    <section class="el-impact" aria-labelledby="el-impact-title">
+      <div class="rf-shell el-impact-grid">
+        <div><p class="el-section-kicker">Published indicators</p><h2 id="el-impact-title">Learning that builds opportunity</h2><p>Figures are aggregate records and may include learners who participated in more than one activity.</p></div>
+        <article><span aria-hidden="true">◎</span><strong data-count-target="1200">1,200</strong><p>Course enrolments</p></article>
+        <article><span aria-hidden="true">◇</span><strong data-count-target="950">950</strong><p>Certificates issued</p></article>
+        <article><span aria-hidden="true">▦</span><strong data-count-target="12">12</strong><p>Learning tracks</p></article>
+      </div>
+    </section>
+
+    <section class="el-how" aria-labelledby="how-title">
+      <div class="rf-shell el-how-grid">
+        <div class="el-video"><iframe src="https://www.youtube-nocookie.com/embed/QjVZSWX7IQY?rel=0&modestbranding=1&playsinline=1" title="WHSF FutureTech Academy welcome video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="el-how-copy"><p class="el-section-kicker">How it works</p><h2 id="how-title">A clear route from registration to recognition</h2>
+          <ol><li><span>01</span><div><h3>Create your account</h3><p>Register or sign in to access the full learning catalogue.</p></div></li><li><span>02</span><div><h3>Choose a course</h3><p>Select a pathway that matches your interests and goals.</p></div></li><li><span>03</span><div><h3>Learn at your pace</h3><p>Complete guided topics, practical activities and assessments.</p></div></li><li><span>04</span><div><h3>Earn and verify</h3><p>Eligible completions can lead to a WHSF certificate that can be verified online.</p></div></li></ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="el-catalogue" id="courses" hidden aria-labelledby="catalogue-title">
+      <div class="rf-shell">
+        <div class="el-section-heading"><p class="el-section-kicker">Your course catalogue</p><h2 id="catalogue-title">Continue learning</h2><p>Signed-in learners can open the complete WHSF FutureTech Academy catalogue below.</p></div>
+        <div class="course-grid" id="course-grid">
           <article class="course-card reveal" data-code="ARTIFICIAL INTELLIGENCE" data-cartoon="🧠"><span>Artificial Intelligence</span><h3>AI &amp; Integration</h3><p>Explore AI literacy, prompts, responsible AI, automation workflows and practical tools for learning and work.</p><small>Beginner • 5 weeks • online</small><a class="arrow-link course-open-link" href="e-classroom-course.html?course=robotics-automation">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="DIGITAL SAFETY & CYBERSECURITY" data-cartoon="🛡️"><span>Cybersecurity</span><h3>Digital Safety & Cybersecurity</h3><p>Learn safe internet use, privacy, phishing prevention, cyber hygiene and beginner security concepts.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=digital-safety-cybersecurity">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="DRONE TECHNOLOGY" data-cartoon="🛸"><span>Drone Tech</span><h3>Drone Technology</h3><p>Introduce drone safety, mapping, community use cases, STEM exploration and responsible drone operations.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=drone-technology">Open course <span>→</span></a></article>
@@ -135,36 +131,34 @@
           <article class="course-card reveal" data-code="AI FOR AGRICULTURE" data-cartoon="🌱"><span>AI Agriculture</span><h3>AI for Agriculture</h3><p>Develop practical tools for crop disease detection, soil analysis, weather intelligence, pest monitoring, market prices and smart irrigation guidance.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-for-agriculture#video-modules">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="AI FOR HEALTHCARE" data-cartoon="🩺"><span>AI Health</span><h3>AI for Healthcare</h3><p>Create solutions for telemedicine support, maternal health assistants, medical translation, symptom-triage guidance, health worker training and medical education chatbots.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-for-healthcare">Open course <span>→</span></a></article>
           <article class="course-card reveal" data-code="AI RAPID RESPONSE" data-cartoon="⚡"><span>Response</span><h3>AI Rapid Response</h3><p>Train learners to use AI responsibly for emergency communication, community coordination, disaster information, urgent support workflows and rapid decision support.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-rapid-response">Open course <span>→</span></a></article>
-          <article class="course-card reveal" data-code="AI MEDIA & INFORMATION COMMUNICATION" data-cartoon="ðŸ“¡"><span>Media AI</span><h3>AI Media & Information Communication</h3><p>Use AI for media literacy, public-interest communication, misinformation awareness, safe storytelling, content creation, translation and community education.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-media-information-communication">Open course <span>→</span></a></article>
+          <article class="course-card reveal" data-code="AI MEDIA & INFORMATION COMMUNICATION" data-cartoon="📡"><span>Media AI</span><h3>AI Media & Information Communication</h3><p>Use AI for media literacy, public-interest communication, misinformation awareness, safe storytelling, content creation, translation and community education.</p><a class="arrow-link course-open-link" href="e-classroom-course.html?course=ai-media-information-communication">Open course <span>→</span></a></article>
         </div>
-      </section>
-
-    </main>
-
-    <footer class="site-footer">
-      <div class="shell footer-grid">
-        <div class="footer-brand">
-          <img src="assets/whsf-logo.jpg" width="62" height="62" alt="WHSF emblem" />
-          <div><strong>World Humanitarian Support Foundation</strong><p>e-learning for inclusive technology learning.</p></div>
-        </div>
-        <div class="footer-links">
-          <div><strong>Classroom</strong><a href="e-classroom-login.html">Login / SignUp</a><a href="e-classroom-admin.html">Teacher/Admin</a><a href="verify-certificate.html">Verify Certificate</a></div>
-          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact WHSF</a><a href="impact-dashboard.html">Impact</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
-        </div>
-        <figure class="footer-award footer-award-image" aria-label="WHSF recognition">
-          <img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" />
-          <figcaption><strong>2025 London Data Center World Award Winner</strong></figcaption>
-        </figure>
       </div>
-      <div class="shell footer-bottom">
-        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
-        <a href="#top">Back to top ↑</a>
-      </div>
-    </footer>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-      const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
+    <section class="el-cta">
+      <div class="rf-shell el-cta-inner">
+        <div><p class="el-section-kicker">Ready to begin?</p><h2>Start building practical technology skills with WHSF.</h2><p>Create an account, choose a pathway and learn at a pace that works for you.</p></div>
+        <div class="el-cta-actions"><a class="rf-button el-button-light" href="e-classroom-login.html?mode=signup" data-auth-login>Create learner account →</a><a class="rf-button el-button-outline" href="verify-certificate.html">Verify certificate</a><button class="rf-button el-button-outline" type="button" data-auth-signout hidden>Sign out</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rf-footer">
+    <div class="rf-shell">
+      <div class="rf-footer-top el-footer-grid">
+        <div class="rf-footer-brand"><img src="assets/whsf-logo.jpg" alt="WHSF emblem"><div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div></div>
+        <div><h4>Academy</h4><nav><a href="e-classroom-login.html">Login / SignUp</a><a href="e-classroom-admin.html">Teacher/Admin</a><a href="verify-certificate.html">Verify Certificate</a><a href="#learning-tracks">Learning Tracks</a></nav></div>
+        <div><h4>Quick Links</h4><nav><a href="programs.html">Programs</a><a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner With Us</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
+        <div><h4>Contact Us</h4><div class="rf-footer-address"><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span><nav class="rf-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">▶</a></nav></div></div>
+      </div>
+      <div class="rf-footer-bottom">© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved. · <a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a></div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
       const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
       const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
 
@@ -189,7 +183,7 @@
         if (text.includes('health') || text.includes('ehealth')) return '🩺';
         if (text.includes('girls in ai')) return '👩🏾‍💻';
         if (text.includes('rapid') || text.includes('response')) return '⚡';
-        if (text.includes('media') || text.includes('information')) return 'ðŸ“¡';
+        if (text.includes('media') || text.includes('information')) return '📡';
         if (text.includes('robot')) return '🤖';
         if (text.includes('cyber') || text.includes('safety')) return '🛡️';
         if (text.includes('drone')) return '🛸';
@@ -286,6 +280,6 @@
         setCourseVisibility(Boolean(session?.user));
       });
       loadCoursesFromSupabase();
-    </script>
-  </body>
+  </script>
+</body>
 </html>
