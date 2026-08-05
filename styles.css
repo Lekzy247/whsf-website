@@ -7455,3 +7455,113 @@ body {
   line-height:1.15;
   letter-spacing:.01em;
 }
+
+
+/* Homepage depth refresh */
+.home-page {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(109,16,36,.12), transparent 34rem),
+    linear-gradient(180deg, #f3ece9 0%, #eee5e2 48%, #f5efec 100%);
+}
+.home-page .project-feature {
+  background: rgba(249,245,242,.92);
+}
+.home-page .path-finder-section,
+.home-page .partner-section {
+  background: #e8dedb;
+}
+.home-programme-intro {
+  position: relative;
+  overflow: hidden;
+  color: #fdf7f8;
+  background:
+    radial-gradient(circle at 85% 12%, rgba(214,165,74,.18), transparent 28rem),
+    linear-gradient(135deg, #261218 0%, #421523 54%, #5b192c 100%);
+}
+.home-programme-intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,255,255,.035), transparent 42%);
+}
+.home-programme-intro-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(280px,.78fr) minmax(0,1.42fr);
+  gap: clamp(2rem,5vw,4.5rem);
+  align-items: start;
+}
+.home-programme-intro-copy {
+  position: sticky;
+  top: 2rem;
+}
+.home-programme-intro h2,
+.home-programme-intro h3 {
+  color: #fff;
+}
+.home-programme-intro-copy .lead {
+  color: #f9e9ed;
+  font-size: 1.12rem;
+}
+.home-programme-intro-copy > p:not(.eyebrow):not(.lead) {
+  color: #dfcdd2;
+}
+.home-programme-outline {
+  border: 1px solid rgba(255,255,255,.7);
+  color: #fff;
+  background: transparent;
+}
+.home-programme-outline:hover,
+.home-programme-outline:focus {
+  color: #35131d;
+  background: #fff;
+}
+.home-programme-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 1rem;
+}
+.home-programme-card {
+  padding: 1.35rem;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 16px;
+  background: rgba(255,255,255,.075);
+  box-shadow: 0 18px 45px rgba(10,3,6,.16);
+  backdrop-filter: blur(8px);
+}
+.home-programme-card > span {
+  display: block;
+  color: #f2cf8b;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.home-programme-card h3 {
+  margin: .4rem 0 .6rem;
+  font-size: 1.32rem;
+}
+.home-programme-card p {
+  margin: 0 0 1rem;
+  color: #e5d6da;
+  font-size: .94rem;
+}
+.home-programme-card a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+.home-programme-card a:hover,
+.home-programme-card a:focus {
+  color: #f2cf8b;
+}
+@media (max-width: 900px) {
+  .home-programme-intro-grid { grid-template-columns: 1fr; }
+  .home-programme-intro-copy { position: static; }
+}
+@media (max-width: 640px) {
+  .home-programme-card-grid { grid-template-columns: 1fr; }
+  .home-programme-intro .hero-actions { align-items: stretch; }
+  .home-programme-intro .button { width: 100%; text-align: center; }
+}
