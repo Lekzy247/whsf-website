@@ -156,6 +156,14 @@ function initFooterSocialLogos() {
 
 initFooterSocialLogos();
 
+const homepageMain = document.querySelector('main#main');
+const homepageGallery = document.querySelector('#gallery.gallery-section');
+
+if (homepageMain && homepageGallery) {
+  homepageGallery.classList.add('home-top-gallery-section');
+  homepageMain.insertBefore(homepageGallery, homepageMain.firstElementChild);
+}
+
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') setMenu(false);
 });

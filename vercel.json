@@ -1,8 +1,16 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
+  "cleanUrls": false,
   "trailingSlash": false,
-  "rewrites": [],
+  "rewrites": [
+    {
+      "source": "/media-information-library",
+      "destination": "/media-information-library.html"
+    },
+    {
+      "source": "/media-information-library/",
+      "destination": "/media-information-library.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -67,77 +75,6 @@
           "value": "application/manifest+json; charset=utf-8"
         }
       ]
-    },
-    {
-      "source": "/post/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/programmes",
-      "destination": "/programs",
-      "permanent": true
-    },
-    {
-      "source": "/impact",
-      "destination": "/impact-dashboard",
-      "permanent": true
-    },
-    {
-      "source": "/partners",
-      "destination": "/partner-sponsor",
-      "permanent": true
-    },
-    {
-      "source": "/contact-us",
-      "destination": "/contact",
-      "permanent": true
-    },
-    {
-      "source": "/fr/home",
-      "destination": "/fr",
-      "permanent": true
-    },
-    {
-      "source": "/fr/about",
-      "destination": "/fr",
-      "permanent": true
-    },
-    {
-      "source": "/fr/programs",
-      "destination": "/fr/programmes",
-      "permanent": true
-    },
-    {
-      "source": "/fr/impact-dashboard",
-      "destination": "/fr/impact",
-      "permanent": true
-    },
-    {
-      "source": "/post/robotic-and-ai-innovation",
-      "destination": "/agrismart",
-      "permanent": true
-    },
-    {
-      "source": "/post/ict-for-girls-on-going-project",
-      "destination": "/programs",
-      "permanent": true
-    },
-    {
-      "source": "/post/drone-tech-program-dtp-1",
-      "destination": "/programs",
-      "permanent": true
-    },
-    {
-      "source": "/post/scholarship-award",
-      "destination": "/programs",
-      "permanent": true
     }
   ]
 }
