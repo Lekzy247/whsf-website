@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v162';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v163';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -25,6 +25,7 @@ const WHSF_CORE_ASSETS = [
   '/ai-career-connect/skills-passport.js',
   '/innovation.html',
   '/contact.html',
+  '/contact-reference.css',
   '/privacy-policy.html',
   '/child-safeguarding-policy.html',
   '/opportunities.html',
@@ -63,6 +64,7 @@ const WHSF_CORE_ASSETS = [
   '/assets/whsf-logo.jpg',
   '/assets/impact/whsf-girls-certificates-2026.jpg',
   '/assets/partners/whsf-partnership-recognition.jpg',
+  '/assets/contact/whsf-contact-learner.jpg',
   '/assets/awards/london-data-center-world-award-2025-winner.jpg',
   '/assets/about/about-us-board.webp',
   '/assets/programs/ai-career-connect-social.png',
