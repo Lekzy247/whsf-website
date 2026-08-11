@@ -79,7 +79,7 @@
 .pg-cta-actions{display:flex;flex:0 0 auto;gap:.75rem}
 .pg-partners{padding:2.4rem 0;background:#fff;text-align:center}
 .pg-partner-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2rem;align-items:center;margin-top:1.2rem}
-.pg-partner-grid img{width:auto;max-width:150px;max-height:56px;margin:auto;object-fit:contain;filter:saturate(.9)}
+.pg-partner-grid a{display:grid;min-height:64px;place-items:center;text-decoration:none}\n.pg-partner-grid img{width:auto;max-width:150px;max-height:56px;margin:auto;object-fit:contain;filter:saturate(.9)}
 .programs-reference .pg-footer-grid{grid-template-columns:1.45fr .85fr .9fr 1.15fr}
 @media(max-width:1080px){
   .pg-programme-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
