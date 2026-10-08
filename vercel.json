@@ -75,6 +75,18 @@
           "value": "application/manifest+json; charset=utf-8"
         }
       ]
+    },
+    {
+      "source": "/mobile-app-admin(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/e-classroom-admin(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
+  ],
+  "redirects": [
+    { "source": "/whsf-website", "destination": "/", "permanent": true },
+    { "source": "/whsf-website/:path*", "destination": "/", "permanent": true }
   ]
 }
