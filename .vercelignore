@@ -1,0 +1,10 @@
+# Repo-only files: keep them in Git, never serve them on the website.
+*.sql
+supabase/
+docs/
+scripts/
+.github/
+README.md
+.env.example
+vercel-redeploy.txt
+.redeploy-clean-site

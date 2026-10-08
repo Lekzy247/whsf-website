@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v167';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v168';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -67,11 +67,9 @@ const WHSF_CORE_ASSETS = [
   '/assets/contact/whsf-contact-learner.jpg',
   '/assets/programs/whsf-drone-practical-header.jpg',
   '/assets/awards/london-data-center-world-award-2025-winner.jpg',
-  '/assets/about/about-us-board.webp',
-  '/assets/programs/ai-career-connect-social.png',
-  '/assets/programs/agrismart-ai-programme.png',
-  '/assets/programs/ai-career-connect-programme.png',
-  '/assets/programs/media-information-library.png'
+  '/assets/programs/agrismart-ai-programme.jpg',
+  '/assets/programs/ai-career-connect-programme.jpg',
+  '/assets/programs/media-information-library.jpg'
 ];
 
 self.addEventListener('install', (event) => {
