@@ -133,7 +133,11 @@ export async function syncGrantsGov(db: SupabaseClient): Promise<{ fetched: numb
     .select('source_id, summary, details_fetched_at').eq('source', 'grants_gov');
   const knownById = new Map((known ?? []).map((row) => [row.source_id, row]));
 
+  // Grants.gov keeps some long-dead listings "posted"/"forecasted" with no close date;
+  // skip those once they are more than 18 months old.
+  const staleBefore = new Date(Date.now() - 548 * 864e5).toISOString().slice(0, 10);
   const relevant = [...hits.values()].filter((hit) => {
+    if (!hit.closeDate && (toIsoDate(hit.openDate) ?? '') < staleBefore) return false;
     const saved = knownById.get(String(hit.id));
     return isWhsfRelevant(sectorsFor(hit.title, saved?.summary ?? ''));
   });

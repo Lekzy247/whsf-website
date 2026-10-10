@@ -29,7 +29,10 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="grants.css" />
     <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+    <script src="grants.js" defer></script>
       <meta property="og:site_name" content="World Humanitarian Support Foundation" />
     <meta property="og:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -91,6 +94,7 @@
             </p>
             <div class="hero-actions">
               <a class="button button-light" href="#opportunity-calendar">View opportunities</a>
+              <a class="button button-secondary" href="grants.html">Search grants &amp; funders</a>
             </div>
           </div>
           <aside class="opportunity-command-card reveal delay-one" aria-label="Opportunity summary">
@@ -102,6 +106,17 @@
               technology, education, youth and women-focused impact.
             </p>
           </aside>
+        </div>
+      </section>
+
+      <section class="section opportunity-calendar-section" id="un-events" data-live-events hidden>
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Live from Indico.UN</p>
+            <h2>Upcoming UN meetings and conferences</h2>
+            <p>Public UN events relevant to WHSF's work, imported daily and checked by WHSF before they appear.</p>
+          </div>
+          <div class="opportunity-grid" data-live-events-grid aria-live="polite"></div>
         </div>
       </section>
 
