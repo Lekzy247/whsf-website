@@ -27,8 +27,9 @@ export type Item = {
 
 const SECTOR_RULES: [string, RegExp][] = [
   ['ai', /\bartificial intelligence\b|\bmachine learning\b|\bAI\b/],
-  ['ict', /\bICT\b|\bdigital\b|broadband|internet|computer|cyber|software|coding|technolog/i],
-  ['stem', /\bSTEM\b|\bscience\b|engineering|mathemat|robotic/i],
+  ['ict', /\bICT\b|\bdigital\b|broadband|internet|computer science|computing|cyber|software|coding|information technology|technology education|tech skills/i],
+  // Not bare "science"/"mathematics": that pulls in pure research grants (e.g. melanoma, mathematical biology).
+  ['stem', /\bSTEM\b|science education|science teach|computer science|engineering education|math(ematics)? education|robotic/i],
   ['education', /educat|school|teacher|literacy|curricul|student|learning|skills/i],
   ['womens_empowerment', /\bwomen\b|\bgirls?\b|gender|female/i],
   ['youth', /\byouth\b|young people|adolescen|\bchild(ren)?\b/i],
@@ -48,6 +49,9 @@ function sectorsFor(title: string, description = ''): string[] {
   return SECTOR_RULES.filter(([, re]) => re.test(text)).map(([s]) => s);
 }
 const isWhsfRelevant = (sectors: string[]) => sectors.some((s) => WHSF_FOCUS.has(s));
+// Clinical and biomedical research calls use "AI", "digital" and "technology" too, but are not WHSF's work.
+const MEDICAL_RESEARCH = /cancer|clinic|therapeut|tumou?r|melanoma|biomedic|precision medicine|\bdrugs?\b|disease|\bburns?\b|surgery|surgical|vaccine|genom|pharma/i;
+const isWhsfGrant = (title: string, sectors: string[]) => isWhsfRelevant(sectors) && !MEDICAL_RESEARCH.test(title);
 
 const ENTITIES: Record<string, string> = {
   nbsp: ' ', amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", rsquo: "'", lsquo: "'",
@@ -139,7 +143,7 @@ export async function syncGrantsGov(db: SupabaseClient): Promise<{ fetched: numb
   const relevant = [...hits.values()].filter((hit) => {
     if (!hit.closeDate && (toIsoDate(hit.openDate) ?? '') < staleBefore) return false;
     const saved = knownById.get(String(hit.id));
-    return isWhsfRelevant(sectorsFor(hit.title, saved?.summary ?? ''));
+    return isWhsfGrant(hit.title, sectorsFor(hit.title, saved?.summary ?? ''));
   });
   const needDetails = relevant.filter((hit) => !knownById.get(String(hit.id))?.details_fetched_at)
     .slice(0, MAX_DETAIL_FETCHES);
@@ -238,7 +242,7 @@ export async function syncEu(): Promise<{ fetched: number; items: Item[] }> {
     if (deadlines.length && !deadline) continue; // all deadlines passed
 
     const sectors = sectorsFor(`${title} ${callTitle}`, description);
-    if (!isWhsfRelevant(sectors)) continue;
+    if (!isWhsfGrant(`${title} ${callTitle}`, sectors)) continue;
 
     const type = String(first('type'));
     const portalUrl = String(first('url') || res.url || '');
