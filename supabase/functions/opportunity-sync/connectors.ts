@@ -201,15 +201,27 @@ export async function syncEu(): Promise<{ fetched: number; items: Item[] }> {
   const query = JSON.stringify({
     bool: { must: [{ terms: { type: ['1', '2', '8'] } }, { terms: { status: Object.values(EU_STATUS) } }] },
   });
+  let failures = 0;
+  let lastError = '';
   for (const text of EU_KEYWORDS) {
-    const form = new FormData();
-    form.append('query', new Blob([query], { type: 'application/json' }));
-    form.append('languages', new Blob(['["en"]'], { type: 'application/json' }));
-    const url = 'https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&pageSize=50&pageNumber=1&text='
+    const url = 'https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&pageSize=25&pageNumber=1&text='
       + encodeURIComponent(text);
-    const r = await fetchJson(url, { method: 'POST', body: form });
-    for (const res of r?.results ?? []) if (res?.reference) seen.set(res.reference, res);
+    // The EU endpoint sometimes drops the connection mid-response; retry once per keyword.
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const form = new FormData();
+        form.append('query', new Blob([query], { type: 'application/json' }));
+        form.append('languages', new Blob(['["en"]'], { type: 'application/json' }));
+        // Compressed responses from this endpoint break off when read from Supabase's network.
+        const r = await fetchJson(url, { method: 'POST', body: form, headers: { 'Accept-Encoding': 'identity' } }, 40000);
+        for (const res of r?.results ?? []) if (res?.reference) seen.set(res.reference, res);
+        break;
+      } catch (err) {
+        if (attempt === 2) { failures++; lastError = String((err as Error).message ?? err); }
+      }
+    }
   }
+  if (failures === EU_KEYWORDS.length) throw new Error(`EU portal unreachable: ${lastError}`);
 
   const today = new Date().toISOString().slice(0, 10);
   const items: Item[] = [];
@@ -260,13 +272,59 @@ export async function syncEu(): Promise<{ fetched: number; items: Item[] }> {
 
 const UN_EVENT_KEYWORDS = /ECOSOC|\bSDGs?\b|sustainable development|civil society|\bNGOs?\b|youth|women|girls|gender|digital|technolog|education|innovation|artificial intelligence|\bICT\b|science/i;
 
+// Public UN-entity categories on indico.un.org (DESA, DGC, ECA, ECE, ECLAC, ESCAP, HRC, OHCHR,
+// NGO Liaison UNOG, ODA, ODG, UNCITRAL, UNCTAD, UNEP, UNESCO, UNHCR, UNODC, Conferences,
+// Other Events, Special Events). The root category (0) exports nothing, and "Internal" is left out.
+const INDICO_DEFAULT_CATEGORIES = '583,101702,587,809,101348,1306,885,800,720,722,891,100404,807,810,741,745,815,200,1128,1689';
+
+function indicoCategories(): string[] {
+  return (Deno.env.get('INDICO_UN_CATEGORIES') || INDICO_DEFAULT_CATEGORIES).split(/[\s,]+/).filter((c) => /^\d+$/.test(c));
+}
+
+// Without a token (or if the export API returns nothing), read the public Atom feeds:
+// they only ever contain public events, but carry just title, link and start time.
+async function indicoFromAtom(categories: string[]): Promise<{ fetched: number; items: Item[] }> {
+  const today = new Date().toISOString().slice(0, 10);
+  const seen = new Map<string, Item>();
+  let fetched = 0;
+  await mapLimit(categories, 4, async (cat) => {
+    try {
+      const res = await fetch(`https://indico.un.org/category/${cat}/events.atom`, { signal: AbortSignal.timeout(25000) });
+      if (!res.ok) return;
+      const xml = await res.text();
+      const feedName = stripHtml(xml.match(/<title>Indico Feed \[([^\]]*)\]<\/title>/)?.[1] ?? 'United Nations');
+      for (const entry of xml.split('<entry>').slice(1)) {
+        fetched++;
+        const link = entry.match(/<link href="([^"]+)"/)?.[1] ?? '';
+        const id = link.match(/\/event\/(\d+)/)?.[1];
+        const title = stripHtml(entry.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? '');
+        const start = toIsoDate(entry.match(/<updated>([^<]+)<\/updated>/)?.[1]);
+        if (!id || !title || !start || start < today || seen.has(id)) continue;
+        if (!UN_EVENT_KEYWORDS.test(`${title} ${feedName}`)) continue;
+        seen.set(id, {
+          source_id: id, title, funder_name: feedName, summary: '', url: link,
+          countries: ['GLOBAL'], location: '', sectors: sectorsFor(`${title} ${feedName}`),
+          open_date: start, deadline: start, deadline_note: 'Event start date', status: 'open',
+          raw: { via: 'atom', categoryId: cat }, detailed: false,
+        });
+      }
+    } catch { /* one feed failing should not stop the rest */ }
+  });
+  return { fetched, items: [...seen.values()] };
+}
+
 export async function syncIndico(): Promise<{ fetched: number; items: Item[]; skipped?: string }> {
+  const categories = indicoCategories();
   const token = Deno.env.get('INDICO_UN_TOKEN');
-  if (!token) return { fetched: 0, items: [], skipped: 'INDICO_UN_TOKEN secret is not set' };
-  const categories = (Deno.env.get('INDICO_UN_CATEGORIES') || '0').replace(/\s/g, '').replace(/,/g, '-');
-  const url = `https://indico.un.org/export/categ/${categories}.json?from=today&to=%2B180d&limit=1000&order=start`;
-  const r = await fetchJson(url, { headers: { Authorization: `Bearer ${token}` } }, 45000);
-  const results: any[] = r?.results ?? [];
+  if (!token) return indicoFromAtom(categories);
+
+  const url = `https://indico.un.org/export/categ/${categories.join('-')}.json?from=today&to=%2B180d&onlypublic=yes&order=start`;
+  let results: any[] = [];
+  try {
+    const r = await fetchJson(url, { headers: { Authorization: `Bearer ${token}` } }, 45000);
+    results = r?.results ?? [];
+  } catch { /* fall back to the public feeds below */ }
+  if (!results.length) return indicoFromAtom(categories);
 
   const items: Item[] = [];
   for (const ev of results) {
@@ -289,7 +347,7 @@ export async function syncIndico(): Promise<{ fetched: number; items: Item[]; sk
       deadline: end,
       deadline_note: 'Event dates (start – end)',
       status: 'open',
-      raw: { type: ev.type ?? '', categoryId: ev.categoryId ?? null, timezone: ev.timezone ?? '' },
+      raw: { via: 'export', type: ev.type ?? '', categoryId: ev.categoryId ?? null, timezone: ev.timezone ?? '' },
       detailed: true,
     });
   }

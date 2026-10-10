@@ -1,7 +1,7 @@
 -- Daily run of the opportunity-sync Edge Function (apply after the function is deployed).
 -- The function needs no key: unforced calls are limited to one run per source every 6 hours.
 create extension if not exists pg_cron;
-create extension if not exists pg_net;
+create extension if not exists pg_net with schema extensions;
 
 select cron.unschedule('whsf-opportunity-sync')
 where exists (select 1 from cron.job where jobname = 'whsf-opportunity-sync');

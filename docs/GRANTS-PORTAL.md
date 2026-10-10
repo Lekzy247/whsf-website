@@ -34,7 +34,7 @@ Public page: `grants.html` · Admin: `grants-admin.html` · UN events also appea
 |---|---|---|
 | Grants.gov `search2` + `fetchOpportunity` | Free, no key | US federal; WHSF is eligible as a 501(c)(3). Details fetched for 40 new grants per run. Listings with no close date older than 18 months are skipped; far-future placeholder dates show as "open until further notice". |
 | EU Funding & Tenders search API | Free, public (`apiKey=SEDIA`) | Used by the EU portal itself but not formally documented, so it may change. Calls, topics and cascade (third-party) calls, open or forthcoming. |
-| Indico.UN `/export/categ/<ids>.json` | Personal API token | Refused without `Authorization: Bearer`. Optional `INDICO_UN_CATEGORIES` (comma-separated ids, default `0` = everything visible to the token). |
+| Indico.UN `/export/categ/<ids>.json` | Personal API token | Refused without `Authorization: Bearer`; called with `onlypublic=yes` over the UN-entity categories (DESA, ECA, UNESCO, NGO Liaison UNOG… set `INDICO_UN_CATEGORIES` to override). The root category exports nothing. If the token is missing or the export returns nothing, the public Atom feeds (`/category/<id>/events.atom`, public events only: title, link, start date) are used instead. |
 | Added by WHSF | Admin page | For foundations without APIs (Mastercard, Gates, Google.org, UN agencies…). |
 
 Considered for later: Simpler.Grants.gov API (free key, still changing), ProPublica Nonprofit Explorer (US
@@ -44,13 +44,16 @@ API or permission (e.g. fundsforngos, Instrumentl) are not scraped.
 
 ## Operating it
 
-1. Deploy the function: `supabase functions deploy opportunity-sync --no-verify-jwt --project-ref ophymlgqnfilgxsuzcuz`
-   (the function enforces its own limits: anyone may trigger a normal run at most every 6 hours; only a signed-in
-   grants admin can force one).
-2. Add the secret in Supabase → Edge Functions → Secrets: `INDICO_UN_TOKEN` (from Indico.UN → My profile →
-   API tokens; read-only scope is enough).
-3. Apply `supabase/migrations/20261011_grant_portal_schedule.sql` to run the import every day at 05:15 UTC.
-4. Sign in at `/grants-admin.html` and review the pending EU calls and UN events.
+Status (2026-10-11): function deployed (`--no-verify-jwt`; it enforces its own limits: anyone may trigger a
+normal run at most every 6 hours, only a signed-in grants admin can force one) and scheduled daily at 05:15 UTC
+(pg_cron job `whsf-opportunity-sync`). First runs: Grants.gov 204 live, EU 60 pending, Indico.UN 101 pending
+(via the public feeds).
+
+- Redeploy after changes: `supabase functions deploy opportunity-sync --no-verify-jwt --project-ref ophymlgqnfilgxsuzcuz`
+- `INDICO_UN_TOKEN` (Supabase → Edge Functions → Secrets) must have the read-only "Classic API" scope for the
+  richer export; otherwise the public feeds are used.
+- The EU endpoint drops compressed responses when read from Supabase, so requests ask for `identity` encoding.
+- Review pending EU calls and UN events at `/grants-admin.html`.
 
 ## Roadmap
 
