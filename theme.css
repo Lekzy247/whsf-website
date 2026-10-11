@@ -208,3 +208,6 @@ h1 { letter-spacing: -.05em; }
   .brand img { width: 40px; height: 40px; }
   .brand strong { font-size: 1.15rem; }
 }
+
+/* Staff verification: hint under the official email field. */
+.staff-verify-hint { margin: -4px 0 14px; color: var(--wx-muted); font-size: .8rem; line-height: 1.5; }

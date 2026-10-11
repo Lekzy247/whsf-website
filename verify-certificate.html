@@ -37,7 +37,7 @@
     <meta property="og:image:alt" content="WHSF Girls Club members learning with computers" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
-  <link rel="stylesheet" href="/theme.css">
+  <link rel="stylesheet" href="/theme.css?v=2">
 </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -387,6 +387,11 @@
                 <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: (424)-(396)-(9671)" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code, for example (424)-(396)-(9671)" autocomplete="tel-national" required />
               </label>
             </div>
+            <label>
+              <span>Official WHSF email <small>(optional, but recommended)</small></span>
+              <input id="employee-email" name="employee_email" type="email" placeholder="Example: name@worldhsfoundation.org" autocomplete="off" spellcheck="false" />
+            </label>
+            <p class="staff-verify-hint">Enter the email address the person contacted you from. If it doesn't match their WHSF record, don't trust messages from it.</p>
             <button class="button" type="submit">Verify staff details</button>
             <p id="staff-verify-status" role="status">Enter staff details to begin verification review.</p>
           </form>
@@ -414,6 +419,10 @@
               <div>
                 <dt>Phone #</dt>
                 <dd id="staff-result-phone">—</dd>
+              </div>
+              <div>
+                <dt>Official email</dt>
+                <dd id="staff-result-email">Not checked</dd>
               </div>
               <div>
                 <dt>Status</dt>
@@ -760,6 +769,30 @@
           alert(phoneMismatchMessage);
           return;
         }
+
+        // If an email was given, it must also be this person's official WHSF email.
+        const employeeEmail = String(formData.get('employee_email') || '').trim().toLowerCase();
+        let emailResult = 'Not checked';
+        if (employeeEmail) {
+          const { data: emailData, error: emailError } = await whsfSupabase.rpc('verify_whsf_staff_contact', {
+            p_full_name: employeeName,
+            p_phone: '',
+            p_official_email: employeeEmail
+          });
+          if (emailError) {
+            setStaffStatus('Staff verification is temporarily unavailable. Please try again later or contact WHSF.');
+            return;
+          }
+          const emailMatches = (emailData?.[0]?.verification_status || '').toLowerCase().includes('official email');
+          if (!emailMatches) {
+            const emailMismatchMessage = `Name and phone number match WHSF staff records, but ${employeeEmail} is NOT this person's official WHSF email. Do not trust messages, payment requests or offers sent from that address. Report it through the Contact page.`;
+            setStaffStatus(emailMismatchMessage);
+            alert(emailMismatchMessage);
+            return;
+          }
+          emailResult = employeeEmail + ' (matches WHSF records)';
+        }
+        setText('#staff-result-email', emailResult);
 
         setText('#staff-result-name', verifiedStaff.full_name);
         setText('#staff-result-number', verifiedStaff.employee_number);
