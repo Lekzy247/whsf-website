@@ -1,10 +1,11 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v170';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v171';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
   '/',
   '/index.html',
-  '/about.html',  '/mobile-app-admin.html',
+  '/about.html',
+  '/mobile-app-admin.html',
   '/programs.html',
   '/robotic-drone-programme.html',
   '/girls-in-ict-tech-excursion.html',
@@ -18,7 +19,6 @@ const WHSF_CORE_ASSETS = [
   '/opportunities.html',
   '/innovation-support-building.html',
   '/student-projects.html',
-  '/e-classroom.html',
   '/impact-dashboard.html',
   '/impact-data.js',
   '/impact-experience.js',
@@ -35,7 +35,6 @@ const WHSF_CORE_ASSETS = [
   '/media-library.html',
   '/donor-portal.html',
   '/corporate-partnerships.html',
-  '/partner-reference.css',
   '/content-data.js',
   '/content-hub.js',
   '/verify-certificate.html',
@@ -43,7 +42,6 @@ const WHSF_CORE_ASSETS = [
   '/homepage-reference.css',
   '/about-reference.css',
   '/programs-reference.css',
-  '/e-learning-reference.css',
   '/mil-platform.js',
   '/script.js',
   '/manifest.webmanifest',

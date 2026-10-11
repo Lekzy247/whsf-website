@@ -97,6 +97,10 @@
     { "source": "/agrismart-app.html", "destination": "/programme-agrismart-ai.html", "permanent": true },
     { "source": "/mobile-app.html", "destination": "/programme-agrismart-ai.html", "permanent": true },
     { "source": "/ai-career-connect", "destination": "/programme-ai-career-connect.html", "permanent": true },
-    { "source": "/ai-career-connect/:path*", "destination": "/programme-ai-career-connect.html", "permanent": true }
+    { "source": "/ai-career-connect/:path*", "destination": "/programme-ai-career-connect.html", "permanent": true },
+    { "source": "/e-classroom.html", "destination": "/programs.html", "permanent": true },
+    { "source": "/e-classroom", "destination": "/programs.html", "permanent": true },
+    { "source": "/partner-sponsor.html", "destination": "/corporate-partnerships.html", "permanent": true },
+    { "source": "/partner-sponsor", "destination": "/corporate-partnerships.html", "permanent": true }
   ]
 }

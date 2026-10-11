@@ -282,10 +282,10 @@ const pathSecondaryAction = document.querySelector('#path-secondary-action');
 const pathContent = {
   student: {
     label: 'Student pathway',
-    title: 'Start or continue learning with WHSF e-learning.',
+    title: 'Start or continue learning with WHSF.',
     copy: 'Explore technology training in robotics, cybersecurity, drone technology, AI, STEM, eHealth and accessibility technology.',
-    primaryText: 'Open e-learning',
-    primaryHref: 'e-classroom.html',
+    primaryText: 'Explore programmes',
+    primaryHref: 'programs.html',
     secondaryText: 'Contact support',
     secondaryHref: 'contact.html',
     interest: 'e-learning support'
@@ -1474,10 +1474,10 @@ const whsfAssistantAnswers = [
   },
   {
     keys: ['e-classroom', 'classroom', 'course', 'student', 'lesson', 'assignment', 'certificate course', 'learning'],
-    title: 'WHSF e-learning',
-    answer: 'WHSF e-learning provides accessible courses connected to robotics, cybersecurity, drone technology, AI, data centre management, project management, eHealth, STEM, accessibility technology, agriculture, healthcare and media literacy. Learners can view lessons, submit assignments, track progress and receive certificates.',
-    link: 'e-classroom.html',
-    linkText: 'Open e-learning'
+    title: 'WHSF classroom',
+    answer: 'Learners enrolled in a WHSF programme can sign in to the WHSF classroom to view lessons, submit assignments, track progress and receive certificates. Certificates can be checked on the Verify Certificate page.',
+    link: 'e-classroom-login.html',
+    linkText: 'Learner sign in'
   },
   {
     keys: ['admin', 'teacher', 'teacher dashboard', 'course management', 'students'],
