@@ -246,3 +246,14 @@
   .impact-reference .im-dashboard { width: calc(100% - 24px); border-radius: 24px; }
   .impact-reference .im-dashboard > .rf-shell { width: calc(100% - 36px); }
 }
+
+/* ---------------------------------------------------------------- grants: live stats row inside the page hero */
+.gx-page-hero .gx-hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 150px)); gap: 10px; margin-top: 26px; }
+.gx-page-hero .gx-hero-stats div { padding: 14px 16px; border: 1px solid #f0dde6; border-radius: 18px; background: rgb(255 255 255 / 80%); }
+.gx-page-hero .gx-hero-stats strong { display: block; color: var(--wx-wine); font-size: 1.9rem; font-weight: 700; line-height: 1; letter-spacing: -.04em; }
+.gx-page-hero .gx-hero-stats span { display: block; margin-top: 6px; color: var(--wx-muted); font-size: 12px; font-weight: 600; }
+.gx-page-hero > .gx-note { margin-top: 16px; }
+@media (max-width: 620px) {
+  .gx-page-hero .gx-hero-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .gx-page-hero .gx-hero-stats strong { font-size: 1.4rem; }
+}
