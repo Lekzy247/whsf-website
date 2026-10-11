@@ -16,6 +16,8 @@
     interested: 'Interested', preparing: 'Preparing', submitted: 'Submitted',
     awarded: 'Awarded', declined: 'Declined', not_eligible: 'Not eligible',
   };
+  const SAVED_SELECT = 'id,opportunity_id,status,notes,draft,draft_updated_at,'
+    + 'whsf_opportunities(id,title,url,deadline,deadline_note,source,status)';
   const VERDICTS = {
     likely: { label: 'Likely eligible', rank: 0, cls: '' },
     possible: { label: 'Check the details', rank: 1, cls: 'is-forecast' },
@@ -184,6 +186,7 @@
         org = null;
         $('#matches').hidden = true;
         $('#tracker').hidden = true;
+        $('#proposal').hidden = true;
         if (wasSignedIn) setAuthStatus('Signed out.');
         return;
       }
@@ -254,11 +257,11 @@
       const [{ data: rows, error }, { data: savedRows }] = await Promise.all([
         db.from('whsf_opportunities')
           .select('id,source,title,funder_name,summary,url,countries,location,sectors,applicant_types,amount_min_usd,amount_max_usd,amount_note,open_date,deadline,deadline_note,status')
-          .eq('kind', 'grant').neq('status', 'closed')
+          .eq('kind', 'grant').eq('review_status', 'published').neq('status', 'closed')
           .or(`deadline.gte.${G.today()},deadline.is.null`)
           .limit(1000),
         db.from('whsf_grant_saved')
-          .select('id,opportunity_id,status,notes,whsf_opportunities(title,url,deadline,deadline_note,source,status)')
+          .select(SAVED_SELECT)
           .eq('org_id', org.id).order('created_at', { ascending: false }),
       ]);
       if (error) return G.message($('[data-match-results]'), 'Grants could not be loaded right now. Please try again shortly.', true);
@@ -295,7 +298,9 @@
         checklist,
       ]);
       card.insertBefore(details, card.querySelector('h3').nextSibling);
-      card.append(saveButton);
+      const draftButton = el('button', { class: 'button button-light button-small', type: 'button', text: 'Draft proposal' });
+      draftButton.addEventListener('click', () => openProposal(match.row));
+      card.append(el('div', { class: 'grant-card-actions' }, [saveButton, draftButton]));
       return card;
     }
 
@@ -326,12 +331,214 @@
     }));
     $('[data-match-more]').addEventListener('click', () => renderMatches(false));
 
+    // ------------------------------------------------------------ proposal assistant (no AI on WHSF's side)
+    const GRANT_FIELDS = 'id,source,title,funder_name,summary,url,countries,location,sectors,applicant_types,'
+      + 'amount_min_usd,amount_max_usd,amount_note,open_date,deadline,deadline_note,status';
+    const SOURCE_STEPS = {
+      grants_gov: [
+        'Register in SAM.gov for a Unique Entity ID (UEI); allow several weeks',
+        'Create a Grants.gov account and an organisation workspace',
+        'Download the application package and complete the required SF-424 forms',
+        'Read the full Notice of Funding Opportunity (NOFO) for page limits and scoring criteria',
+      ],
+      eu_ft: [
+        'Register your organisation on the EU Funding & Tenders Portal to get a PIC number',
+        'Find an EU-based lead or partners if the call requires a consortium',
+        'Use the official Part A (online forms) and Part B (technical description) templates',
+        'Check the call document for eligible countries, co-financing rate and page limits',
+      ],
+      manual: [
+        "Read the funder's guidelines and check whether they accept unsolicited proposals",
+        'Contact the funder if anything about eligibility is unclear',
+      ],
+    };
+    const ORG_NOUNS = {
+      nonprofit: 'a nonprofit organisation', us_nonprofit: 'a US 501(c)(3) nonprofit', school: 'a school',
+      university: 'a university', business: 'a social enterprise', individual: 'an individual applicant',
+      government: 'a government body',
+    };
+    let proposalGrant = null;
+
+    const money = (n) => (n ? `USD ${Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })}` : null);
+    function buildDraft(grant, profile) {
+      const sectors = (profile.sectors || []).map((s) => G.SECTOR_LABELS[s] || s).join(', ');
+      const overlap = (grant.sectors || []).filter((s) => (profile.sectors || []).includes(s)).map((s) => G.SECTOR_LABELS[s] || s);
+      const country = countryName(profile.country);
+      const where = [country, ...(profile.operating_countries || []).map(countryName)].join(', ');
+      const ask = money(grant.amount_max_usd) ? `[amount, up to ${money(grant.amount_max_usd)}]` : '[amount requested]';
+      const lines = [
+        `PROPOSAL DRAFT: ${grant.title}`,
+        `Funder: ${grant.funder_name || '[funder]'}`,
+        `Deadline: ${grant.deadline ? G.formatDate(grant.deadline) : (grant.deadline_note || '[check the call]')}`,
+        `Official call: ${grant.url || '[link]'}`,
+        '',
+        '1. SUMMARY',
+        `${profile.name} requests ${ask} to [one sentence: what you will do, for whom, where and by when].`,
+        `The project supports ${overlap.length ? overlap.join(', ') : '[the funder\'s priority area]'} in ${where}.`,
+        '',
+        '2. ABOUT THE ORGANISATION',
+        `${profile.name} is ${ORG_NOUNS[profile.org_type] || 'an organisation'} `
+          + `based in ${country}${profile.founded_year ? `, founded in ${profile.founded_year}` : ''}.`,
+        profile.description || '[What you do, who you serve and your main results so far.]',
+        `Areas of work: ${sectors || '[areas]'}.`,
+        profile.annual_budget_usd ? `Annual budget: ${money(profile.annual_budget_usd)}.` : 'Annual budget: [amount].',
+        profile.website ? `Website: ${profile.website}` : '',
+        '',
+        '3. THE NEED',
+        '[Describe the problem with local evidence: numbers, sources and who is affected. Link it to the funder\'s priorities.]',
+        '',
+        '4. PROJECT DESCRIPTION',
+        '[What you will do, the approach, and why it will work. Mention partners and how participants are reached.]',
+        '',
+        '5. OBJECTIVES AND EXPECTED RESULTS',
+        '- Objective 1: [specific, measurable, with a target and date]',
+        '- Objective 2: [ ]',
+        '- Objective 3: [ ]',
+        '',
+        '6. ACTIVITIES AND TIMELINE',
+        '| Month | Activity | Responsible |',
+        '| [1-2] | [ ] | [ ] |',
+        '| [3-6] | [ ] | [ ] |',
+        '',
+        '7. BUDGET SUMMARY',
+        `Total requested: ${ask}`,
+        '- Staff: [ ]',
+        '- Equipment and materials: [ ]',
+        '- Training / events: [ ]',
+        '- Monitoring and evaluation: [ ]',
+        '- Other (including any allowed indirect costs): [ ]',
+        '',
+        '8. MONITORING AND EVALUATION',
+        '[Indicators, how and when you will collect data, and how you will report to the funder.]',
+        '',
+        '9. SUSTAINABILITY',
+        '[How the results continue after the grant: partners, other funding, local ownership.]',
+        '',
+        '10. CONTACT',
+        `${profile.name} | [contact person, title] | ${session?.user?.email || '[email]'} | [phone]`,
+      ];
+      return lines.filter((line, i) => line !== '' || lines[i - 1] !== '').join('\n');
+    }
+
+    function buildPrompt(grant, profile, draft) {
+      return [
+        'You are helping a small organisation write a grant proposal. Improve the draft below so it is clear, specific and persuasive for this funder.',
+        'Rules: do not invent facts, numbers, partners or results; keep anything you cannot know as [placeholders] and list what the organisation must fill in; follow the funder\'s priorities; use plain English.',
+        '',
+        `GRANT: ${grant.title}`,
+        `Funder: ${grant.funder_name || 'unknown'}`,
+        `Deadline: ${grant.deadline || grant.deadline_note || 'see call'}`,
+        `Amount: ${money(grant.amount_max_usd) ? `up to ${money(grant.amount_max_usd)}` : (grant.amount_note || 'see call')}`,
+        `Official call: ${grant.url || ''}`,
+        `Summary of the call: ${G.truncate(grant.summary || 'not available; ask me to paste the call text', 1500)}`,
+        '',
+        `ORGANISATION: ${profile.name}, ${ORG_NOUNS[profile.org_type] || 'an organisation'} based in ${countryName(profile.country)}`,
+        `Works on: ${(profile.sectors || []).map((s) => G.SECTOR_LABELS[s] || s).join(', ')}`,
+        profile.description ? `About: ${profile.description}` : null,
+        '',
+        'MY DRAFT:',
+        draft,
+      ].filter((line) => line !== null).join('\n');
+    }
+
+    // Lets the template and prompt be checked with sample profiles (see evaluate above).
+    Object.assign(window.WHSFGrantMatch, { buildDraft, buildPrompt });
+
+    function renderProposalChecklist(grant) {
+      const { checks } = evaluate(grant, org);
+      const steps = SOURCE_STEPS[grant.source] || SOURCE_STEPS.manual;
+      $('[data-proposal-checklist]').replaceChildren(
+        ...checks.map((c) => el('li', { class: `is-${c.state}` }, [
+          el('span', { 'aria-hidden': 'true', text: c.state === 'pass' ? '✓' : c.state === 'fail' ? '✗' : '!' }), c.text,
+        ])),
+        ...steps.map((s) => el('li', { class: 'is-check' }, [el('span', { 'aria-hidden': 'true', text: '☐' }), s])),
+      );
+    }
+
+    async function openProposalById(opportunityId) {
+      const known = grants.find((g) => g.row.id === opportunityId)?.row;
+      if (known) return openProposal(known);
+      const { data, error } = await db.from('whsf_opportunities').select(GRANT_FIELDS).eq('id', opportunityId).maybeSingle();
+      if (error || !data) return ($('#tracker-status').textContent = 'That grant is no longer available.');
+      openProposal(data);
+    }
+
+    function openProposal(grant) {
+      proposalGrant = grant;
+      const entry = saved.get(grant.id);
+      $('#proposal').hidden = false;
+      $('[data-proposal-for]').textContent = `${grant.title} · ${grant.funder_name || ''}`;
+      $('#proposal-draft').value = entry?.draft || buildDraft(grant, org);
+      $('#proposal-status').textContent = entry?.draft_updated_at
+        ? `Your saved draft from ${new Date(entry.draft_updated_at).toLocaleString()}.`
+        : 'New draft from the template. Save it to keep it with this grant in your tracker.';
+      const call = $('[data-proposal-call]');
+      call.href = G.safeUrl(grant.url) || 'grants.html';
+      renderProposalChecklist(grant);
+      $('#proposal').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function copyText(text, statusText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        $('#proposal-status').textContent = statusText;
+      } catch {
+        $('#proposal-status').textContent = 'Copy was blocked by the browser. Select the text and copy it manually.';
+      }
+    }
+
+    $('#proposal-save').addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (!proposalGrant) return;
+      button.disabled = true;
+      const draft = $('#proposal-draft').value;
+      const now = new Date().toISOString();
+      let entry = saved.get(proposalGrant.id);
+      let error;
+      if (entry) {
+        ({ error } = await db.from('whsf_grant_saved').update({ draft, draft_updated_at: now, updated_at: now }).eq('id', entry.id));
+        if (!error) Object.assign(entry, { draft, draft_updated_at: now });
+      } else {
+        const result = await db.from('whsf_grant_saved')
+          .insert({ org_id: org.id, opportunity_id: proposalGrant.id, status: 'preparing', draft, draft_updated_at: now })
+          .select(SAVED_SELECT).single();
+        error = result.error;
+        if (!error) { entry = result.data; saved.set(proposalGrant.id, entry); }
+      }
+      button.disabled = false;
+      $('#proposal-status').textContent = error ? `Not saved: ${error.message}` : 'Draft saved with this grant in your tracker.';
+      if (!error) { renderTracker(); renderMatches(true); }
+    });
+    $('#proposal-copy').addEventListener('click', () => copyText($('#proposal-draft').value, 'Draft copied.'));
+    $('#proposal-download').addEventListener('click', () => {
+      if (!proposalGrant) return;
+      const blob = new Blob([$('#proposal-draft').value], { type: 'text/plain;charset=utf-8' });
+      const link = el('a', {
+        href: URL.createObjectURL(blob),
+        download: `proposal-${proposalGrant.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 60)}.txt`,
+      });
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    });
+    $('#proposal-reset').addEventListener('click', () => {
+      if (!proposalGrant) return;
+      $('#proposal-draft').value = buildDraft(proposalGrant, org);
+      $('#proposal-status').textContent = 'Template restored. Your saved draft is unchanged until you click "Save draft".';
+    });
+    $('#proposal-copy-prompt').addEventListener('click', () => {
+      if (!proposalGrant) return;
+      copyText(buildPrompt(proposalGrant, org, $('#proposal-draft').value),
+        'AI prompt copied. Open Claude or ChatGPT and paste it into a new chat.');
+    });
+
     // ------------------------------------------------------------ tracker
     async function saveGrant(row, button) {
       button.disabled = true;
       const { data, error } = await db.from('whsf_grant_saved')
         .insert({ org_id: org.id, opportunity_id: row.id })
-        .select('id,opportunity_id,status,notes,whsf_opportunities(title,url,deadline,deadline_note,source,status)').single();
+        .select(SAVED_SELECT).single();
       if (error) {
         button.disabled = false;
         $('#tracker-status').textContent = `Not saved: ${error.message}`;
@@ -381,7 +588,14 @@
           el('td', { text: deadline }),
           el('td', {}, status),
           el('td', {}, notes),
-          el('td', {}, remove),
+          el('td', {}, el('div', { class: 'grant-card-actions' }, [
+            (() => {
+              const draft = el('button', { type: 'button', class: 'button button-small', text: entry.draft ? 'Open draft' : 'Draft proposal' });
+              draft.addEventListener('click', () => openProposalById(entry.opportunity_id));
+              return draft;
+            })(),
+            remove,
+          ])),
         ]);
       }));
     }

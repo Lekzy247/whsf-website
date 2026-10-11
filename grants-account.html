@@ -203,6 +203,48 @@
           <small class="admin-form-status" id="tracker-status" role="status"></small>
         </div>
       </section>
+
+      <section class="section opportunity-calendar-section" id="proposal" hidden>
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Step 4</p>
+            <h2>Draft your proposal</h2>
+            <p data-proposal-for></p>
+          </div>
+          <div class="grant-proposal">
+            <div class="grant-proposal-main">
+              <p class="grant-admin-muted">
+                A starting draft built from your profile and this grant. Replace everything in [square brackets]
+                and follow the funder's own guidelines, word limits and forms.
+              </p>
+              <textarea id="proposal-draft" rows="28" maxlength="40000" aria-label="Proposal draft"></textarea>
+              <div class="hero-actions">
+                <button class="button" type="button" id="proposal-save">Save draft</button>
+                <button class="button button-light" type="button" id="proposal-copy">Copy draft</button>
+                <button class="button button-light" type="button" id="proposal-download">Download (.txt)</button>
+                <button class="button button-light" type="button" id="proposal-reset">Start again from template</button>
+              </div>
+              <small class="admin-form-status" id="proposal-status" role="status"></small>
+            </div>
+            <aside class="grant-proposal-side">
+              <h3>Before you submit</h3>
+              <ul class="grant-checklist" data-proposal-checklist></ul>
+              <h3>Improve it with your own AI</h3>
+              <p class="grant-admin-muted">
+                Copy a ready-made prompt with this grant, your profile and your draft, then paste it into your own
+                Claude or ChatGPT account. WHSF does not see that conversation or pay for it, and your AI provider's
+                terms apply. Check every fact it writes.
+              </p>
+              <div class="hero-actions">
+                <button class="button" type="button" id="proposal-copy-prompt">Copy AI prompt</button>
+                <a class="button button-light" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude</a>
+                <a class="button button-light" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Open ChatGPT</a>
+              </div>
+              <a class="arrow-link" href="#" target="_blank" rel="noopener noreferrer" data-proposal-call>Read the official call <span>→</span></a>
+            </aside>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">

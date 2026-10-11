@@ -152,7 +152,6 @@
 .grant-checklist .is-pass > span[aria-hidden] { color: #1f7a4d; }
 .grant-checklist .is-check > span[aria-hidden] { color: #a8701a; }
 .grant-checklist .is-fail > span[aria-hidden] { color: var(--red); }
-.grant-card > .button-small { margin-top: 12px; align-self: flex-start; }
 #tracker-table textarea, #tracker-table select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; font: inherit; }
 .grant-cta {
   max-width: 1040px; margin: 0 auto 24px; padding: 18px 22px;
@@ -161,6 +160,19 @@
 }
 .grant-cta p { margin: 0; color: rgba(255, 255, 255, .9); }
 .grant-cta strong { display: block; color: #fff; font-size: 1.05rem; }
+
+/* Proposal assistant (grants-account.html #proposal) */
+.grant-proposal { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 20px; align-items: start; }
+.grant-proposal-main, .grant-proposal-side { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); background: #fff; }
+.grant-proposal-main textarea {
+  width: 100%; margin: 10px 0 14px; padding: 14px; border: 1px solid var(--line); border-radius: 12px;
+  font: .92rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--ink); resize: vertical;
+}
+.grant-proposal-side h3 { margin: 0 0 10px; font-size: 1.05rem; }
+.grant-proposal-side h3:not(:first-child) { margin-top: 22px; }
+.grant-proposal-side .arrow-link { display: inline-block; margin-top: 18px; }
+.grant-card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+@media (max-width: 900px) { .grant-proposal { grid-template-columns: 1fr; } }
 
 /* Admin */
 .grant-admin-tabs { display: flex; flex-wrap: wrap; gap: 8px; }

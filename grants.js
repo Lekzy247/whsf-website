@@ -186,6 +186,8 @@
       let query = db.from('whsf_opportunities')
         .select('id,source,title,funder_name,summary,url,countries,location,sectors,applicant_types,amount_min_usd,amount_max_usd,amount_note,open_date,deadline,deadline_note,status', { count: 'exact' })
         .eq('kind', 'grant')
+        // RLS lets grants admins read unreviewed rows; the public list must not show them.
+        .eq('review_status', 'published')
         .neq('status', 'closed');
       if (filters.within) {
         query = query.gte('deadline', today()).lte('deadline', addDays(Number(filters.within)));
@@ -263,7 +265,7 @@
     }));
 
     db.from('whsf_funders').select('name,funder_type,headquarters,sectors,website,funding_page,summary')
-      .order('name').then(({ data, error }) => {
+      .eq('published', true).order('name').then(({ data, error }) => {
         if (error) return message(container, 'The funder directory could not be loaded right now.', true);
         funders = data;
         render('');
@@ -296,10 +298,10 @@
     const stat = (name) => document.querySelector(`[data-grant-stat="${name}"]`);
     if (!stat('open')) return;
     const base = () => db.from('whsf_opportunities').select('id', { count: 'exact', head: true })
-      .eq('kind', 'grant').neq('status', 'closed');
+      .eq('kind', 'grant').eq('review_status', 'published').neq('status', 'closed');
     base().or(`deadline.gte.${today()},deadline.is.null`).then(({ count }) => { stat('open').textContent = count ?? '–'; });
     base().gte('deadline', today()).lte('deadline', addDays(30)).then(({ count }) => { stat('soon').textContent = count ?? '–'; });
-    db.from('whsf_funders').select('id', { count: 'exact', head: true })
+    db.from('whsf_funders').select('id', { count: 'exact', head: true }).eq('published', true)
       .then(({ count }) => { stat('funders').textContent = count ?? '–'; });
   }
 
@@ -310,7 +312,7 @@
     const grid = section.querySelector('[data-live-events-grid]');
     db.from('whsf_opportunities')
       .select('title,funder_name,url,location,sectors,open_date,deadline')
-      .eq('kind', 'event').gte('deadline', today())
+      .eq('kind', 'event').eq('review_status', 'published').gte('deadline', today())
       .order('open_date', { ascending: true }).limit(12)
       .then(({ data, error }) => {
         if (error || !data?.length) return; // section stays hidden until events are approved
