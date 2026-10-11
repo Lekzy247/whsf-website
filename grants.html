@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Search open grants and funding opportunities for ICT, STEM, AI, education, youth and women's empowerment, plus a directory of donors and foundations. Curated by WHSF."
+    />
+    <meta name="theme-color" content="#6d1024" />
+    <meta property="og:title" content="Grant & Funding Opportunities Portal | WHSF" />
+    <meta
+      property="og:description"
+      content="Open grants from Grants.gov, the EU Funding & Tenders Portal and WHSF-verified funders, searchable by country, sector and deadline."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.worldhsfoundation.org/grants.html" />
+    <meta property="og:site_name" content="World Humanitarian Support Foundation" />
+    <meta property="og:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="WHSF Girls Club members learning with computers" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
+    <title>Grant & Funding Opportunities Portal | WHSF</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="WHSF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="grants.css" />
+    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+    <script src="grants.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="utility-bar">
+      <div class="shell utility-inner">
+        <p>Advancing dignity, inclusion and sustainable development</p>
+        <div class="utility-actions" aria-label="Accessibility controls">
+          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>World Humanitarian Support Foundation</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a>
+          <a href="programs.html">Programs</a>
+          <a href="e-classroom.html">e-learning</a>
+          <a href="impact-dashboard.html">Impact</a>
+          <a href="partner-sponsor.html">Partner &amp; Sponsor</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="opportunity-hero" aria-labelledby="grants-title">
+        <div class="shell opportunity-hero-grid">
+          <div class="reveal">
+            <p class="eyebrow">Funding opportunities portal</p>
+            <h1 id="grants-title">Find grants for ICT, STEM, AI, education and women's empowerment</h1>
+            <p class="hero-lead">
+              Open calls from official sources such as Grants.gov and the EU Funding &amp; Tenders Portal,
+              plus grants checked by WHSF. Search by country, sector, who can apply and deadline.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-light" href="#grant-search">Search grants</a>
+              <a class="button button-secondary" href="#funders">Donor directory</a>
+            </div>
+          </div>
+          <aside class="opportunity-command-card reveal delay-one" aria-label="Portal summary">
+            <span>Updated daily</span>
+            <h2>Official sources, checked against WHSF programme areas</h2>
+            <p>
+              Each listing links to the funder's own page. Always confirm eligibility,
+              amounts and deadlines there before applying.
+            </p>
+            <div class="grant-stats" aria-live="polite">
+              <div><strong data-grant-stat="open">–</strong><span>Open grants</span></div>
+              <div><strong data-grant-stat="soon">–</strong><span>Close in 30 days</span></div>
+              <div><strong data-grant-stat="funders">–</strong><span>Funders listed</span></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section opportunity-calendar-section" id="grant-search">
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Search</p>
+            <h2>Open funding opportunities</h2>
+            <p>Results are sorted by closing date. Forecasted calls are expected but not yet open.</p>
+          </div>
+
+          <form class="grant-search" data-grant-search>
+            <label>
+              Keyword
+              <input type="search" name="q" placeholder="e.g. digital skills, girls, robotics" autocomplete="off" />
+            </label>
+            <label>
+              Country
+              <select name="country" data-country-select>
+                <option value="">Any country</option>
+              </select>
+            </label>
+            <label>
+              Sector
+              <select name="sector">
+                <option value="">All WHSF sectors</option>
+                <option value="ict">ICT &amp; digital</option>
+                <option value="stem">STEM</option>
+                <option value="ai">Artificial intelligence</option>
+                <option value="education">Education</option>
+                <option value="womens_empowerment">Women &amp; girls</option>
+                <option value="youth">Youth</option>
+                <option value="health">Health</option>
+                <option value="climate">Climate &amp; environment</option>
+                <option value="humanitarian">Humanitarian</option>
+                <option value="economic_development">Livelihoods &amp; enterprise</option>
+              </select>
+            </label>
+            <label>
+              Who can apply
+              <select name="applicant">
+                <option value="">Anyone</option>
+                <option value="nonprofit">Nonprofits / NGOs</option>
+                <option value="us_nonprofit">US 501(c)(3) nonprofits</option>
+                <option value="school">Schools</option>
+                <option value="university">Universities</option>
+                <option value="business">Businesses</option>
+                <option value="individual">Individuals</option>
+              </select>
+            </label>
+            <label>
+              Deadline
+              <select name="within">
+                <option value="">Any open deadline</option>
+                <option value="30">Closing in 30 days</option>
+                <option value="60">Closing in 60 days</option>
+                <option value="90">Closing in 90 days</option>
+              </select>
+            </label>
+            <label>
+              Source
+              <select name="source">
+                <option value="">All sources</option>
+                <option value="manual">Added by WHSF</option>
+                <option value="grants_gov">Grants.gov (US federal)</option>
+                <option value="eu_ft">EU Funding &amp; Tenders</option>
+              </select>
+            </label>
+            <div class="grant-search-actions">
+              <p class="grant-result-count" data-grant-count role="status">Loading opportunities…</p>
+              <div class="hero-actions">
+                <button class="button" type="submit">Search</button>
+                <button class="button button-light" type="reset">Clear</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="opportunity-grid" data-grant-results aria-live="polite"></div>
+          <div class="grant-more"><button class="button button-light" type="button" data-grant-more hidden>Show more</button></div>
+          <p class="grant-disclaimer">
+            WHSF lists these opportunities to help organisations find funding. WHSF is not the funder unless stated,
+            and listing a grant does not mean WHSF is applying for it or endorses the funder.
+          </p>
+        </div>
+      </section>
+
+      <section class="section opportunity-deadlines-section" id="funders">
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Donor &amp; foundation directory</p>
+            <h2>Funders that support WHSF's areas of work</h2>
+            <p>Short profiles with links to each funder's official grant pages. Priorities change, so check their site before approaching them.</p>
+          </div>
+          <div class="opportunity-filter-panel" data-funder-filters aria-label="Funder type">
+            <button class="active" type="button" data-funder-type="">All</button>
+            <button type="button" data-funder-type="government">Government</button>
+            <button type="button" data-funder-type="multilateral">Multilateral</button>
+            <button type="button" data-funder-type="foundation">Foundations</button>
+            <button type="button" data-funder-type="corporate">Corporate</button>
+            <button type="button" data-funder-type="platform">Platforms</button>
+          </div>
+          <div class="funder-grid" data-funder-results aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="section source-monitoring-section" id="sources">
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Where the data comes from</p>
+            <h2>Connected sources</h2>
+            <p>Imports run automatically every day. Calls that need checking are reviewed by WHSF before they appear here.</p>
+          </div>
+          <div class="source-grid" data-grant-sources></div>
+          <div class="hero-actions" style="justify-content:center;margin-top:28px">
+            <a class="button" href="contact.html">Tell us about a grant we're missing</a>
+            <a class="button button-light" href="opportunities.html">UN &amp; tech events calendar</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
+          <div>
+            <strong>World Humanitarian<br />Support Foundation</strong>
+            <p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="index.html#about">About Us</a><a href="programs.html">Programs</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="opportunities.html">Opportunities</a><a href="grants.html">Grants</a><a href="index.html#partners">Partners</a></div>
+          <div><strong>Connect</strong><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="index.html#more">Get involved</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
+        </div>
+      </div>
+      <div class="shell social-links" aria-label="WHSF social media">
+        <a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>

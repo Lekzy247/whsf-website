@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#6d1024" />
+    <title>Grants Admin | WHSF</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="grants.css" />
+    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+    <script src="grants-admin.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>Grants Admin</small>
+          </span>
+        </a>
+        <nav id="primary-navigation" class="primary-nav" aria-label="Admin navigation">
+          <a href="grants.html">Public portal</a>
+          <a href="#review">Review</a>
+          <a href="#add-grant">Add grant</a>
+          <a href="#funders-admin">Funders</a>
+          <a href="#sources-admin">Sources</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="admin-hero" aria-labelledby="admin-title">
+        <div class="shell admin-hero-grid">
+          <div>
+            <p class="eyebrow">Grant &amp; opportunity portal</p>
+            <h1 id="admin-title">Review imported grants and UN events, add your own, and manage sources.</h1>
+          </div>
+          <form class="student-login-card" id="login-form">
+            <label>
+              Admin email
+              <input name="email" type="email" placeholder="info@worldhsfoundation.org" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" placeholder="Enter password" autocomplete="current-password" />
+            </label>
+            <div class="auth-actions">
+              <button class="button" type="submit">Sign in</button>
+              <button class="button button-light" type="button" id="magic-link-button">Email me a sign-in link</button>
+              <button class="button button-light" type="button" id="signout-button" hidden>Sign out</button>
+            </div>
+            <p id="login-status" role="status">Only WHSF grants administrators can use this page.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section admin-dashboard-section" id="dashboard" hidden>
+        <div class="shell admin-summary">
+          <article><span data-count="pending">–</span><strong>Waiting for review</strong></article>
+          <article><span data-count="published">–</span><strong>Published</strong></article>
+          <article><span data-count="hidden">–</span><strong>Hidden</strong></article>
+          <article><span data-count="events">–</span><strong>UN events published</strong></article>
+          <article><span data-count="funders">–</span><strong>Funders</strong></article>
+        </div>
+
+        <div class="shell admin-panel-grid">
+          <section class="admin-panel" id="review">
+            <div class="admin-panel-heading">
+              <div>
+                <p class="eyebrow">Review queue</p>
+                <h2>Opportunities</h2>
+                <p class="grant-admin-muted">EU calls and UN events wait here until you publish them. Check eligibility and that UN events are public before publishing.</p>
+              </div>
+              <div class="grant-admin-tabs" role="tablist" aria-label="Review status">
+                <button class="active" type="button" data-review-tab="pending">Pending</button>
+                <button type="button" data-review-tab="published">Published</button>
+                <button type="button" data-review-tab="hidden">Hidden</button>
+              </div>
+            </div>
+            <form class="admin-form" id="review-filters">
+              <select name="kind" aria-label="Type">
+                <option value="">Grants and events</option>
+                <option value="grant">Grants only</option>
+                <option value="event">UN events only</option>
+              </select>
+              <select name="source" aria-label="Source">
+                <option value="">All sources</option>
+                <option value="manual">Added by WHSF</option>
+                <option value="grants_gov">Grants.gov</option>
+                <option value="eu_ft">EU Funding &amp; Tenders</option>
+                <option value="indico_un">Indico.UN</option>
+              </select>
+              <input name="q" type="search" placeholder="Search title or funder" aria-label="Search" />
+              <button class="button button-light" type="submit">Filter</button>
+            </form>
+            <p class="admin-form-status" id="review-status" role="status"></p>
+            <div class="admin-table-wrap">
+              <table>
+                <thead><tr><th>Opportunity</th><th>Source</th><th>Deadline / date</th><th>Sectors</th><th>Actions</th></tr></thead>
+                <tbody id="review-table"></tbody>
+              </table>
+            </div>
+            <div class="grant-more"><button class="button button-light" type="button" id="review-more" hidden>Show more</button></div>
+          </section>
+
+          <section class="admin-panel" id="add-grant">
+            <div class="admin-panel-heading">
+              <div>
+                <p class="eyebrow">Add or edit</p>
+                <h2 id="grant-form-title">Add a grant</h2>
+                <p class="grant-admin-muted">Grants you add are published straight away. Editing an imported grant keeps your changes until the source next updates it.</p>
+              </div>
+            </div>
+            <form class="admin-form" id="grant-form">
+              <input type="hidden" name="id" />
+              <input name="title" placeholder="Grant title" required style="grid-column: span 2" />
+              <input name="funder_name" placeholder="Funder" required />
+              <input name="url" type="url" placeholder="https:// official call page" required />
+              <label class="grant-admin-muted">Opens <input name="open_date" type="date" /></label>
+              <label class="grant-admin-muted">Deadline <input name="deadline" type="date" /></label>
+              <input name="deadline_note" placeholder="Deadline note (e.g. rolling)" />
+              <select name="status" aria-label="Status">
+                <option value="open">Open</option>
+                <option value="forecasted">Forecasted</option>
+                <option value="closed">Closed</option>
+              </select>
+              <input name="amount_min_usd" type="number" min="0" step="1" placeholder="Min amount (USD)" />
+              <input name="amount_max_usd" type="number" min="0" step="1" placeholder="Max amount (USD)" />
+              <input name="countries" placeholder="Countries: GLOBAL or codes e.g. NG, KE, US" required />
+              <input name="location" placeholder="Location note (optional)" />
+              <fieldset data-checkboxes="sectors"><legend>Sectors</legend></fieldset>
+              <fieldset data-checkboxes="applicant_types"><legend>Who can apply</legend></fieldset>
+              <textarea name="summary" placeholder="Short summary in your own words" style="grid-column: 1 / -1"></textarea>
+              <button class="button" type="submit">Save grant</button>
+              <button class="button button-light" type="reset">Clear</button>
+              <small class="admin-form-status" id="grant-form-status" role="status" style="grid-column: span 2"></small>
+            </form>
+          </section>
+
+          <section class="admin-panel" id="funders-admin">
+            <div class="admin-panel-heading">
+              <div>
+                <p class="eyebrow">Donor directory</p>
+                <h2>Funders</h2>
+              </div>
+            </div>
+            <form class="admin-form" id="funder-form">
+              <input type="hidden" name="id" />
+              <input name="name" placeholder="Funder name" required />
+              <select name="funder_type" aria-label="Funder type">
+                <option value="foundation">Foundation</option>
+                <option value="government">Government</option>
+                <option value="multilateral">Multilateral</option>
+                <option value="corporate">Corporate</option>
+                <option value="platform">Platform</option>
+                <option value="other">Other</option>
+              </select>
+              <input name="headquarters" placeholder="Headquarters country" />
+              <input name="regions" placeholder="Regions: GLOBAL or codes" />
+              <input name="website" type="url" placeholder="https:// website" required />
+              <input name="funding_page" type="url" placeholder="https:// grants page" />
+              <fieldset data-checkboxes="funder_sectors"><legend>Sectors</legend></fieldset>
+              <textarea name="summary" placeholder="One or two sentences on what they fund" required style="grid-column: 1 / -1"></textarea>
+              <button class="button" type="submit">Save funder</button>
+              <button class="button button-light" type="reset">Clear</button>
+              <small class="admin-form-status" id="funder-form-status" role="status" style="grid-column: span 2"></small>
+            </form>
+            <div class="admin-table-wrap">
+              <table>
+                <thead><tr><th>Funder</th><th>Type</th><th>Shown</th><th>Actions</th></tr></thead>
+                <tbody id="funders-table"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="admin-panel" id="sources-admin">
+            <div class="admin-panel-heading">
+              <div>
+                <p class="eyebrow">Connected APIs</p>
+                <h2>Sources</h2>
+                <p class="grant-admin-muted">Imports run once a day. "Auto-publish" puts new items live without review.</p>
+              </div>
+              <button class="button" type="button" id="run-sync">Run all imports now</button>
+            </div>
+            <p class="admin-form-status" id="sync-status" role="status"></p>
+            <div class="admin-table-wrap">
+              <table>
+                <thead><tr><th>Source</th><th>On</th><th>Auto-publish</th><th>Last run</th></tr></thead>
+                <tbody id="sources-table"></tbody>
+              </table>
+            </div>
+            <h3 style="margin-top:26px">Recent import runs</h3>
+            <div class="admin-table-wrap">
+              <table>
+                <thead><tr><th>When</th><th>Source</th><th>Result</th><th>New</th><th>Updated</th></tr></thead>
+                <tbody id="runs-table"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="admin-panel" id="admins">
+            <div class="admin-panel-heading">
+              <div>
+                <p class="eyebrow">Access</p>
+                <h2>Grants administrators</h2>
+                <p class="grant-admin-muted">info@worldhsfoundation.org always has access. Each person also needs a WHSF sign-in account.</p>
+              </div>
+            </div>
+            <form class="admin-form" id="admin-form">
+              <input name="email" type="email" placeholder="colleague@worldhsfoundation.org" required style="grid-column: span 2" />
+              <button class="button" type="submit">Add administrator</button>
+              <small class="admin-form-status" id="admin-form-status" role="status"></small>
+            </form>
+            <div class="admin-table-wrap">
+              <table>
+                <thead><tr><th>Email</th><th>Added</th><th>Actions</th></tr></thead>
+                <tbody id="admins-table"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
