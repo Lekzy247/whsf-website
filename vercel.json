@@ -34,6 +34,14 @@
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https://ophymlgqnfilgxsuzcuz.supabase.co; connect-src 'self' https://ophymlgqnfilgxsuzcuz.supabase.co wss://ophymlgqnfilgxsuzcuz.supabase.co https://quickchart.io; frame-src https://www.youtube.com https://www.youtube-nocookie.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
         }
       ]
     },
@@ -78,29 +86,92 @@
     },
     {
       "source": "/mobile-app-admin(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     },
     {
       "source": "/e-classroom-admin(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     },
     {
       "source": "/grants-admin(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ],
   "redirects": [
-    { "source": "/whsf-website", "destination": "/", "permanent": true },
-    { "source": "/whsf-website/:path*", "destination": "/", "permanent": true },
-    { "source": "/agrismart", "destination": "/programme-agrismart-ai.html", "permanent": true },
-    { "source": "/agrismart/:path*", "destination": "/programme-agrismart-ai.html", "permanent": true },
-    { "source": "/agrismart-app.html", "destination": "/programme-agrismart-ai.html", "permanent": true },
-    { "source": "/mobile-app.html", "destination": "/programme-agrismart-ai.html", "permanent": true },
-    { "source": "/ai-career-connect", "destination": "/programme-ai-career-connect.html", "permanent": true },
-    { "source": "/ai-career-connect/:path*", "destination": "/programme-ai-career-connect.html", "permanent": true },
-    { "source": "/e-classroom.html", "destination": "/programs.html", "permanent": true },
-    { "source": "/e-classroom", "destination": "/programs.html", "permanent": true },
-    { "source": "/partner-sponsor.html", "destination": "/corporate-partnerships.html", "permanent": true },
-    { "source": "/partner-sponsor", "destination": "/corporate-partnerships.html", "permanent": true }
+    {
+      "source": "/whsf-website",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/whsf-website/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/agrismart",
+      "destination": "/programme-agrismart-ai.html",
+      "permanent": true
+    },
+    {
+      "source": "/agrismart/:path*",
+      "destination": "/programme-agrismart-ai.html",
+      "permanent": true
+    },
+    {
+      "source": "/agrismart-app.html",
+      "destination": "/programme-agrismart-ai.html",
+      "permanent": true
+    },
+    {
+      "source": "/mobile-app.html",
+      "destination": "/programme-agrismart-ai.html",
+      "permanent": true
+    },
+    {
+      "source": "/ai-career-connect",
+      "destination": "/programme-ai-career-connect.html",
+      "permanent": true
+    },
+    {
+      "source": "/ai-career-connect/:path*",
+      "destination": "/programme-ai-career-connect.html",
+      "permanent": true
+    },
+    {
+      "source": "/e-classroom.html",
+      "destination": "/programs.html",
+      "permanent": true
+    },
+    {
+      "source": "/e-classroom",
+      "destination": "/programs.html",
+      "permanent": true
+    },
+    {
+      "source": "/partner-sponsor.html",
+      "destination": "/corporate-partnerships.html",
+      "permanent": true
+    },
+    {
+      "source": "/partner-sponsor",
+      "destination": "/corporate-partnerships.html",
+      "permanent": true
+    }
   ]
 }

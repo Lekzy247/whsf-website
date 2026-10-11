@@ -62,7 +62,7 @@
           <a href="#lessons">Lessons</a>
           <a href="#assignments">Assignments</a>
           <a href="#certificates">Certificates</a>
-          <a href="verify-certificate.html">Verify Certificate</a>
+          <a href="verify-certificate.html">Verify staff</a>
           <a href="contact.html">Contact &amp; Support</a>
         </nav>
       </div>
@@ -222,9 +222,9 @@
       </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous"></script>
     <script>
       const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
       const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
@@ -304,7 +304,9 @@
             return;
           }
           const script = document.createElement('script');
-          script.src = 'https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js';
+          script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js';
+          script.integrity = 'sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7';
+          script.crossOrigin = 'anonymous';
           script.dataset.qrLibrary = 'fallback';
           script.onload = () => resolve(Boolean(window.QRCode?.toCanvas));
           script.onerror = () => resolve(false);
