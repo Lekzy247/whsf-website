@@ -211,3 +211,34 @@ h1 { letter-spacing: -.05em; }
 
 /* Staff verification: hint under the official email field. */
 .staff-verify-hint { margin: -4px 0 14px; color: var(--wx-muted); font-size: .8rem; line-height: 1.5; }
+
+/* ---------------------------------------------------------------- site-wide type scale
+   One regular, consistent size for every page (older pages used 84-100px titles).
+   Sizes shrink smoothly on smaller screens. !important is needed to win over the
+   many page-specific heading rules in styles.css and the older page stylesheets. */
+main h1 {
+  font-size: clamp(2rem, 1.35rem + 1.9vw, 2.75rem) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.035em !important;
+}
+.hp-hero h1, .hp-hero .hp-h1 {
+  font-size: clamp(2.1rem, 1.4rem + 2.1vw, 3rem) !important;
+}
+main h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -.025em !important;
+}
+main h3 {
+  font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem) !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.01em !important;
+}
+/* Small headings that sit inside cards and notices stay compact. */
+main .gx-alert h2, main .verify-result-card h2, main .gx-reach h3, main .gx-process strong { font-size: 1.25rem !important; }
+/* Intro / lead paragraphs: readable, not oversized. */
+main .hero-lead, main .gx-page-hero-copy > p, main .hp-slide-copy > p, main .academy-login-copy > p:not(.eyebrow) {
+  font-size: clamp(1rem, .95rem + .2vw, 1.0625rem) !important;
+  line-height: 1.65 !important;
+}
+main .academy-login-copy > .eyebrow { font-size: .75rem !important; }

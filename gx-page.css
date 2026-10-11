@@ -259,3 +259,19 @@
   .gx-page-hero .gx-hero-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .gx-page-hero .gx-hero-stats strong { font-size: 1.4rem; }
 }
+
+/* ---------------------------------------------------------------- page hero with a photo on the right (matches the homepage slider) */
+.gx-page-hero.gx-hero-split { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); column-gap: 48px; align-items: center; }
+.gx-hero-split .gx-page-hero-copy { max-width: none; }
+.gx-hero-split .gx-shortcuts { grid-column: 1 / -1; }
+.gx-hero-visual {
+  position: relative; min-height: 400px; height: 100%; margin: 0;
+  overflow: hidden; border-radius: 26px;
+  background: var(--wx-wine-night);
+  box-shadow: 0 24px 60px rgb(78 17 42 / 22%);
+}
+.gx-hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+@media (max-width: 980px) {
+  .gx-page-hero.gx-hero-split { grid-template-columns: 1fr; row-gap: 28px; }
+  .gx-hero-visual { min-height: 300px; order: -1; }
+}
