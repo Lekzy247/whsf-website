@@ -1518,15 +1518,15 @@ const whsfAssistantAnswers = [
     keys: ['agrismart', 'agriculture', 'climate smart', 'farming', 'rural girls'],
     title: 'AgriSmart AI',
     answer: 'AgriSmart AI equips rural and peri-urban girls and young women with climate-smart agriculture, sustainability, digital tools and applied technology skills.',
-    link: 'agrismart/',
-    linkText: 'Explore AgriSmart AI'
+    link: 'programme-agrismart-ai.html',
+    linkText: 'About AgriSmart AI'
   },
   {
     keys: ['career connect', 'ai career', 'career guidance', 'jobs', 'resume', 'interview', 'skills passport'],
     title: 'AI Career Connect',
     answer: 'AI Career Connect helps learners and professionals explore career pathways, build job-ready skills, prepare resumes and interviews, connect with mentors and discover global opportunities.',
-    link: 'ai-career-connect/',
-    linkText: 'Open AI Career Connect'
+    link: 'programme-ai-career-connect.html',
+    linkText: 'About AI Career Connect'
   },
   {
     keys: ['media information library', 'mil', 'media literacy', 'fact checking', 'responsible ai', 'cyber safety', 'podcast'],
@@ -1548,13 +1548,6 @@ const whsfAssistantAnswers = [
     answer: 'WHSF Tech Excursions & Events give Girls in ICT Club and TechWomen participants guided exposure to robotics, industrial automation, engineering environments and practical technology experiences.',
     link: 'girls-in-ict-tech-excursion.html',
     linkText: 'Explore Tech Experience'
-  },
-  {
-    keys: ['mobile app', 'app', 'volunteer hub', 'donor hub', 'member dashboard', 'chat', 'community'],
-    title: 'WHSF Mobile App',
-    answer: 'The WHSF Mobile App portal helps donors, volunteers, partners, students and members stay connected with impact updates, collaboration chat, volunteer tasks, donor information, member dashboards and announcements.',
-    link: 'mobile-app.html',
-    linkText: 'View mobile app under Innovation'
   },
   {
     keys: ['impact', 'metrics', 'report', 'dashboard', 'sdg', 'data', 'statistics'],

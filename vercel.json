@@ -91,6 +91,12 @@
   ],
   "redirects": [
     { "source": "/whsf-website", "destination": "/", "permanent": true },
-    { "source": "/whsf-website/:path*", "destination": "/", "permanent": true }
+    { "source": "/whsf-website/:path*", "destination": "/", "permanent": true },
+    { "source": "/agrismart", "destination": "/programme-agrismart-ai.html", "permanent": true },
+    { "source": "/agrismart/:path*", "destination": "/programme-agrismart-ai.html", "permanent": true },
+    { "source": "/agrismart-app.html", "destination": "/programme-agrismart-ai.html", "permanent": true },
+    { "source": "/mobile-app.html", "destination": "/programme-agrismart-ai.html", "permanent": true },
+    { "source": "/ai-career-connect", "destination": "/programme-ai-career-connect.html", "permanent": true },
+    { "source": "/ai-career-connect/:path*", "destination": "/programme-ai-career-connect.html", "permanent": true }
   ]
 }
