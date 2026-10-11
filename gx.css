@@ -249,8 +249,16 @@
   background: #fff;
 }
 .hp-partners > span { color: var(--wx-kicker); font-size: 11px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
-.hp-partners ul { display: flex; flex: 1; flex-wrap: wrap; align-items: center; justify-content: space-around; gap: 22px 34px; margin: 0; padding: 0; list-style: none; }
+.hp-partners ul { display: flex; flex: none; align-items: center; margin: 0; padding: 0; list-style: none; }
+.hp-partners li { flex: none; padding: 0 34px; }
 .hp-partners img { display: block; height: 44px; width: auto; max-width: 140px; object-fit: contain; filter: grayscale(.2); }
+/* Partner logos scroll continuously left to right; the second list is a hidden copy for a seamless loop. */
+.hp-partners-viewport {
+  flex: 1 1 320px; min-width: 0; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.hp-partners-track { display: flex; width: max-content; }
 
 /* ---------------------------------------------------------------- duo cards */
 .hp-duo { width: min(1180px, calc(100% - 40px)); display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px auto 0; }
@@ -298,6 +306,7 @@
 }
 @keyframes hp-progress { from { width: 0; } to { width: 100%; } }
 @keyframes hp-marquee { to { transform: translateX(-50%); } }
+@keyframes hp-partners-scroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 @keyframes hp-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes hp-zoom { from { opacity: .4; transform: scale(.96); } to { opacity: 1; transform: none; } }
 @keyframes hp-kenburns { from { transform: scale(1.08); } to { transform: scale(1); } }
@@ -317,6 +326,8 @@
   .hp-tab.is-active:not(.is-running) .hp-tab-bar i { width: 100%; }
   .hp-marquee-track { animation: hp-marquee 70s linear infinite; }
   .hp-marquee:hover .hp-marquee-track { animation-play-state: paused; }
+  .hp-partners-track { animation: hp-partners-scroll 40s linear infinite; }
+  .hp-partners:hover .hp-partners-track, .hp-partners:focus-within .hp-partners-track { animation-play-state: paused; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hp-btn.cta-glow { animation: none; }
