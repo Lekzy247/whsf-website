@@ -1725,7 +1725,7 @@ function initWhsfAssistant() {
   });
 }
 
-initWhsfAssistant();
+// The floating "Chat Us" assistant is switched off site-wide (owner request); the AI Assistant page remains.
 
 function initAiAssistantActions() {
   const response = document.querySelector('#ai-action-response');
