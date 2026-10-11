@@ -87,8 +87,24 @@ normal run at most every 6 hours, only a signed-in grants admin can force one) a
   both switch `alerts_opt_in` off.
 - Runs appear in the admin page's import log as "Grant emails".
 
+## Phase 4: proposal assistant (no AI cost to WHSF)
+
+Owner rule (2026-10-11): WHSF does not pay for Claude or any AI usage.
+
+- "Draft proposal" on every match and tracker row opens an editable draft built from a template in
+  `grants-account.js` (`buildDraft`): grant, funder, deadline, amount, the organisation's profile and sector fit,
+  then the sections funders usually ask for (need, project, objectives, timeline, budget, M&E, sustainability).
+  Everything the organisation must write is in [square brackets].
+- "Save draft" stores it in `whsf_grant_saved.draft` (adds the grant to the tracker as "Preparing" if needed);
+  copy and .txt download are also available.
+- A "Before you submit" checklist combines the eligibility checks with source-specific steps (SAM.gov UEI and
+  Grants.gov forms; EU PIC, consortium and Part A/B templates).
+- "Copy AI prompt" (`buildPrompt`) copies the grant, profile and draft with rules (no invented facts, keep
+  placeholders) for the organisation to paste into **its own** Claude or ChatGPT account. WHSF never calls an AI
+  API, never sees that conversation and pays nothing.
+
 ## Roadmap
 
 - Phase 2: organisation sign-up, profile-based matching and eligibility checklist (done).
 - Phase 3: deadline reminder emails (30/14/3 days) and new-match alerts via Resend (done).
-- Phase 4: proposal assistant that calls Claude only when a user asks for a draft.
+- Phase 4: proposal assistant: template + copy-prompt for the organisation's own AI (done; no AI cost to WHSF).
