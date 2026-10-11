@@ -14,7 +14,7 @@
     nonprofit: 'Nonprofits', us_nonprofit: 'US 501(c)(3)', school: 'Schools', university: 'Universities',
     government: 'Government', business: 'Businesses', individual: 'Individuals', any: 'Unrestricted',
   };
-  const SOURCE_LABELS = { manual: 'WHSF', grants_gov: 'Grants.gov', eu_ft: 'EU F&T', indico_un: 'Indico.UN' };
+  const SOURCE_LABELS = { manual: 'WHSF', grants_gov: 'Grants.gov', eu_ft: 'EU F&T', indico_un: 'Indico.UN', grant_alerts: 'Grant emails' };
 
   const $ = (selector) => document.querySelector(selector);
   function el(tag, attrs = {}, children = []) {
