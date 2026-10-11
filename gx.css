@@ -1,5 +1,6 @@
-/* WHSF homepage: Gelllez homepage layout (hero slider, ticker, pillars, impact band, duo cards)
-   in WHSF medium wine. Tokens come from theme.css. */
+/* WHSF shared page components in the Gelllez layout (hero card, ticker, pillars, impact band,
+   story cards, partners, duo cards, footer), in WHSF medium wine. Tokens come from theme.css.
+   Used by the homepage and the rebuilt inner pages; inner-page extras live in gx-page.css. */
 
 .home-page { background: #fff; }
 .home-page main { overflow-x: clip; }

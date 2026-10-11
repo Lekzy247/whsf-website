@@ -3,146 +3,270 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Explore WHSF programmes in digital skills, Girls in ICT, robotics and drones, AI career development, media literacy and climate-smart innovation.">
-  <meta name="theme-color" content="#6d1024">
+  <meta name="theme-color" content="#7b2142">
   <meta property="og:title" content="WHSF Programmes">
   <meta property="og:description" content="Practical technology and education programmes expanding skills, confidence and opportunity.">
-  <meta property="og:type" content="website"><meta property="og:url" content="https://www.worldhsfoundation.org/programs.html"><meta property="og:image" content="https://www.worldhsfoundation.org/assets/programs/whsf-drone-practical-header.jpg">
+  <meta property="og:type" content="website"><meta property="og:url" content="https://www.worldhsfoundation.org/programs.html">
+  <meta property="og:site_name" content="World Humanitarian Support Foundation">
+  <meta property="og:image" content="https://www.worldhsfoundation.org/assets/programs/whsf-drone-practical-header.jpg">
+  <meta property="og:image:alt" content="A WHSF Girls in ICT learner receiving practical drone technology guidance">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.worldhsfoundation.org/assets/programs/whsf-drone-practical-header.jpg">
   <title>Our Programs | World Humanitarian Support Foundation</title>
   <link rel="icon" href="assets/whsf-logo.jpg"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/whsf-logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=152"><link rel="stylesheet" href="homepage-reference.css?v=3"><link rel="stylesheet" href="programs-reference.css?v=2">
-  <script src="script.js" defer></script>
-    <meta property="og:site_name" content="World Humanitarian Support Foundation" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="WHSF Girls Club members learning with computers" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
+  <link rel="stylesheet" href="styles.css?v=153">
+  <link rel="stylesheet" href="gx.css">
+  <link rel="stylesheet" href="gx-page.css">
   <link rel="stylesheet" href="/theme.css">
+  <script src="script.js" defer></script>
 </head>
-<body class="reference-home programs-reference">
+<body class="home-page">
   <a class="skip-link" href="#main">Skip to main content</a>
 
-  <header class="rf-header" id="top">
-    <div class="rf-shell rf-header-inner">
-      <a class="rf-brand" href="index.html" aria-label="WHSF home">
-        <img src="assets/whsf-logo.jpg" width="56" height="56" alt="WHSF emblem">
-        <span class="rf-brand-copy"><strong>World Humanitarian Support Foundation</strong><span>Humanity. Inclusion. Sustainability.</span></span>
+  <div class="utility-bar">
+    <div class="shell utility-inner">
+      <p>Humanity. Inclusion. Sustainability. A 501(c)(3) charity.</p>
+      <div class="utility-actions" aria-label="Accessibility controls">
+        <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+        <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+        <a class="utility-donate" href="donor-portal.html">Donate now</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header" id="top">
+    <div class="shell nav-wrap">
+      <a class="brand" href="index.html" aria-label="WHSF home">
+        <img src="assets/whsf-logo.jpg" width="46" height="46" alt="WHSF emblem">
+        <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
       </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span></button>
-      <nav id="primary-navigation" class="primary-nav rf-nav" aria-label="Primary navigation">
-        <a href="index.html">Home</a><a href="about.html">About Us</a><a href="programs.html" aria-current="page">Programs</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a><a class="rf-donate-nav" href="donor-portal.html">Donate Now ♡</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
+      <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html" aria-current="page">Programs</a>
+        <a href="grants.html">Grants</a>
+        <a href="impact-dashboard.html">Impact</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="pg-hero" aria-labelledby="pg-title">
-      <div class="pg-hero-media"><img src="assets/programs/whsf-drone-practical-header.jpg" alt="A WHSF Girls in ICT learner receiving practical drone technology guidance"></div>
-      <div class="rf-shell pg-hero-inner">
-        <div class="pg-hero-copy">
-          <p class="pg-eyebrow">Our programmes</p>
-          <h1 id="pg-title">Skills today.<span>Opportunity tomorrow.</span></h1>
-          <p>WHSF programmes equip girls, women, young people and underserved communities with practical digital skills, AI awareness, STEM education and pathways to participate in a changing world.</p>
-          <div class="pg-actions"><a class="rf-button pg-button-light" href="#programme-areas">Explore programmes ↓</a><a class="rf-button pg-button-outline" href="partner-sponsor.html">Make an impact ♡</a></div>
+    <!-- Page hero (Gelllez inner-page layout) -->
+    <section class="gx-page-hero" aria-labelledby="pg-title">
+      <span class="hp-hero-glow" aria-hidden="true"></span>
+      <div class="gx-page-hero-copy">
+        <span class="hp-kicker">Our programmes</span>
+        <h1 id="pg-title">Skills today. <em>Opportunity tomorrow.</em></h1>
+        <p>WHSF programmes equip girls, women, young people and underserved communities with practical digital skills, AI awareness, STEM education and pathways to take part in a changing world.</p>
+        <div class="hp-actions">
+          <a class="hp-btn hp-btn-primary cta-glow" href="#programme-areas">Explore programmes
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+          <a class="hp-btn hp-btn-solid" href="donor-portal.html">Donate now</a>
+          <a class="hp-btn hp-btn-outline" href="corporate-partnerships.html">Partner with us</a>
         </div>
       </div>
+      <ul class="gx-shortcuts" aria-label="Programme areas">
+        <li><a href="#prog-digital"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg></span>Digital Skills</a></li>
+        <li><a href="#prog-girls"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg></span>Girls in ICT</a></li>
+        <li><a href="#prog-robotics"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>Robotics &amp; Drones</a></li>
+        <li><a href="#prog-career"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg></span>Career Connect</a></li>
+        <li><a href="#prog-agri"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M12 12C12 7 8 4 3 4c0 5 4 8 9 8zM12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg></span>AgriSmart &amp; Climate</a></li>
+        <li><a href="#pathways"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span>Media Literacy</a></li>
+      </ul>
+      <figure class="gx-hero-photo">
+        <img src="assets/programs/whsf-drone-practical-header.jpg" alt="A WHSF Girls in ICT learner receiving practical drone technology guidance">
+      </figure>
     </section>
 
-    <section class="pg-programmes" id="programme-areas" aria-labelledby="programme-title">
-      <div class="rf-shell">
-        <div class="pg-section-heading"><p class="pg-section-kicker">Our programme areas</p><h2 id="programme-title">Programmes that create opportunity</h2><p>Each pathway combines accessible learning, practical experience and clearer routes into education, enterprise, work or community action.</p></div>
-        <div class="pg-programme-grid">
-          <article class="pg-programme-card">
-            <div class="pg-card-image"><img src="assets/home/girls-in-ai-africa.jpg" alt="Girls building digital skills through WHSF"><span class="pg-card-icon" aria-hidden="true">D</span></div>
-            <div class="pg-card-body"><h3>Digital Skills &amp; e-Learning</h3><p>Accessible digital literacy, online learning and certificates that help learners participate with confidence.</p><ul><li>Digital foundations</li><li>Productivity and safety</li><li>Flexible learning tracks</li></ul><a href="e-classroom.html">Learn more →</a></div>
-          </article>
-          <article class="pg-programme-card">
-            <div class="pg-card-image"><img src="assets/programs/ict-girls-club-certificates.jpg" alt="Girls in ICT Club learners celebrating WHSF certificates"><span class="pg-card-icon" aria-hidden="true">G</span></div>
-            <div class="pg-card-body"><h3>Girls in ICT</h3><p>Safe, practical learning spaces that strengthen digital confidence, curiosity and future ambition.</p><ul><li>ICT clubs</li><li>Technology excursions</li><li>Mentorship and recognition</li></ul><a href="programme-girls-in-ict.html">Learn more →</a></div>
-          </article>
-          <article class="pg-programme-card">
-            <div class="pg-card-image"><img src="assets/home/ai-and-robotics.jpg" alt="WHSF learners exploring robotics technology"><span class="pg-card-icon" aria-hidden="true">R</span></div>
-            <div class="pg-card-body"><h3>Robotics &amp; Drones</h3><p>Hands-on STEM activities that build engineering thinking and practical problem-solving.</p><ul><li>Robotics workshops</li><li>Drone fundamentals</li><li>STEM challenges</li></ul><a href="programme-robotics-drones.html">Learn more →</a></div>
-          </article>
-          <article class="pg-programme-card">
-            <div class="pg-card-image"><img src="assets/programs/ai-career-connect-programme.jpg" alt="AI Career Connect education and opportunity network"><span class="pg-card-icon" aria-hidden="true">C</span></div>
-            <div class="pg-card-body"><h3>AI Career Connect</h3><p>A global education and talent ecosystem connecting learners with skills and opportunity pathways.</p><ul><li>Career readiness</li><li>Mentorship</li><li>Opportunity discovery</li></ul><a href="programme-ai-career-connect.html">Learn more →</a></div>
-          </article>
-          <article class="pg-programme-card">
-            <div class="pg-card-image"><img src="assets/programs/agrismart-ai-programme.jpg" alt="Technology supporting climate-smart agriculture"><span class="pg-card-icon" aria-hidden="true">A</span></div>
-            <div class="pg-card-body"><h3>AgriSmart AI &amp; Climate Tech</h3><p>Applied technology and climate-smart learning for rural and peri-urban girls and communities.</p><ul><li>Climate-smart agriculture</li><li>Applied technology</li><li>Sustainability awareness</li></ul><a href="programme-agrismart-ai.html">Learn more →</a></div>
-          </article>
+    <!-- Programme areas -->
+    <section class="hp-section" id="programme-areas" aria-labelledby="programme-title">
+      <div class="hp-heading">
+        <div>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/></svg>Our programme areas</span>
+          <h2 id="programme-title">Programmes that create opportunity</h2>
         </div>
+        <p>Each pathway combines accessible learning, practical experience and clearer routes into education, enterprise, work or community action.</p>
       </div>
-    </section>
-
-    <section class="pg-impact" aria-labelledby="pg-impact-title">
-      <div class="rf-shell">
-        <div class="pg-impact-heading"><p class="pg-section-kicker">Published programme indicators</p><h2 id="pg-impact-title">Skills and opportunity in action</h2><p>Figures may overlap across activities and should not be added together as a single beneficiary total.</p></div>
-        <div class="pg-impact-grid">
-          <article><span aria-hidden="true">◎</span><strong data-count-target="7500" data-count-suffix="+">7,500+</strong><p>Girls impacted since 2015</p></article>
-          <article><span aria-hidden="true">◇</span><strong data-count-target="550" data-count-suffix="+">550+</strong><p>Young women empowered</p></article>
-          <article><span aria-hidden="true">↗</span><strong data-count-target="1200">1,200</strong><p>Course enrolments</p></article>
-          <article><span aria-hidden="true">✓</span><strong data-count-target="950">950</strong><p>Certificates issued</p></article>
-          <article><span aria-hidden="true">▦</span><strong data-count-target="12">12</strong><p>Learning tracks</p></article>
-        </div>
-        <a class="pg-impact-link" href="impact-dashboard.html">Explore the impact dashboard →</a>
-      </div>
-    </section>
-
-    <section class="pg-feature" aria-labelledby="feature-title">
-      <div class="rf-shell pg-feature-grid">
-        <figure class="pg-feature-image"><img src="assets/programs/robotic-drone/ict-club-computer-lab.jpg" alt="Girls gaining hands-on computer and STEM experience through WHSF"></figure>
-        <div class="pg-feature-copy">
-          <p class="pg-section-kicker">Featured programme</p>
-          <h2 id="feature-title">Robotics &amp; Drone Programme</h2>
-          <p>Hands-on robotics, drone technology and digital skills build confidence, engineering thinking and practical problem-solving while reconnecting rural and out-of-school learners with education.</p>
-          <div class="pg-feature-points">
-            <article><span aria-hidden="true">01</span><div><h3>Practical STEM</h3><p>Learning by building, testing and solving.</p></div></article>
-            <article><span aria-hidden="true">02</span><div><h3>Technology exposure</h3><p>Robotics, drones and engineering pathways.</p></div></article>
-            <article><span aria-hidden="true">03</span><div><h3>Confidence and inclusion</h3><p>Supportive learning for underserved girls.</p></div></article>
+      <div class="gx-cards">
+        <article class="gx-card" id="prog-digital">
+          <img src="assets/home/girls-in-ai-africa.jpg" alt="Girls building digital skills through WHSF" loading="lazy">
+          <div class="gx-card-body">
+            <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg></span>
+            <h3>Digital Skills</h3>
+            <p>Accessible digital literacy training and certificates that help learners take part with confidence.</p>
+            <ul class="gx-chips"><li>Digital foundations</li><li>Productivity &amp; safety</li><li>Verifiable certificates</li></ul>
+            <a class="hp-card-link" href="verify-certificate.html">Verify a certificate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
-          <a class="rf-button pg-button-wine" href="programme-robotics-drones.html">Explore this programme →</a>
+        </article>
+        <article class="gx-card" id="prog-girls">
+          <img src="assets/programs/ict-girls-club-certificates.jpg" alt="Girls in ICT Club learners celebrating WHSF certificates" loading="lazy">
+          <div class="gx-card-body">
+            <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg></span>
+            <h3>Girls in ICT</h3>
+            <p>Safe, practical learning spaces that strengthen digital confidence, curiosity and future ambition.</p>
+            <ul class="gx-chips"><li>ICT clubs</li><li>Technology excursions</li><li>Mentorship</li></ul>
+            <a class="hp-card-link" href="programme-girls-in-ict.html">About Girls in ICT <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+        <article class="gx-card" id="prog-robotics">
+          <img src="assets/home/ai-and-robotics.jpg" alt="WHSF learners exploring robotics technology" loading="lazy">
+          <div class="gx-card-body">
+            <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>
+            <h3>Robotics &amp; Drones</h3>
+            <p>Hands-on STEM activities that build engineering thinking and practical problem-solving.</p>
+            <ul class="gx-chips"><li>Robotics workshops</li><li>Drone fundamentals</li><li>STEM challenges</li></ul>
+            <a class="hp-card-link" href="programme-robotics-drones.html">See the programme <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+        <article class="gx-card" id="prog-career">
+          <img src="assets/programs/ai-career-connect-programme.jpg" alt="AI Career Connect education and opportunity network" loading="lazy">
+          <div class="gx-card-body">
+            <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg></span>
+            <h3>AI Career Connect</h3>
+            <p>A global education and talent network connecting learners with skills and opportunity pathways.</p>
+            <ul class="gx-chips"><li>Career readiness</li><li>Mentorship</li><li>Opportunity discovery</li></ul>
+            <a class="hp-card-link" href="programme-ai-career-connect.html">About Career Connect <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+        <article class="gx-card" id="prog-agri">
+          <img src="assets/programs/agrismart-ai-programme.jpg" alt="Technology supporting climate-smart agriculture" loading="lazy">
+          <div class="gx-card-body">
+            <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M12 12C12 7 8 4 3 4c0 5 4 8 9 8zM12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg></span>
+            <h3>AgriSmart AI &amp; Climate Tech</h3>
+            <p>Applied technology and climate-smart learning for rural and peri-urban girls and communities.</p>
+            <ul class="gx-chips"><li>Climate-smart agriculture</li><li>Applied technology</li><li>Sustainability</li></ul>
+            <a class="hp-card-link" href="programme-agrismart-ai.html">About AgriSmart AI <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+        <article class="gx-card">
+          <img src="assets/home/community-learning.jpg" alt="WHSF community learning group" loading="lazy">
+          <div class="gx-card-body">
+            <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a2.5 2.5 0 0 0-2.5-1.5c-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2A2.5 2.5 0 0 1 9.5 15M12 6v1.5M12 16.5V18"/></svg></span>
+            <h3>Grants &amp; Funding</h3>
+            <p>Open grants matched to your organisation, with eligibility checks, deadline reminders and a proposal template.</p>
+            <ul class="gx-chips"><li>Grant search</li><li>Matching</li><li>Free for nonprofits</li></ul>
+            <a class="hp-card-link" href="grants.html">Find funding <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Indicators -->
+    <section class="gx-stats-band" aria-labelledby="pg-impact-title">
+      <div class="hp-heading">
+        <div>
+          <span class="hp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Published programme indicators</span>
+          <h2 id="pg-impact-title">Skills and opportunity in action</h2>
         </div>
+        <a href="impact-dashboard.html">Explore the impact dashboard →</a>
+      </div>
+      <ul class="hp-stats">
+        <li><div><strong>7,500+</strong><span>Girls reached since 2015</span></div></li>
+        <li><div><strong>550+</strong><span>Young women empowered</span></div></li>
+        <li><div><strong>1,200</strong><span>Course enrolments</span></div></li>
+        <li><div><strong>950</strong><span>Certificates issued</span></div></li>
+        <li><div><strong>12</strong><span>Learning tracks</span></div></li>
+      </ul>
+      <p class="gx-note">Figures may overlap across activities and should not be added together as a single beneficiary total.</p>
+    </section>
+
+    <!-- Featured programme -->
+    <section class="gx-feature" aria-labelledby="feature-title">
+      <figure class="gx-feature-photo"><img src="assets/programs/robotic-drone/ict-club-computer-lab.jpg" alt="Girls gaining hands-on computer and STEM experience through WHSF" loading="lazy"></figure>
+      <div class="gx-feature-copy">
+        <span class="hp-label">Featured programme</span>
+        <h2 id="feature-title">Robotics &amp; Drone Programme</h2>
+        <p>Hands-on robotics, drone technology and digital skills build confidence, engineering thinking and practical problem-solving, while reconnecting rural and out-of-school learners with education.</p>
+        <ol class="gx-steps">
+          <li><b>01</b><div><strong>Practical STEM</strong><span>Learning by building, testing and solving.</span></div></li>
+          <li><b>02</b><div><strong>Technology exposure</strong><span>Robotics, drones and engineering pathways.</span></div></li>
+          <li><b>03</b><div><strong>Confidence and inclusion</strong><span>Supportive learning for underserved girls.</span></div></li>
+        </ol>
+        <a class="hp-btn hp-btn-primary" href="programme-robotics-drones.html">Explore this programme
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </section>
 
-    <section class="pg-pathways" aria-labelledby="pathways-title">
-      <div class="rf-shell">
-        <div class="pg-section-heading"><p class="pg-section-kicker">More ways WHSF expands access</p><h2 id="pathways-title">Learning, information and professional opportunity</h2><p>Our wider programme ecosystem connects technology education with trusted information and long-term development.</p></div>
-        <div class="pg-pathway-grid">
-          <a href="programme-girls-in-ict.html"><img src="assets/home/stem-education-underserved-web.jpg" alt="Girls taking part in hands-on STEM learning"><div><p>Girls in ICT</p><h3>Confidence through practical exposure</h3><span>ICT clubs, excursions, mentorship and certificates help girls see technology as achievable.</span><strong>Explore Girls in ICT →</strong></div></a>
-          <a href="media-information-library.html"><img src="assets/programs/media-information-library.jpg" alt="WHSF Media and Information Literacy programme"><div><p>Media &amp; Information Literacy</p><h3>Skills for a trusted digital world</h3><span>Digital literacy, responsible AI, trusted information, cybersecurity and creative media.</span><strong>Explore the library →</strong></div></a>
-          <a href="partner-sponsor.html"><img src="assets/partners/partner-cpi.png" alt="Center for Project Innovation"><div><p>Scholarships</p><h3>Professional development pathways</h3><span>WHSF’s partnership with the Center for Project Innovation has supported ten scholarship awards.</span><strong>Support opportunity →</strong></div></a>
+    <!-- Wider pathways -->
+    <section class="hp-section" id="pathways" aria-labelledby="pathways-title">
+      <div class="hp-heading">
+        <div>
+          <span>More ways WHSF expands access</span>
+          <h2 id="pathways-title">Learning, information and professional opportunity</h2>
         </div>
+        <p>Our wider programme ecosystem connects technology education with trusted information and long-term development.</p>
+      </div>
+      <div class="hp-stories">
+        <article class="hp-story">
+          <img src="assets/home/stem-education-underserved-web.jpg" alt="Girls taking part in hands-on STEM learning" loading="lazy">
+          <div><span class="hp-label">Girls in ICT</span><h3>Confidence through practical exposure</h3><p>ICT clubs, excursions, mentorship and certificates help girls see technology as achievable.</p>
+            <a class="hp-card-link" href="programme-girls-in-ict.html">Explore Girls in ICT <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+        <article class="hp-story">
+          <img src="assets/programs/media-information-library.jpg" alt="WHSF Media and Information Literacy programme" loading="lazy">
+          <div><span class="hp-label">Media &amp; Information Literacy</span><h3>Skills for a trusted digital world</h3><p>Digital literacy, responsible AI, trusted information, cybersecurity and creative media.</p>
+            <a class="hp-card-link" href="media-information-library.html">Explore the library <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+        <article class="hp-story">
+          <img src="assets/home/tablet-community-learning.jpg" alt="Learners using a tablet in a WHSF community session" loading="lazy">
+          <div><span class="hp-label">Scholarships</span><h3>Professional development pathways</h3><p>WHSF’s partnership with the Center for Project Innovation has supported ten scholarship awards.</p>
+            <a class="hp-card-link" href="corporate-partnerships.html">Support opportunity <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        </article>
       </div>
     </section>
 
-    <section class="pg-cta">
-      <div class="rf-shell pg-cta-inner">
-        <div><p class="pg-section-kicker">Help expand our programmes</p><h2>Together, we can bring practical technology education to more communities.</h2></div>
-        <div class="pg-cta-actions"><a class="rf-button pg-button-light" href="donor-portal.html">Donate now ♡</a><a class="rf-button pg-button-outline" href="partner-sponsor.html">Partner with us →</a></div>
-      </div>
+    <!-- Partners -->
+    <section class="hp-partners" aria-label="Partners and collaborators">
+      <span>Partners &amp; collaborators</span>
+      <ul>
+        <li><img src="assets/partners/partner-cpi.png" alt="Center for Project Innovation" loading="lazy"></li>
+        <li><img src="assets/partners/partner-giva.png" alt="Giva" loading="lazy"></li>
+        <li><img src="assets/partners/partner-reef.png" alt="Reef" loading="lazy"></li>
+        <li><a href="https://www.gellleztech.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Gelllez Technologies website"><img src="assets/partners/partner-gelllez-technologies.jpg" alt="Gelllez Technologies" loading="lazy"></a></li>
+        <li><img src="assets/partners/partner-techwomen.jpg" alt="TechWomen" loading="lazy"></li>
+      </ul>
     </section>
 
-    <section class="pg-partners" aria-labelledby="partners-title">
-      <div class="rf-shell"><p class="pg-section-kicker" id="partners-title">Partners and collaborators</p><div class="pg-partner-grid">
-        <img src="assets/partners/partner-cpi.png" alt="Center for Project Innovation"><img src="assets/partners/partner-giva.png" alt="Giva"><img src="assets/partners/partner-reef.png" alt="Reef"><a href="https://www.gellleztech.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Gelllez Technologies website"><img src="assets/partners/partner-gelllez-technologies.jpg" alt="Gelllez Technologies"></a><img src="assets/partners/partner-techwomen.jpg" alt="TechWomen">
-      </div></div>
+    <!-- Help expand our programmes -->
+    <section class="hp-duo" aria-label="Help expand our programmes">
+      <article class="hp-duo-card give">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>Help expand our programmes</span>
+        <h2>Bring practical technology education to more communities.</h2>
+        <p>Every gift helps fund devices, trainers, excursions and certificates. WHSF is a 501(c)(3) charity, so US donations are tax deductible.</p>
+        <a class="hp-btn hp-btn-white" href="donor-portal.html">Donate now</a>
+      </article>
+      <article class="hp-duo-card partner">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg>Partner with WHSF</span>
+        <h2>Sponsor a programme, a lab or a cohort.</h2>
+        <p>Work with us on programme delivery, technology access, scholarships and evaluation.</p>
+        <a class="hp-btn hp-btn-white" href="corporate-partnerships.html">Partner with us</a>
+      </article>
     </section>
   </main>
 
-  <footer class="rf-footer">
-    <div class="rf-shell">
-      <div class="rf-footer-top pg-footer-grid">
-        <div class="rf-footer-brand"><img src="assets/whsf-logo.jpg" alt="WHSF emblem"><div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div></div>
-        <div><h4>Quick Links</h4><nav><a href="about.html">About Us</a><a href="programs.html">Our Programs</a><a href="impact-dashboard.html">Impact</a><a href="newsroom.html">Newsroom</a></nav></div>
-        <div><h4>Get Involved</h4><nav><a href="donor-portal.html">Donate</a><a href="contact.html">Volunteer</a><a href="corporate-partnerships.html">Partner With Us</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
-        <div><h4>Contact Us</h4><div class="rf-footer-address"><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span><nav class="rf-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">▶</a></nav></div></div>
+  <footer class="hp-footer">
+    <div class="hp-footer-top">
+      <div class="hp-footer-brand">
+        <img src="assets/whsf-logo.jpg" alt="WHSF emblem" width="46" height="46">
+        <div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div>
       </div>
-      <div class="rf-footer-bottom">© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved. · <a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a></div>
+      <div><h4>Explore</h4><nav aria-label="Explore"><a href="about.html">About us</a><a href="programs.html">Our programs</a><a href="grants.html">Grants portal</a><a href="impact-dashboard.html">Impact</a><a href="newsroom.html">Newsroom</a></nav></div>
+      <div><h4>Get involved</h4><nav aria-label="Get involved"><a href="donor-portal.html">Donate</a><a href="contact.html">Volunteer</a><a href="corporate-partnerships.html">Partner with us</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
+      <div><h4>Contact</h4>
+        <address><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span></address>
+        <nav class="hp-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Facebook">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Instagram">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer" aria-label="YouTube">▶</a></nav>
+      </div>
+      <figure class="hp-footer-award"><img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" loading="lazy"><figcaption>2025 London Data Center World Award Winner</figcaption></figure>
+    </div>
+    <div class="hp-footer-bottom">
+      <span>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</span>
+      <span><a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a> · <a href="governance.html">Governance</a></span>
     </div>
   </footer>
 </body>
