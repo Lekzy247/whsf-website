@@ -101,6 +101,23 @@
     }
     window.WHSFGrantMatch = { evaluate }; // lets the rules be checked against sample profiles
 
+    // ------------------------------------------------------------ unsubscribe link from an email
+    const unsubscribeToken = new URLSearchParams(window.location.search).get('unsubscribe');
+    if (unsubscribeToken) {
+      const banner = $('#unsubscribe-banner');
+      banner.hidden = false;
+      banner.textContent = 'Unsubscribing…';
+      fetch(`${G.SUPABASE_URL}/functions/v1/grant-alerts?unsubscribe=${encodeURIComponent(unsubscribeToken)}`, { method: 'POST' })
+        .then((res) => res.json())
+        .then((result) => {
+          banner.textContent = result.ok
+            ? `${result.name ? `${result.name} is` : 'You are'} unsubscribed from WHSF grant emails. You can turn them back on in your profile at any time.`
+            : 'This unsubscribe link did not work. Sign in and untick the email option in your profile, or reply to any WHSF email.';
+        })
+        .catch(() => { banner.textContent = 'Could not reach the server. Please try the link again shortly.'; });
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+
     // ------------------------------------------------------------ auth
     let authMode = 'signin';
     const authForm = $('#auth-form');

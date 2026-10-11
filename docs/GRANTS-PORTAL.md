@@ -70,8 +70,25 @@ normal run at most every 6 hours, only a signed-in grants admin can force one) a
 - Supabase Auth must allow `https://www.worldhsfoundation.org/grants-account.html` as a redirect URL for the
   confirmation and password-reset links.
 
+## Phase 3: deadline reminders and weekly matches (Edge Function `grant-alerts`)
+
+- Runs daily at 07:00 UTC (pg_cron job `whsf-grant-alerts`); at most one run per 20 hours unless a signed-in
+  grants admin forces it. Admins can also POST `{ "dry_run": true }` to see what would be sent.
+- Only organisations with `alerts_opt_in` and a confirmed email get emails.
+- Deadline reminders: one email per organisation listing saved grants ("Interested"/"Preparing") that reach
+  30, 14 or 3 days before their deadline. Weekly (Mondays): up to 10 grants published in the last 7 days that
+  the rules rate "likely" or "check the details" (`grant-alerts/match.ts` mirrors `evaluate()` in
+  `grants-account.js`; keep them in sync).
+- Sent through **WHSF's own Resend account** (domain worldhsfoundation.org, verified 2026-10-11; never the Gelllez
+  account) from `WHSF Grants <noreply@worldhsfoundation.org>`, replies to info@. Secret `RESEND_API_KEY` in
+  Supabase Edge Function secrets; capped at 90 emails per run (Resend free plan: 100/day).
+- `whsf_grant_alert_log` records every email so nothing is sent twice. Each organisation has an `alerts_token`:
+  the unsubscribe link (`grants-account.html?unsubscribe=<token>`) and the one-click `List-Unsubscribe` header
+  both switch `alerts_opt_in` off.
+- Runs appear in the admin page's import log as "Grant emails".
+
 ## Roadmap
 
 - Phase 2: organisation sign-up, profile-based matching and eligibility checklist (done).
-- Phase 3: deadline reminder emails (30/14/3 days) and new-match alerts via Resend.
+- Phase 3: deadline reminder emails (30/14/3 days) and new-match alerts via Resend (done).
 - Phase 4: proposal assistant that calls Claude only when a user asks for a draft.
