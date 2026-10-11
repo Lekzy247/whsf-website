@@ -90,7 +90,7 @@
 }
 .hp-slide-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 /* Silent looping video over the still photo (slide 1); the photo stays as the fallback. */
-.hp-slide-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
+.hp-slide-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease; }
 .hp-slide-video.is-playing { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .hp-slide-video { display: none; } }
 
@@ -313,7 +313,7 @@
   .hp-slide.is-active .hp-slide-copy > :nth-child(4) { animation-delay: .24s; }
   .hp-slide.is-active .hp-slide-visual { animation: hp-zoom .9s cubic-bezier(.2, .7, .2, 1) both; }
   .hp-slide.is-active .hp-slide-visual img { animation: hp-kenburns 9s ease-out both; }
-  .hp-tab.is-running .hp-tab-bar i { animation: hp-progress 7s linear both; }
+  .hp-tab.is-running .hp-tab-bar i { animation: hp-progress var(--hp-duration, 7s) linear both; }
   .hp-tab.is-active:not(.is-running) .hp-tab-bar i { width: 100%; }
   .hp-marquee-track { animation: hp-marquee 70s linear infinite; }
   .hp-marquee:hover .hp-marquee-track { animation-play-state: paused; }
