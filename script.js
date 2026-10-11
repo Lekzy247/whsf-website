@@ -1,3 +1,6 @@
+// Everything runs in its own scope so page scripts can reuse names like `form` or `escapeHtml`
+// without "Identifier has already been declared" errors.
+(() => {
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('.primary-nav');
 const menuLabel = menuButton?.querySelector('.sr-only');
@@ -2238,3 +2241,4 @@ function initPartnerSponsorEnquiryForm() {
 }
 
 initPartnerSponsorEnquiryForm();
+})();

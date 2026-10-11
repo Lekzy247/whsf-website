@@ -192,6 +192,8 @@
 .gx-alert svg { width: 24px; height: 24px; }
 .gx-alert h2 { margin: 0 0 6px; font-size: 20px; letter-spacing: -.02em; }
 .gx-alert p { margin: 0; color: #5d4630; line-height: 1.6; }
+.gx-alert p + p { margin-top: 10px; }
+.gx-alert .hp-actions { margin-top: 16px; }
 
 @media (max-width: 980px) {
   .gx-page-hero { padding: 40px 34px 26px; }
