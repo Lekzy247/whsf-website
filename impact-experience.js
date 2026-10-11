@@ -59,6 +59,13 @@
           if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); showLocation(marker.dataset.location); }
         });
       });
+      // On narrow screens the map scrolls sideways; open it centred on the markers.
+      const panel = map.closest('.map-panel');
+      if (panel && locations.length && panel.scrollWidth > panel.clientWidth) {
+        const xs = locations.map(location => coords(location).x);
+        const centre = (Math.min(...xs) + Math.max(...xs)) / 2 / 1000;
+        panel.scrollLeft = centre * panel.scrollWidth - panel.clientWidth / 2;
+      }
       if (locations[0]) showLocation(locations[0].id);
       else mapDetail.innerHTML = '<span>Project locations</span><h3>No published location</h3><p>No mapped record matches this filter.</p>';
     };
