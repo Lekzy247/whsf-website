@@ -137,7 +137,11 @@
 /* Organisation account: matching and tracker (grants-account.html) */
 .grant-benefits { margin: 20px 0 0; padding-left: 20px; color: rgba(255, 255, 255, .88); }
 .grant-benefits li { margin-bottom: 6px; }
-.grant-profile-form { max-width: 1040px; margin: 0 auto; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
+/* These sit inside the dark .opportunity-deadlines-section, so set dark text on their white cards. */
+.grant-profile-form { max-width: 1040px; margin: 0 auto; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); background: #fff; }
+.grant-profile-form fieldset legend, .grant-profile-form fieldset label { color: var(--ink); }
+#tracker .admin-table-wrap { color: var(--ink); background: #fff; }
+#tracker .admin-form-status { display: block; margin-top: 10px; }
 .grant-profile-form label.grant-admin-muted { display: grid; gap: 6px; font-weight: 800; }
 .grant-eligibility { margin: 0 0 12px; }
 .grant-eligibility summary { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; cursor: pointer; font-size: .82rem; }
