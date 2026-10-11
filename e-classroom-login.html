@@ -87,7 +87,7 @@
       </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous"></script>
     <script>
       const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
       const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
@@ -101,7 +101,19 @@
       const loginHelper = document.querySelector('#academy-login-helper');
       const loginStatus = document.querySelector('#academy-login-status');
       const params = new URLSearchParams(window.location.search);
-      const redirectTarget = params.get('redirect') || 'e-classroom-course.html';
+      // Only allow redirects to pages on this site (blocks open redirects and javascript: URLs).
+      const redirectTarget = (() => {
+        const fallback = 'e-classroom-course.html';
+        const requested = params.get('redirect');
+        if (!requested) return fallback;
+        try {
+          const url = new URL(requested, window.location.href);
+          if (url.origin !== window.location.origin || !/^https?:$/.test(url.protocol)) return fallback;
+          return url.pathname + url.search + url.hash;
+        } catch {
+          return fallback;
+        }
+      })();
       let signupMode = params.get('mode') === 'signup';
 
       function setLoginStatus(message) {

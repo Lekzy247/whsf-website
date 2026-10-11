@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Verify WHSF e-learning certificates and submit employee or staff verification details for World Humanitarian Support Foundation."
+      content="Check whether someone who says they work for World Humanitarian Support Foundation is genuine WHSF staff, by name, phone number and official email."
     />
     <meta name="theme-color" content="#6d1024" />
-    <meta property="og:title" content="Verify WHSF Certificate" />
+    <meta property="og:title" content="Verify WHSF Staff" />
     <meta
       property="og:description"
-      content="Confirm whether a WHSF e-learning certificate number is valid."
+      content="Check whether someone who says they work for WHSF is genuine WHSF staff."
     />
     <meta property="og:type" content="website" />
-    <title>Verify Certificate &amp; Staff | WHSF</title>
+    <title>Verify WHSF Staff | WHSF</title>
     <link rel="icon" href="assets/whsf-logo.jpg" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/whsf-logo.jpg" />
@@ -80,86 +80,11 @@
     </header>
 
     <main id="main">
-      <section class="classroom-hero verify-hero" aria-labelledby="verify-title">
-        <div class="shell classroom-hero-grid">
-          <div class="classroom-copy reveal">
-            <p class="eyebrow">Certificate verification</p>
-            <h1 id="verify-title">Confirm a WHSF e-learning certificate or staff identity.</h1>
-            <p class="hero-lead">
-              Enter a certificate number to confirm learner records, or use the staff verification section below to submit employee details for WHSF identity review.
-            </p>
-          </div>
-          <form class="student-login-card verify-card reveal delay-one" id="verify-certificate-form">
-            <label>
-              Certificate number
-              <input
-                id="certificate-number"
-                name="certificate_number"
-                type="text"
-                placeholder="Example: WHSF-2567"
-                autocomplete="off"
-                required
-              />
-            </label>
-            <button class="button" type="submit">Verify certificate</button>
-            <p id="verify-status" role="status">Enter a certificate number to begin verification.</p>
-          </form>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="shell">
-          <article class="verify-result-card" id="verify-result" hidden>
-            <div class="verify-badge" id="verify-badge">Valid</div>
-            <div>
-              <p class="eyebrow">Verification result</p>
-              <h2 id="result-heading">Certificate verified</h2>
-              <p id="result-summary">This certificate was issued by World Humanitarian Support Foundation.</p>
-            </div>
-            <dl class="verify-details">
-              <div>
-                <dt>Certificate number</dt>
-                <dd id="result-number">—</dd>
-              </div>
-              <div>
-                <dt>Learner</dt>
-                <dd id="result-student">—</dd>
-              </div>
-              <div>
-                <dt>Course</dt>
-                <dd id="result-course">—</dd>
-              </div>
-              <div>
-                <dt>Category</dt>
-                <dd id="result-category">—</dd>
-              </div>
-              <div>
-                <dt>Issued date</dt>
-                <dd id="result-issued">—</dd>
-              </div>
-            </dl>
-            <a class="button" id="certificate-file-link" href="#" target="_blank" rel="noreferrer" hidden>Open certificate file</a>
-          </article>
-
-          <article class="verify-result-card verify-result-error" id="verify-error" hidden>
-            <div class="verify-badge invalid">Not found</div>
-            <div>
-              <p class="eyebrow">Verification result</p>
-              <h2>Certificate not found</h2>
-              <p>
-                We could not find this certificate number in WHSF records. Check the number and try again, or contact WHSF for support.
-              </p>
-              <a class="arrow-link" href="contact.html">Contact WHSF <span>→</span></a>
-            </div>
-          </article>
-        </div>
-      </section>
-
       <section class="section section-tint staff-verify-section" id="staff-verification" aria-labelledby="staff-verify-title">
         <div class="shell staff-verify-grid">
           <div class="section-heading reveal">
             <p class="eyebrow">Employee / Staff verification</p>
-            <h2 id="staff-verify-title">Check WHSF staff identity details.</h2>
+            <h1 id="staff-verify-title">Check WHSF staff identity details.</h1>
             <p>
               Use this form to confirm WHSF staff identity details. First name, last name and phone number are required.
             </p>
@@ -173,11 +98,11 @@
             <div class="staff-name-grid">
               <label>
                 First name
-                <input id="employee-first-name" name="employee_first_name" type="text" placeholder="Example: Olalekan" autocomplete="given-name" required />
+                <input id="employee-first-name" name="employee_first_name" type="text" placeholder="" autocomplete="given-name" required />
               </label>
               <label>
                 Last name
-                <input id="employee-last-name" name="employee_last_name" type="text" placeholder="Example: Okunola" autocomplete="family-name" required />
+                <input id="employee-last-name" name="employee_last_name" type="text" placeholder="" autocomplete="family-name" required />
               </label>
             </div>
             <div class="staff-phone-field">
@@ -384,12 +309,12 @@
               </div>
               <label>
                 <span>Phone #</span>
-                <input id="employee-phone" name="employee_phone" type="tel" placeholder="Example: (424)-(396)-(9671)" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code, for example (424)-(396)-(9671)" autocomplete="tel-national" required />
+                <input id="employee-phone" name="employee_phone" type="tel" placeholder="" pattern="[0-9\s\-()]{6,}" title="Enter the phone number without the country code, for example (424)-(396)-(9671)" autocomplete="tel-national" required />
               </label>
             </div>
             <label>
               <span>Official WHSF email <small>(optional, but recommended)</small></span>
-              <input id="employee-email" name="employee_email" type="email" placeholder="Example: name@worldhsfoundation.org" autocomplete="off" spellcheck="false" />
+              <input id="employee-email" name="employee_email" type="email" placeholder="" autocomplete="off" spellcheck="false" />
             </label>
             <p class="staff-verify-hint">Enter the email address the person contacted you from. If it doesn't match their WHSF record, don't trust messages from it.</p>
             <button class="button" type="submit">Verify staff details</button>
@@ -459,19 +384,12 @@
       </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous"></script>
     <script>
       const WHSF_SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
       const WHSF_SUPABASE_ANON_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
       const whsfSupabase = window.supabase.createClient(WHSF_SUPABASE_URL, WHSF_SUPABASE_ANON_KEY);
 
-      const params = new URLSearchParams(window.location.search);
-      const form = document.querySelector('#verify-certificate-form');
-      const input = document.querySelector('#certificate-number');
-      const statusEl = document.querySelector('#verify-status');
-      const resultCard = document.querySelector('#verify-result');
-      const errorCard = document.querySelector('#verify-error');
-      const certificateFileLink = document.querySelector('#certificate-file-link');
       const staffForm = document.querySelector('#staff-verification-form');
       const staffStatus = document.querySelector('#staff-verify-status');
       const staffResult = document.querySelector('#staff-verify-result');
@@ -483,29 +401,12 @@
         document.querySelector(selector).textContent = value || '—';
       };
 
-      const setStatus = (message) => {
-        statusEl.textContent = message;
-      };
-
       const setStaffStatus = (message) => {
         staffStatus.textContent = message;
       };
 
-      function normalizeStaffName(value) {
-        return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
-      }
 
-      const knownWhsfStaffNames = new Set([
-        'olalekan okunola',
-        'oluwaseun okunola',
-        'donald lalude',
-        'segun adekeye',
-        'abayomi okunola',
-        'funmilayo esho',
-        'toluwanimi okunola'
-      ]);
-
-      const phoneMismatchMessage = 'Name found, but the phone number did not match WHSF staff records. Please select the correct country code and enter the phone number in this format: +234 - Country code + (xxx)-(xxx)-(xxxx). Example: select +234 and enter (803)-(574)-(0987).';
+      const notVerifiedMessage = 'These details do not match WHSF staff records. Do not share information or send money to this person. Check the name, country code and phone number (for example +234 and (803)-(574)-(0987)) and try again, or report it through the Contact page.';
 
       function formatEmployeeNumber(value) {
         const cleaned = String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -637,78 +538,6 @@
         renderSelected();
       }
 
-      function showError(message = 'Certificate not found.') {
-        resultCard.hidden = true;
-        errorCard.hidden = false;
-        setStatus(message);
-      }
-
-      function showResult(certificate) {
-        errorCard.hidden = true;
-        resultCard.hidden = false;
-        setText('#result-number', certificate.certificate_number);
-        setText('#result-student', certificate.student_name);
-        setText('#result-course', certificate.course_title);
-        setText('#result-category', certificate.course_category);
-        setText('#result-issued', new Date(certificate.issued_at).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        }));
-        if (certificate.certificate_url) {
-          certificateFileLink.hidden = false;
-          certificateFileLink.href = certificate.certificate_url;
-        } else {
-          certificateFileLink.hidden = true;
-          certificateFileLink.href = '#';
-        }
-        setStatus('Certificate verified successfully.');
-      }
-
-      async function verifyCertificate(certificateNumber) {
-        const cleanedNumber = String(certificateNumber || '').trim();
-        if (!cleanedNumber) {
-          showError('Enter a certificate number first.');
-          return;
-        }
-
-        setStatus('Checking WHSF certificate records…');
-        resultCard.hidden = true;
-        errorCard.hidden = true;
-
-        const { data, error } = await whsfSupabase.rpc('verify_eclassroom_certificate', {
-          p_certificate_number: cleanedNumber
-        });
-
-        if (error) {
-          showError(error.message);
-          return;
-        }
-
-        if (!data?.length) {
-          showError('Certificate number was not found.');
-          return;
-        }
-
-        showResult(data[0]);
-      }
-
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const formData = new FormData(form);
-        const certificateNumber = formData.get('certificate_number');
-        const url = new URL(window.location.href);
-        url.searchParams.set('number', String(certificateNumber || '').trim());
-        window.history.replaceState({}, '', url);
-        verifyCertificate(certificateNumber);
-      });
-
-      const initialNumber = params.get('number');
-      if (initialNumber) {
-        input.value = initialNumber;
-        verifyCertificate(initialNumber);
-      }
-
       initCountryPicker();
 
       staffForm?.addEventListener('submit', async (event) => {
@@ -717,7 +546,6 @@
         const employeeFirstName = String(formData.get('employee_first_name') || '').trim();
         const employeeLastName = String(formData.get('employee_last_name') || '').trim();
         const employeeName = `${employeeFirstName} ${employeeLastName}`.trim().replace(/\s+/g, ' ');
-        const employeeNameFound = knownWhsfStaffNames.has(normalizeStaffName(employeeName));
         const employeeNumber = '';
         const employeeCountryCode = String(formData.get('employee_country_code') || '').trim();
         const employeePhoneLocal = String(formData.get('employee_phone') || '').trim();
@@ -753,20 +581,16 @@
         }
 
         if (!data?.length) {
-          if (employeeNameFound) {
-            setStaffStatus(phoneMismatchMessage);
-            alert(phoneMismatchMessage);
-            return;
-          }
-          setStaffStatus('This person is not a staff of WHSF.');
-          alert('This person is not a staff of WHSF.');
+          // One neutral answer for every mismatch, so the page never confirms which names are real staff.
+          setStaffStatus(notVerifiedMessage);
+          alert(notVerifiedMessage);
           return;
         }
 
         const verifiedStaff = data[0];
         if ((verifiedStaff.verification_status || '').toLowerCase().includes('phone')) {
-          setStaffStatus(phoneMismatchMessage);
-          alert(phoneMismatchMessage);
+          setStaffStatus(notVerifiedMessage);
+          alert(notVerifiedMessage);
           return;
         }
 
