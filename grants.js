@@ -139,6 +139,20 @@
     container.replaceChildren(el('p', { class: isError ? 'grant-error' : 'grant-empty', text }));
   }
 
+  function fillCountrySelect(select) {
+    const names = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['en'], { type: 'region' }) : null;
+    COUNTRY_CODES.map((code) => [code, names?.of(code) || code])
+      .sort((a, b) => a[1].localeCompare(b[1]))
+      .forEach(([code, name]) => select.append(el('option', { value: code, text: name })));
+  }
+
+  // Shared with grants-account.js (organisation matching and tracker).
+  window.WHSFGrants = {
+    SUPABASE_URL, SUPABASE_KEY, SOURCE_LABELS, SECTOR_LABELS, APPLICANT_LABELS, EU_MEMBERS,
+    today, addDays, daysUntil, el, safeUrl, formatDate, amountText, truncate, deadlineBadge,
+    grantCard, message, fillCountrySelect,
+  };
+
   function init() {
     if (!window.supabase) return;
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -158,10 +172,7 @@
     const moreButton = document.querySelector('[data-grant-more]');
     const countrySelect = form.querySelector('[data-country-select]');
 
-    const names = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['en'], { type: 'region' }) : null;
-    COUNTRY_CODES.map((code) => [code, names?.of(code) || code])
-      .sort((a, b) => a[1].localeCompare(b[1]))
-      .forEach(([code, name]) => countrySelect.append(el('option', { value: code, text: name })));
+    fillCountrySelect(countrySelect);
 
     const params = new URLSearchParams(window.location.search);
     for (const field of ['q', 'country', 'sector', 'applicant', 'within', 'source']) {

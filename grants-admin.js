@@ -366,11 +366,31 @@
       loadAdmins();
     });
 
+    // ------------------------------------------------------------ registered organisations
+    async function loadOrgs() {
+      const { data, error } = await db.from('whsf_grant_orgs')
+        .select('name,org_type,country,sectors,website,alerts_opt_in,created_at,whsf_grant_saved(count)')
+        .order('created_at', { ascending: false }).limit(200);
+      const tbody = $('#orgs-table');
+      if (error) return tbody.replaceChildren(el('tr', {}, el('td', { colspan: '7', text: `Could not load: ${error.message}` })));
+      if (!data.length) return tbody.replaceChildren(el('tr', {}, el('td', { colspan: '7', text: 'No organisations have registered yet.' })));
+      tbody.replaceChildren(...data.map((o) => el('tr', {}, [
+        el('td', {}, safeUrl(o.website) ? el('a', { href: o.website, target: '_blank', rel: 'noopener noreferrer', text: o.name }) : o.name),
+        el('td', { text: APPLICANTS[o.org_type] || o.org_type }),
+        el('td', { text: o.country }),
+        el('td', { text: (o.sectors || []).map((s) => SECTORS[s] || s).join(', ') }),
+        el('td', { text: o.whsf_grant_saved?.[0]?.count ?? 0 }),
+        el('td', { text: o.alerts_opt_in ? 'Yes' : 'No' }),
+        el('td', { text: new Date(o.created_at).toLocaleDateString() }),
+      ])));
+    }
+
     function loadAll() {
       loadCounts();
       loadReview(true);
       loadFunders();
       loadSources();
+      loadOrgs();
       loadAdmins();
     }
   }
