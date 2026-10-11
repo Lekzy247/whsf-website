@@ -1,4 +1,4 @@
-.elearning-reference h1,.elearning-reference h2,.elearning-reference h3{font-family:"DM Sans",Arial,sans-serif}
+.elearning-reference h1,.elearning-reference h2,.elearning-reference h3{font-family: var(--font-ui)}
 .elearning-reference{--el-wine:#8f1f3d;--el-wine-dark:#6d1024;--el-wine-deep:#3b0711;--el-gold:#f0bd50;--el-rose:#f8e9ed;--el-ink:#111a36;--el-muted:#566179;--el-line:#eadce1;background:#fff;color:var(--el-ink)}
 .elearning-reference main{overflow:hidden}
 .el-eyebrow,.el-section-kicker{margin:0 0 .5rem;color:var(--el-wine);font-size:.73rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}

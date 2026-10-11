@@ -14,7 +14,7 @@
 .grant-stats strong {
   display: block;
   color: #fff;
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: var(--font-heading);
   font-size: 2rem;
   line-height: 1;
 }
