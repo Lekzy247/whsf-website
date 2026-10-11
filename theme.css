@@ -189,6 +189,20 @@ h1 { letter-spacing: -.05em; }
 }
 .whsf-chatbot-head { background: linear-gradient(135deg, var(--wx-wine-deep), var(--wx-wine)) !important; }
 
+/* ---------------------------------------------------------------- phone fixes for older page layouts */
+@media (max-width: 620px) {
+  /* Award caption had a fixed 142px width inside the 86px phone award box. */
+  .site-footer .footer-award figcaption, .site-footer .footer-award span { width: auto; max-width: 100%; font-size: .5rem; }
+  /* Footers built from plain columns (events, career fair) don't fit the brand/award/links areas: stack them. */
+  .site-footer .footer-grid:not(:has(> .footer-links)) { grid-template-columns: 1fr; grid-template-areas: none; }
+  .site-footer .footer-grid:not(:has(> .footer-links)) > * { grid-area: auto; justify-self: stretch; width: auto; min-width: 0; max-width: 100%; }
+  .site-footer .footer-grid:not(:has(> .footer-links)) > .footer-award { justify-self: start; }
+  .site-footer .footer-grid:not(:has(> .footer-links)) > div:has(> strong + a) { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .site-footer .footer-grid:not(:has(> .footer-links)) > div:has(> strong + a) > strong { flex-basis: 100%; }
+  /* Grid items default to min-width:auto, so a wide form pushed the fact-check section off-screen. */
+  .factcheck-submit-grid > * { min-width: 0; }
+}
+
 @media (max-width: 760px) {
   .nav-wrap { min-height: 66px; }
   .brand img { width: 40px; height: 40px; }
