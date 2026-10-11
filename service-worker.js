@@ -1,28 +1,15 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v168';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v169';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
   '/',
   '/index.html',
-  '/about.html',
-  '/mobile-app.html',
-  '/mobile-app-admin.html',
+  '/about.html',  '/mobile-app-admin.html',
   '/programs.html',
   '/robotic-drone-programme.html',
   '/girls-in-ict-tech-excursion.html',
   '/media-information-library.html',
   '/media-information-library/',
-  '/ai-career-connect/',
-  '/ai-career-connect/index.html',
-  '/ai-career-connect/styles.css',
-  '/ai-career-connect/app.js',
-  '/ai-career-connect/workspaces.css',
-  '/ai-career-connect/resume-builder.html',
-  '/ai-career-connect/resume-builder.js',
-  '/ai-career-connect/interview-coach.html',
-  '/ai-career-connect/interview-coach.js',
-  '/ai-career-connect/skills-passport.html',
-  '/ai-career-connect/skills-passport.js',
   '/innovation.html',
   '/contact.html',
   '/contact-reference.css',

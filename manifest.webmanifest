@@ -1,8 +1,8 @@
 {
   "name": "World Humanitarian Support Foundation",
   "short_name": "WHSF",
-  "description": "A branded WHSF mobile app experience for donors, volunteers, members, students and partners.",
-  "start_url": "/mobile-app.html",
+  "description": "World Humanitarian Support Foundation: programmes, e-learning, grants and support.",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",

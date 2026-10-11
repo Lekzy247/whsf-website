@@ -15,8 +15,8 @@ window.WHSF_CONTENT_DATA = {
     { category:"Learning", title:"Fact-Checking Centre", description:"Tools and guidance for assessing sources, claims and digital information.", url:"fact-checking.html", format:"Learning tool" },
     { category:"Safety", title:"Child Safeguarding Policy", description:"WHSF’s public child-safeguarding commitments and reporting route.", url:"child-safeguarding-policy.html", format:"Policy" },
     { category:"Privacy", title:"Privacy Policy", description:"How WHSF handles personal information and website privacy.", url:"privacy-policy.html", format:"Policy" },
-    { category:"Careers", title:"AI Career Connect", description:"Education, mentorship, skills profiles and opportunity pathways.", url:"ai-career-connect/", format:"Digital platform" },
-    { category:"Agriculture", title:"AgriSmart AI", description:"Climate-smart agriculture, sustainability and applied technology.", url:"agrismart/", format:"Digital platform" },
+    { category:"Careers", title:"AI Career Connect", description:"Education, mentorship, skills profiles and opportunity pathways.", url:"programme-ai-career-connect.html", format:"Programme" },
+    { category:"Agriculture", title:"AgriSmart AI", description:"Climate-smart agriculture, sustainability and applied technology.", url:"programme-agrismart-ai.html", format:"Programme" },
     { category:"Media", title:"WHSF YouTube channel", description:"Programme videos, community activities and public media.", url:"https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ", format:"External media" }
   ]
 };
