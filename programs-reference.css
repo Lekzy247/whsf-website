@@ -1,4 +1,4 @@
-.programs-reference h1,.programs-reference h2,.programs-reference h3{font-family:"DM Sans",Arial,sans-serif}
+.programs-reference h1,.programs-reference h2,.programs-reference h3{font-family: var(--font-ui)}
 .programs-reference{--pg-wine:#8f1f3d;--pg-wine-dark:#6d1024;--pg-wine-deep:#3b0711;--pg-rose:#f8e9ed;--pg-ink:#111a36;--pg-muted:#566179;--pg-line:#eadce1;background:#fff;color:var(--pg-ink)}
 .programs-reference main{overflow:hidden}
 .pg-eyebrow,.pg-section-kicker{margin:0 0 .5rem;color:var(--pg-wine);font-size:.73rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}

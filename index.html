@@ -3,115 +3,314 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="World Humanitarian Support Foundation expands opportunity through AI, digital skills, STEM, responsible technology and climate-smart innovation.">
-  <meta name="theme-color" content="#071736">
+  <meta name="theme-color" content="#7b2142">
   <meta property="og:title" content="World Humanitarian Support Foundation">
   <meta property="og:description" content="Technology for humanity. Skills, confidence and opportunity for underserved communities.">
   <meta property="og:type" content="website"><meta property="og:url" content="https://www.worldhsfoundation.org/">
+  <meta property="og:site_name" content="World Humanitarian Support Foundation">
+  <meta property="og:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="WHSF Girls Club members learning with computers">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg">
   <title>World Humanitarian Support Foundation</title>
   <link rel="icon" href="assets/whsf-logo.jpg"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/whsf-logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=152"><link rel="stylesheet" href="homepage-reference.css?v=3">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=153">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="/theme.css">
   <script src="script.js" defer></script>
-    <meta property="og:site_name" content="World Humanitarian Support Foundation" />
-    <meta property="og:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="WHSF Girls Club members learning with computers" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
-  </head>
-<body class="reference-home">
+  <script src="home.js" defer></script>
+</head>
+<body class="home-page">
   <a class="skip-link" href="#main">Skip to main content</a>
 
-  <header class="rf-header" id="top">
-    <div class="rf-shell rf-header-inner">
-      <a class="rf-brand" href="#top" aria-label="WHSF home">
-        <img src="assets/whsf-logo.jpg" width="56" height="56" alt="WHSF emblem">
-        <span class="rf-brand-copy"><strong>World Humanitarian Support Foundation</strong><span>Humanity. Inclusion. Sustainability.</span></span>
+  <div class="utility-bar">
+    <div class="shell utility-inner">
+      <p>Humanity. Inclusion. Sustainability. A 501(c)(3) charity.</p>
+      <div class="utility-actions" aria-label="Accessibility controls">
+        <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+        <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+        <a class="utility-donate" href="donor-portal.html">Donate now</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header" id="top">
+    <div class="shell nav-wrap">
+      <a class="brand" href="index.html" aria-label="WHSF home">
+        <img src="assets/whsf-logo.jpg" width="46" height="46" alt="WHSF emblem">
+        <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
       </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span></button>
-      <nav id="primary-navigation" class="primary-nav rf-nav" aria-label="Primary navigation">
-        <a href="index.html" aria-current="page">Home</a><a href="about.html">About Us</a><a href="programs.html">Programs</a><a href="e-classroom.html">e-learning</a><a href="impact-dashboard.html">Impact</a><a href="partner-sponsor.html">Partner &amp; Sponsor</a><a href="contact.html">Contact</a><a class="rf-donate-nav" href="donor-portal.html">Donate Now ♡</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
+      <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="grants.html">Grants</a>
+        <a href="e-classroom.html">e-learning</a>
+        <a href="impact-dashboard.html">Impact</a>
+        <a href="partner-sponsor.html">Partner &amp; Sponsor</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="rf-hero" aria-labelledby="rf-hero-title">
-      <div class="rf-hero-media"><img src="assets/programs/whsf-programmes-technology.jpg" alt="WHSF learners taking part in practical drone technology training"></div>
-      <div class="rf-shell rf-hero-inner">
-        <div class="rf-hero-copy">
-          <h1 id="rf-hero-title">Technology for humanity.<span>Opportunity for all.</span></h1>
-          <p>WHSF equips girls, women, young people and underserved communities with digital skills, AI awareness, STEM education and responsible technology for a more inclusive and sustainable future.</p>
-          <div class="rf-actions"><a class="rf-button rf-button-primary" href="programs.html">Explore Our Programs</a><a class="rf-button rf-button-outline" href="donor-portal.html">Donate Now ♡</a></div>
+    <!-- Hero slider (Gelllez layout) -->
+    <section class="hp-hero" aria-roledescription="carousel" aria-label="WHSF highlights" data-hp-slider>
+      <span class="hp-hero-glow" aria-hidden="true"></span>
+      <img class="hp-hero-mark" src="assets/whsf-logo.jpg" alt="" aria-hidden="true">
+      <div class="hp-slides">
+        <article class="hp-slide is-active" id="hp-slide-1" role="group" aria-roledescription="slide" aria-label="1 of 3">
+          <div class="hp-slide-copy">
+            <span class="hp-kicker">Technology for humanity</span>
+            <h1>Technology for humanity. <em>Opportunity for all.</em></h1>
+            <p>WHSF equips girls, women, young people and underserved communities with digital skills, AI awareness, STEM education and responsible technology for a more inclusive and sustainable future.</p>
+            <div class="hp-actions">
+              <a class="hp-btn hp-btn-primary cta-glow" href="programs.html">Explore our programs
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="hp-btn hp-btn-solid" href="donor-portal.html">Donate now</a>
+              <a class="hp-btn hp-btn-outline" href="partner-sponsor.html">Partner with us</a>
+            </div>
+          </div>
+          <div class="hp-slide-visual">
+            <img src="assets/programs/whsf-programmes-technology.jpg" alt="WHSF learners taking part in practical drone technology training">
+          </div>
+        </article>
+
+        <article class="hp-slide" id="hp-slide-2" role="group" aria-roledescription="slide" aria-label="2 of 3" aria-hidden="true">
+          <div class="hp-slide-copy">
+            <span class="hp-kicker">Grants &amp; funding portal</span>
+            <h2 class="hp-h1">Find funding. <em>Grow your impact.</em></h2>
+            <p>Search open grants from Grants.gov, the EU and WHSF-verified funders. Register your organisation to get matches, eligibility checks, deadline reminders and a proposal template.</p>
+            <div class="hp-actions">
+              <a class="hp-btn hp-btn-primary" href="grants.html" tabindex="-1">Search grants
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="hp-btn hp-btn-solid" href="grants-account.html" tabindex="-1">Get matched</a>
+              <a class="hp-btn hp-btn-outline" href="grants.html#funders" tabindex="-1">Donor directory</a>
+            </div>
+          </div>
+          <div class="hp-slide-visual">
+            <img src="assets/home/community-learning.jpg" alt="WHSF community learning group" loading="lazy">
+          </div>
+        </article>
+
+        <article class="hp-slide" id="hp-slide-3" role="group" aria-roledescription="slide" aria-label="3 of 3" aria-hidden="true">
+          <div class="hp-slide-copy">
+            <span class="hp-kicker">e-learning &amp; certificates</span>
+            <h2 class="hp-h1">Learn new skills. <em>Earn your certificate.</em></h2>
+            <p>Free WHSF courses in digital skills, AI, STEM and careers, with certificates employers and schools can verify online.</p>
+            <div class="hp-actions">
+              <a class="hp-btn hp-btn-primary" href="e-classroom.html" tabindex="-1">Start learning
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="hp-btn hp-btn-outline" href="verify-certificate.html" tabindex="-1">Verify a certificate</a>
+            </div>
+          </div>
+          <div class="hp-slide-visual">
+            <img src="assets/programs/ict-girls-club-certificates.jpg" alt="Girls in ICT Club learners celebrating WHSF certificates" loading="lazy">
+          </div>
+        </article>
+      </div>
+
+      <div class="hp-controls">
+        <div class="hp-tabs" role="tablist" aria-label="Choose a highlight">
+          <button class="hp-tab is-active is-running" type="button" role="tab" aria-selected="true" aria-controls="hp-slide-1" data-hp-tab="0"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">Technology for humanity</span></button>
+          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="hp-slide-2" data-hp-tab="1" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">Grants portal</span></button>
+          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="hp-slide-3" data-hp-tab="2" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">e-learning</span></button>
+        </div>
+        <div class="hp-arrows">
+          <button type="button" data-hp-prev aria-label="Previous highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button type="button" data-hp-pause aria-label="Pause highlights"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-hp-pause-icon><path d="M9 5v14M15 5v14"/></svg></button>
+          <button type="button" data-hp-next aria-label="Next highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
       </div>
     </section>
 
-    <section class="rf-programmes" aria-labelledby="rf-programmes-title">
-      <div class="rf-shell">
-        <div class="rf-section-heading"><p class="rf-kicker">What we do</p><h2 id="rf-programmes-title">Programmes that create opportunity</h2><p>Practical pathways connecting technology education with confidence, livelihoods and community resilience.</p></div>
-        <div class="rf-programme-grid">
-          <article class="rf-programme-card"><img src="assets/home/girls-in-ai-africa.jpg" alt="Girls learning digital skills together at WHSF" loading="lazy"><span class="rf-programme-icon rf-i-blue">ICT</span><div class="rf-programme-body"><h3>Digital Skills</h3><p>Accessible digital literacy, e-learning and certificates that help learners participate with confidence.</p><a href="e-classroom.html">Learn more →</a></div></article>
-          <article class="rf-programme-card"><img src="assets/home/data-cloud-infrastructure-skills.jpg" alt="Young women learning data, cloud and digital infrastructure skills" loading="lazy"><span class="rf-programme-icon rf-i-purple">AI</span><div class="rf-programme-body"><h3>AI &amp; Innovation</h3><p>Responsible AI awareness and innovation pathways that prepare communities for a changing world.</p><a href="responsible-ai.html">Learn more →</a></div></article>
-          <article class="rf-programme-card"><img src="assets/home/ai-and-robotics.jpg" alt="WHSF learners experiencing robotics technology" loading="lazy"><span class="rf-programme-icon rf-i-green">STEM</span><div class="rf-programme-body"><h3>STEM &amp; Robotics</h3><p>Hands-on robotics, drones and engineering activities that build problem-solving confidence.</p><a href="programme-robotics-drones.html">Learn more →</a></div></article>
-          <article class="rf-programme-card"><img src="assets/programs/ai-career-connect-programme.jpg" alt="AI Career Connect education, mentorship and opportunity network" loading="lazy"><span class="rf-programme-icon rf-i-orange">CAREER</span><div class="rf-programme-body"><h3>Career Connect</h3><p>Career guidance, mentorship, professional skills and opportunity pathways for learners worldwide.</p><a href="programme-ai-career-connect.html">Learn more →</a></div></article>
-          <article class="rf-programme-card"><img src="assets/home/ai-for-agriculture.jpg" alt="Digital technology supporting climate-smart agriculture" loading="lazy"><span class="rf-programme-icon rf-i-pink">AGRI</span><div class="rf-programme-body"><h3>AgriSmart &amp; Climate Tech</h3><p>Applied technology and climate-smart learning supporting rural and peri-urban communities.</p><a href="programme-agrismart-ai.html">Learn more →</a></div></article>
+    <!-- Ticker -->
+    <div class="hp-marquee" aria-label="What WHSF offers">
+      <div class="hp-marquee-track">
+        <ul>
+          <li><span class="hp-marquee-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg></span><strong>WHSF Programs</strong> <span class="hp-marquee-line">Digital skills, AI, STEM and career pathways</span></li>
+          <li><span class="hp-marquee-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a2.5 2.5 0 0 0-2.5-1.5c-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2A2.5 2.5 0 0 1 9.5 15M12 6v1.5M12 16.5V18"/></svg></span><strong>Grants portal</strong> <span class="hp-marquee-line">Open funding from Grants.gov, the EU and verified funders</span></li>
+          <li><span class="hp-marquee-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></span><strong>e-learning</strong> <span class="hp-marquee-line">Free courses with verifiable certificates</span></li>
+          <li><span class="hp-marquee-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><strong>Impact</strong> <span class="hp-marquee-line">7,500+ girls reached since 2015</span></li>
+          <li><span class="hp-marquee-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg></span><strong>Girls in ICT Club</strong> <span class="hp-marquee-line">Mentorship and TechWomen pathways</span></li>
+          <li><span class="hp-marquee-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg></span><strong>Partner &amp; Sponsor</strong> <span class="hp-marquee-line">Support technology access for more communities</span></li>
+        </ul>
+        <ul aria-hidden="true">
+          <li><span class="hp-marquee-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg></span><strong>WHSF Programs</strong> <span class="hp-marquee-line">Digital skills, AI, STEM and career pathways</span></li>
+          <li><span class="hp-marquee-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a2.5 2.5 0 0 0-2.5-1.5c-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2A2.5 2.5 0 0 1 9.5 15M12 6v1.5M12 16.5V18"/></svg></span><strong>Grants portal</strong> <span class="hp-marquee-line">Open funding from Grants.gov, the EU and verified funders</span></li>
+          <li><span class="hp-marquee-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></span><strong>e-learning</strong> <span class="hp-marquee-line">Free courses with verifiable certificates</span></li>
+          <li><span class="hp-marquee-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><strong>Impact</strong> <span class="hp-marquee-line">7,500+ girls reached since 2015</span></li>
+          <li><span class="hp-marquee-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg></span><strong>Girls in ICT Club</strong> <span class="hp-marquee-line">Mentorship and TechWomen pathways</span></li>
+          <li><span class="hp-marquee-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg></span><strong>Partner &amp; Sponsor</strong> <span class="hp-marquee-line">Support technology access for more communities</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Programmes (Gelllez "pillars") -->
+    <section class="hp-section" aria-labelledby="hp-programs-title">
+      <div class="hp-heading">
+        <div>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/></svg>One foundation, many pathways</span>
+          <h2 id="hp-programs-title">Learn skills. Find funding. Change lives.</h2>
         </div>
+        <p>Practical programmes connecting technology education with confidence, livelihoods and community resilience.</p>
+      </div>
+      <div class="hp-pillars">
+        <article class="hp-pillar p1">
+          <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg></span>
+          <h3>Digital Skills</h3>
+          <p>Accessible digital literacy, e-learning and certificates that help learners take part with confidence.</p>
+          <b>Free courses + certificates</b>
+          <a class="hp-card-link" href="e-classroom.html">Start learning <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="hp-pillar p2">
+          <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></span>
+          <h3>AI &amp; Innovation</h3>
+          <p>Responsible AI awareness and innovation pathways that prepare communities for a changing world.</p>
+          <b>Responsible AI framework</b>
+          <a class="hp-card-link" href="responsible-ai.html">Explore AI at WHSF <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="hp-pillar p3">
+          <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>
+          <h3>STEM &amp; Robotics</h3>
+          <p>Hands-on robotics, drones and engineering activities that build problem-solving confidence.</p>
+          <b>Robotics + drones</b>
+          <a class="hp-card-link" href="programme-robotics-drones.html">See the programme <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="hp-pillar p2">
+          <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg></span>
+          <h3>Career Connect</h3>
+          <p>Career guidance, mentorship, professional skills and opportunity pathways for learners worldwide.</p>
+          <b>Mentorship + careers</b>
+          <a class="hp-card-link" href="programme-ai-career-connect.html">About Career Connect <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="hp-pillar p3">
+          <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M12 12C12 7 8 4 3 4c0 5 4 8 9 8zM12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg></span>
+          <h3>AgriSmart &amp; Climate Tech</h3>
+          <p>Applied technology and climate-smart learning supporting rural and peri-urban communities.</p>
+          <b>Climate-smart learning</b>
+          <a class="hp-card-link" href="programme-agrismart-ai.html">About AgriSmart AI <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="hp-pillar p1">
+          <span class="hp-pillar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a2.5 2.5 0 0 0-2.5-1.5c-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2A2.5 2.5 0 0 1 9.5 15M12 6v1.5M12 16.5V18"/></svg></span>
+          <h3>Grants &amp; Funding</h3>
+          <p>Open grants matched to your organisation, with eligibility checks, reminders and a proposal template.</p>
+          <b>Free for nonprofits</b>
+          <a class="hp-card-link" href="grants.html">Find funding <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
       </div>
     </section>
 
-    <section class="rf-impact" aria-labelledby="rf-impact-title">
-      <div class="rf-shell">
-        <div class="rf-section-heading"><p class="rf-kicker">Our impact</p><h2 id="rf-impact-title">Expanding skills and opportunity through technology</h2></div>
-        <div class="rf-impact-grid">
-          <article class="rf-impact-item"><span class="rf-impact-icon" aria-hidden="true">◎</span><div><strong data-count-target="7500" data-count-suffix="+">7,500+</strong><span>Girls impacted since 2015</span></div></article>
-          <article class="rf-impact-item"><span class="rf-impact-icon" aria-hidden="true">◇</span><div><strong data-count-target="550" data-count-suffix="+">550+</strong><span>Young women empowered</span></div></article>
-          <article class="rf-impact-item"><span class="rf-impact-icon" aria-hidden="true">↗</span><div><strong data-count-target="1200">1,200</strong><span>Course enrolments</span></div></article>
-          <article class="rf-impact-item"><span class="rf-impact-icon" aria-hidden="true">✓</span><div><strong data-count-target="950">950</strong><span>Certificates issued</span></div></article>
-          <article class="rf-impact-item"><span class="rf-impact-icon" aria-hidden="true">▦</span><div><strong data-count-target="12">12</strong><span>Learning tracks</span></div></article>
+    <!-- Impact band (Gelllez "market" band) -->
+    <section class="hp-market" aria-labelledby="hp-impact-title">
+      <div class="hp-market-intro">
+        <span class="hp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Our impact</span>
+        <h2 id="hp-impact-title">Expanding skills and opportunity through technology</h2>
+        <p>Since 2015, WHSF has worked with girls, young women and communities to build digital confidence, practical STEM skills and pathways into work and leadership.</p>
+        <a class="hp-btn hp-btn-primary" href="impact-dashboard.html">Explore the impact dashboard
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <ul class="hp-trust">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>501(c)(3) charity</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8.2 13.4L7 22l5-3 5 3-1.2-8.6"/></svg>2025 London Data Center World Award</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>USA &amp; Nigeria</li>
+        </ul>
+      </div>
+      <ul class="hp-stats">
+        <li><div><strong>7,500+</strong><span>Girls reached since 2015</span></div></li>
+        <li><div><strong>550+</strong><span>Young women empowered</span></div></li>
+        <li><div><strong>1,200</strong><span>Course enrolments</span></div></li>
+        <li><div><strong>950</strong><span>Certificates issued</span></div></li>
+        <li><div><strong>12</strong><span>Learning tracks</span></div></li>
+        <li><div><strong>SDG</strong><span><a href="transparency.html">Transparent reporting</a></span></div></li>
+      </ul>
+      <div class="hp-market-photo">
+        <img src="assets/home/stem-education-underserved.jpg" alt="WHSF learner gaining practical STEM skills" loading="lazy">
+      </div>
+    </section>
+
+    <!-- Stories -->
+    <section class="hp-section" aria-labelledby="hp-stories-title">
+      <div class="hp-heading">
+        <div>
+          <span>Explore WHSF</span>
+          <h2 id="hp-stories-title">Evidence, stories and responsible innovation</h2>
         </div>
+        <a href="newsroom.html">View all updates →</a>
+      </div>
+      <div class="hp-stories">
+        <article class="hp-story">
+          <img src="assets/home/stem-practical-skills.jpg" alt="WHSF learners practising STEM skills" loading="lazy">
+          <div><span class="hp-label">Measurable impact</span><h3>Explore programme evidence</h3><p>Filter published indicators and view aggregate project locations.</p>
+            <a class="hp-card-link" href="impact-dashboard.html">Open dashboard <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+        <article class="hp-story">
+          <img src="assets/home/girls-in-ai-africa.jpg" alt="Girls learning digital skills together at WHSF" loading="lazy">
+          <div><span class="hp-label">Newsroom</span><h3>Verified updates from WHSF</h3><p>Read announcements, programme developments and community stories.</p>
+            <a class="hp-card-link" href="newsroom.html">Read updates <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+        <article class="hp-story">
+          <img src="assets/home/data-cloud-infrastructure-skills.jpg" alt="Young women learning data, cloud and digital infrastructure skills" loading="lazy">
+          <div><span class="hp-label">Responsible technology</span><h3>Our AI and ethics framework</h3><p>How WHSF approaches human oversight, privacy, fairness and safety.</p>
+            <a class="hp-card-link" href="responsible-ai.html">Read the framework <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        </article>
       </div>
     </section>
 
-    <section class="rf-explore" aria-labelledby="rf-explore-title">
-      <div class="rf-shell">
-        <div class="rf-explore-head"><div><p class="rf-kicker">Explore WHSF</p><h2 id="rf-explore-title">Evidence, stories and responsible innovation</h2></div><a class="rf-text-link" href="newsroom.html">View all updates →</a></div>
-        <div class="rf-explore-grid">
-          <article class="rf-explore-card"><img src="assets/home/stem-education-underserved.jpg" alt="WHSF learner gaining practical STEM skills" loading="lazy"><div class="rf-explore-copy"><span>Measurable impact</span><h3>Explore programme evidence</h3><p>Filter published indicators and view aggregate project locations.</p><a href="impact-dashboard.html">Open dashboard →</a></div></article>
-          <article class="rf-explore-card"><img src="assets/programs/ict-girls-club-certificates.jpg" alt="Girls in ICT Club learners celebrating WHSF certificates" loading="lazy"><div class="rf-explore-copy"><span>Newsroom</span><h3>Verified updates from WHSF</h3><p>Read website announcements, programme developments and community stories.</p><a href="newsroom.html">Read updates →</a></div></article>
-          <article class="rf-explore-card"><img src="assets/home/community-learning.jpg" alt="WHSF community learning group" loading="lazy"><div class="rf-explore-copy"><span>Responsible technology</span><h3>Our AI and ethics framework</h3><p>See how WHSF approaches human oversight, privacy, fairness and safety.</p><a href="responsible-ai.html">Read the framework →</a></div></article>
-        </div>
-      </div>
+    <!-- Partners -->
+    <section class="hp-partners" aria-label="Partners and collaborators">
+      <span>Partners &amp; collaborators</span>
+      <ul>
+        <li><img src="assets/partners/partner-cpi.png" alt="Center for Project Innovation" loading="lazy"></li>
+        <li><img src="assets/partners/partner-giva.png" alt="Giva" loading="lazy"></li>
+        <li><img src="assets/partners/partner-reef.png" alt="Reef" loading="lazy"></li>
+        <li><a href="https://www.gellleztech.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Gelllez Technologies website"><img src="assets/partners/partner-gelllez-technologies.jpg" alt="Gelllez Technologies" loading="lazy"></a></li>
+        <li><img src="assets/partners/partner-techwomen.jpg" alt="TechWomen" loading="lazy"></li>
+      </ul>
     </section>
 
-    <section class="rf-partners" aria-labelledby="rf-partners-title">
-      <div class="rf-shell"><p class="rf-kicker" id="rf-partners-title">Partners and collaborators</p><div class="rf-partner-grid">
-        <figure><img src="assets/partners/partner-cpi.png" alt="Center for Project Innovation"></figure><figure><img src="assets/partners/partner-giva.png" alt="Giva"></figure><figure><img src="assets/partners/partner-reef.png" alt="Reef"></figure><figure><a href="https://www.gellleztech.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Gelllez Technologies website"><img src="assets/partners/partner-gelllez-technologies.jpg" alt="Gelllez Technologies"></a></figure><figure><img src="assets/partners/partner-techwomen.jpg" alt="TechWomen"></figure>
-      </div></div>
-    </section>
-
-    <section class="rf-cta-band" aria-label="Ways to support WHSF">
-      <div class="rf-shell rf-cta-grid">
-        <article class="rf-cta-card"><h3>Make a difference</h3><p>Your support helps bring technology, skills and opportunity to more communities.</p><a class="rf-button rf-button-primary" href="donor-portal.html">Donate Now ♡</a></article>
-        <article class="rf-cta-card"><h3>Partner with us</h3><p>Collaborate on programmes, technology access, evaluation and responsible innovation.</p><a class="rf-button rf-button-outline" href="corporate-partnerships.html">Become a Partner →</a></article>
-        <article class="rf-cta-card"><h3>Volunteer</h3><p>Share your skills and time through mentoring, training and programme support.</p><a class="rf-button rf-button-outline" href="contact.html">Volunteer With Us →</a></article>
-        <article class="rf-cta-card"><h3>Stay updated</h3><p>Follow verified programme news, impact evidence and public announcements.</p><a class="rf-button rf-button-primary" href="newsroom.html">Open Newsroom →</a></article>
-      </div>
+    <!-- Ways to support (Gelllez "duo" cards) -->
+    <section class="hp-duo" aria-label="Ways to support WHSF">
+      <article class="hp-duo-card give">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>Make a difference</span>
+        <h2>Bring technology and opportunity to more communities.</h2>
+        <p>Your gift funds devices, training, mentors and certificates for girls and young women. WHSF is a 501(c)(3) charity, so US donations are tax deductible.</p>
+        <ul class="hp-chips"><li>Devices &amp; labs</li><li>Training</li><li>Mentorship</li><li>Certificates</li></ul>
+        <a class="hp-btn hp-btn-white" href="donor-portal.html">Donate now</a>
+      </article>
+      <article class="hp-duo-card partner">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg>Partner, volunteer, follow</span>
+        <h2>Work with WHSF on programmes that last.</h2>
+        <p>Collaborate on programmes, technology access, evaluation and responsible innovation, or share your skills as a mentor or trainer.</p>
+        <ul class="hp-chips"><li>Corporate partners</li><li>Sponsorship</li><li>Volunteering</li></ul>
+        <a class="hp-btn hp-btn-white" href="corporate-partnerships.html">Become a partner</a>
+        <div class="hp-duo-links"><a href="contact.html">Volunteer with us</a><a href="newsroom.html">Open the newsroom</a></div>
+      </article>
     </section>
   </main>
 
-  <footer class="rf-footer">
-    <div class="rf-shell">
-      <div class="rf-footer-top">
-        <div class="rf-footer-brand"><img src="assets/whsf-logo.jpg" alt="WHSF emblem"><div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div></div>
-        <div><h4>Quick Links</h4><nav><a href="about.html">About Us</a><a href="programs.html">Our Programs</a><a href="impact-dashboard.html">Impact</a><a href="newsroom.html">Newsroom</a></nav></div>
-        <div><h4>Get Involved</h4><nav><a href="donor-portal.html">Donate</a><a href="contact.html">Volunteer</a><a href="corporate-partnerships.html">Partner With Us</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
-        <div><h4>Contact Us</h4><div class="rf-footer-address"><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span><nav class="rf-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">▶</a></nav></div></div>
-        <figure class="rf-footer-award"><img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner"><figcaption>2025 London Data Center World Award Winner</figcaption></figure>
+  <footer class="hp-footer">
+    <div class="hp-footer-top">
+      <div class="hp-footer-brand">
+        <img src="assets/whsf-logo.jpg" alt="WHSF emblem" width="46" height="46">
+        <div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div>
       </div>
-      <div class="rf-footer-bottom">© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved. · <a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a></div>
+      <div><h4>Explore</h4><nav aria-label="Explore"><a href="about.html">About us</a><a href="programs.html">Our programs</a><a href="grants.html">Grants portal</a><a href="impact-dashboard.html">Impact</a><a href="newsroom.html">Newsroom</a></nav></div>
+      <div><h4>Get involved</h4><nav aria-label="Get involved"><a href="donor-portal.html">Donate</a><a href="contact.html">Volunteer</a><a href="corporate-partnerships.html">Partner with us</a><a href="e-classroom.html">e-learning</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
+      <div><h4>Contact</h4>
+        <address><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span></address>
+        <nav class="hp-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Facebook">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Instagram">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer" aria-label="YouTube">▶</a></nav>
+      </div>
+      <figure class="hp-footer-award"><img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" loading="lazy"><figcaption>2025 London Data Center World Award Winner</figcaption></figure>
+    </div>
+    <div class="hp-footer-bottom">
+      <span>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</span>
+      <span><a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a> · <a href="governance.html">Governance</a></span>
     </div>
   </footer>
 </body>

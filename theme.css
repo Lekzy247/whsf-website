@@ -1,0 +1,196 @@
+/*
+ * WHSF design system: the Gelllez layout language (Inter, soft cards, gradient buttons,
+ * light sticky header, light footer) in WHSF medium wine (#7B2142) with gold highlights.
+ * Loaded last on every page, so it re-themes the existing page styles without rewriting them.
+ */
+:root {
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-heading: var(--font-ui);
+
+  --wx-wine: #7b2142;
+  --wx-wine-deep: #5a1530;
+  --wx-wine-night: #2a0a17;
+  --wx-wine-bright: #a3365f;
+  --wx-kicker: #8f2a52;
+  --wx-gold: #f7bb24;
+  --wx-gold-soft: #f0c535;
+  --wx-ink: #160d1d;
+  --wx-text: #5b4d55;
+  --wx-muted: #6f5a63;
+  --wx-soft: #fbf3f6;
+  --wx-line: #eedde4;
+  --wx-line-strong: #dcc5d0;
+
+  /* Existing WHSF tokens, remapped so every page picks up the new palette. */
+  --red: var(--wx-wine);
+  --red-dark: var(--wx-wine-deep);
+  --gold: var(--wx-gold);
+  --ink: var(--wx-ink);
+  --muted: var(--wx-muted);
+  --line: var(--wx-line);
+  --paper: #fff;
+  --green-950: var(--wx-wine-night);
+  --green-900: #451026;
+  --green-800: var(--wx-wine-deep);
+  --green-700: var(--wx-wine);
+  --green-100: #f7e3ea;
+  --green-50: var(--wx-soft);
+  --shadow: 0 24px 70px rgb(90 21 48 / 12%);
+  --rf-wine: var(--wx-wine);
+  --rf-wine-dark: var(--wx-wine-deep);
+  /* The "rf" pages (about, programmes, e-learning, impact, partner, contact) were blue/navy. */
+  --rf-navy: var(--wx-wine-night);
+  --rf-navy-2: var(--wx-wine-deep);
+  --rf-blue: var(--wx-wine);
+  --rf-cyan: var(--wx-wine-bright);
+  --rf-ink: var(--wx-ink);
+  --rf-muted: var(--wx-muted);
+  --rf-line: var(--wx-line);
+}
+
+body {
+  background: #fff;
+  color: var(--wx-ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; letter-spacing: -.035em; }
+h1 { letter-spacing: -.05em; }
+::selection { background: #f7e3ea; color: var(--wx-wine-deep); }
+:focus-visible { outline: 3px solid var(--wx-gold-soft); outline-offset: 3px; }
+
+/* ---------------------------------------------------------------- utility bar */
+.utility-bar { color: var(--wx-muted); background: var(--wx-soft); border-bottom: 1px solid var(--wx-line); font-size: .76rem; }
+.utility-bar .text-button { color: var(--wx-muted); }
+.utility-bar .text-button:hover, .utility-bar .text-button[aria-pressed="true"] { color: var(--wx-wine); }
+.utility-donate { border-radius: 999px; background: linear-gradient(135deg, var(--wx-wine), var(--wx-wine-bright)); color: #fff !important; }
+
+/* ---------------------------------------------------------------- header */
+.site-header {
+  background: rgb(255 255 255 / 92%);
+  border-bottom: 1px solid var(--wx-line);
+  box-shadow: none;
+  backdrop-filter: blur(16px);
+}
+.nav-wrap { min-height: 76px; }
+.brand { gap: 11px; }
+.brand img {
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgb(90 21 48 / 18%);
+}
+.brand strong { font-family: var(--font-ui); font-size: 1.32rem; font-weight: 700; letter-spacing: -.01em; color: #201029; }
+.brand small { color: var(--wx-muted); font-size: .64rem; font-weight: 600; letter-spacing: .06em; }
+.primary-nav { gap: 22px; font-size: .8rem; font-weight: 600; }
+.primary-nav > a:not(.button) { color: #5f5466; }
+.primary-nav > a:not(.button):hover, .primary-nav > a[aria-current="page"] { color: var(--wx-wine); }
+.primary-nav > a:not(.button)::after { bottom: -6px; height: 2px; border-radius: 2px; background: var(--wx-wine); }
+.menu-toggle { border-color: var(--wx-line-strong); border-radius: 12px; }
+
+/* ---------------------------------------------------------------- buttons */
+.button {
+  min-height: 48px;
+  padding: 13px 21px;
+  border: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--wx-wine), var(--wx-wine-bright));
+  color: #fff;
+  font-size: .84rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: 0 12px 28px rgb(123 33 66 / 28%);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.button:hover { background: linear-gradient(135deg, var(--wx-wine-deep), var(--wx-wine)); transform: translateY(-2px); }
+.button-secondary {
+  border: 1px solid var(--wx-line-strong);
+  background: #fff;
+  color: #4b2a3a;
+  box-shadow: none;
+}
+.button-secondary:hover { border-color: var(--wx-wine); background: var(--wx-soft); color: var(--wx-wine); }
+.button-light { border: 0; background: #fff; color: var(--wx-wine); box-shadow: 0 10px 24px rgb(42 10 23 / 18%); }
+.button-light:hover { background: var(--wx-soft); color: var(--wx-wine-deep); }
+.button-small { min-height: 40px; padding: 8px 15px; font-size: .78rem; }
+.cta-glow { box-shadow: 0 0 0 2px var(--wx-gold-soft), 0 0 18px 4px rgb(240 197 53 / 55%), 0 10px 24px rgb(123 33 66 / 30%); }
+
+/* ---------------------------------------------------------------- type helpers */
+.eyebrow { color: var(--wx-kicker); font-size: .7rem; font-weight: 600; letter-spacing: .13em; }
+.eyebrow-light { color: #f6cfdc; }
+.section-heading h2 { font-size: clamp(2rem, 3.6vw, 2.75rem); line-height: 1.02; letter-spacing: -.05em; }
+.section-heading.centered > p:last-child, .section-heading > p { color: var(--wx-muted); }
+.arrow-link { color: var(--wx-wine); font-weight: 600; }
+
+/* ---------------------------------------------------------------- cards */
+.opportunity-card, .funder-card, .admin-panel, .student-login-card, .pillar-card, .source-grid a,
+.admin-summary article, .grant-proposal-main, .grant-proposal-side {
+  border-color: var(--wx-line);
+  border-radius: 24px;
+  box-shadow: 0 14px 40px rgb(54 17 38 / 7%);
+}
+.opportunity-card, .funder-card, .pillar-card, .source-grid a { transition: transform .25s ease, box-shadow .25s ease; }
+.opportunity-card:hover, .funder-card:hover, .pillar-card:hover, .source-grid a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 50px rgb(54 17 38 / 12%);
+}
+.opportunity-tags span, .grant-badge { background: var(--wx-soft); color: var(--wx-wine-deep); }
+.opportunity-filter-panel button { border-color: var(--wx-line-strong); color: var(--wx-wine-deep); font-weight: 600; }
+.opportunity-filter-panel button.active { background: var(--wx-wine); border-color: var(--wx-wine); }
+
+/* ---------------------------------------------------------------- footer (light, like Gelllez) */
+.site-footer {
+  border-top: 1px solid var(--wx-line);
+  background: #fff;
+  color: var(--wx-muted);
+}
+.site-footer .footer-links a, .site-footer .social-links a { color: #5f5466; }
+.site-footer .footer-links a:hover, .site-footer .social-links a:hover { color: var(--wx-wine); text-decoration: underline; }
+.footer-brand img { border-radius: 14px; }
+.footer-brand strong, .footer-links strong { color: var(--wx-ink); font-family: var(--font-ui); }
+.social-links, .footer-bottom { border-top-color: var(--wx-line); }
+.footer-bottom a { color: var(--wx-wine); }
+
+/* ---------------------------------------------------------------- "rf" pages: header, buttons, footer */
+.reference-home { color: var(--wx-ink); }
+.rf-header { position: sticky; top: 0; z-index: 100; background: rgb(255 255 255 / 92%); border-bottom: 1px solid var(--wx-line); backdrop-filter: blur(16px); }
+.rf-header-inner { min-height: 76px; }
+.rf-brand img { width: 46px; height: 46px; border-radius: 14px; box-shadow: 0 8px 18px rgb(90 21 48 / 18%); }
+.rf-brand-copy strong { color: #201029; font-weight: 700; letter-spacing: -.01em; }
+.rf-nav a { color: #5f5466 !important; font-size: .8rem !important; font-weight: 600 !important; }
+.rf-nav a:hover, .rf-nav a:focus, .rf-nav a[aria-current="page"] { color: var(--wx-wine) !important; }
+.rf-nav .rf-donate-nav {
+  border-radius: 11px !important;
+  background: linear-gradient(135deg, var(--wx-wine), var(--wx-wine-bright)) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgb(123 33 66 / 28%) !important;
+}
+.rf-kicker { color: var(--wx-kicker); font-weight: 600; letter-spacing: .13em; }
+.rf-section-heading h2 { letter-spacing: -.05em; line-height: 1.02; }
+.rf-button { border-radius: 11px; font-weight: 600; }
+.rf-button-primary { background: linear-gradient(135deg, var(--wx-wine), var(--wx-wine-bright)); box-shadow: 0 12px 28px rgb(123 33 66 / 28%); }
+.rf-footer { border-top: 1px solid var(--wx-line); background: #fff; color: var(--wx-muted); }
+.rf-footer-brand img { border-radius: 14px; }
+.rf-footer-brand strong, .rf-footer h4 { color: var(--wx-ink); }
+.rf-footer a, .rf-footer-address span { color: #5f5466; }
+.rf-footer a:hover { color: var(--wx-wine); text-decoration: underline; }
+.rf-footer-social a { border-color: var(--wx-line-strong); color: var(--wx-wine); }
+.rf-footer-award figcaption { color: var(--wx-muted); }
+.rf-footer-bottom { border-top-color: var(--wx-line); }
+
+/* ---------------------------------------------------------------- floating assistant pill */
+.whsf-chatbot-toggle {
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, var(--wx-wine-deep), var(--wx-wine-bright)) !important;
+  color: #fff !important;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgb(240 197 53 / 70%), 0 14px 32px rgb(90 21 48 / 35%) !important;
+}
+.whsf-chatbot-head { background: linear-gradient(135deg, var(--wx-wine-deep), var(--wx-wine)) !important; }
+
+@media (max-width: 760px) {
+  .nav-wrap { min-height: 66px; }
+  .brand img { width: 40px; height: 40px; }
+  .brand strong { font-size: 1.15rem; }
+}
