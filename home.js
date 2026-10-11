@@ -31,7 +31,26 @@
       tab.tabIndex = active ? 0 : -1;
     });
     if (focusTab) tabs[current].focus();
+    syncVideos();
     restart();
+  }
+
+  // Slide videos play only while their slide is showing and the slider isn't paused.
+  // Skipped entirely for reduced-motion and data-saver visitors, who keep the still photo.
+  const saveData = navigator.connection && navigator.connection.saveData;
+  const videos = reducedMotion || saveData ? [] : [...slider.querySelectorAll('[data-hp-video]')];
+  videos.forEach((video) => {
+    video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
+  });
+  function syncVideos() {
+    videos.forEach((video) => {
+      if (video.closest('.hp-slide') === slides[current] && !paused && !document.hidden) {
+        if (video.preload === 'none') video.preload = 'auto';
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
   }
 
   function restart() {
@@ -54,6 +73,7 @@
     } else {
       restart();
     }
+    syncVideos();
   }
 
   tabs.forEach((tab, i) => {
@@ -73,7 +93,10 @@
   slider.addEventListener('focusout', (event) => {
     if (!slider.contains(event.relatedTarget)) { hovering = false; restart(); }
   });
-  document.addEventListener('visibilitychange', () => (document.hidden ? clearTimeout(timer) : restart()));
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) clearTimeout(timer); else restart();
+    syncVideos();
+  });
 
   setPaused(paused);
   show(0);
