@@ -278,7 +278,7 @@
 
 /* ---------------------------------------------------------------- footer (Gelllez-style) */
 .hp-footer { width: min(1180px, calc(100% - 40px)); margin: 90px auto 0; padding: 34px 0 42px; border-top: 1px solid var(--wx-line); color: var(--wx-muted); font-size: 13px; }
-.hp-footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr auto; gap: 30px; align-items: start; }
+.hp-footer-top { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr 1.2fr auto; gap: 28px; align-items: start; }
 .hp-footer-brand { display: flex; align-items: flex-start; gap: 12px; }
 .hp-footer-brand img { width: 46px; height: 46px; border-radius: 14px; box-shadow: 0 8px 18px rgb(90 21 48 / 18%); }
 .hp-footer-brand strong { display: block; color: var(--wx-ink); font-size: 15px; line-height: 1.25; }
