@@ -129,6 +129,70 @@
 .gx-process span { color: #66575f; font-size: 14px; line-height: 1.55; }
 .hp-pillar .gx-chips { margin: 0; }
 
+/* ---------------------------------------------------------------- contact: reach list + form panel */
+.gx-contact {
+  width: min(1180px, calc(100% - 40px));
+  display: grid; grid-template-columns: .85fr 1.15fr; gap: 28px; align-items: start;
+  margin: 80px auto 0;
+}
+.gx-reach h2, .gx-form-panel h2 { margin: 12px 0 18px; font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.05; letter-spacing: -.05em; }
+.gx-reach article { display: grid; grid-template-columns: 46px 1fr; gap: 14px; margin-bottom: 10px; padding: 16px 18px; border: 1px solid #eee0e7; border-radius: 20px; background: #fff; }
+.gx-reach article > span { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; background: var(--wx-soft); color: var(--wx-wine); }
+.gx-reach article svg { width: 21px; height: 21px; }
+.gx-reach h3 { margin: 0 0 4px; font-size: 16px; letter-spacing: -.02em; }
+.gx-reach p, .gx-reach address { margin: 4px 0; color: #66575f; font-size: 14px; font-style: normal; line-height: 1.5; }
+.gx-reach a { color: var(--wx-wine); font-size: 14px; font-weight: 600; text-decoration: none; }
+.gx-reach a:hover { text-decoration: underline; }
+.gx-social { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.gx-social a { padding: 5px 11px; border-radius: 999px; background: var(--wx-soft); font-size: 13px; }
+.gx-privacy { margin-top: 14px; padding: 18px 20px; border-radius: 20px; background: linear-gradient(135deg, #fff2f6, #fff7d4); }
+.gx-privacy strong { color: var(--wx-wine-deep); }
+.gx-privacy p { margin: 6px 0; color: var(--wx-text); font-size: 14px; line-height: 1.55; }
+.gx-privacy a { color: var(--wx-wine); font-size: 14px; font-weight: 600; }
+
+.gx-form-panel { padding: 32px; border: 1px solid #f0dde6; border-radius: 28px; background: #fff; box-shadow: 0 24px 60px rgb(78 17 42 / 10%); }
+.gx-form-panel > p { margin: -6px 0 22px; color: var(--wx-text); }
+.gx-form-panel .contact-form { display: grid; gap: 16px; padding: 0; border: 0; border-radius: 0; background: transparent; }
+.gx-form-panel .contact-form label { display: block; margin: 0; color: var(--wx-ink); font-size: 14px; font-weight: 600; }
+.gx-form-panel .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.gx-form-panel .contact-form input:not([type="checkbox"]), .gx-form-panel .contact-form select, .gx-form-panel .contact-form textarea {
+  width: 100%; min-height: 48px; margin: 7px 0 0; padding: 12px 14px;
+  border: 1px solid var(--wx-line-strong); border-radius: 12px;
+  background: #fff; color: var(--wx-ink); font: inherit; font-weight: 400;
+}
+.gx-form-panel .contact-form textarea { min-height: 150px; resize: vertical; }
+.gx-form-panel .contact-form input::placeholder, .gx-form-panel .contact-form textarea::placeholder { color: #9a8790; }
+.gx-form-panel .contact-form input:focus, .gx-form-panel .contact-form select:focus, .gx-form-panel .contact-form textarea:focus { border-color: var(--wx-wine); outline: 3px solid rgb(123 33 66 / 14%); }
+.gx-form-panel .optional-label { margin-left: 4px; padding: 0; border: 0; background: none; color: var(--wx-muted); font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.gx-form-panel label > span[aria-hidden] { color: var(--wx-wine); }
+.gx-form-panel .form-guidance { margin: 0; padding: 12px 14px; border: 0; border-radius: 12px; background: var(--wx-soft); color: var(--wx-text); font-size: 13px; font-weight: 500; line-height: 1.5; }
+.gx-form-panel .contact-form .ct-consent { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 10px; color: var(--wx-text); font-size: 13px; font-weight: 500; }
+.gx-form-panel .ct-consent input { margin: 3px 0 0; accent-color: var(--wx-wine); }
+.gx-form-panel .ct-consent a { color: var(--wx-wine); }
+.gx-form-panel .ct-next { display: grid; gap: 4px; padding: 14px 16px; border-radius: 14px; background: #fbf7f9; color: var(--wx-text); font-size: 13px; }
+.gx-form-panel .ct-next strong { color: var(--wx-wine-deep); }
+.gx-form-panel .ct-submit { width: 100%; justify-content: center; border: 0; cursor: pointer; }
+.gx-form-panel .form-note { margin: 0; color: var(--wx-muted); font-size: 13px; line-height: 1.5; }
+.ct-honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+
+/* ---------------------------------------------------------------- FAQ + alert */
+.gx-faq { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gx-faq details { padding: 4px 22px; border: 1px solid #eee0e7; border-radius: 18px; background: #fff; }
+.gx-faq summary { padding: 16px 0; color: var(--wx-ink); font-weight: 600; cursor: pointer; }
+.gx-faq details p { margin: 0 0 18px; color: #66575f; line-height: 1.6; }
+.gx-faq a { color: var(--wx-wine); }
+.gx-alert {
+  width: min(1180px, calc(100% - 40px));
+  display: grid; grid-template-columns: 52px 1fr; gap: 18px; align-items: start;
+  margin: 60px auto 0; padding: 24px 28px;
+  border: 1px solid #f3dca4; border-radius: 24px;
+  background: #fff8e6;
+}
+.gx-alert > span { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: #fff; color: #9a5b00; }
+.gx-alert svg { width: 24px; height: 24px; }
+.gx-alert h2 { margin: 0 0 6px; font-size: 20px; letter-spacing: -.02em; }
+.gx-alert p { margin: 0; color: #5d4630; line-height: 1.6; }
+
 @media (max-width: 980px) {
   .gx-page-hero { padding: 40px 34px 26px; }
   .gx-cards { grid-template-columns: 1fr 1fr; }
@@ -137,6 +201,8 @@
   .gx-stats-band { padding: 36px 28px; }
   .gx-stats-band .hp-stats { grid-template-columns: repeat(3, 1fr); }
   .gx-process { grid-template-columns: 1fr 1fr; }
+  .gx-contact { grid-template-columns: 1fr; }
+  .gx-faq { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .gx-page-hero { width: calc(100% - 24px); padding: 28px 18px 20px; border-radius: 24px; }
@@ -147,4 +213,8 @@
   .gx-feature, .gx-stats-band { width: calc(100% - 32px); }
   .gx-stats-band .hp-stats { grid-template-columns: repeat(2, 1fr); }
   .gx-process { grid-template-columns: 1fr; }
+  .gx-contact, .gx-alert { width: calc(100% - 32px); }
+  .gx-form-panel { padding: 22px 18px; }
+  .gx-form-panel .field-row { grid-template-columns: 1fr; }
+  .gx-alert { grid-template-columns: 1fr; }
 }

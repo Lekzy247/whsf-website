@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v172';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v173';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -13,7 +13,6 @@ const WHSF_CORE_ASSETS = [
   '/media-information-library/',
   '/innovation.html',
   '/contact.html',
-  '/contact-reference.css',
   '/privacy-policy.html',
   '/child-safeguarding-policy.html',
   '/opportunities.html',
