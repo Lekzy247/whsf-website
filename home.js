@@ -98,6 +98,11 @@
     syncVideos();
   });
 
+  // Later slides' photos are lazy; warm them after load so a slide never appears as an empty box.
+  window.addEventListener('load', () => {
+    slider.querySelectorAll('.hp-slide-visual img[loading="lazy"]').forEach((img) => { img.loading = 'eager'; });
+  }, { once: true });
+
   setPaused(paused);
   show(0);
 })();
