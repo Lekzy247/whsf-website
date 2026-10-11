@@ -37,80 +37,77 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="grants.css" />
+    <link rel="stylesheet" href="gx.css" />
+    <link rel="stylesheet" href="gx-page.css" />
     <script src="script.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
     <script src="grants.js" defer></script>
   <link rel="stylesheet" href="/theme.css">
 </head>
-  <body>
+  <body class="home-page">
     <a class="skip-link" href="#main">Skip to main content</a>
 
-    <div class="utility-bar">
-      <div class="shell utility-inner">
-        <p>Advancing dignity, inclusion and sustainable development</p>
-        <div class="utility-actions" aria-label="Accessibility controls">
-          <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
-          <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
-          <a class="utility-donate" href="https://paypal.com/us/fundraiser/charity/1450337" target="_blank" rel="noreferrer">Donate now</a>
-        </div>
+  <div class="utility-bar">
+    <div class="shell utility-inner">
+      <p>Humanity. Inclusion. Sustainability. A 501(c)(3) charity.</p>
+      <div class="utility-actions" aria-label="Accessibility controls">
+        <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+        <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+        <a class="utility-donate" href="donor-portal.html">Donate now</a>
       </div>
     </div>
+  </div>
 
-    <header class="site-header" id="top">
-      <div class="shell nav-wrap">
-        <a class="brand" href="index.html" aria-label="WHSF home">
-          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
-          <span>
-            <strong>WHSF</strong>
-            <small>World Humanitarian Support Foundation</small>
-          </span>
-        </a>
+  <header class="site-header" id="top">
+    <div class="shell nav-wrap">
+      <a class="brand" href="index.html" aria-label="WHSF home">
+        <img src="assets/whsf-logo.jpg" width="46" height="46" alt="WHSF emblem">
+        <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
+      <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="grants.html" aria-current="page">Grants</a>
+        <a href="impact-dashboard.html">Impact</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-          <span class="menu-lines" aria-hidden="true"></span>
-          <span class="sr-only">Open menu</span>
-        </button>
-
-        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-          <a href="index.html">Home</a>
-          <a href="programs.html">Programs</a>
-          <a href="impact-dashboard.html">Impact</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
-    </header>
-
-    <main id="main">
-      <section class="opportunity-hero" aria-labelledby="grants-title">
-        <div class="shell opportunity-hero-grid">
-          <div class="reveal">
-            <p class="eyebrow">Funding opportunities portal</p>
-            <h1 id="grants-title">Find grants for ICT, STEM, AI, education and women's empowerment</h1>
-            <p class="hero-lead">
-              Open calls from official sources such as Grants.gov and the EU Funding &amp; Tenders Portal,
-              plus grants checked by WHSF. Search by country, sector, who can apply and deadline.
-            </p>
-            <div class="hero-actions">
-              <a class="button button-light" href="#grant-search">Search grants</a>
-              <a class="button button-secondary" href="grants-account.html">Get matched</a>
-              <a class="button button-secondary" href="#funders">Donor directory</a>
-            </div>
-          </div>
-          <aside class="opportunity-command-card reveal delay-one" aria-label="Portal summary">
-            <span>Updated daily</span>
-            <h2>Official sources, checked against WHSF programme areas</h2>
-            <p>
-              Each listing links to the funder's own page. Always confirm eligibility,
-              amounts and deadlines there before applying.
-            </p>
-            <div class="grant-stats" aria-live="polite">
-              <div><strong data-grant-stat="open">–</strong><span>Open grants</span></div>
-              <div><strong data-grant-stat="soon">–</strong><span>Close in 30 days</span></div>
-              <div><strong data-grant-stat="funders">–</strong><span>Funders listed</span></div>
-            </div>
-          </aside>
+  <main id="main">
+    <!-- Page hero (Gelllez inner-page layout) -->
+    <section class="gx-page-hero" aria-labelledby="grants-title">
+      <span class="hp-hero-glow" aria-hidden="true"></span>
+      <div class="gx-page-hero-copy">
+        <span class="hp-kicker">Funding opportunities portal</span>
+        <h1 id="grants-title">Find funding. <em>Grow your impact.</em></h1>
+        <p>Open grants for ICT, STEM, AI, education and women’s empowerment from official sources such as Grants.gov and the EU Funding &amp; Tenders Portal, plus grants checked by WHSF. Search by country, sector, who can apply and deadline.</p>
+        <div class="hp-actions">
+          <a class="hp-btn hp-btn-primary cta-glow" href="#grant-search">Search grants
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+          <a class="hp-btn hp-btn-solid" href="grants-account.html">Get matched</a>
+          <a class="hp-btn hp-btn-outline" href="#funders">Donor directory</a>
         </div>
-      </section>
+        <div class="gx-hero-stats grant-stats" aria-live="polite">
+          <div><strong data-grant-stat="open">–</strong><span>Open grants</span></div>
+          <div><strong data-grant-stat="soon">–</strong><span>Close in 30 days</span></div>
+          <div><strong data-grant-stat="funders">–</strong><span>Funders listed</span></div>
+        </div>
+      </div>
+      <ul class="gx-shortcuts" aria-label="Grants portal">
+        <li><a href="#grant-search"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>Search grants</a></li>
+        <li><a href="grants-account.html"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/></svg></span>Get matched</a></li>
+        <li><a href="grants-account.html"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>Deadline alerts</a></li>
+        <li><a href="#funders"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg></span>Donor directory</a></li>
+        <li><a href="#sources"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>Official sources</a></li>
+        <li><a href="contact.html"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Ask WHSF</a></li>
+      </ul>
+      <p class="gx-note">Updated daily. Each listing links to the funder’s own page. Always confirm eligibility, amounts and deadlines there before applying.</p>
+    </section>
 
       <section class="section opportunity-calendar-section" id="grant-search">
         <div class="shell">
@@ -236,30 +233,24 @@
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="shell footer-grid">
-        <div class="footer-brand">
-          <img src="assets/whsf-logo.jpg" width="72" height="72" alt="WHSF emblem" />
-          <div>
-            <strong>World Humanitarian<br />Support Foundation</strong>
-            <p>Humanity. Inclusion. Sustainability.<br />WHSF is a 501(c)(3) charity. Donations are tax deductible.</p>
-          </div>
-        </div>
-        <div class="footer-links">
-          <div><strong>Explore</strong><a href="index.html#projects">Projects</a><a href="index.html#about">About Us</a><a href="programs.html">Programs</a><a href="impact-dashboard.html">Impact</a><a href="opportunities.html">Opportunities</a><a href="grants.html">Grants</a><a href="index.html#partners">Partners</a></div>
-          <div><strong>Connect</strong><a href="corporate-partnerships.html">Partner with us</a><a href="index.html#more">Get involved</a><a href="contact.html">Contact &amp; Support</a><a href="https://paypal.com/us/fundraiser/charity/1450337">Donate</a></div>
-        </div>
+  <footer class="hp-footer">
+    <div class="hp-footer-top">
+      <div class="hp-footer-brand">
+        <img src="assets/whsf-logo.jpg" alt="WHSF emblem" width="46" height="46">
+        <div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div>
       </div>
-      <div class="shell social-links" aria-label="WHSF social media">
-        <a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer">Facebook</a>
-        <a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer">YouTube</a>
-        <a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer">LinkedIn</a>
+      <div><h4>Explore</h4><nav aria-label="Explore"><a href="about.html">About us</a><a href="programs.html">Our programs</a><a href="grants.html">Grants portal</a><a href="impact-dashboard.html">Impact</a><a href="newsroom.html">Newsroom</a></nav></div>
+      <div><h4>Get involved</h4><nav aria-label="Get involved"><a href="donor-portal.html">Donate</a><a href="contact.html">Volunteer</a><a href="corporate-partnerships.html">Partner with us</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
+      <div><h4>Contact</h4>
+        <address><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span></address>
+        <nav class="hp-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Facebook">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Instagram">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer" aria-label="YouTube">▶</a></nav>
       </div>
-      <div class="shell footer-bottom">
-        <p>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</p>
-        <a href="#top">Back to top ↑</a>
-      </div>
-    </footer>
-  </body>
+      <figure class="hp-footer-award"><img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" loading="lazy"><figcaption>2025 London Data Center World Award Winner</figcaption></figure>
+    </div>
+    <div class="hp-footer-bottom">
+      <span>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</span>
+      <span><a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a> · <a href="governance.html">Governance</a></span>
+    </div>
+  </footer>
+</body>
 </html>
