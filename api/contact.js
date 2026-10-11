@@ -22,6 +22,50 @@ function escapeHtml(value) {
   })[character]);
 }
 
+const VERIFY_STAFF_URL = 'https://www.worldhsfoundation.org/verify-certificate.html#staff-verification';
+const CONTACT_URL = 'https://www.worldhsfoundation.org/contact.html';
+
+// Messages about money WHSF supposedly pays out, promotions, prizes or scams get a fraud advisory
+// as their acknowledgement instead of the standard one.
+const FRAUD_PATTERN = new RegExp([
+  'scam', 'fraud', 'fake', 'impersonat', 'identity theft', 'hack',
+  'disburs', 'payout', 'pay out', 'loan', 'lottery', 'prize', 'winner', 'jackpot',
+  'promotion', '\bpromo\b', 'cash (grant|gift|support|reward)', 'empowerment (fund|grant|money|cash|program)',
+  '(registration|processing|activation|clearance|release) fee', 'beneficiar', 'palliative',
+  'claim (my|the|your) (grant|fund|money|prize|reward)', '(grant|fund|money) (approved|awarded|release)',
+  'whatsapp group', 'bank (details|account)', 'account number', 'investment opportunit'
+].join('|'), 'i');
+
+function isFraudRelated(interest, message) {
+  return interest === 'Fraud / Scam report' || FRAUD_PATTERN.test(message);
+}
+
+function fraudAdvisory(firstName, reference) {
+  const button = 'display:inline-block;padding:12px 20px;border-radius:10px;background:#7b2142;color:#ffffff;font-weight:600;text-decoration:none';
+  const html =
+    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#160d1d;max-width:600px">' +
+    '<p>Hello ' + escapeHtml(firstName) + ',</p>' +
+    '<p>Thank you for contacting World Humanitarian Support Foundation (WHSF). Your message has been received.</p>' +
+    '<p><strong>Important:</strong> WHSF is <strong>not involved</strong> in disbursing funds, cash grants, loans or empowerment payments to individuals, and does not run promotions, prizes or "opportunity" payouts. WHSF never asks anyone to pay a fee or share bank details to receive any benefit. Any message, page or group claiming otherwise is not from WHSF.</p>' +
+    '<p>If someone has contacted you about this, please <strong>do not send money or personal or financial information</strong>, and report it to the police or the appropriate authority (for example, a cybercrime or consumer-protection unit) close to you.</p>' +
+    '<p>To protect yourself from fraud, identity theft or misrepresentation, verify anyone who says they work for WHSF. Check their <strong>name, phone number and official WHSF email</strong>:</p>' +
+    '<p><a href="' + VERIFY_STAFF_URL + '" style="' + button + '">Verify a WHSF employee</a></p>' +
+    '<p style="font-size:13px;color:#5b4d55">Or open this link: <a href="' + VERIFY_STAFF_URL + '">' + VERIFY_STAFF_URL + '</a></p>' +
+    '<p>Official WHSF contacts: <a href="https://www.worldhsfoundation.org">www.worldhsfoundation.org</a> and <a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a>. To report suspected fraud to us, use <a href="' + CONTACT_URL + '">our Contact page</a>.</p>' +
+    '<p><strong>Reference:</strong> ' + reference + '</p>' +
+    '<p>World Humanitarian Support Foundation</p>' +
+    '</div>';
+  const text =
+    'Hello ' + firstName + ',\n\n' +
+    'Thank you for contacting World Humanitarian Support Foundation (WHSF). Your message has been received.\n\n' +
+    'Important: WHSF is not involved in disbursing funds, cash grants, loans or empowerment payments to individuals, and does not run promotions, prizes or "opportunity" payouts. WHSF never asks anyone to pay a fee or share bank details to receive any benefit. Any message, page or group claiming otherwise is not from WHSF.\n\n' +
+    'If someone has contacted you about this, do not send money or personal or financial information, and report it to the police or the appropriate authority (for example, a cybercrime or consumer-protection unit) close to you.\n\n' +
+    'Verify anyone who says they work for WHSF by name, phone number and official WHSF email:\n' + VERIFY_STAFF_URL + '\n\n' +
+    'Official WHSF contacts: www.worldhsfoundation.org and info@worldhsfoundation.org.\n\n' +
+    'Reference: ' + reference + '\n\nWorld Humanitarian Support Foundation';
+  return { html, text };
+}
+
 function getClientKey(request) {
   const forwarded = String(request.headers['x-forwarded-for'] || '').split(',')[0].trim();
   return createHash('sha256').update(forwarded || 'unknown').digest('hex').slice(0, 20);
@@ -105,7 +149,8 @@ export default async function handler(request, response) {
     return response.status(503).json({ error: 'The contact service is temporarily unavailable.' });
   }
 
-  const routeVariable = ROUTES[interest];
+  const fraudRelated = isFraudRelated(interest, message);
+  const routeVariable = ROUTES[fraudRelated ? 'Fraud / Scam report' : interest];
   const recipient = (routeVariable && process.env[routeVariable]) || fallbackRecipient;
   const reference = 'WHSF-' + randomUUID().split('-')[0].toUpperCase();
   const submittedAt = new Date().toISOString();
@@ -123,28 +168,40 @@ export default async function handler(request, response) {
     from,
     to: [recipient],
     reply_to: email,
-    subject: '[' + reference + '] WHSF enquiry: ' + interest,
+    subject: '[' + reference + '] ' + (fraudRelated ? 'FRAUD ALERT - ' : '') + 'WHSF enquiry: ' + interest,
     html: '<h1>New WHSF website enquiry</h1>' +
       '<p><strong>Reference:</strong> ' + reference + '</p>' +
       '<p><strong>Name:</strong> ' + safe.name + '<br>' +
       '<strong>Email:</strong> ' + safe.email + '<br>' +
       '<strong>Phone:</strong> ' + safe.phone + '<br>' +
       '<strong>Route:</strong> ' + safe.interest + '</p>' +
+      (fraudRelated ? '<p><strong>Flagged as fraud-related.</strong> The sender was sent the fraud advisory with the Verify a WHSF employee link.</p>' : '') +
       '<p><strong>Message</strong><br>' + safe.message + '</p>' +
       '<hr><p>Consent to use and retain this submission for follow-up: Yes<br>' +
       'Submitted: ' + submittedAt + '<br>Client record: ' + clientKey + '</p>'
   });
 
-  await sendEmail(apiKey, {
-    from,
-    to: [email],
-    subject: 'We received your WHSF enquiry [' + reference + ']',
-    html: '<p>Hello ' + escapeHtml(firstName) + ',</p>' +
-      '<p>Thank you for contacting World Humanitarian Support Foundation. Your enquiry has been routed to the appropriate team.</p>' +
-      '<p><strong>Reference:</strong> ' + reference + '</p>' +
-      '<p>We normally respond within three business days.</p>' +
-      '<p>If you did not submit this enquiry, reply to this email and let us know.</p>'
-  });
+  if (fraudRelated) {
+    const advisory = fraudAdvisory(firstName, reference);
+    await sendEmail(apiKey, {
+      from,
+      to: [email],
+      subject: 'Important: WHSF does not disburse funds or run promotions [' + reference + ']',
+      html: advisory.html,
+      text: advisory.text
+    });
+  } else {
+    await sendEmail(apiKey, {
+      from,
+      to: [email],
+      subject: 'We received your WHSF enquiry [' + reference + ']',
+      html: '<p>Hello ' + escapeHtml(firstName) + ',</p>' +
+        '<p>Thank you for contacting World Humanitarian Support Foundation. Your enquiry has been routed to the appropriate team.</p>' +
+        '<p><strong>Reference:</strong> ' + reference + '</p>' +
+        '<p>We normally respond within three business days.</p>' +
+        '<p>If you did not submit this enquiry, reply to this email and let us know.</p>'
+    });
+  }
 
   return response.status(200).json({
     message: 'Thank you. Your enquiry was sent successfully. Acknowledgement reference: ' + reference + '. We normally respond within three business days.'
