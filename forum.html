@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="The WHSF Forum: a members-only community (18+) for mentors, partners, volunteers and families building opportunity through technology.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#7b2142">
+  <meta property="og:title" content="WHSF Forum">
+  <meta property="og:description" content="Join the WHSF community: share updates, celebrate wins and find funding opportunities.">
+  <meta property="og:type" content="website"><meta property="og:url" content="https://www.worldhsfoundation.org/forum.html">
+  <meta property="og:site_name" content="World Humanitarian Support Foundation">
+  <meta property="og:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg">
+  <meta property="og:image:alt" content="WHSF community">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg">
+  <title>WHSF Forum | World Humanitarian Support Foundation</title>
+  <link rel="icon" href="assets/whsf-logo.jpg"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/whsf-logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=153">
+  <link rel="stylesheet" href="gx.css?v=5">
+  <link rel="stylesheet" href="gx-page.css?v=4">
+  <link rel="stylesheet" href="forum.css?v=1">
+  <link rel="stylesheet" href="/theme.css?v=3">
+  <script src="script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
+  <script src="forum.js?v=1" defer></script>
+</head>
+<body class="home-page">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="utility-bar">
+    <div class="shell utility-inner">
+      <p>Humanity. Inclusion. Sustainability. A 501(c)(3) charity.</p>
+      <div class="utility-actions" aria-label="Accessibility controls">
+        <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
+        <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
+        <a class="utility-donate" href="donor-portal.html">Donate now</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header" id="top">
+    <div class="shell nav-wrap">
+      <a class="brand" href="index.html" aria-label="WHSF home">
+        <img src="assets/whsf-logo.jpg" width="46" height="46" alt="WHSF emblem">
+        <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
+      <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="impact-dashboard.html">Impact</a>
+        <a href="forum.html" aria-current="page">Forum</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="fm">
+    <!-- Forum bar -->
+    <div class="fm-bar">
+      <div class="fm-bar-inner">
+        <a class="fm-brand" href="forum.html"><span aria-hidden="true">W</span>WHSF Forum</a>
+        <label class="fm-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <span class="sr-only">Search members</span>
+          <input type="search" id="fm-search" placeholder="Search people, skills, roles" autocomplete="off">
+        </label>
+        <nav class="fm-tabs" aria-label="Forum">
+          <a href="#feed" data-fm-tab="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+          <a href="#people" data-fm-tab="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg>Network</a>
+          <a href="grants.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>Opportunities</a>
+          <a href="#rules" data-fm-tab="rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Rules</a>
+          <a href="#me" data-fm-tab="me"><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true">?</span>Me</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="fm-grid">
+      <!-- Left: profile card -->
+      <aside class="fm-left">
+        <section class="fm-card fm-profile" data-fm-profile-card hidden>
+          <div class="fm-cover" aria-hidden="true"></div>
+          <div class="fm-avatar fm-avatar-lg" data-fm-avatar aria-hidden="true"></div>
+          <h1 class="fm-name" data-fm-name></h1>
+          <p class="fm-headline" data-fm-headline></p>
+          <p class="fm-location" data-fm-location></p>
+          <div class="fm-stats">
+            <a href="#people"><strong data-fm-connections>0</strong><span>Connections</span></a>
+            <a href="#people"><strong data-fm-followers>0</strong><span>Followers</span></a>
+          </div>
+          <div class="fm-strength">
+            <p><span>Profile strength</span><strong data-fm-strength>1/5</strong></p>
+            <div class="fm-meter"><i data-fm-strength-bar></i></div>
+            <a href="#me" data-fm-next-step>Next: add a headline →</a>
+          </div>
+        </section>
+
+        <section class="fm-card fm-guest" data-fm-guest-card>
+          <div class="fm-cover" aria-hidden="true"></div>
+          <div class="fm-avatar fm-avatar-lg fm-avatar-logo" aria-hidden="true"><img src="assets/whsf-logo.jpg" alt=""></div>
+          <h1 class="fm-name">WHSF Forum</h1>
+          <p class="fm-headline">A community for people building opportunity through technology.</p>
+          <p class="fm-note">Adults 18+ · Members only</p>
+        </section>
+
+        <section class="fm-card fm-promo">
+          <span class="fm-badge">From WHSF</span>
+          <img src="assets/programs/ict-girls-club-certificates.jpg" alt="Girls in ICT Club learners celebrating their certificates" loading="lazy">
+          <h2>Help a girl step into technology</h2>
+          <p>Your gift funds devices, trainers and certificates for the Girls in ICT Club.</p>
+          <a class="hp-btn hp-btn-primary" href="donor-portal.html">Donate now</a>
+          <a class="fm-link" href="corporate-partnerships.html">Partner with WHSF</a>
+        </section>
+      </aside>
+
+      <!-- Centre -->
+      <section class="fm-center">
+        <!-- Signed out: join / sign in -->
+        <section class="fm-card fm-auth" data-fm-auth hidden>
+          <span class="fm-badge">Join the WHSF Forum</span>
+          <h2 data-fm-auth-title>Sign in to join the conversation</h2>
+          <p>Connect with mentors, learners' families, partners and volunteers working on digital skills, STEM and opportunity. The forum is for <strong>adults aged 18 and over</strong>.</p>
+          <form class="fm-form" data-fm-auth-form novalidate>
+            <label>Email<input type="email" name="email" autocomplete="email" required></label>
+            <label>Password<input type="password" name="password" autocomplete="current-password" minlength="8" required></label>
+            <div class="fm-actions">
+              <button class="hp-btn hp-btn-primary" type="submit" data-fm-auth-submit>Sign in</button>
+              <button class="fm-text-btn" type="button" data-fm-auth-toggle>New here? Create an account</button>
+            </div>
+            <button class="fm-text-btn fm-small" type="button" data-fm-forgot>Forgot password?</button>
+            <p class="fm-status" role="status" data-fm-auth-status></p>
+          </form>
+        </section>
+
+        <!-- Signed in but not a member yet -->
+        <section class="fm-card fm-join" data-fm-join hidden>
+          <span class="fm-badge">Almost there</span>
+          <h2>Create your forum profile</h2>
+          <p>Your name, headline and location are visible to other members. Your date of birth is only used to confirm you are 18 or over and is not stored.</p>
+          <form class="fm-form" data-fm-join-form novalidate>
+            <label>Name shown to members<input name="display_name" maxlength="80" required></label>
+            <label>Headline <small>(optional)</small><input name="headline" maxlength="120" placeholder="e.g. Volunteer mentor, STEM teacher"></label>
+            <label>Location <small>(optional)</small><input name="location" maxlength="80" placeholder="City, country"></label>
+            <label>Date of birth<input type="date" name="birth_date" required></label>
+            <label class="fm-check"><input type="checkbox" name="accept_rules" required> <span>I am 18 or over and I agree to the <a href="#rules">community rules</a>.</span></label>
+            <div class="fm-actions">
+              <button class="hp-btn hp-btn-primary" type="submit">Join the forum</button>
+              <button class="fm-text-btn" type="button" data-fm-signout>Sign out</button>
+            </div>
+            <p class="fm-status" role="status" data-fm-join-status></p>
+          </form>
+        </section>
+
+        <!-- Member: composer -->
+        <section class="fm-card fm-composer" data-fm-composer hidden>
+          <form data-fm-post-form novalidate>
+            <div class="fm-composer-row">
+              <div class="fm-avatar" data-fm-avatar aria-hidden="true"></div>
+              <label class="fm-grow"><span class="sr-only">Start a conversation</span>
+                <textarea name="body" rows="2" maxlength="3000" placeholder="Start a conversation" required></textarea>
+              </label>
+            </div>
+            <div class="fm-attach" data-fm-attach hidden>
+              <img alt="Selected picture preview" data-fm-attach-img>
+              <button type="button" class="fm-text-btn" data-fm-attach-remove>Remove picture</button>
+            </div>
+            <label class="fm-location-input" data-fm-location-row hidden>Location<input name="location" maxlength="80" placeholder="Where is this?"></label>
+            <div class="fm-tools">
+              <label class="fm-tool"><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-fm-file hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Picture</label>
+              <a class="fm-tool" href="grants.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>Opportunities</a>
+              <button type="button" class="fm-tool" data-fm-celebrate aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l5-14 9 9z"/><path d="M14 4l1-2M19 9l2-1M18 4l-1 2"/></svg>Celebrate</button>
+              <button type="button" class="fm-tool" data-fm-location-toggle><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Location</button>
+              <button class="hp-btn hp-btn-primary fm-post-btn" type="submit">Post</button>
+            </div>
+            <p class="fm-status" role="status" data-fm-post-status></p>
+          </form>
+        </section>
+
+        <section class="fm-card fm-reco" data-fm-reco>
+          <p class="fm-reco-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/></svg>Recommended for you</p>
+          <h2>Find funding for your project or organisation</h2>
+          <div class="fm-actions">
+            <a class="hp-btn hp-btn-primary" href="grants.html">Take a look →</a>
+            <a class="fm-text-btn" href="grants-account.html">Get matched to grants</a>
+          </div>
+        </section>
+
+        <!-- Feed -->
+        <div data-fm-view="feed">
+          <div class="fm-filter" role="tablist" aria-label="Feed" data-fm-filter hidden>
+            <button type="button" role="tab" aria-selected="true" data-fm-scope="everyone">Everyone</button>
+            <button type="button" role="tab" aria-selected="false" data-fm-scope="network">My network</button>
+          </div>
+          <div class="fm-feed" data-fm-feed aria-live="polite"></div>
+          <button type="button" class="fm-more" data-fm-more hidden>Show more</button>
+        </div>
+
+        <!-- People -->
+        <section class="fm-card" data-fm-view="people" hidden>
+          <h2>People in the forum</h2>
+          <p class="fm-muted">Follow members to see their posts under <em>My network</em>. People who follow each other are connections.</p>
+          <div class="fm-people" data-fm-people></div>
+        </section>
+
+        <!-- Me -->
+        <section class="fm-card" data-fm-view="me" hidden>
+          <h2>Your profile</h2>
+          <form class="fm-form" data-fm-me-form novalidate>
+            <div class="fm-me-avatar">
+              <div class="fm-avatar fm-avatar-lg" data-fm-avatar aria-hidden="true"></div>
+              <label class="fm-text-btn"><input type="file" accept="image/jpeg,image/png,image/webp" data-fm-avatar-file hidden>Change photo</label>
+            </div>
+            <label>Name shown to members<input name="display_name" maxlength="80" required></label>
+            <label>Headline<input name="headline" maxlength="120"></label>
+            <label>Location<input name="location" maxlength="80"></label>
+            <label>About<textarea name="about" rows="4" maxlength="1000"></textarea></label>
+            <div class="fm-actions">
+              <button class="hp-btn hp-btn-primary" type="submit">Save profile</button>
+              <button class="fm-text-btn" type="button" data-fm-signout>Sign out</button>
+            </div>
+            <p class="fm-status" role="status" data-fm-me-status></p>
+          </form>
+        </section>
+
+        <!-- Rules -->
+        <section class="fm-card fm-rules" data-fm-view="rules" hidden id="rules-text">
+          <h2>Community rules</h2>
+          <ol>
+            <li><strong>Adults only.</strong> The forum is for people aged 18 and over. Do not share photos or details of children without their guardian's consent.</li>
+            <li><strong>Be respectful.</strong> No harassment, hate, threats or sexual content.</li>
+            <li><strong>No scams or money requests.</strong> WHSF does not disburse funds, loans, prizes or promotions to individuals and never asks for fees. Report any such post.</li>
+            <li><strong>Protect privacy.</strong> Don't post phone numbers, addresses or ID documents, yours or anyone else's.</li>
+            <li><strong>Verify before you trust.</strong> Anyone claiming to work for WHSF can be checked on the <a href="verify-certificate.html#staff-verification">Verify staff</a> page.</li>
+            <li><strong>Report problems.</strong> Use <em>Report</em> on a post. WHSF moderators can hide posts and suspend accounts.</li>
+          </ol>
+          <p class="fm-muted">See also our <a href="child-safeguarding-policy.html">Child Safeguarding Policy</a> and <a href="privacy-policy.html">Privacy Policy</a>.</p>
+        </section>
+      </section>
+
+      <!-- Right -->
+      <aside class="fm-right">
+        <section class="fm-card">
+          <h2 class="fm-side-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>Funding opportunities</h2>
+          <ul class="fm-opps" data-fm-opps><li class="fm-muted">Loading…</li></ul>
+          <a class="fm-link" href="grants.html">All opportunities →</a>
+        </section>
+        <section class="fm-card fm-safety">
+          <h2 class="fm-side-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Stay safe</h2>
+          <p>WHSF never asks for fees or bank details and does not pay out funds or prizes. Check anyone who says they work for WHSF.</p>
+          <a class="hp-btn hp-btn-primary" href="verify-certificate.html#staff-verification">Verify a WHSF employee</a>
+        </section>
+        <p class="fm-foot-links"><a href="#rules">Community rules</a> · <a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a> · <a href="contact.html">Contact</a></p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="hp-footer">
+    <div class="hp-footer-top">
+      <div class="hp-footer-brand">
+        <img src="assets/whsf-logo.jpg" alt="WHSF emblem" width="46" height="46">
+        <div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div>
+      </div>
+      <div><h4>Explore</h4><nav aria-label="Explore"><a href="about.html">About us</a><a href="programs.html">Our programs</a><a href="impact-dashboard.html">Impact</a><a href="newsroom.html">Newsroom</a></nav></div>
+      <div><h4>Grants portal</h4><nav aria-label="Grants portal"><a href="grants.html">Search grants</a><a href="grants-account.html">Get matched</a><a href="grants-account.html">Deadline alerts</a><a href="grants.html#funders">Donor directory</a></nav></div>
+      <div><h4>Get involved</h4><nav aria-label="Get involved"><a href="donor-portal.html">Donate</a><a href="contact.html">Volunteer</a><a href="corporate-partnerships.html">Partner with us</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
+      <div><h4>Contact</h4>
+        <address><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span></address>
+        <nav class="hp-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Facebook">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Instagram">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer" aria-label="YouTube">▶</a></nav>
+      </div>
+      <figure class="hp-footer-award"><img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" loading="lazy"><figcaption>2025 London Data Center World Award Winner</figcaption></figure>
+    </div>
+    <div class="hp-footer-bottom">
+      <span>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</span>
+      <span><a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a> · <a href="governance.html">Governance</a></span>
+    </div>
+  </footer>
+</body>
+</html>
