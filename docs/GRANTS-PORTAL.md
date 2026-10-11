@@ -55,8 +55,23 @@ normal run at most every 6 hours, only a signed-in grants admin can force one) a
 - The EU endpoint drops compressed responses when read from Supabase, so requests ask for `identity` encoding.
 - Review pending EU calls and UN events at `/grants-admin.html`.
 
+## Phase 2: organisations, matching, eligibility (`grants-account.html`)
+
+- Organisations sign up with the shared WHSF account (email + password, email confirmation, password reset)
+  and fill in a profile: type, country, other countries, sectors, budget, and the registrations funders ask for
+  (US 501(c)(3), SAM.gov UEI, EU PIC, able to partner with an EU organisation).
+- Tables `whsf_grant_orgs` (one per account) and `whsf_grant_saved` (tracker: interested → preparing →
+  submitted → awarded / declined / not eligible, with notes). Owner-only RLS; grants admins can read.
+- Matching runs in the browser (`grants-account.js`, `evaluate()`) with no AI. Each open grant gets a checklist:
+  location, applicant type, sector fit, time to prepare, source registrations (SAM.gov UEI for Grants.gov,
+  PIC for EU), and award size vs budget. Verdict: any failed rule → "Probably not eligible"; at most one item to
+  check → "Likely eligible"; otherwise "Check the details". Results are ranked by verdict, then score.
+- Admins see registered organisations (and how many grants each saved) on the admin page.
+- Supabase Auth must allow `https://www.worldhsfoundation.org/grants-account.html` as a redirect URL for the
+  confirmation and password-reset links.
+
 ## Roadmap
 
-- Phase 2: organisation sign-up, profile-based matching and eligibility checklist.
+- Phase 2: organisation sign-up, profile-based matching and eligibility checklist (done).
 - Phase 3: deadline reminder emails (30/14/3 days) and new-match alerts via Resend.
 - Phase 4: proposal assistant that calls Claude only when a user asks for a draft.

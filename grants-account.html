@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Register your organisation with WHSF to get grants matched to your country, sector and organisation type, with an eligibility checklist and an application tracker."
+    />
+    <meta name="theme-color" content="#6d1024" />
+    <meta property="og:title" content="Get matched to grants | WHSF" />
+    <meta property="og:description" content="Free grant matching, eligibility checks and an application tracker for nonprofits, schools and social enterprises." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.worldhsfoundation.org/grants-account.html" />
+    <meta property="og:site_name" content="World Humanitarian Support Foundation" />
+    <meta property="og:image" content="https://www.worldhsfoundation.org/assets/whsf-share.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Get Matched to Grants | WHSF</title>
+    <link rel="icon" href="assets/whsf-logo.jpg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="grants.css" />
+    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+    <script src="grants.js" defer></script>
+    <script src="grants-account.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header" id="top">
+      <div class="shell nav-wrap">
+        <a class="brand" href="index.html" aria-label="WHSF home">
+          <img src="assets/whsf-logo.jpg" width="64" height="64" alt="WHSF emblem" />
+          <span>
+            <strong>WHSF</strong>
+            <small>World Humanitarian Support Foundation</small>
+          </span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="menu-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open menu</span>
+        </button>
+        <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a>
+          <a href="grants.html">Grants</a>
+          <a href="#matches" data-signed-in-link hidden>My matches</a>
+          <a href="#tracker" data-signed-in-link hidden>My tracker</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="opportunity-hero" aria-labelledby="account-title">
+        <div class="shell opportunity-hero-grid">
+          <div>
+            <p class="eyebrow">Free for nonprofits, schools and social enterprises</p>
+            <h1 id="account-title">Get grants matched to your organisation</h1>
+            <p class="hero-lead">
+              Tell us where you work, what you do and who you are. We rank open grants for you,
+              check the basic eligibility rules for each one and help you track your applications.
+            </p>
+            <ul class="grant-benefits">
+              <li>Matches by country, sector and organisation type</li>
+              <li>An eligibility checklist for every grant, with the registrations funders ask for</li>
+              <li>A tracker from "interested" to "awarded"</li>
+            </ul>
+          </div>
+
+          <div class="student-login-card" id="auth-card">
+            <div class="grant-admin-tabs" role="tablist" aria-label="Account" data-auth-tabs>
+              <button class="active" type="button" data-auth-tab="signin">Sign in</button>
+              <button type="button" data-auth-tab="signup">Create account</button>
+              <button type="button" data-auth-tab="reset">Forgot password</button>
+            </div>
+            <form id="auth-form" style="margin-top:18px">
+              <label>
+                Email
+                <input name="email" type="email" autocomplete="email" required />
+              </label>
+              <label data-auth-field="password">
+                Password
+                <input name="password" type="password" autocomplete="current-password" minlength="8" />
+              </label>
+              <div class="auth-actions">
+                <button class="button" type="submit" data-auth-submit>Sign in</button>
+              </div>
+              <p id="auth-status" role="status">Use the same WHSF account as e-learning, or create one.</p>
+            </form>
+            <form id="new-password-form" hidden style="margin-top:18px">
+              <label>
+                New password
+                <input name="password" type="password" autocomplete="new-password" minlength="8" required />
+              </label>
+              <div class="auth-actions"><button class="button" type="submit">Save new password</button></div>
+            </form>
+            <div id="signed-in-card" hidden>
+              <p><strong data-signed-in-email></strong></p>
+              <div class="auth-actions">
+                <a class="button" href="#matches">See my matches</a>
+                <button class="button button-light" type="button" id="signout-button">Sign out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section opportunity-deadlines-section" id="profile" hidden>
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Step 1</p>
+            <h2>Your organisation profile</h2>
+            <p>Only you and WHSF's grants team can see this. Matches update as soon as you save.</p>
+          </div>
+          <form class="admin-form grant-profile-form" id="profile-form">
+            <label class="grant-admin-muted" style="grid-column: span 2">Organisation name
+              <input name="name" required minlength="2" maxlength="200" />
+            </label>
+            <label class="grant-admin-muted">Type
+              <select name="org_type" required>
+                <option value="nonprofit">Nonprofit / NGO</option>
+                <option value="us_nonprofit">US 501(c)(3) nonprofit</option>
+                <option value="school">School</option>
+                <option value="university">University / college</option>
+                <option value="business">Social enterprise / business</option>
+                <option value="individual">Individual</option>
+                <option value="government">Government body</option>
+              </select>
+            </label>
+            <label class="grant-admin-muted">Registered in
+              <select name="country" required data-country-select><option value="">Choose country</option></select>
+            </label>
+            <label class="grant-admin-muted" style="grid-column: span 2">Other countries you work in (codes, e.g. KE, GH)
+              <input name="operating_countries" placeholder="Optional" />
+            </label>
+            <label class="grant-admin-muted">Annual budget (USD)
+              <input name="annual_budget_usd" type="number" min="0" step="1" placeholder="Optional" />
+            </label>
+            <label class="grant-admin-muted">Year founded
+              <input name="founded_year" type="number" min="1800" max="2100" placeholder="Optional" />
+            </label>
+            <label class="grant-admin-muted" style="grid-column: span 2">Website
+              <input name="website" type="url" placeholder="https://" />
+            </label>
+            <fieldset data-checkboxes="sectors"><legend>What you work on (pick all that apply)</legend></fieldset>
+            <fieldset>
+              <legend>Registrations you already have</legend>
+              <label><input type="checkbox" name="has_us_501c3" /> US 501(c)(3) status</label>
+              <label><input type="checkbox" name="has_sam_uei" /> SAM.gov UEI (needed for US federal grants)</label>
+              <label><input type="checkbox" name="has_eu_pic" /> EU Participant Identification Code (PIC)</label>
+              <label><input type="checkbox" name="can_partner_eu" /> We can partner with an EU-based organisation</label>
+            </fieldset>
+            <textarea name="description" maxlength="2000" placeholder="What does your organisation do? (optional, helps WHSF suggest funders)" style="grid-column: 1 / -1"></textarea>
+            <label class="grant-admin-muted" style="grid-column: 1 / -1; display:flex; gap:8px; align-items:center">
+              <input type="checkbox" name="alerts_opt_in" style="width:auto" />
+              Email me about new matching grants and deadlines (coming soon; you can turn this off any time)
+            </label>
+            <button class="button" type="submit">Save profile</button>
+            <small class="admin-form-status" id="profile-status" role="status" style="grid-column: span 3"></small>
+          </form>
+        </div>
+      </section>
+
+      <section class="section opportunity-calendar-section" id="matches" hidden>
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Step 2</p>
+            <h2>Grants matched to you</h2>
+            <p>Ranked by how well each open grant fits your profile. The checklist is a guide, not a decision: always confirm on the funder's page.</p>
+          </div>
+          <div class="opportunity-filter-panel" aria-label="Match filter">
+            <button class="active" type="button" data-match-filter="good">Likely and possible</button>
+            <button type="button" data-match-filter="likely">Likely only</button>
+            <button type="button" data-match-filter="all">Everything open</button>
+          </div>
+          <p class="grant-result-count" data-match-count role="status" style="text-align:center"></p>
+          <div class="opportunity-grid" data-match-results aria-live="polite"></div>
+          <div class="grant-more"><button class="button button-light" type="button" data-match-more hidden>Show more</button></div>
+        </div>
+      </section>
+
+      <section class="section opportunity-deadlines-section" id="tracker" hidden>
+        <div class="shell">
+          <div class="section-heading centered">
+            <p class="eyebrow">Step 3</p>
+            <h2>My application tracker</h2>
+            <p>Grants you saved, with your status and notes.</p>
+          </div>
+          <div class="admin-table-wrap">
+            <table>
+              <thead><tr><th>Grant</th><th>Deadline</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="tracker-table"></tbody>
+            </table>
+          </div>
+          <small class="admin-form-status" id="tracker-status" role="status"></small>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-bottom">
+        <p>© <span id="year"></span> World Humanitarian Support Foundation. <a href="privacy-policy.html">Privacy policy</a></p>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>
