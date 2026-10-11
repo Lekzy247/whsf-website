@@ -40,7 +40,12 @@
   const saveData = navigator.connection && navigator.connection.saveData;
   const videos = reducedMotion || saveData ? [] : [...slider.querySelectorAll('[data-hp-video]')];
   videos.forEach((video) => {
-    video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
+    video.addEventListener('playing', () => video.classList.add('is-playing'));
+    // The clip doesn't end where it starts, so fade back to the photo, rest, then play again.
+    video.addEventListener('ended', () => {
+      video.classList.remove('is-playing');
+      setTimeout(() => { video.currentTime = 0; syncVideos(); }, 1600);
+    });
   });
   function syncVideos() {
     videos.forEach((video) => {
@@ -49,6 +54,11 @@
         video.play().catch(() => {});
       } else {
         video.pause();
+        // Leaving the slide: start the clip from the beginning next time it shows.
+        if (video.closest('.hp-slide') !== slides[current] && video.currentTime > 0) {
+          video.classList.remove('is-playing');
+          video.currentTime = 0;
+        }
       }
     });
   }
@@ -58,9 +68,12 @@
     const tab = tabs[current];
     if (paused || hovering) return;
     // Re-trigger the progress bar animation.
+    // A slide can stay up longer than the default (e.g. while its video plays): data-hp-duration in ms.
+    const duration = Number(slides[current].dataset.hpDuration) || INTERVAL;
+    tab.style.setProperty('--hp-duration', `${duration}ms`);
     void tab.offsetWidth;
     tab.classList.add('is-running');
-    timer = setTimeout(() => show(current + 1), INTERVAL);
+    timer = setTimeout(() => show(current + 1), duration);
   }
 
   function setPaused(value) {
