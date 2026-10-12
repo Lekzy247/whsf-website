@@ -272,6 +272,10 @@
   box-shadow: 0 24px 60px rgb(78 17 42 / 22%);
 }
 .gx-hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+/* full-width banner image above the copy, never cropped (for artwork with text, e.g. MIL Lab) */
+.gx-page-hero.gx-hero-banner { grid-template-columns: 1fr; row-gap: 32px; }
+.gx-hero-banner .gx-hero-visual { order: -1; min-height: 0; height: auto; aspect-ratio: 1695 / 928; }
+.gx-hero-banner .gx-hero-visual img { object-fit: contain; }
 @media (max-width: 980px) {
   .gx-page-hero.gx-hero-split { grid-template-columns: 1fr; row-gap: 28px; }
   .gx-hero-visual { min-height: 300px; order: -1; }
