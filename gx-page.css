@@ -286,3 +286,8 @@
 .hp-slide-visual.hp-slide-art img { object-fit: contain; animation: none !important; }
 /* every slide's picture uses the artwork's wide frame, so the slider never jumps in height */
 .hp-hero-wide .hp-slide-visual { width: 100%; min-height: 0; height: auto; align-self: center; aspect-ratio: 1695 / 928; }
+
+/* responsive 16:9 video embed */
+.gx-video { position: relative; max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 22px; background: var(--wx-wine-night); box-shadow: 0 24px 60px rgb(78 17 42 / 18%); }
+.gx-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+#watch .gx-note { text-align: center; }
