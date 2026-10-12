@@ -127,6 +127,7 @@
 }
 .gx-process strong { color: var(--wx-ink); font-size: 18px; letter-spacing: -.02em; }
 .gx-process span { color: #66575f; font-size: 14px; line-height: 1.55; }
+.gx-process-3 { grid-template-columns: repeat(3, 1fr); }
 .hp-pillar .gx-chips { margin: 0; }
 
 /* ---------------------------------------------------------------- contact: reach list + form panel */
