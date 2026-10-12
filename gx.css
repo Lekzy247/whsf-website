@@ -363,3 +363,9 @@
 .hp-slide-visual.hp-slide-art { width: 100%; min-height: 0; height: auto; align-self: center; aspect-ratio: 1695 / 928; background: #eef3fb; }
 .hp-slide-visual.hp-slide-art img { object-fit: contain; animation: none !important; }
 .hp-slide-art .hp-slide-video { object-fit: cover; }
+
+/* artwork shown whole inside a standard-size slide box, with a soft blurred copy filling the space around it */
+.hp-slide-visual.hp-slide-fit { background: #eef3fb; }
+.hp-slide-fit .hp-slide-bg { object-fit: cover; filter: blur(22px) saturate(1.15); transform: scale(1.2); opacity: .6; animation: none !important; }
+.hp-slide-fit img:not(.hp-slide-bg) { object-fit: contain; animation: none !important; }
+.hp-slide-fit .hp-slide-video { object-fit: contain; }
