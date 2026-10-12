@@ -338,6 +338,6 @@
 /* two-card story row (fills the row instead of leaving an empty third column) */
 @media (min-width: 981px) { .hp-stories.hp-stories-2 { grid-template-columns: repeat(2, 1fr); } }
 
-/* one-slide hero (MIL Lab): no tabs or arrows, keep only the pause button for the moving video */
-.hp-hero-single .hp-tabs, .hp-hero-single [data-hp-prev], .hp-hero-single [data-hp-next] { display: none; }
-.hp-hero-single .hp-controls { justify-content: flex-end; }
+/* one-slide hero (MIL Lab): no tabs, arrows or pause button */
+/* (no video any more, so the pause button is hidden too) */
+.hp-hero-single .hp-controls { display: none; }
