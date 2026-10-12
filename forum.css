@@ -139,7 +139,12 @@
   .fm-tabs a { min-width: 0; flex: 1; padding: 6px 2px; font-size: 11px; }
   .fm-grid { grid-template-columns: 1fr; }
   .fm-right { grid-template-columns: 1fr; }
-  .fm-left .fm-promo { display: none; }
+  /* Phones: profile card first, then the main column, then the Donate card and the right column. */
+  .fm-left { display: contents; }
+  .fm-left .fm-profile, .fm-left .fm-guest { order: 0; }
+  .fm-center { order: 1; }
+  .fm-left .fm-promo { order: 2; }
+  .fm-right { order: 3; }
   .fm-post-btn { width: 100%; margin-left: 0; justify-content: center; }
 }
 
