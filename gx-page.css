@@ -321,3 +321,6 @@
   .gx-video-frame .gx-video { border-radius: 16px; box-shadow: 0 0 0 2px rgb(255 255 255 / 92%); }
   .gx-video-frame figcaption { padding: 10px 6px 11px; font-size: 13px; }
 }
+
+/* feature photo shown at its own 3:2 shape so artwork with text is never cropped */
+.gx-feature-photo.gx-feature-photo-3x2 { min-height: 0; aspect-ratio: 3 / 2; align-self: center; }
