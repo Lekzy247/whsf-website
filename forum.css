@@ -174,3 +174,44 @@
 .fm-idcheck-imgs video { width: 100%; height: 220px; border-radius: 12px; background: #000; }
 .fm-form .fm-method input[type="radio"] { flex: none; width: 18px !important; height: 18px; min-height: 0 !important; margin: 3px 0 0; padding: 0 !important; border: 0; }
 .fm-waiting { display: block; margin-top: 6px; color: var(--wx-wine); font-weight: 600; }
+
+/* ---------------------------------------------------------------- standalone app page (like the Gelllez Forum) */
+body.fm-app { background: #f7f2f4; }
+.fm-tabs { align-items: center; }
+.fm-tabs a span { line-height: 1.1; }
+.fm-me { position: relative; }
+.fm-me-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 76px; padding: 8px 10px; border: 0; border-radius: 12px; background: none; color: #5f5466; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.fm-me-btn:hover, .fm-me-btn[aria-expanded="true"] { background: var(--wx-soft); color: var(--wx-wine); }
+.fm-donate { flex: none; padding: 8px 16px; border-radius: 999px; background: var(--wx-wine); color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; }
+.fm-donate:hover { background: var(--wx-wine-deep); color: #fff; }
+.fm-me-scrim { position: fixed; inset: 0; z-index: 40; background: transparent; }
+.fm-me-menu {
+  position: fixed; top: 72px; right: max(16px, calc((100vw - 1240px) / 2)); z-index: 41;
+  width: min(380px, calc(100vw - 24px)); max-height: calc(100vh - 88px); overflow-y: auto;
+  padding: 14px; border: 1px solid var(--wx-line); border-radius: 18px; background: #fff;
+  box-shadow: 0 24px 60px rgb(42 10 23 / 22%);
+}
+.fm-me-head { display: flex; align-items: center; gap: 12px; padding: 4px 4px 12px; }
+.fm-me-head .fm-avatar { width: 52px; height: 52px; font-size: 18px; }
+.fm-me-head strong { display: block; color: var(--wx-ink); font-size: 16px; }
+.fm-me-head small { display: block; color: var(--wx-muted); font-size: 13px; }
+.fm-me-actions { display: flex; gap: 8px; padding: 0 4px 12px; border-bottom: 1px solid var(--wx-line); }
+.fm-me-actions .hp-btn { flex: 1; justify-content: center; min-height: 40px; padding: 8px 14px; font-size: 14px; }
+.fm-me-actions .hp-btn svg { width: 16px; height: 16px; }
+.fm-me-group { margin: 14px 4px 4px; color: var(--wx-muted); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.fm-me-menu a[role="menuitem"]:not(.hp-btn), .fm-me-out { display: flex; gap: 12px; align-items: flex-start; width: 100%; padding: 9px 8px; border: 0; border-radius: 10px; background: none; color: var(--wx-ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; }
+.fm-me-menu a[role="menuitem"]:not(.hp-btn):hover, .fm-me-out:hover { background: var(--wx-soft); }
+.fm-me-menu a[role="menuitem"] svg, .fm-me-out svg { flex: none; width: 20px; height: 20px; margin-top: 1px; color: var(--wx-wine); }
+.fm-me-menu a[role="menuitem"] strong, .fm-me-out strong { display: block; font-size: 15px; font-weight: 600; }
+.fm-me-menu a[role="menuitem"] small { display: block; color: var(--wx-muted); font-size: 12.5px; }
+.fm-me-out { margin-top: 10px; border-top: 1px solid var(--wx-line); border-radius: 0; padding-top: 14px; }
+.fm-foot { padding: 0 16px 28px; text-align: center; color: var(--wx-muted); font-size: 13px; }
+.fm-foot a { color: var(--wx-wine); }
+@media (max-width: 760px) {
+  .fm-donate { order: 1; margin-left: auto; padding: 7px 14px; }
+  .fm-search { order: 3; }
+  .fm-tabs { order: 4; }
+  .fm-me-btn { min-width: 0; flex: 1; padding: 6px 2px; font-size: 11px; }
+  .fm-tabs .fm-me { flex: 1; display: flex; }
+  .fm-me-menu { top: auto; bottom: 0; right: 0; left: 0; width: 100%; max-height: 82vh; border-radius: 20px 20px 0 0; }
+}

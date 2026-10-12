@@ -61,7 +61,37 @@
     if (view === 'me') fillMeForm();
     if (view === 'idchecks') loadIdChecks();
   }
-  window.addEventListener('hashchange', showView);
+  window.addEventListener('hashchange', () => { setMeMenu(false); showView(); });
+
+  // ---------------------------------------------------------------- "Me" menu (like the Gelllez Forum)
+  function setMeMenu(open) {
+    const menu = $('[data-fm-me-menu]');
+    if (!menu) return;
+    menu.hidden = !open;
+    $('[data-fm-me-scrim]').hidden = !open;
+    $('[data-fm-me-toggle]').setAttribute('aria-expanded', String(open));
+    if (open) menu.querySelector('a, button')?.focus();
+  }
+  $('[data-fm-me-toggle]').addEventListener('click', () => setMeMenu($('[data-fm-me-menu]').hidden));
+  $('[data-fm-me-scrim]').addEventListener('click', () => setMeMenu(false));
+  $('[data-fm-me-menu]').addEventListener('click', (event) => { if (event.target.closest('a')) setMeMenu(false); });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !$('[data-fm-me-menu]').hidden) { setMeMenu(false); $('[data-fm-me-toggle]').focus(); }
+  });
+  $('[data-fm-menu-signin]').addEventListener('click', () => setTimeout(() => $('[data-fm-auth-form] input[name="email"]')?.focus(), 50));
+
+  function renderMeMenu() {
+    const p = state.profile;
+    const signedIn = Boolean(state.session);
+    fillAvatar($('[data-fm-menu-avatar]'), p || { display_name: signedIn ? state.session.user.email : 'W' });
+    $('[data-fm-menu-name]').textContent = p?.display_name || (signedIn ? 'Finish joining' : 'WHSF Forum');
+    $('[data-fm-menu-headline]').textContent = state.me ? (p.headline || 'Member') : p ? 'Verification in progress' : signedIn ? 'Create your forum profile' : 'Sign in to join the conversation';
+    $('[data-fm-menu-member]').hidden = !state.me;
+    $('[data-fm-menu-guest]').hidden = signedIn;
+    $('[data-fm-menu-forum]').hidden = !state.me;
+    $('[data-fm-menu-staff]').hidden = !state.isStaff;
+    $('[data-fm-menu-signout]').hidden = !signedIn;
+  }
 
   // ---------------------------------------------------------------- auth
   let signUpMode = new URLSearchParams(location.search).get('join') === '1';
@@ -648,6 +678,7 @@
       if (!f.display_name.value) f.display_name.value = state.session.user.user_metadata?.full_name || '';
     }
     renderProfileCard();
+    renderMeMenu();
     showView();
     loadFeed(true);
   }
