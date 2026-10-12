@@ -42,19 +42,21 @@
   };
   const setStatus = (sel, text) => { const n = $(sel); if (n) n.textContent = text || ''; };
 
-  const state = { session: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
+  const state = { session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
-  const views = ['feed', 'people', 'me', 'rules'];
+  const views = ['feed', 'people', 'me', 'rules', 'idchecks'];
   function showView() {
     let view = (location.hash || '#feed').slice(1);
     if (!views.includes(view)) view = 'feed';
     if (!state.me && (view === 'people' || view === 'me')) view = 'feed';
+    if (!state.isStaff && view === 'idchecks') view = 'feed';
     views.forEach((v) => $$(`[data-fm-view="${v}"]`).forEach((n) => { n.hidden = v !== view; }));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     $('[data-fm-reco]').hidden = view !== 'feed';
     if (view === 'people') loadPeople();
     if (view === 'me') fillMeForm();
+    if (view === 'idchecks') loadIdChecks();
   }
   window.addEventListener('hashchange', showView);
 
@@ -116,9 +118,158 @@
     const uid = state.session?.user?.id;
     state.me = null;
     if (!uid) return;
-    const { data } = await db.from('forum_profiles').select('user_id,display_name,headline,location,about,avatar_url,is_suspended').eq('user_id', uid).maybeSingle();
-    state.me = data && !data.is_suspended ? data : null;
+    const { data } = await db.from('forum_profiles').select('user_id,display_name,headline,location,about,avatar_url,is_suspended,verification_status,verification_reason').eq('user_id', uid).maybeSingle();
+    state.profile = data || null;
+    // Only ID-verified, active profiles are members (the database enforces the same rule).
+    state.me = data && !data.is_suspended && data.verification_status === 'approved' ? data : null;
     if (data?.is_suspended) setStatus('[data-fm-join-status]', 'Your forum account is suspended. Contact WHSF if you think this is a mistake.');
+  }
+
+  // ---------------------------------------------------------------- age verification (official photo ID + selfie)
+  // Images go to the private forum-id-checks bucket; only WHSF moderators can open them.
+  const ID_TYPES = { national_id: 'National ID', passport: 'Passport', drivers_licence: "Driver's licence", voter_card: "Voter's card", residence_permit: 'Residence permit' };
+  const ID_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+  const MAX_ID_BYTES = 8 * 1024 * 1024;
+
+  async function renderVerify() {
+    const p = state.profile;
+    const card = $('[data-fm-verify]');
+    card.hidden = !p || p.is_suspended || p.verification_status === 'approved';
+    if (card.hidden) return;
+    const pending = p.verification_status === 'pending';
+    $('[data-fm-verify-pending]').hidden = !pending;
+    $('[data-fm-verify-start]').hidden = pending;
+    const rejected = $('[data-fm-verify-rejected]');
+    rejected.hidden = p.verification_status !== 'rejected';
+    rejected.textContent = p.verification_status === 'rejected'
+      ? `Your last ID check was not approved: ${p.verification_reason || 'please try again'}. Please submit new photos.` : '';
+    if (!pending) {
+      const { data, error } = await db.rpc('forum_id_code');
+      $('[data-fm-verify-code]').textContent = error ? 'reload the page' : data;
+    }
+  }
+
+  $('[data-fm-verify-form]').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const f = event.currentTarget;
+    const say = (t) => setStatus('[data-fm-verify-status]', t);
+    const front = f.id_front.files[0]; const back = f.id_back.files[0]; const selfie = f.selfie.files[0];
+    if (f.country.value.trim().length < 2) return say('Enter the country that issued your ID.');
+    if (!f.id_type.value) return say('Choose the type of ID.');
+    if (!front) return say('Add a photo of the front of your ID.');
+    if (!selfie) return say('Add a selfie holding your ID and the code.');
+    for (const file of [front, back, selfie].filter(Boolean)) {
+      if (!ID_EXT[file.type]) return say('Photos must be JPG, PNG or WebP.');
+      if (file.size > MAX_ID_BYTES) return say('Each photo must be 8 MB or smaller.');
+    }
+    if (!f.consent.checked) return say('Please agree to WHSF viewing your images for age verification.');
+    const button = f.querySelector('button[type="submit"]');
+    button.disabled = true;
+    const uploaded = [];
+    const upload = async (file) => {
+      const path = `${state.profile.user_id}/${crypto.randomUUID()}.${ID_EXT[file.type]}`;
+      const { error } = await db.storage.from('forum-id-checks').upload(path, file, { contentType: file.type, upsert: false });
+      if (error) throw error;
+      uploaded.push(path);
+      return path;
+    };
+    try {
+      say('Uploading your photos securely…');
+      const frontPath = await upload(front);
+      const backPath = back ? await upload(back) : null;
+      const selfiePath = await upload(selfie);
+      const { error } = await db.rpc('forum_id_submit', {
+        p_country: f.country.value.trim(), p_id_type: f.id_type.value, p_front: frontPath, p_back: backPath, p_selfie: selfiePath
+      });
+      if (error) throw error;
+      f.reset(); say('');
+      await refresh();
+    } catch (error) {
+      if (uploaded.length) await db.storage.from('forum-id-checks').remove(uploaded);
+      say(error?.message ? `Could not submit: ${error.message}` : 'Could not submit. Please try again.');
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  // ---------------------------------------------------------------- moderators: ID check queue
+  async function deleteIdFiles(check) {
+    const paths = [check.id_front_path, check.id_back_path, check.selfie_path].filter(Boolean);
+    if (paths.length) {
+      const { error } = await db.storage.from('forum-id-checks').remove(paths);
+      if (error) return error;
+    }
+    const { error } = await db.rpc('forum_id_files_deleted', { p_check_id: check.id });
+    return error;
+  }
+
+  async function loadIdChecks() {
+    const box = $('[data-fm-idchecks]');
+    const cleanup = $('[data-fm-idcleanup]');
+    if (!state.isStaff) return;
+    const cols = 'id,user_id,country,id_type,challenge_code,id_front_path,id_back_path,selfie_path,status,submitted_at,forum_profiles(display_name)';
+    const { data: pending, error } = await db.from('forum_id_checks').select(cols).eq('status', 'pending').order('submitted_at').limit(20);
+    if (error) { box.replaceChildren(el('p', { class: 'fm-muted', text: 'Could not load ID checks.' })); return; }
+    box.replaceChildren();
+    if (!pending.length) box.append(el('p', { class: 'fm-muted', text: 'No ID checks waiting.' }));
+    for (const check of pending) box.append(await renderIdCheck(check));
+
+    // Decided checks whose images are still stored (e.g. a delete failed): offer to delete them.
+    const { data: leftover } = await db.from('forum_id_checks').select('id,status,id_front_path,id_back_path,selfie_path,reviewed_at,forum_profiles(display_name)')
+      .neq('status', 'pending').is('files_deleted_at', null).limit(20);
+    cleanup.replaceChildren();
+    (leftover || []).forEach((check) => {
+      const status = el('p', { class: 'fm-status', role: 'status' });
+      cleanup.append(el('div', { class: 'fm-idcheck' }, [
+        el('p', { text: `${check.forum_profiles?.display_name || 'Member'}: ${check.status}, images still stored.` }),
+        el('div', { class: 'fm-actions' }, [el('button', { class: 'fm-text-btn', type: 'button', text: 'Delete images now', onclick: async () => {
+          const err = await deleteIdFiles(check);
+          if (err) status.textContent = `Could not delete: ${err.message}`; else loadIdChecks();
+        } })]),
+        status
+      ]));
+    });
+  }
+
+  async function renderIdCheck(check) {
+    const status = el('p', { class: 'fm-status', role: 'status' });
+    const imgs = el('div', { class: 'fm-idcheck-imgs' });
+    for (const [label, path] of [['ID front', check.id_front_path], ['ID back', check.id_back_path], ['Selfie', check.selfie_path]]) {
+      if (!path) continue;
+      const { data } = await db.storage.from('forum-id-checks').createSignedUrl(path, 600);
+      if (!data?.signedUrl) { imgs.append(el('p', { class: 'fm-muted', text: `${label}: could not load` })); continue; }
+      imgs.append(el('figure', {}, [
+        el('a', { href: data.signedUrl, target: '_blank', rel: 'noopener noreferrer' }, [el('img', { src: data.signedUrl, alt: `${label} submitted for age verification` })]),
+        el('figcaption', { text: `${label} (opens full size)` })
+      ]));
+    }
+    const box = (name, text) => el('label', { class: 'fm-check' }, [el('input', { type: 'checkbox', name }), el('span', { text })]);
+    const age = box('age', 'The date of birth on the ID shows they are 18 or over');
+    const face = box('face', `The selfie shows the same face, holding the ID and the code ${check.challenge_code}`);
+    const genuine = box('genuine', 'The ID is an official government document and looks genuine');
+    const reason = el('input', { type: 'text', maxlength: '300', placeholder: 'e.g. photo blurry, under 18, code missing' });
+    const decide = async (approve) => {
+      status.textContent = approve ? 'Approving…' : 'Rejecting…';
+      const { error } = await db.rpc('forum_id_review', {
+        p_check_id: check.id, p_approve: approve, p_reason: reason.value,
+        p_age_18_plus: age.querySelector('input').checked, p_face_matches: face.querySelector('input').checked, p_genuine_id: genuine.querySelector('input').checked
+      });
+      if (error) { status.textContent = error.message; return; }
+      const delError = await deleteIdFiles(check);
+      if (delError) status.textContent = `Decision saved, but the images could not be deleted: ${delError.message}`;
+      else loadIdChecks();
+    };
+    return el('article', { class: 'fm-idcheck' }, [
+      el('h3', { text: check.forum_profiles?.display_name || 'Member' }),
+      el('p', { class: 'fm-muted', text: `${ID_TYPES[check.id_type] || check.id_type} · ${check.country} · code ${check.challenge_code} · submitted ${timeAgo(check.submitted_at)} ago` }),
+      imgs, age, face, genuine,
+      el('div', { class: 'fm-form' }, [el('label', {}, [document.createTextNode('Reason (shown to the member if rejected)'), reason])]),
+      el('div', { class: 'fm-actions' }, [
+        el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Approve', onclick: () => decide(true) }),
+        el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Reject', onclick: () => decide(false) })
+      ]),
+      status
+    ]);
   }
   async function loadFollows() {
     const uid = state.me?.user_id;
@@ -410,10 +561,12 @@
     await loadFollows();
     const signedIn = Boolean(state.session);
     $('[data-fm-auth]').hidden = signedIn;
-    $('[data-fm-join]').hidden = !signedIn || Boolean(state.me);
+    $('[data-fm-join]').hidden = !signedIn || Boolean(state.profile);
+    $$('[data-fm-staff-only]').forEach((n) => { n.hidden = !state.isStaff; });
+    await renderVerify();
     $('[data-fm-composer]').hidden = !state.me;
     $('[data-fm-filter]').hidden = !state.me;
-    if (signedIn && !state.me) {
+    if (signedIn && !state.profile) {
       const f = $('[data-fm-join-form]');
       if (!f.display_name.value) f.display_name.value = state.session.user.user_metadata?.full_name || '';
     }

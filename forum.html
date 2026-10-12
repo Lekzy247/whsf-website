@@ -20,11 +20,11 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=1">
+  <link rel="stylesheet" href="forum.css?v=2">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=1" defer></script>
+  <script src="forum.js?v=2" defer></script>
 </head>
 <body class="home-page">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -76,6 +76,7 @@
           <a href="#people" data-fm-tab="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg>Network</a>
           <a href="grants.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>Opportunities</a>
           <a href="#rules" data-fm-tab="rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Rules</a>
+          <a href="#idchecks" data-fm-tab="idchecks" data-fm-staff-only hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/></svg>ID checks</a>
           <a href="#me" data-fm-tab="me"><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true">?</span>Me</a>
         </nav>
       </div>
@@ -106,7 +107,7 @@
           <div class="fm-avatar fm-avatar-lg fm-avatar-logo" aria-hidden="true"><img src="assets/whsf-logo.jpg" alt=""></div>
           <h1 class="fm-name">WHSF Forum</h1>
           <p class="fm-headline">A community for people building opportunity through technology.</p>
-          <p class="fm-note">Adults 18+ · Members only</p>
+          <p class="fm-note">Adults 18+ · ID-verified members only</p>
         </section>
 
         <section class="fm-card fm-promo">
@@ -125,7 +126,7 @@
         <section class="fm-card fm-auth" data-fm-auth hidden>
           <span class="fm-badge">Join the WHSF Forum</span>
           <h2 data-fm-auth-title>Sign in to join the conversation</h2>
-          <p>Connect with mentors, learners' families, partners and volunteers working on digital skills, STEM and opportunity. The forum is for <strong>adults aged 18 and over</strong>.</p>
+          <p>Connect with mentors, learners' families, partners and volunteers working on digital skills, STEM and opportunity. The forum is for <strong>adults aged 18 and over</strong>, verified with an official photo ID and a selfie.</p>
           <form class="fm-form" data-fm-auth-form novalidate>
             <label>Email<input type="email" name="email" autocomplete="email" required></label>
             <label>Password<input type="password" name="password" autocomplete="current-password" minlength="8" required></label>
@@ -142,7 +143,7 @@
         <section class="fm-card fm-join" data-fm-join hidden>
           <span class="fm-badge">Almost there</span>
           <h2>Create your forum profile</h2>
-          <p>Your name, headline and location are visible to other members. Your date of birth is only used to confirm you are 18 or over and is not stored.</p>
+          <p>Your name, headline and location are visible to other members. Your date of birth is only used to confirm you are 18 or over and is not stored. Next, you will verify your age with an official photo ID and a selfie.</p>
           <form class="fm-form" data-fm-join-form novalidate>
             <label>Name shown to members<input name="display_name" maxlength="80" required></label>
             <label>Headline <small>(optional)</small><input name="headline" maxlength="120" placeholder="e.g. Volunteer mentor, STEM teacher"></label>
@@ -155,6 +156,47 @@
             </div>
             <p class="fm-status" role="status" data-fm-join-status></p>
           </form>
+        </section>
+
+        <!-- Profile created: strict age verification (official photo ID + selfie, reviewed by WHSF) -->
+        <section class="fm-card fm-verify" data-fm-verify hidden>
+          <span class="fm-badge">Step 2 of 2 · Age verification</span>
+          <h2>Verify your age to enter the forum</h2>
+          <div data-fm-verify-pending hidden>
+            <p><strong>Thank you, your ID check is with a WHSF moderator.</strong> You will be able to read and post as soon as it is approved. This usually takes 1–3 working days.</p>
+            <p class="fm-muted">Your ID and selfie images are deleted as soon as a decision is made.</p>
+          </div>
+          <div data-fm-verify-start>
+            <p class="fm-alert" data-fm-verify-rejected hidden></p>
+            <p>The WHSF Forum is strictly for adults aged 18 and over. Every member must be verified by a WHSF moderator using an official photo ID from their country and a selfie.</p>
+            <ol class="fm-steps">
+              <li>Take a clear photo of your <strong>national ID card, passport, driver&#39;s licence, voter&#39;s card or residence permit</strong>. Your date of birth and photo must be readable.</li>
+              <li>Write this code on a piece of paper: <strong class="fm-code" data-fm-verify-code>…</strong></li>
+              <li>Take a <strong>selfie holding your ID and the paper with the code</strong> next to your face.</li>
+            </ol>
+            <form class="fm-form" data-fm-verify-form novalidate>
+              <label>Country that issued your ID<input name="country" maxlength="80" autocomplete="country-name" required placeholder="e.g. Nigeria"></label>
+              <label>Type of ID
+                <select name="id_type" required>
+                  <option value="">Choose…</option>
+                  <option value="national_id">National ID card / National Identification</option>
+                  <option value="passport">International passport</option>
+                  <option value="drivers_licence">Driver&#39;s licence</option>
+                  <option value="voter_card">Voter&#39;s card</option>
+                  <option value="residence_permit">Residence permit</option>
+                </select>
+              </label>
+              <label>Photo of your ID (front)<input type="file" name="id_front" accept="image/jpeg,image/png,image/webp" required></label>
+              <label>Photo of your ID (back) <small>(if it has one)</small><input type="file" name="id_back" accept="image/jpeg,image/png,image/webp"></label>
+              <label>Selfie holding your ID and the code<input type="file" name="selfie" accept="image/jpeg,image/png,image/webp" capture="user" required></label>
+              <label class="fm-check"><input type="checkbox" name="consent" required> <span>I agree that WHSF moderators may view these images only to confirm my age and identity. They are stored privately and deleted once a decision is made. See the <a href="privacy-policy.html#forum-id">Privacy Policy</a>.</span></label>
+              <div class="fm-actions">
+                <button class="hp-btn hp-btn-primary" type="submit">Submit for verification</button>
+                <button class="fm-text-btn" type="button" data-fm-signout>Sign out</button>
+              </div>
+              <p class="fm-status" role="status" data-fm-verify-status></p>
+            </form>
+          </div>
         </section>
 
         <!-- Member: composer -->
@@ -229,11 +271,19 @@
           </form>
         </section>
 
+        <!-- Moderators: ID check queue -->
+        <section class="fm-card" data-fm-view="idchecks" hidden>
+          <h2>ID checks</h2>
+          <p class="fm-muted">Approve only when the ID is government-issued, the date of birth shows the person is 18 or over, and the selfie shows the same face holding the ID and the code. Images are deleted automatically after you decide.</p>
+          <div data-fm-idchecks><p class="fm-muted">Loading…</p></div>
+          <div data-fm-idcleanup></div>
+        </section>
+
         <!-- Rules -->
         <section class="fm-card fm-rules" data-fm-view="rules" hidden id="rules-text">
           <h2>Community rules</h2>
           <ol>
-            <li><strong>Adults only.</strong> The forum is for people aged 18 and over. Do not share photos or details of children without their guardian's consent.</li>
+            <li><strong>Adults only, ID-verified.</strong> The forum is strictly for people aged 18 and over. Every member must pass an age check by a WHSF moderator using an official photo ID from their country (national ID card, passport, driver&#39;s licence, voter&#39;s card or residence permit) and a selfie holding the ID. Nobody can read or post until they are verified. The images are stored privately and deleted as soon as a decision is made. Using someone else&#39;s ID or a fake ID leads to a permanent ban. Do not share photos or details of children without their guardian&#39;s consent.</li>
             <li><strong>Be respectful.</strong> No harassment, hate, threats or sexual content.</li>
             <li><strong>No scams or money requests.</strong> WHSF does not disburse funds, loans, prizes or promotions to individuals and never asks for fees. Report any such post.</li>
             <li><strong>Protect privacy.</strong> Don't post phone numbers, addresses or ID documents, yours or anyone else's.</li>
