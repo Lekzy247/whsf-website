@@ -54,6 +54,9 @@
     views.forEach((v) => $$(`[data-fm-view="${v}"]`).forEach((n) => { n.hidden = v !== view; }));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     $('[data-fm-reco]').hidden = view !== 'feed';
+    // The post box and feed filter belong to the Home feed only, so a new post is always seen where it lands.
+    $('[data-fm-composer]').hidden = !state.me || view !== 'feed';
+    $('[data-fm-filter]').hidden = !state.me || view !== 'feed';
     if (view === 'people') loadPeople();
     if (view === 'me') fillMeForm();
     if (view === 'idchecks') loadIdChecks();
@@ -389,6 +392,7 @@
     $('[data-fm-attach]').hidden = true; $('[data-fm-location-row]').hidden = true;
     $('[data-fm-celebrate]').setAttribute('aria-pressed', 'false');
     setStatus('[data-fm-post-status]', 'Posted.');
+    if ((location.hash || '#feed') !== '#feed') location.hash = '#feed';
     loadFeed(true);
   });
 
