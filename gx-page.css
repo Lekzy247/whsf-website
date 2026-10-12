@@ -280,3 +280,7 @@
   .gx-page-hero.gx-hero-split { grid-template-columns: 1fr; row-gap: 28px; }
   .gx-hero-visual { min-height: 300px; order: -1; }
 }
+
+/* slider visual showing artwork with text (e.g. MIL Lab): never cropped, no zoom */
+.hp-slide-visual.hp-slide-art { width: 100%; min-height: 0; height: auto; align-self: center; aspect-ratio: 1695 / 928; background: #eef3fb; }
+.hp-slide-visual.hp-slide-art img { object-fit: contain; animation: none !important; }
