@@ -272,3 +272,50 @@ body.fm-app { background: #f7f2f4; }
 }
 .fm-wide .fm-grid { grid-template-columns: 1fr; max-width: 1100px; }
 .fm-wide .fm-left, .fm-wide .fm-right { display: none; }
+
+/* ---------------------------------------------------------------- events (part 3) */
+.fm-ev-head { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; justify-content: space-between; }
+.fm-ev-head h2 { margin: 0 0 4px; }
+.fm-ev-section { margin: 26px 0 12px; font-size: 17px; }
+.fm-ev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.fm-ev-card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--wx-line); border-radius: 16px; background: #fff; color: var(--wx-ink); text-decoration: none; transition: box-shadow .2s; }
+.fm-ev-card:hover { box-shadow: 0 12px 30px rgb(42 10 23 / 12%); }
+.fm-ev-card img, .fm-ev-card .fm-ev-cover { width: 100%; aspect-ratio: 16 / 7; object-fit: cover; }
+.fm-ev-cover { display: block; background: linear-gradient(135deg, var(--wx-wine-deep), var(--wx-wine-bright) 60%, var(--wx-gold)); }
+.fm-ev-body { display: flex; gap: 12px; padding: 12px 14px 14px; }
+.fm-ev-body > span:last-child { display: grid; gap: 3px; min-width: 0; }
+.fm-ev-body strong { font-size: 15.5px; line-height: 1.3; }
+.fm-ev-body small { color: var(--wx-muted); font-size: 12.5px; }
+.fm-ev-date { display: grid; place-items: center; flex: none; width: 46px; height: 50px; border-radius: 10px; background: var(--wx-soft); color: var(--wx-wine); line-height: 1; }
+.fm-ev-date b { font-size: 19px; }
+.fm-ev-date small { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: var(--wx-wine) !important; }
+.fm-ev-going { color: #1c7c45 !important; font-weight: 600; }
+.fm-ev-ticket { color: var(--wx-wine) !important; font-weight: 700; }
+.fm-chip { display: inline-block; justify-self: start; margin-top: 4px; padding: 3px 9px; border-radius: 999px; background: #fff3d1; color: #7a5300; font-size: 11.5px; font-weight: 700; }
+.fm-chip.is-rejected, .fm-chip.is-cancelled { background: #fdecef; color: var(--wx-wine-deep); }
+.fm-ev-detail { margin-top: 12px; overflow: hidden; border: 1px solid var(--wx-line); border-radius: 18px; }
+.fm-ev-hero { display: block; width: 100%; aspect-ratio: 16 / 5; object-fit: cover; }
+.fm-ev-detail-body { padding: 20px 22px 24px; }
+.fm-ev-detail-body h2 { margin: 0 0 6px; }
+.fm-ev-when { margin: 0; color: var(--wx-wine); font-weight: 700; }
+.fm-ev-where { margin: 4px 0; color: var(--wx-text); }
+.fm-ev-action { display: grid; gap: 8px; justify-items: start; margin: 14px 0; }
+.fm-ev-about { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; }
+.fm-ev-hostline { display: flex; gap: 10px; align-items: center; margin: 16px 0; }
+.fm-ev-hostline .fm-avatar { width: 44px; height: 44px; font-size: 15px; }
+.fm-ev-hostline small, .fm-ev-hostline strong { display: block; }
+.fm-ev-hostline small { color: var(--wx-muted); font-size: 12.5px; }
+.fm-ticket { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 14px; border: 2px dashed var(--wx-line-strong); border-radius: 16px; background: var(--wx-soft); }
+.fm-ticket canvas { width: 120px; height: 120px; border-radius: 8px; background: #fff; }
+.fm-ticket > div { display: grid; gap: 6px; justify-items: start; }
+.fm-ticket p { margin: 0; font-family: ui-monospace, Consolas, monospace; font-size: 16px; }
+.fm-ev-host { display: grid; gap: 12px; justify-items: start; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--wx-line); }
+.fm-ev-review, .fm-ev-attendees { width: 100%; }
+.fm-checkin { display: flex; gap: 8px; flex-wrap: wrap; }
+.fm-checkin input { flex: 1; min-width: 200px; min-height: 44px; padding: 10px 14px; border: 1px solid var(--wx-line-strong); border-radius: 12px; font: inherit; text-transform: uppercase; }
+.fm-ev-guests { display: grid; gap: 4px; margin: 8px 0 0; padding: 0; list-style: none; }
+.fm-ev-guests li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--wx-soft); }
+.fm-ev-guests small { color: var(--wx-muted); }
+.fm-ev-formwrap { max-width: 720px; margin-top: 12px; }
+.fm-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .fm-two { grid-template-columns: 1fr; } .fm-ev-hero { aspect-ratio: 16 / 7; } }
