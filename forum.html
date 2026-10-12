@@ -20,12 +20,13 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=5">
+  <link rel="stylesheet" href="forum.css?v=6">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=7" defer></script>
+  <script src="forum.js?v=8" defer></script>
+  <script src="forum-social.js?v=1" defer></script>
 </head>
 <body class="fm-app">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -44,7 +45,9 @@
         <nav class="fm-tabs" aria-label="Forum">
           <a href="#feed" data-fm-tab="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
           <a href="#people" data-fm-tab="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg><span>Network</span></a>
+          <a href="#messages" data-fm-tab="messages" data-fm-member-tab hidden><span class="fm-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg><b class="fm-badge-n" data-fm-badge-messages hidden></b></span><span>Messages</span></a>
           <a href="grants.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg><span>Opportunities</span></a>
+          <a href="#alerts" data-fm-tab="alerts" data-fm-profile-tab hidden><span class="fm-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><b class="fm-badge-n" data-fm-badge-alerts hidden></b></span><span>Alerts</span></a>
           <a href="#idchecks" data-fm-tab="idchecks" data-fm-staff-only hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/></svg><span>ID checks</span></a>
           <div class="fm-me" data-fm-me>
             <button type="button" class="fm-me-btn" aria-haspopup="menu" aria-expanded="false" data-fm-me-toggle><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true">?</span><span>Me ▾</span></button>
@@ -68,6 +71,7 @@
       </div>
       <div data-fm-menu-forum>
         <p class="fm-me-group">Forum</p>
+            <a href="#messages" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg><span><strong>Messages</strong></span></a>
             <a href="#people" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg><span><strong>Network</strong><small>Find and follow members</small></span></a>
       </div>
       <p class="fm-me-group">WHSF Opportunities</p>
@@ -285,6 +289,7 @@
         <section class="fm-card" data-fm-view="people" hidden>
           <h2>People in the forum</h2>
           <p class="fm-muted">Follow members to see their posts under <em>My network</em>. People who follow each other are connections.</p>
+          <p class="fm-status" role="status" data-fm-people-status></p>
           <div class="fm-people" data-fm-people></div>
         </section>
 
@@ -306,6 +311,33 @@
             </div>
             <p class="fm-status" role="status" data-fm-me-status></p>
           </form>
+        </section>
+
+        <!-- Messages -->
+        <section class="fm-card fm-messages" data-fm-view="messages" data-fm-messages-view hidden>
+          <div class="fm-threads-pane">
+            <h2>Messages</h2>
+            <div class="fm-threads" data-fm-threads></div>
+          </div>
+          <div class="fm-convo-pane">
+            <p class="fm-muted fm-convo-empty" data-fm-convo-empty>Choose a conversation, or open <a href="#people">Network</a> and press <strong>Message</strong> on a member.</p>
+            <div class="fm-convo" data-fm-convo hidden>
+              <div class="fm-convo-head" data-fm-convo-head></div>
+              <div class="fm-convo-body" data-fm-convo-body aria-live="polite"></div>
+              <form class="fm-send" data-fm-send-form novalidate>
+                <label class="sr-only" for="fm-send-body">Message</label>
+                <textarea id="fm-send-body" name="body" rows="2" maxlength="2000" placeholder="Write a message… (Enter to send, Shift+Enter for a new line)"></textarea>
+                <button class="hp-btn hp-btn-primary" type="submit">Send</button>
+              </form>
+              <p class="fm-status" role="status" data-fm-send-status></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Alerts -->
+        <section class="fm-card" data-fm-view="alerts" hidden>
+          <h2>Alerts</h2>
+          <div class="fm-alerts" data-fm-alerts></div>
         </section>
 
         <!-- Moderators: ID check queue -->
