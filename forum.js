@@ -137,6 +137,8 @@
     card.hidden = !p || p.is_suspended || p.verification_status === 'approved';
     if (card.hidden) return;
     const pending = p.verification_status === 'pending';
+    $('[data-fm-verify-badge]').textContent = pending ? 'Step 2 of 2 · Under review' : 'Step 2 of 2 · Age verification';
+    $('[data-fm-verify-title]').textContent = pending ? 'Your verification is under review' : 'Verify your age to enter the forum';
     $('[data-fm-verify-pending]').hidden = !pending;
     $('[data-fm-verify-start]').hidden = pending;
     const rejected = $('[data-fm-verify-rejected]');
