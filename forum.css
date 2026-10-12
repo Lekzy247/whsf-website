@@ -319,3 +319,33 @@ body.fm-app { background: #f7f2f4; }
 .fm-ev-formwrap { max-width: 720px; margin-top: 12px; }
 .fm-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 640px) { .fm-two { grid-template-columns: 1fr; } .fm-ev-hero { aspect-ratio: 16 / 7; } }
+
+/* ---------------------------------------------------------------- adverts + invites (part 4) */
+.fm-sponsored { display: grid; gap: 8px; justify-items: start; }
+.fm-sponsored img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; }
+.fm-sponsored h2 { margin: 0; font-size: 17px; }
+.fm-sponsored p { margin: 0; color: var(--wx-text); font-size: 14px; }
+.fm-ad-row { display: grid; grid-template-columns: minmax(220px, 300px) 1fr; gap: 18px; padding: 16px 0; border-top: 1px solid var(--wx-line); }
+.fm-ad-preview { display: grid; gap: 8px; justify-items: start; padding: 14px; border: 1px solid var(--wx-line); border-radius: 16px; background: #fff; }
+.fm-ad-preview img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; }
+.fm-ad-preview strong { font-size: 16px; }
+.fm-ad-preview p { margin: 0; color: var(--wx-text); font-size: 14px; overflow-wrap: anywhere; }
+.fm-ad-preview .hp-btn { pointer-events: none; min-height: 38px; padding: 8px 16px; font-size: 14px; }
+.fm-ad-side { display: grid; gap: 8px; align-content: start; justify-items: start; }
+.fm-ad-side p { margin: 0; overflow-wrap: anywhere; }
+.fm-chip.is-live { background: #e5f6ec; color: #1c7c45; }
+.fm-chip.is-paused { background: #eee; color: #555; }
+.fm-ad-stats { display: flex; flex-wrap: wrap; gap: 10px; }
+.fm-ad-stats span { display: grid; min-width: 90px; padding: 10px 14px; border-radius: 12px; background: var(--wx-soft); }
+.fm-ad-stats b { color: var(--wx-wine); font-size: 20px; }
+.fm-ad-stats small { color: var(--wx-muted); font-size: 12px; }
+.fm-ad-editor { display: grid; grid-template-columns: 1fr minmax(240px, 300px); gap: 24px; align-items: start; margin-top: 12px; }
+.fm-ad-editor h2 { margin-top: 0; }
+.fm-ad-live { position: sticky; top: 90px; }
+.fm-invite-link { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+.fm-invite-link input { flex: 1; min-width: 220px; min-height: 46px; padding: 10px 14px; border: 1px solid var(--wx-line-strong); border-radius: 12px; font: inherit; background: var(--wx-soft); }
+.fm-invite-stats { margin-top: 18px; }
+@media (max-width: 760px) {
+  .fm-ad-row, .fm-ad-editor { grid-template-columns: 1fr; }
+  .fm-ad-live { position: static; }
+}
