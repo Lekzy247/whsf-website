@@ -7,7 +7,13 @@
   const { db, state, el, $, fillAvatar } = F;
   const IMAGE_PREFIX = 'https://ophymlgqnfilgxsuzcuz.supabase.co/storage/v1/object/public/forum-images/';
   const FORMATS = { in_person: 'In person', online: 'Online', hybrid: 'In person + online' };
-  const COLS = 'id,host_id,title,about,format,starts_at,ends_at,time_zone,venue_name,address,city,country,livestream_url,capacity,cover_url,status,review_note';
+  // Event types (must match forum_events.category in the database).
+  const CATS = {
+    conference: '🎤 Conference', summit: '🏛️ Summit', exchange: '🌍 Exchange programme', career_fair: '💼 Career fair',
+    webinar: '💻 Webinar', workshop: '🛠️ Workshop', meetup: '☕ Meetup', networking: '🤝 Networking'
+  };
+  let catFilter = null;
+  const COLS = 'id,host_id,category,title,about,format,starts_at,ends_at,time_zone,venue_name,address,city,country,livestream_url,capacity,cover_url,status,review_note';
   const myZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
   const root = () => $('[data-fm-events]');
 
@@ -54,6 +60,7 @@
       el('span', { class: 'fm-ev-body' }, [
         dateBadge(e),
         el('span', {}, [
+          el('small', { class: 'fm-ev-cat', text: CATS[e.category] || CATS.meetup }),
           el('strong', { text: e.title }),
           el('small', { text: when(e) }),
           el('small', { text: `${FORMATS[e.format]} · ${where(e)}` }),
@@ -107,7 +114,11 @@
       box.append(grid);
     }
     box.append(el('h3', { class: 'fm-ev-section', text: 'Upcoming events' }));
-    const others = (upcoming || []).filter((e) => e.host_id !== state.me.user_id);
+    box.append(el('div', { class: 'fm-topics fm-ev-cats', 'aria-label': 'Filter by event type' }, [
+      el('button', { type: 'button', class: `fm-topic${catFilter ? '' : ' is-on'}`, text: 'All types', onclick: () => { catFilter = null; renderList(); } }),
+      ...Object.entries(CATS).map(([k, t]) => el('button', { type: 'button', class: `fm-topic${catFilter === k ? ' is-on' : ''}`, text: t, onclick: () => { catFilter = k; renderList(); } }))
+    ]));
+    const others = (upcoming || []).filter((e) => e.host_id !== state.me.user_id && (!catFilter || e.category === catFilter));
     if (!others.length) box.append(el('p', { class: 'fm-muted', text: 'No upcoming events yet. Be the first to host one!' }));
     else {
       const grid = el('div', { class: 'fm-ev-grid' });
@@ -188,6 +199,7 @@
       el('article', { class: 'fm-ev-detail' }, [
         cover ? el('img', { class: 'fm-ev-hero', src: cover, alt: '' }) : el('div', { class: 'fm-ev-hero fm-ev-cover', 'aria-hidden': 'true' }),
         el('div', { class: 'fm-ev-detail-body' }, [
+          el('span', { class: 'fm-ev-cat', text: CATS[e.category] || CATS.meetup }),
           el('h2', { text: e.title }),
           el('p', { class: 'fm-ev-when', text: when(e) }),
           localWhen(e) ? el('p', { class: 'fm-muted', text: localWhen(e) }) : null,
@@ -278,11 +290,13 @@
     const input = (name, attrs = {}) => el('input', { name, ...attrs });
     const f = el('form', { class: 'fm-form fm-ev-form', novalidate: '' });
     const fmtSel = el('select', { name: 'format' }, Object.entries(FORMATS).map(([v, t]) => el('option', { value: v, text: t })));
+    const catSel = el('select', { name: 'category' }, Object.entries(CATS).map(([v, t]) => el('option', { value: v, text: t })));
     const about = el('textarea', { name: 'about', rows: '6', maxlength: '4000', placeholder: 'Who it is for, the agenda, speakers, and what attendees will gain.' });
     const cover = el('input', { type: 'file', name: 'cover', accept: 'image/jpeg,image/png,image/webp' });
     const status = el('p', { class: 'fm-status', role: 'status' });
     f.append(
       field('Event title', input('title', { maxlength: '120', required: '', placeholder: 'e.g. MIL Lab: spotting deepfakes workshop' })),
+      field('Type of event', catSel),
       field('About the event', about),
       field('Format', fmtSel),
       el('div', { class: 'fm-two' }, [
@@ -315,7 +329,7 @@
     fmtSel.addEventListener('change', syncFormat);
     if (e) {
       const fe = f.elements;
-      fe.title.value = e.title; about.value = e.about; fmtSel.value = e.format;
+      fe.title.value = e.title; about.value = e.about; fmtSel.value = e.format; catSel.value = e.category || 'meetup';
       fe.starts.value = toLocalInput(e.starts_at); fe.ends.value = toLocalInput(e.ends_at);
       ['venue_name', 'address', 'city', 'country', 'livestream_url'].forEach((k) => { fe[k].value = e[k] || ''; });
       fe.capacity.value = e.capacity || ''; fe.meeting_link.value = link;
@@ -350,7 +364,7 @@
       const online = fmtSel.value !== 'in_person';
       const place = fmtSel.value !== 'online';
       const row = {
-        title: v('title'), about: about.value.trim(), format: fmtSel.value,
+        title: v('title'), about: about.value.trim(), format: fmtSel.value, category: catSel.value,
         starts_at: starts.toISOString(), ends_at: ends.toISOString(), time_zone: myZone,
         venue_name: place ? v('venue_name') || null : null, address: place ? v('address') || null : null,
         city: place ? v('city') || null : null, country: place ? v('country') || null : null,
@@ -393,4 +407,23 @@
     else renderList();
   }
   F.hooks.view.push((view) => { if (view === 'events') route(); });
+
+  async function renderUpcoming() {
+    const box = $('[data-fm-upcoming]');
+    if (!box) return;
+    if (!state.me) { box.hidden = true; return; }
+    const { data } = await db.from('forum_events').select(COLS).eq('status', 'published').gte('ends_at', new Date().toISOString()).order('starts_at').limit(3);
+    box.replaceChildren(el('h2', { class: 'fm-side-title', text: '📅 Upcoming events' }));
+    if (!data?.length) box.append(el('p', { class: 'fm-muted', text: 'No upcoming events yet.' }));
+    (data || []).forEach((e) => box.append(el('a', { class: 'fm-up-row', href: `#events/${e.id}` }, [
+      dateBadge(e),
+      el('span', {}, [el('strong', { text: e.title }), el('small', { text: `${CATS[e.category] || ''} · ${FORMATS[e.format]}` })])
+    ])));
+    box.append(el('div', { class: 'fm-actions' }, [
+      el('a', { class: 'fm-link', href: '#events', text: 'All events →' }),
+      el('a', { class: 'fm-link', href: '#events/new', text: 'Host an event' })
+    ]));
+    box.hidden = false;
+  }
+  F.hooks.refresh.push(renderUpcoming);
 })();
