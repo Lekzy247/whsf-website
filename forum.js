@@ -45,13 +45,19 @@
   const state = { session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
-  const views = ['feed', 'people', 'me', 'rules', 'idchecks'];
+  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite'];
+  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite'];
+  // Add-on scripts (forum-social.js, …) register here to react to page refreshes and view changes.
+  const hooks = { refresh: [], view: [] };
   function showView() {
-    let view = (location.hash || '#feed').slice(1);
+    let view = (location.hash || '#feed').slice(1).split('/')[0];
     if (!views.includes(view)) view = 'feed';
-    if (!state.me && (view === 'people' || view === 'me')) view = 'feed';
+    if (!state.me && memberViews.includes(view)) view = 'feed';
+    if (!state.profile && view === 'alerts') view = 'feed';
     if (!state.isStaff && view === 'idchecks') view = 'feed';
     views.forEach((v) => $$(`[data-fm-view="${v}"]`).forEach((n) => { n.hidden = v !== view; }));
+    // Messages, events and adverts use the full page width (side panels hidden), like the Gelllez Forum.
+    document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite'].includes(view));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     $('[data-fm-reco]').hidden = view !== 'feed';
     // The post box and feed filter belong to the Home feed only, so a new post is always seen where it lands.
@@ -60,6 +66,7 @@
     if (view === 'people') loadPeople();
     if (view === 'me') fillMeForm();
     if (view === 'idchecks') loadIdChecks();
+    hooks.view.forEach((fn) => fn(view));
   }
   window.addEventListener('hashchange', () => { setMeMenu(false); showView(); });
 
@@ -91,6 +98,8 @@
     $('[data-fm-menu-forum]').hidden = !state.me;
     $('[data-fm-menu-staff]').hidden = !state.isStaff;
     $('[data-fm-menu-signout]').hidden = !signedIn;
+    $$('[data-fm-member-tab]').forEach((t) => { t.hidden = !state.me; });
+    $$('[data-fm-profile-tab]').forEach((t) => { t.hidden = !state.profile; });
   }
 
   // ---------------------------------------------------------------- auth
@@ -606,7 +615,7 @@
     if (!state.me) return;
     list.replaceChildren(el('p', { class: 'fm-muted', text: 'Loading members…' }));
     const term = $('#fm-search').value.trim();
-    let query = db.from('forum_profiles').select('user_id,display_name,headline,location,avatar_url').neq('user_id', state.me.user_id).order('created_at', { ascending: false }).limit(60);
+    let query = db.from('forum_profiles').select('user_id,display_name,headline,location,avatar_url').eq('verification_status', 'approved').eq('is_suspended', false).neq('user_id', state.me.user_id).order('created_at', { ascending: false }).limit(60);
     if (term) {
       const like = `%${term.replace(/[%_,()]/g, ' ')}%`;
       query = query.or(`display_name.ilike.${like},headline.ilike.${like},location.ilike.${like}`);
@@ -628,7 +637,10 @@
       list.append(el('div', { class: 'fm-person' }, [avatar, el('div', {}, [
         el('strong', { text: p.display_name }),
         el('span', { text: [p.headline, p.location].filter(Boolean).join(' · ') })
-      ]), button]));
+      ]), el('div', { class: 'fm-person-actions' }, [
+        el('button', { class: 'fm-follow', type: 'button', text: 'Message', onclick: () => window.WHSFForum.startMessage?.(p.user_id) }),
+        button
+      ])]));
     });
   }
   let searchTimer;
@@ -679,9 +691,12 @@
     }
     renderProfileCard();
     renderMeMenu();
+    hooks.refresh.forEach((fn) => fn());
     showView();
     loadFeed(true);
   }
+
+  window.WHSFForum = { db, state, hooks, el, $, $$, fillAvatar, timeAgo, setStatus, refresh };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => { if (['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED'].includes(event)) refresh(); });
