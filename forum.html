@@ -20,47 +20,16 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=4">
+  <link rel="stylesheet" href="forum.css?v=5">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=6" defer></script>
+  <script src="forum.js?v=7" defer></script>
 </head>
-<body class="home-page">
+<body class="fm-app">
   <a class="skip-link" href="#main">Skip to main content</a>
 
-  <div class="utility-bar">
-    <div class="shell utility-inner">
-      <p>Humanity. Inclusion. Sustainability. A 501(c)(3) charity.</p>
-      <div class="utility-actions" aria-label="Accessibility controls">
-        <button id="font-toggle" class="text-button" type="button" aria-pressed="false">Larger text</button>
-        <button id="contrast-toggle" class="text-button" type="button" aria-pressed="false">High contrast</button>
-        <a class="utility-donate" href="donor-portal.html">Donate now</a>
-      </div>
-    </div>
-  </div>
-
-  <header class="site-header" id="top">
-    <div class="shell nav-wrap">
-      <a class="brand" href="index.html" aria-label="WHSF home">
-        <img src="assets/whsf-logo.jpg" width="46" height="46" alt="WHSF emblem">
-        <span><strong>WHSF</strong><small>World Humanitarian Support Foundation</small></span>
-      </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Open menu</span>
-      </button>
-      <nav id="primary-navigation" class="primary-nav" aria-label="Primary navigation">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="programs.html">Programs</a>
-        <a href="mil-lab.html">MIL Lab</a>
-        <a href="impact-dashboard.html">Impact</a>
-        <a href="forum.html" aria-current="page">Forum</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-    </div>
-  </header>
 
   <main id="main" class="fm">
     <!-- Forum bar -->
@@ -73,14 +42,51 @@
           <input type="search" id="fm-search" placeholder="Search people, skills, roles" autocomplete="off">
         </label>
         <nav class="fm-tabs" aria-label="Forum">
-          <a href="#feed" data-fm-tab="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
-          <a href="#people" data-fm-tab="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg>Network</a>
-          <a href="grants.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>Opportunities</a>
-          <a href="#rules" data-fm-tab="rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Rules</a>
-          <a href="#idchecks" data-fm-tab="idchecks" data-fm-staff-only hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/></svg>ID checks</a>
-          <a href="#me" data-fm-tab="me"><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true">?</span>Me</a>
+          <a href="#feed" data-fm-tab="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
+          <a href="#people" data-fm-tab="people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg><span>Network</span></a>
+          <a href="grants.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg><span>Opportunities</span></a>
+          <a href="#idchecks" data-fm-tab="idchecks" data-fm-staff-only hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/></svg><span>ID checks</span></a>
+          <div class="fm-me" data-fm-me>
+            <button type="button" class="fm-me-btn" aria-haspopup="menu" aria-expanded="false" data-fm-me-toggle><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true">?</span><span>Me ▾</span></button>
+          </div>
         </nav>
+        <a class="fm-donate" href="donor-portal.html" target="_blank" rel="noopener">Donate</a>
       </div>
+    </div>
+
+    <div class="fm-me-scrim" data-fm-me-scrim hidden></div>
+    <div class="fm-me-menu" role="menu" aria-label="Your account" data-fm-me-menu hidden>
+      <div class="fm-me-head">
+        <span class="fm-avatar" data-fm-menu-avatar aria-hidden="true">?</span>
+        <div><strong data-fm-menu-name>WHSF Forum</strong><small data-fm-menu-headline>Sign in to join the conversation</small></div>
+      </div>
+      <div class="fm-me-actions" data-fm-menu-member hidden>
+        <a class="hp-btn hp-btn-primary" href="#me" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/></svg>Edit profile</a>
+      </div>
+      <div class="fm-me-actions" data-fm-menu-guest>
+        <a class="hp-btn hp-btn-primary" href="#feed" role="menuitem" data-fm-menu-signin>Sign in or join</a>
+      </div>
+      <div data-fm-menu-forum>
+        <p class="fm-me-group">Forum</p>
+            <a href="#people" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg><span><strong>Network</strong><small>Find and follow members</small></span></a>
+      </div>
+      <p class="fm-me-group">WHSF Opportunities</p>
+            <a href="grants.html" role="menuitem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span><strong>Find grants and funding</strong><small>Grants.gov, EU and verified funders</small></span></a>
+            <a href="grants-account.html" role="menuitem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span><strong>Get matched to grants</strong><small>Your grant profile and deadline alerts</small></span></a>
+            <a href="verify-certificate.html#staff-verification" role="menuitem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg><span><strong>Verify a WHSF employee</strong><small>Check anyone who says they work for WHSF</small></span></a>
+      <p class="fm-me-group">Support WHSF</p>
+            <a href="donor-portal.html" role="menuitem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span><strong>Donate</strong><small>Fund devices, trainers and certificates</small></span></a>
+            <a href="corporate-partnerships.html" role="menuitem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 17l2 2a1.4 1.4 0 0 0 2-2"/><path d="M14 14l2.5 2.5a1.4 1.4 0 0 0 2-2L15 11l-3 1-2-2 4-4h3l4 4v4"/><path d="M3 7l4 4-3 3"/></svg><span><strong>Partner with WHSF</strong></span></a>
+      <div data-fm-menu-staff hidden>
+        <p class="fm-me-group">Moderators</p>
+            <a href="#idchecks" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/></svg><span><strong>ID checks</strong><small>Approve new members</small></span></a>
+      </div>
+      <p class="fm-me-group">Help</p>
+            <a href="#rules" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg><span><strong>Community rules</strong></span></a>
+            <a href="mailto:info@worldhsfoundation.org" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg><span><strong>Help and support</strong><small>info@worldhsfoundation.org</small></span></a>
+            <a href="privacy-policy.html#forum-id" role="menuitem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span><strong>Privacy policy</strong></span></a>
+            <a href="index.html" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span><strong>WHSF website</strong><small>worldhsfoundation.org</small></span></a>
+      <button type="button" class="fm-me-out" role="menuitem" data-fm-signout data-fm-menu-signout hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span><strong>Sign out</strong></span></button>
     </div>
 
     <div class="fm-grid">
@@ -342,25 +348,8 @@
     </div>
   </main>
 
-  <footer class="hp-footer">
-    <div class="hp-footer-top">
-      <div class="hp-footer-brand">
-        <img src="assets/whsf-logo.jpg" alt="WHSF emblem" width="46" height="46">
-        <div><strong>World Humanitarian Support Foundation</strong><p>Humanity. Inclusion. Sustainability.<br>A 501(c)(3) charity. Donations are tax deductible.</p></div>
-      </div>
-      <div><h4>Explore</h4><nav aria-label="Explore"><a href="about.html">About us</a><a href="programs.html">Our programs</a><a href="impact-dashboard.html">Impact</a><a href="newsroom.html">Newsroom</a></nav></div>
-      <div><h4>Grants portal</h4><nav aria-label="Grants portal"><a href="grants.html">Search grants</a><a href="grants-account.html">Get matched</a><a href="grants-account.html">Deadline alerts</a><a href="grants.html#funders">Donor directory</a></nav></div>
-      <div><h4>Get involved</h4><nav aria-label="Get involved"><a href="donor-portal.html">Donate</a><a href="contact.html">Volunteer</a><a href="corporate-partnerships.html">Partner with us</a><a href="responsible-ai.html">Responsible AI</a></nav></div>
-      <div><h4>Contact</h4>
-        <address><a href="mailto:info@worldhsfoundation.org">info@worldhsfoundation.org</a><span>11535 Western Ave, Torrance, CA 90501</span><span>No. 5 Akinyemi Avenue, Ibadan, Nigeria</span></address>
-        <nav class="hp-footer-social" aria-label="WHSF social media"><a href="https://www.facebook.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Facebook">f</a><a href="https://www.instagram.com/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="Instagram">ig</a><a href="http://linkedin.com/company/worldhsfoundation" target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a><a href="https://www.youtube.com/channel/UCiDbbLL3icQI2D90ZTfHFOQ" target="_blank" rel="noreferrer" aria-label="YouTube">▶</a></nav>
-      </div>
-      <figure class="hp-footer-award"><img src="assets/awards/london-data-center-world-award-2025-winner.jpg" alt="2025 London Data Center World Award Winner" loading="lazy"><figcaption>2025 London Data Center World Award Winner</figcaption></figure>
-    </div>
-    <div class="hp-footer-bottom">
-      <span>© <span id="year"></span> World Humanitarian Support Foundation. All rights reserved.</span>
-      <span><a href="privacy-policy.html">Privacy</a> · <a href="child-safeguarding-policy.html">Safeguarding</a> · <a href="governance.html">Governance</a></span>
-    </div>
+  <footer class="fm-foot">
+    <p>© <span id="year"></span> World Humanitarian Support Foundation · <a href="index.html">worldhsfoundation.org</a> · <a href="#rules">Community rules</a> · <a href="privacy-policy.html" target="_blank" rel="noopener">Privacy</a> · <a href="child-safeguarding-policy.html" target="_blank" rel="noopener">Safeguarding</a> · <a href="contact.html" target="_blank" rel="noopener">Contact</a></p>
   </footer>
 </body>
 </html>
