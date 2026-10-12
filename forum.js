@@ -182,6 +182,9 @@
         p_country: f.country.value.trim(), p_id_type: f.id_type.value, p_front: frontPath, p_back: backPath, p_selfie: selfiePath
       });
       if (error) throw error;
+      // Let WHSF moderators know (the server sends at most one email per check).
+      const token = state.session?.access_token;
+      if (token) fetch('/api/forum-id-alert', { method: 'POST', headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
       f.reset(); say('');
       await refresh();
     } catch (error) {
