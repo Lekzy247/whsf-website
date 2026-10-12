@@ -324,3 +324,7 @@
 
 /* feature photo shown at its own 3:2 shape so artwork with text is never cropped */
 .gx-feature-photo.gx-feature-photo-3x2 { min-height: 0; aspect-ratio: 3 / 2; align-self: center; }
+
+/* silent looping clip over a hero photo (photo stays as the fallback) */
+.gx-hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+@media (prefers-reduced-motion: reduce) { .gx-hero-video { display: none; } }
