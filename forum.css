@@ -142,3 +142,17 @@
   .fm-left .fm-promo { display: none; }
   .fm-post-btn { width: 100%; margin-left: 0; justify-content: center; }
 }
+
+/* age verification */
+.fm-form select { width: 100%; min-height: 46px; padding: 11px 14px; border: 1px solid var(--wx-line-strong); border-radius: 12px; background: #fff; color: var(--wx-ink); font: inherit; font-weight: 400; }
+.fm-form input[type="file"] { font-weight: 400; font-size: 14px; max-width: 100%; }
+.fm-steps { display: grid; gap: 8px; margin: 12px 0 4px; padding-left: 20px; color: var(--wx-text); font-size: 15px; line-height: 1.55; }
+.fm-code { display: inline-block; padding: 2px 10px; border-radius: 8px; background: #fff3d1; color: var(--wx-ink); font-family: ui-monospace, Consolas, monospace; font-size: 17px; letter-spacing: .06em; }
+.fm-alert { margin: 8px 0 12px; padding: 12px 14px; border-radius: 12px; background: #fdecef; color: var(--wx-wine-deep); font-size: 14px; }
+.fm-idcheck { display: grid; gap: 12px; padding: 16px 0; border-top: 1px solid var(--wx-line); }
+.fm-idcheck h3 { margin: 0; font-size: 17px; }
+.fm-idcheck-imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.fm-idcheck-imgs figure { margin: 0; }
+.fm-idcheck-imgs a { display: block; }
+.fm-idcheck-imgs img { width: 100%; height: 220px; object-fit: contain; border-radius: 12px; background: #f4eef1; }
+.fm-idcheck-imgs figcaption { margin-top: 4px; color: var(--wx-muted); font-size: 12px; }
