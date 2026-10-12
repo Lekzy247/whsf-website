@@ -290,4 +290,34 @@
 /* responsive 16:9 video embed */
 .gx-video { position: relative; max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 22px; background: var(--wx-wine-night); box-shadow: 0 24px 60px rgb(78 17 42 / 18%); }
 .gx-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-#watch .gx-note { text-align: center; }
+/* decorative WHSF frame around an embedded video: wine-to-gold ring, fine inner line, gold dot accents */
+.gx-video-frame {
+  position: relative; isolation: isolate; max-width: 1000px; margin: 32px auto 8px; padding: 12px 12px 0;
+  border-radius: 32px; background: linear-gradient(135deg, var(--wx-wine-deep) 0%, var(--wx-wine) 38%, var(--wx-wine-bright) 68%, var(--wx-gold) 100%);
+  box-shadow: 0 30px 70px rgb(78 17 42 / 24%);
+}
+.gx-video-frame::before {
+  content: ""; position: absolute; inset: 5px; z-index: 1; border: 1px solid rgb(255 255 255 / 38%); border-radius: 27px; pointer-events: none;
+}
+.gx-video-frame::after, .gx-video-dots {
+  content: ""; position: absolute; z-index: -1; width: 150px; height: 150px; border-radius: 18px;
+  background-image: radial-gradient(var(--wx-gold) 2.2px, transparent 2.8px); background-size: 15px 15px; opacity: .75;
+}
+.gx-video-frame::after { right: -30px; bottom: -30px; }
+.gx-video-dots { top: -30px; left: -30px; background-image: radial-gradient(var(--wx-wine-bright) 2.2px, transparent 2.8px); opacity: .45; }
+.gx-video-frame .gx-video { max-width: none; border-radius: 22px; box-shadow: 0 0 0 3px rgb(255 255 255 / 92%), 0 10px 30px rgb(42 10 23 / 35%); }
+.gx-video-frame figcaption {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 16px;
+  padding: 13px 10px 14px; color: #fff; font-size: 14px; font-weight: 600;
+}
+.gx-video-frame figcaption span { display: inline-flex; align-items: center; gap: 8px; }
+.gx-video-frame figcaption svg { width: 18px; height: 18px; color: var(--wx-gold); }
+.gx-video-frame figcaption a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.gx-video-frame figcaption a:hover { color: #fff3d1; }
+@media (max-width: 1120px) { .gx-video-frame::after, .gx-video-dots { display: none; } }
+@media (max-width: 640px) {
+  .gx-video-frame { margin-top: 22px; padding: 7px 7px 0; border-radius: 22px; }
+  .gx-video-frame::before { inset: 3px; border-radius: 19px; }
+  .gx-video-frame .gx-video { border-radius: 16px; box-shadow: 0 0 0 2px rgb(255 255 255 / 92%); }
+  .gx-video-frame figcaption { padding: 10px 6px 11px; font-size: 13px; }
+}
