@@ -1,0 +1,44 @@
+/* WHSF Verify: the shared look of identity verification (also used by Gelllez Verify and Gelllez App Verify under
+   their own names). A centred card, brand header, one thing per screen, tip rows with icon chips, a "have these
+   ready" callout, one big primary button and quiet links. */
+.vk-card { width: min(100%, 560px); margin-left: auto; margin-right: auto; text-align: left; }
+.vk-brand { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; color: var(--wx-wine); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.vk-brand svg { width: 16px; height: 16px; }
+.vk-form { display: grid; gap: 14px; }
+.vk-panel { display: grid; gap: 14px; }
+.vk-panel[hidden] { display: none; }
+.vk-progress { margin: 0; color: var(--wx-muted); font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.vk-progress:empty { display: none; }
+.vk-title { margin: 0; font-size: 1.35rem; line-height: 1.25; letter-spacing: -.01em; color: var(--wx-ink); }
+.vk-lead, .vk-sub { margin: 0; color: var(--wx-text); line-height: 1.55; }
+.vk-sub { font-weight: 700; color: var(--wx-ink); }
+.vk-frame { width: min(100%, 240px); margin: 0 auto; display: block; }
+.vk-tips { list-style: none; margin: 0; padding: 14px; display: grid; gap: 12px; background: var(--wx-soft); border: 1px solid var(--wx-line); border-radius: 14px; }
+.vk-tips li { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: center; line-height: 1.5; font-size: 15px; color: var(--wx-text); }
+.vk-chip { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--wx-line); color: var(--wx-wine); }
+.vk-chip svg { width: 20px; height: 20px; }
+.vk-callout { display: grid; grid-template-columns: 24px 1fr; gap: 12px; padding: 14px 16px; background: #fff3d1; border: 1px solid #f0cf6b; border-left: 6px solid #e0a800; border-radius: 10px; color: #4a3500; }
+.vk-callout svg { width: 24px; height: 24px; }
+.vk-callout ul { margin: 6px 0 0; padding-left: 18px; }
+.vk-code-line { margin: 0; text-align: center; font-size: 17px; }
+.vk-primary { display: inline-flex; justify-content: center; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; padding: 14px 18px; border: 0; border-radius: 10px; background: var(--wx-wine); color: #fff; font: inherit; font-size: 17px; font-weight: 700; text-align: center; text-decoration: none; cursor: pointer; }
+.vk-primary:hover { background: var(--wx-wine-deep); }
+.vk-primary:disabled { opacity: .5; cursor: not-allowed; }
+.vk-secondary { display: inline-flex; justify-content: center; align-items: center; width: 100%; box-sizing: border-box; padding: 12px 18px; border: 2px solid var(--wx-wine); border-radius: 10px; background: #fff; color: var(--wx-wine); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.vk-link { border: 0; background: none; padding: 6px; color: #3552b8; font: inherit; font-size: 15px; text-decoration: underline; cursor: pointer; justify-self: center; }
+.vk-file { cursor: pointer; }
+.vk-pick { display: grid; gap: 8px; }
+.vk-picked { margin: 0; color: #1c7c45; font-weight: 600; font-size: 14px; word-break: break-all; }
+.vk-picked:empty { display: none; }
+.vk-preview { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; background: var(--wx-soft); }
+.vk-preview[hidden] { display: none; }
+.vk-error { margin: 0; color: #a3191c; font-weight: 600; font-size: 14px; }
+.vk-error:empty { display: none; }
+.vk-consent { font-size: 14px; line-height: 1.5; }
+.vk-legacy { display: none !important; }
+.vk-status { display: grid; gap: 8px; justify-items: center; text-align: center; padding: 8px 0 4px; }
+.vk-status h3 { margin: 0; font-size: 1.25rem; }
+.vk-status p { margin: 0; color: var(--wx-text); line-height: 1.55; }
+.vk-status-icon svg { width: 44px; height: 44px; }
+.vk-working .vk-status-icon { color: var(--wx-wine); }
+.vk-problem-note { border-left: 6px solid #b3261e; }
