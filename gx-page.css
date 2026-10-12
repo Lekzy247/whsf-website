@@ -334,3 +334,6 @@
 .hp-heading.gx-heading-center > div > span { justify-content: center; }
 .hp-heading.gx-heading-center > div, .hp-heading.gx-heading-center > p { width: 100%; }
 .hp-heading.gx-heading-center > p { max-width: 600px; }
+
+/* two-card story row (fills the row instead of leaving an empty third column) */
+@media (min-width: 981px) { .hp-stories.hp-stories-2 { grid-template-columns: repeat(2, 1fr); } }
