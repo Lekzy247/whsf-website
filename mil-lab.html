@@ -18,7 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=6">
-  <link rel="stylesheet" href="gx-page.css?v=15">
+  <link rel="stylesheet" href="gx-page.css?v=16">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="home.js?v=4" defer></script>
@@ -60,11 +60,11 @@
 
   <main id="main">
     <!-- Page hero: slider (same pattern as the homepage) -->
-    <section class="hp-hero hp-hero-wide" aria-roledescription="carousel" aria-label="MIL Lab highlights" data-hp-slider>
+    <section class="hp-hero hp-hero-wide hp-hero-single" aria-label="MIL Lab" data-hp-slider>
       <span class="hp-hero-glow" aria-hidden="true"></span>
       <img class="hp-hero-mark" src="assets/whsf-logo.jpg" alt="" aria-hidden="true">
       <div class="hp-slides">
-        <article class="hp-slide is-active" id="mil-slide-1" data-hp-duration="11500" role="group" aria-roledescription="slide" aria-label="1 of 4">
+        <article class="hp-slide is-active" id="mil-slide-1" data-hp-duration="11500" role="group">
           <div class="hp-slide-copy">
             <span class="hp-kicker">WHSF Media Information Library</span>
             <h1>MIL Lab. <em>Spot. Verify. Create. Amplify.</em></h1>
@@ -84,61 +84,11 @@
           </div>
         </article>
 
-        <article class="hp-slide" id="mil-slide-2" role="group" aria-roledescription="slide" aria-label="2 of 4" aria-hidden="true">
-          <div class="hp-slide-copy">
-            <span class="hp-kicker">The MIL Lab framework</span>
-            <h2 class="hp-h1">Question first. <em>Share what is true.</em></h2>
-            <p>Spot misleading posts and deepfakes, verify facts with trusted tools, create ethical content and amplify credible information in your community.</p>
-            <div class="hp-actions">
-              <a class="hp-btn hp-btn-primary" href="#framework" tabindex="-1">See the framework
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-              <a class="hp-btn hp-btn-outline" href="#learn" tabindex="-1">Learning modules</a>
-            </div>
-          </div>
-          <div class="hp-slide-visual">
-            <img src="assets/home/data-cloud-infrastructure-skills.jpg" loading="lazy" alt="Young adults learning digital skills together">
-          </div>
-        </article>
-
-        <article class="hp-slide" id="mil-slide-3" role="group" aria-roledescription="slide" aria-label="3 of 4" aria-hidden="true">
-          <div class="hp-slide-copy">
-            <span class="hp-kicker">The six-week journey</span>
-            <h2 class="hp-h1">Six weeks. <em>Real skills, real media.</em></h2>
-            <p>Workshops, mentoring, a Youth Creative Challenge and community outreach, ending with a showcase, certificates and the WHSF MIL Ambassadors Network.</p>
-            <div class="hp-actions">
-              <a class="hp-btn hp-btn-primary" href="#journey" tabindex="-1">See the journey
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-              <a class="hp-btn hp-btn-outline" href="#who" tabindex="-1">Who can join</a>
-            </div>
-          </div>
-          <div class="hp-slide-visual">
-            <img src="assets/programs/whsf-programmes-technology.jpg" loading="lazy" alt="A WHSF facilitator guiding young people through hands-on technology training">
-          </div>
-        </article>
-
-        <article class="hp-slide" id="mil-slide-4" role="group" aria-roledescription="slide" aria-label="4 of 4" aria-hidden="true">
-          <div class="hp-slide-copy">
-            <span class="hp-kicker">Who can join</span>
-            <h2 class="hp-h1">Built for young people <em>aged 18–30.</em></h2>
-            <p>Students, school leavers, youth organisations, content creators, emerging journalists, digital volunteers and early-career professionals, in person or online.</p>
-            <div class="hp-actions">
-              <a class="hp-btn hp-btn-primary" href="contact.html" tabindex="-1">Register your interest
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-              <a class="hp-btn hp-btn-outline" href="#mil-faq" tabindex="-1">Questions</a>
-            </div>
-          </div>
-          <div class="hp-slide-visual">
-            <img src="assets/programs/media-information-library.jpg" loading="lazy" alt="Young people learning media and information literacy with WHSF">
-          </div>
-        </article>
       </div>
 
       <div class="hp-controls">
         <div class="hp-tabs" role="tablist" aria-label="Choose a highlight">
           <button class="hp-tab is-active is-running" type="button" role="tab" aria-selected="true" aria-controls="mil-slide-1" data-hp-tab="0"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">MIL Lab</span></button>
-          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="mil-slide-2" data-hp-tab="1" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">The framework</span></button>
-          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="mil-slide-3" data-hp-tab="2" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">Six-week journey</span></button>
-          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="mil-slide-4" data-hp-tab="3" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">Who can join</span></button>
         </div>
         <div class="hp-arrows">
           <button type="button" data-hp-prev aria-label="Previous highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
