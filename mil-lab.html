@@ -18,9 +18,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
-  <link rel="stylesheet" href="gx-page.css?v=6">
+  <link rel="stylesheet" href="gx-page.css?v=7">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
+  <script src="home.js?v=4" defer></script>
 </head>
 <body class="home-page">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -58,28 +59,90 @@
   </header>
 
   <main id="main">
-    <!-- Page hero -->
-    <section class="gx-page-hero gx-hero-split gx-hero-banner" aria-labelledby="pg-title">
+    <!-- Page hero: slider (same pattern as the homepage) -->
+    <section class="hp-hero" aria-roledescription="carousel" aria-label="MIL Lab highlights" data-hp-slider>
       <span class="hp-hero-glow" aria-hidden="true"></span>
-      <div class="gx-page-hero-copy">
-        <span class="hp-kicker">WHSF Media Information Library</span>
-        <h1 id="pg-title">MIL Lab: <em>Spot. Verify. Create. Amplify.</em></h1>
-        <p>The WHSF MIL Lab is the hands-on learning studio of the WHSF Media Information Library. In six weeks, young people learn to question what they see online, check the facts, use AI responsibly and create trustworthy media for their communities.</p>
-        <div class="hp-actions">
-          <a class="hp-btn hp-btn-primary cta-glow" href="contact.html">Join the MIL Lab <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="hp-btn hp-btn-solid" href="donor-portal.html">Donate now</a>
-          <a class="hp-btn hp-btn-outline" href="media-information-library.html">Visit the library</a>
+      <img class="hp-hero-mark" src="assets/whsf-logo.jpg" alt="" aria-hidden="true">
+      <div class="hp-slides">
+        <article class="hp-slide is-active" id="mil-slide-1" role="group" aria-roledescription="slide" aria-label="1 of 4">
+          <div class="hp-slide-copy">
+            <span class="hp-kicker">WHSF Media Information Library</span>
+            <h1>MIL Lab. <em>Spot. Verify. Create. Amplify.</em></h1>
+            <p>The hands-on learning studio of the WHSF Media Information Library. In six weeks, young people learn to question what they see online, check the facts, use AI responsibly and create trustworthy media for their communities.</p>
+            <div class="hp-actions">
+              <a class="hp-btn hp-btn-primary cta-glow" href="contact.html">Join the MIL Lab
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="hp-btn hp-btn-solid" href="donor-portal.html">Donate now</a>
+              <a class="hp-btn hp-btn-outline" href="media-information-library.html">Visit the library</a>
+            </div>
+          </div>
+          <div class="hp-slide-visual hp-slide-art">
+            <img src="assets/programs/mil-lab-hero.jpg" alt="MIL Lab, Media Information Library: young people celebrating at laptops beside Spot, Verify, Create and Amplify, with the line Empowered People, Stronger Communities" srcset="assets/programs/mil-lab-hero-900.jpg 900w, assets/programs/mil-lab-hero.jpg 1695w" sizes="(max-width: 980px) 100vw, 600px" width="1695" height="928" fetchpriority="high">
+          </div>
+        </article>
+
+        <article class="hp-slide" id="mil-slide-2" role="group" aria-roledescription="slide" aria-label="2 of 4" aria-hidden="true">
+          <div class="hp-slide-copy">
+            <span class="hp-kicker">The MIL Lab framework</span>
+            <h2 class="hp-h1">Question first. <em>Share what is true.</em></h2>
+            <p>Spot misleading posts and deepfakes, verify facts with trusted tools, create ethical content and amplify credible information in your community.</p>
+            <div class="hp-actions">
+              <a class="hp-btn hp-btn-primary" href="#framework" tabindex="-1">See the framework
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="hp-btn hp-btn-outline" href="#learn" tabindex="-1">Learning modules</a>
+            </div>
+          </div>
+          <div class="hp-slide-visual">
+            <img src="assets/home/data-cloud-infrastructure-skills.jpg" loading="lazy" alt="Young adults learning digital skills together">
+          </div>
+        </article>
+
+        <article class="hp-slide" id="mil-slide-3" role="group" aria-roledescription="slide" aria-label="3 of 4" aria-hidden="true">
+          <div class="hp-slide-copy">
+            <span class="hp-kicker">The six-week journey</span>
+            <h2 class="hp-h1">Six weeks. <em>Real skills, real media.</em></h2>
+            <p>Workshops, mentoring, a Youth Creative Challenge and community outreach, ending with a showcase, certificates and the WHSF MIL Ambassadors Network.</p>
+            <div class="hp-actions">
+              <a class="hp-btn hp-btn-primary" href="#journey" tabindex="-1">See the journey
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="hp-btn hp-btn-outline" href="#pillars" tabindex="-1">Our five pillars</a>
+            </div>
+          </div>
+          <div class="hp-slide-visual">
+            <img src="assets/programs/whsf-programmes-technology.jpg" loading="lazy" alt="A WHSF facilitator guiding young people through hands-on technology training">
+          </div>
+        </article>
+
+        <article class="hp-slide" id="mil-slide-4" role="group" aria-roledescription="slide" aria-label="4 of 4" aria-hidden="true">
+          <div class="hp-slide-copy">
+            <span class="hp-kicker">Who can join</span>
+            <h2 class="hp-h1">Built for young people <em>aged 18–30.</em></h2>
+            <p>Students, school leavers, youth organisations, content creators, emerging journalists, digital volunteers and early-career professionals, in person or online.</p>
+            <div class="hp-actions">
+              <a class="hp-btn hp-btn-primary" href="contact.html" tabindex="-1">Register your interest
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="hp-btn hp-btn-outline" href="#mil-faq" tabindex="-1">Questions</a>
+            </div>
+          </div>
+          <div class="hp-slide-visual">
+            <img src="assets/programs/media-information-library.jpg" loading="lazy" alt="Young people learning media and information literacy with WHSF">
+          </div>
+        </article>
+      </div>
+
+      <div class="hp-controls">
+        <div class="hp-tabs" role="tablist" aria-label="Choose a highlight">
+          <button class="hp-tab is-active is-running" type="button" role="tab" aria-selected="true" aria-controls="mil-slide-1" data-hp-tab="0"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">MIL Lab</span></button>
+          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="mil-slide-2" data-hp-tab="1" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">The framework</span></button>
+          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="mil-slide-3" data-hp-tab="2" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">Six-week journey</span></button>
+          <button class="hp-tab" type="button" role="tab" aria-selected="false" aria-controls="mil-slide-4" data-hp-tab="3" tabindex="-1"><span class="hp-tab-bar"><i></i></span><span class="hp-tab-label">Who can join</span></button>
+        </div>
+        <div class="hp-arrows">
+          <button type="button" data-hp-prev aria-label="Previous highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button type="button" data-hp-pause aria-label="Pause highlights"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-hp-pause-icon><path d="M9 5v14M15 5v14"/></svg></button>
+          <button type="button" data-hp-next aria-label="Next highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
       </div>
-      <figure class="gx-hero-visual">
-        <img src="assets/programs/mil-lab-hero.jpg" srcset="assets/programs/mil-lab-hero-900.jpg 900w, assets/programs/mil-lab-hero.jpg 1695w" sizes="(max-width: 980px) 100vw, 1060px" width="1695" height="928" fetchpriority="high" alt="MIL Lab, Media Information Library: young people celebrating at laptops beside Spot, Verify, Create and Amplify, with the line Empowered People, Stronger Communities">
-      </figure>
-      <ul class="gx-shortcuts" aria-label="MIL Lab sections">
-        <li><a href="#framework"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>The framework</a></li>
-        <li><a href="#journey"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>Six-week journey</a></li>
-        <li><a href="#who"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M21 20c0-2.4-1.6-4.2-4-4.8"/></svg></span>Who can join</a></li>
-        <li><a href="#mil-faq"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></span>Questions</a></li>
-      </ul>
     </section>
 
     <!-- Why -->
