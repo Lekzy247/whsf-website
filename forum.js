@@ -132,7 +132,43 @@
   // Images go to the private forum-id-checks bucket; only WHSF moderators can open them.
   const ID_TYPES = { national_id: 'National ID', passport: 'Passport', drivers_licence: "Driver's licence", voter_card: "Voter's card", residence_permit: 'Residence permit' };
   const ID_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+  const VIDEO_EXT = { 'video/mp4': 'mp4', 'video/webm': 'webm', 'video/quicktime': 'mov' };
   const MAX_ID_BYTES = 8 * 1024 * 1024;
+  const MAX_VIDEO_BYTES = 30 * 1024 * 1024;
+  // Google Calendar booking page for verification video calls (made in info@'s Google Calendar).
+  // Leave empty until it exists: members are then told a moderator will email them a Meet link.
+  const VIDEO_CALL_BOOKING_URL = '';
+  const METHODS = { photo_selfie: 'Photo selfie', video_selfie: 'Video selfie', video_call: 'Video call' };
+
+  // Self-service vs video call: show the matching steps and fields.
+  function syncMethod() {
+    const call = $('[data-fm-verify-form]').method.value === 'video_call';
+    $('[data-fm-steps-self]').hidden = call;
+    $('[data-fm-steps-call]').hidden = !call;
+    $('[data-fm-self-only]').hidden = call;
+  }
+  $$('[data-fm-verify-form] input[name="method"]').forEach((r) => r.addEventListener('change', syncMethod));
+
+  // On a computer, offer a QR code that opens this page on the member's phone (free, no text messages).
+  async function renderHandoff() {
+    const box = $('[data-fm-handoff]');
+    const onComputer = window.matchMedia('(pointer: fine) and (min-width: 900px)').matches;
+    box.hidden = !onComputer || !window.QRCode?.toCanvas;
+    if (box.hidden) return;
+    try {
+      await window.QRCode.toCanvas($('[data-fm-handoff-qr]'), `${location.origin}/forum.html`, { width: 132, margin: 1, color: { dark: '#2a0a17', light: '#ffffff' } });
+    } catch { box.hidden = true; return; }
+    // "Waiting for your photos": once the phone submits, this computer page updates by itself.
+    clearInterval(state.handoffTimer);
+    state.handoffTimer = setInterval(async () => {
+      if (document.hidden || !state.profile) return;
+      const { data } = await db.from('forum_profiles').select('verification_status').eq('user_id', state.profile.user_id).maybeSingle();
+      if (data && data.verification_status !== state.profile.verification_status) {
+        clearInterval(state.handoffTimer);
+        await refresh();
+      }
+    }, 10000);
+  }
 
   async function renderVerify() {
     const p = state.profile;
@@ -150,7 +186,24 @@
       ? `Your last ID check was not approved: ${p.verification_reason || 'please try again'}. Please submit new photos.` : '';
     if (!pending) {
       const { data, error } = await db.rpc('forum_id_code');
-      $('[data-fm-verify-code]').textContent = error ? 'reload the page' : data;
+      const code = error ? 'reload the page' : data;
+      $('[data-fm-verify-code]').textContent = code;
+      $('[data-fm-verify-code-2]').textContent = code;
+      syncMethod();
+      renderHandoff();
+    }
+    // Waiting for a video call: show the booking button (or say a moderator will email a link).
+    const callBox = $('[data-fm-call-box]');
+    callBox.hidden = true;
+    if (pending) {
+      const { data: last } = await db.from('forum_id_checks').select('method').eq('user_id', p.user_id).eq('status', 'pending').maybeSingle();
+      if (last?.method === 'video_call') {
+        callBox.hidden = false;
+        const book = $('[data-fm-book-call]');
+        book.hidden = !VIDEO_CALL_BOOKING_URL;
+        if (VIDEO_CALL_BOOKING_URL) book.href = VIDEO_CALL_BOOKING_URL;
+        $('[data-fm-call-fallback]').hidden = Boolean(VIDEO_CALL_BOOKING_URL);
+      }
     }
   }
 
@@ -158,33 +211,40 @@
     event.preventDefault();
     const f = event.currentTarget;
     const say = (t) => setStatus('[data-fm-verify-status]', t);
-    const front = f.id_front.files[0]; const back = f.id_back.files[0]; const selfie = f.selfie.files[0];
+    const call = f.method.value === 'video_call';
+    const front = f.id_front.files[0]; const back = f.id_back.files[0]; const selfie = call ? null : f.selfie.files[0];
     if (f.country.value.trim().length < 2) return say('Enter the country that issued your ID.');
     if (!f.id_type.value) return say('Choose the type of ID.');
     if (!front) return say('Add a photo of the front of your ID.');
-    if (!selfie) return say('Add a selfie holding your ID and the code.');
-    for (const file of [front, back, selfie].filter(Boolean)) {
-      if (!ID_EXT[file.type]) return say('Photos must be JPG, PNG or WebP.');
-      if (file.size > MAX_ID_BYTES) return say('Each photo must be 8 MB or smaller.');
+    if (!call && !selfie) return say('Add your video selfie (or a photo selfie) holding your ID and the code.');
+    for (const file of [front, back].filter(Boolean)) {
+      if (!ID_EXT[file.type]) return say('ID photos must be JPG, PNG or WebP.');
+      if (file.size > MAX_ID_BYTES) return say('Each ID photo must be 8 MB or smaller.');
     }
-    if (!f.consent.checked) return say('Please agree to WHSF viewing your images for age verification.');
+    const selfieIsVideo = Boolean(selfie && VIDEO_EXT[selfie.type]);
+    if (selfie && !selfieIsVideo && !ID_EXT[selfie.type]) return say('The selfie must be an MP4, WebM or MOV video, or a JPG, PNG or WebP photo.');
+    if (selfie && selfie.size > (selfieIsVideo ? MAX_VIDEO_BYTES : MAX_ID_BYTES)) {
+      return say(selfieIsVideo ? 'The video selfie must be 30 MB or smaller. Keep it to about 10 seconds.' : 'The selfie photo must be 8 MB or smaller.');
+    }
+    if (!f.consent.checked) return say('Please agree to WHSF viewing your ID and selfie for age verification.');
+    const method = call ? 'video_call' : (selfieIsVideo ? 'video_selfie' : 'photo_selfie');
     const button = f.querySelector('button[type="submit"]');
     button.disabled = true;
     const uploaded = [];
     const upload = async (file) => {
-      const path = `${state.profile.user_id}/${crypto.randomUUID()}.${ID_EXT[file.type]}`;
+      const path = `${state.profile.user_id}/${crypto.randomUUID()}.${ID_EXT[file.type] || VIDEO_EXT[file.type]}`;
       const { error } = await db.storage.from('forum-id-checks').upload(path, file, { contentType: file.type, upsert: false });
       if (error) throw error;
       uploaded.push(path);
       return path;
     };
     try {
-      say('Uploading your photos securely…');
+      say(selfieIsVideo ? 'Uploading securely… (videos can take a minute)' : 'Uploading securely…');
       const frontPath = await upload(front);
       const backPath = back ? await upload(back) : null;
-      const selfiePath = await upload(selfie);
-      const { error } = await db.rpc('forum_id_submit', {
-        p_country: f.country.value.trim(), p_id_type: f.id_type.value, p_front: frontPath, p_back: backPath, p_selfie: selfiePath
+      const selfiePath = selfie ? await upload(selfie) : null;
+      const { error } = await db.rpc('forum_id_submit_v2', {
+        p_method: method, p_country: f.country.value.trim(), p_id_type: f.id_type.value, p_front: frontPath, p_back: backPath, p_selfie: selfiePath
       });
       if (error) throw error;
       // Let WHSF moderators know (the server sends at most one email per check).
@@ -215,7 +275,7 @@
     const box = $('[data-fm-idchecks]');
     const cleanup = $('[data-fm-idcleanup]');
     if (!state.isStaff) return;
-    const cols = 'id,user_id,country,id_type,challenge_code,id_front_path,id_back_path,selfie_path,status,submitted_at,forum_profiles(display_name)';
+    const cols = 'id,user_id,method,country,id_type,challenge_code,id_front_path,id_back_path,selfie_path,status,submitted_at,forum_profiles(display_name)';
     const { data: pending, error } = await db.from('forum_id_checks').select(cols).eq('status', 'pending').order('submitted_at').limit(20);
     if (error) { box.replaceChildren(el('p', { class: 'fm-muted', text: 'Could not load ID checks.' })); return; }
     box.replaceChildren();
@@ -246,14 +306,21 @@
       if (!path) continue;
       const { data } = await db.storage.from('forum-id-checks').createSignedUrl(path, 600);
       if (!data?.signedUrl) { imgs.append(el('p', { class: 'fm-muted', text: `${label}: could not load` })); continue; }
-      imgs.append(el('figure', {}, [
+      const isVideo = /\.(mp4|webm|mov)$/i.test(path);
+      imgs.append(el('figure', {}, isVideo ? [
+        el('video', { src: data.signedUrl, controls: '', playsinline: '', preload: 'metadata', 'aria-label': 'Video selfie submitted for age verification' }),
+        el('figcaption', { text: 'Video selfie (listen for the code)' })
+      ] : [
         el('a', { href: data.signedUrl, target: '_blank', rel: 'noopener noreferrer' }, [el('img', { src: data.signedUrl, alt: `${label} submitted for age verification` })]),
         el('figcaption', { text: `${label} (opens full size)` })
       ]));
     }
+    const isCall = check.method === 'video_call';
     const box = (name, text) => el('label', { class: 'fm-check' }, [el('input', { type: 'checkbox', name }), el('span', { text })]);
     const age = box('age', 'The date of birth on the ID shows they are 18 or over');
-    const face = box('face', `The selfie shows the same face, holding the ID and the code ${check.challenge_code}`);
+    const face = box('face', isCall
+      ? `On the video call I saw this person live; they showed this ID and said the code ${check.challenge_code}`
+      : `The selfie shows the same face, holding the ID and showing or saying the code ${check.challenge_code}`);
     const genuine = box('genuine', 'The ID is an official government document and looks genuine');
     const reason = el('input', { type: 'text', maxlength: '300', placeholder: 'e.g. photo blurry, under 18, code missing' });
     const decide = async (approve) => {
@@ -269,7 +336,8 @@
     };
     return el('article', { class: 'fm-idcheck' }, [
       el('h3', { text: check.forum_profiles?.display_name || 'Member' }),
-      el('p', { class: 'fm-muted', text: `${ID_TYPES[check.id_type] || check.id_type} · ${check.country} · code ${check.challenge_code} · submitted ${timeAgo(check.submitted_at)} ago` }),
+      el('p', { class: 'fm-muted', text: `${METHODS[check.method] || 'Photo selfie'} · ${ID_TYPES[check.id_type] || check.id_type} · ${check.country} · code ${check.challenge_code} · submitted ${timeAgo(check.submitted_at)} ago` }),
+      isCall ? el('p', { class: 'fm-alert', text: 'Video call: wait until you have met this person on Google Meet, then tick the boxes and approve.' }) : null,
       imgs, age, face, genuine,
       el('div', { class: 'fm-form' }, [el('label', {}, [document.createTextNode('Reason (shown to the member if rejected)'), reason])]),
       el('div', { class: 'fm-actions' }, [

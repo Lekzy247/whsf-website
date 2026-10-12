@@ -20,11 +20,12 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=2">
+  <link rel="stylesheet" href="forum.css?v=4">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=5" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
+  <script src="forum.js?v=6" defer></script>
 </head>
 <body class="home-page">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -165,17 +166,45 @@
           <div data-fm-verify-pending hidden>
             <p><strong>Thank you for submitting your verification.</strong> A WHSF moderator is now reviewing your ID and selfie. This usually takes 1–3 working days.</p>
             <p>Once you are approved, you will have full access to read, post and connect with other members of the WHSF Forum. Simply sign in again to check your status.</p>
+            <div class="fm-call-box" data-fm-call-box hidden>
+              <p><strong>Next: book your video call.</strong> Choose a time that suits you. On the call, show your ID and say your code.</p>
+              <a class="hp-btn hp-btn-primary" data-fm-book-call href="#" target="_blank" rel="noopener noreferrer">Book your video call</a>
+              <p class="fm-muted" data-fm-call-fallback hidden>A WHSF moderator will email you a Google Meet link and time within 2 working days.</p>
+            </div>
             <p class="fm-muted">For your privacy, your ID and selfie images are permanently deleted as soon as a decision has been made.</p>
           </div>
           <div data-fm-verify-start>
             <p class="fm-alert" data-fm-verify-rejected hidden></p>
-            <p>The WHSF Forum is strictly for adults aged 18 and over. Every member must be verified by a WHSF moderator using an official photo ID from their country and a selfie.</p>
-            <ol class="fm-steps">
-              <li>Take a clear photo of your <strong>national ID card, passport, driver&#39;s licence, voter&#39;s card or residence permit</strong>. Your date of birth and photo must be readable.</li>
-              <li>Write this code on a piece of paper: <strong class="fm-code" data-fm-verify-code>…</strong></li>
-              <li>Take a <strong>selfie holding your ID and the paper with the code</strong> next to your face.</li>
-            </ol>
+            <p>The WHSF Forum is strictly for adults aged 18 and over. Every member is verified by a WHSF moderator using an official photo ID from their country.</p>
             <form class="fm-form" data-fm-verify-form novalidate>
+              <fieldset class="fm-methods">
+                <legend>Choose how to confirm your identity</legend>
+                <label class="fm-method">
+                  <input type="radio" name="method" value="self" checked>
+                  <span><strong>Self-service</strong><em>Takes 5–10 minutes</em>Take a photo of your official ID and record a short video selfie.</span>
+                </label>
+                <label class="fm-method">
+                  <input type="radio" name="method" value="video_call">
+                  <span><strong>Video call</strong><em>Takes 10–15 minutes</em>Take a photo of your official ID and join a short Google Meet video call with a WHSF moderator.</span>
+                </label>
+              </fieldset>
+
+              <div class="fm-handoff" data-fm-handoff hidden>
+                <canvas data-fm-handoff-qr width="132" height="132" aria-hidden="true"></canvas>
+                <p><strong>Using a computer? Continue on your phone.</strong> Scan this code with your phone camera to open this page, sign in, and take the photos and video there. <span class="fm-waiting">Waiting for your photos… this page updates by itself when your phone has sent them.</span></p>
+              </div>
+
+              <ol class="fm-steps" data-fm-steps-self>
+                <li>Take a clear photo of your <strong>national ID card, passport, driver&#39;s licence, voter&#39;s card or residence permit</strong>. Your date of birth and photo must be readable.</li>
+                <li>Your code is <strong class="fm-code" data-fm-verify-code>…</strong></li>
+                <li>Record a <strong>5–10 second video selfie</strong>: hold your ID next to your face, say the code out loud, then slowly turn your head left and right. (If you can&#39;t record video, a photo of you holding your ID and the code written on paper also works.)</li>
+              </ol>
+              <ol class="fm-steps" data-fm-steps-call hidden>
+                <li>Take a clear photo of your <strong>national ID card, passport, driver&#39;s licence, voter&#39;s card or residence permit</strong>.</li>
+                <li>Submit it below, then <strong>book a short video call</strong> with a WHSF moderator.</li>
+                <li>On the call, show your ID to the camera and say your code: <strong class="fm-code" data-fm-verify-code-2>…</strong></li>
+              </ol>
+
               <label>Country that issued your ID<input name="country" maxlength="80" autocomplete="country-name" required placeholder="e.g. Nigeria"></label>
               <label>Type of ID
                 <select name="id_type" required>
@@ -189,13 +218,14 @@
               </label>
               <label>Photo of your ID (front)<input type="file" name="id_front" accept="image/jpeg,image/png,image/webp" required></label>
               <label>Photo of your ID (back) <small>(if it has one)</small><input type="file" name="id_back" accept="image/jpeg,image/png,image/webp"></label>
-              <label>Selfie holding your ID and the code<input type="file" name="selfie" accept="image/jpeg,image/png,image/webp" capture="user" required></label>
-              <label class="fm-check"><input type="checkbox" name="consent" required> <span>I agree that WHSF moderators may view these images only to confirm my age and identity. They are stored privately and deleted once a decision is made. See the <a href="privacy-policy.html#forum-id">Privacy Policy</a>.</span></label>
+              <label data-fm-self-only>Video selfie (or photo selfie) with your ID and code<input type="file" name="selfie" accept="video/mp4,video/webm,video/quicktime,image/jpeg,image/png,image/webp" capture="user"></label>
+              <label class="fm-check"><input type="checkbox" name="consent" required> <span>I agree that WHSF moderators may view my ID and selfie only to confirm my age and identity. They are stored privately and deleted once a decision is made. See the <a href="privacy-policy.html#forum-id">Privacy Policy</a>.</span></label>
               <div class="fm-actions">
                 <button class="hp-btn hp-btn-primary" type="submit">Submit for verification</button>
                 <button class="fm-text-btn" type="button" data-fm-signout>Sign out</button>
               </div>
               <p class="fm-status" role="status" data-fm-verify-status></p>
+              <p class="fm-small"><a href="contact.html">I don&#39;t have any of these IDs</a></p>
             </form>
           </div>
         </section>
@@ -284,7 +314,7 @@
         <section class="fm-card fm-rules" data-fm-view="rules" hidden id="rules-text">
           <h2>Community rules</h2>
           <ol>
-            <li><strong>Adults only, ID-verified.</strong> The forum is strictly for people aged 18 and over. Every member must pass an age check by a WHSF moderator using an official photo ID from their country (national ID card, passport, driver&#39;s licence, voter&#39;s card or residence permit) and a selfie holding the ID. Nobody can read or post until they are verified. The images are stored privately and deleted as soon as a decision is made. Using someone else&#39;s ID or a fake ID leads to a permanent ban. Do not share photos or details of children without their guardian&#39;s consent.</li>
+            <li><strong>Adults only, ID-verified.</strong> The forum is strictly for people aged 18 and over. Every member must pass an age check by a WHSF moderator using an official photo ID from their country (national ID card, passport, driver&#39;s licence, voter&#39;s card or residence permit) and either a short video selfie holding the ID or a live video call with a WHSF moderator. Nobody can read or post until they are verified. The images are stored privately and deleted as soon as a decision is made. Using someone else&#39;s ID or a fake ID leads to a permanent ban. Do not share photos or details of children without their guardian&#39;s consent.</li>
             <li><strong>Be respectful.</strong> No harassment, hate, threats or sexual content.</li>
             <li><strong>No scams or money requests.</strong> WHSF does not disburse funds, loans, prizes or promotions to individuals and never asks for fees. Report any such post.</li>
             <li><strong>Protect privacy.</strong> Don't post phone numbers, addresses or ID documents, yours or anyone else's.</li>

@@ -156,3 +156,21 @@
 .fm-idcheck-imgs a { display: block; }
 .fm-idcheck-imgs img { width: 100%; height: 220px; object-fit: contain; border-radius: 12px; background: #f4eef1; }
 .fm-idcheck-imgs figcaption { margin-top: 4px; color: var(--wx-muted); font-size: 12px; }
+
+/* identity method chooser (self-service / video call), phone hand-off, video call booking */
+.fm-methods { display: grid; gap: 10px; margin: 6px 0 4px; padding: 0; border: 0; }
+.fm-methods legend { margin-bottom: 8px; color: var(--wx-ink); font-size: 17px; font-weight: 700; }
+.fm-method { display: flex !important; gap: 12px !important; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--wx-line-strong); border-radius: 14px; background: #fff; font-weight: 400 !important; cursor: pointer; }
+.fm-method:has(input:checked) { border-color: var(--wx-wine); box-shadow: 0 0 0 2px rgb(123 33 66 / 14%); }
+.fm-method input { margin-top: 4px; accent-color: var(--wx-wine); width: 18px; height: 18px; }
+.fm-method span { display: grid; gap: 3px; color: var(--wx-text); font-size: 14px; line-height: 1.5; }
+.fm-method strong { color: var(--wx-ink); font-size: 16px; }
+.fm-method em { color: #1c7c45; font-style: normal; font-weight: 600; }
+.fm-handoff { display: flex; gap: 14px; align-items: center; padding: 12px 14px; border-radius: 14px; background: var(--wx-soft); font-size: 14px; line-height: 1.5; }
+.fm-handoff canvas { flex: none; width: 112px; height: 112px; border-radius: 8px; background: #fff; }
+.fm-handoff p { margin: 0; color: var(--wx-text); }
+.fm-call-box { display: grid; gap: 10px; justify-items: start; margin: 12px 0; padding: 14px 16px; border-radius: 14px; background: var(--wx-soft); }
+.fm-call-box p { margin: 0; }
+.fm-idcheck-imgs video { width: 100%; height: 220px; border-radius: 12px; background: #000; }
+.fm-form .fm-method input[type="radio"] { flex: none; width: 18px !important; height: 18px; min-height: 0 !important; margin: 3px 0 0; padding: 0 !important; border: 0; }
+.fm-waiting { display: block; margin-top: 6px; color: var(--wx-wine); font-weight: 600; }

@@ -13,6 +13,11 @@ const ID_TYPES = {
   voter_card: "Voter's card",
   residence_permit: 'Residence permit'
 };
+const METHODS = {
+  photo_selfie: 'Self-service (ID photo + photo selfie)',
+  video_selfie: 'Self-service (ID photo + video selfie)',
+  video_call: 'Video call requested (ID photo, then a live Google Meet call)'
+};
 
 function escapeHtml(value) {
   return String(value || '').replace(/[&<>"']/g, (character) => ({
@@ -60,6 +65,7 @@ export default async function handler(request, response) {
   const country = escapeHtml(check.country);
   const idType = escapeHtml(ID_TYPES[check.id_type] || check.id_type);
   const when = new Date(check.submitted_at || Date.now()).toUTCString();
+  const method = METHODS[check.method] || METHODS.photo_selfie;
 
   const emailResponse = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -69,11 +75,11 @@ export default async function handler(request, response) {
       to: [to],
       subject: 'WHSF Forum: new member waiting for ID approval',
       text: `${check.display_name || 'A member'} has submitted an ID check to join the WHSF Forum.\n\n` +
-        `Country: ${check.country}\nID type: ${ID_TYPES[check.id_type] || check.id_type}\nSubmitted: ${when}\n\n` +
+        `Method: ${method}\nCountry: ${check.country}\nID type: ${ID_TYPES[check.id_type] || check.id_type}\nSubmitted: ${when}\n\n` +
         `Review it (sign in with a WHSF admin or teacher account): ${QUEUE_URL}\n\n` +
         'The ID and selfie images are only viewable on the Forum page and are deleted after your decision.',
       html: `<p><strong>${name}</strong> has submitted an ID check to join the WHSF Forum.</p>` +
-        `<p>Country: ${country}<br>ID type: ${idType}<br>Submitted: ${escapeHtml(when)}</p>` +
+        `<p>Method: ${escapeHtml(method)}<br>Country: ${country}<br>ID type: ${idType}<br>Submitted: ${escapeHtml(when)}</p>` +
         `<p><a href="${QUEUE_URL}">Review the ID check</a> (sign in with a WHSF admin or teacher account).</p>` +
         '<p style="color:#666">The ID and selfie images are only viewable on the Forum page and are deleted after your decision.</p>'
     })
