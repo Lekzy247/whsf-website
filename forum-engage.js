@@ -33,6 +33,35 @@
     save: ['M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z']
   };
   const postUrl = (id) => `${location.origin}${location.pathname}#post/${id}`;
+  // Comments: compact date + time ("Oct 12, 11:58 PM"); the full date, time and time zone show on hover.
+  const shortTime = (iso) => {
+    const d = new Date(iso);
+    const opts = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+    if (d.getFullYear() !== new Date().getFullYear()) opts.year = 'numeric';
+    return d.toLocaleString(undefined, opts);
+  };
+
+  // "⋯" options menu (posts and comments), like Facebook.
+  function closeMenus() {
+    document.querySelectorAll('.fm-menu-list:not([hidden])').forEach((list) => {
+      list.hidden = true;
+      list.previousElementSibling?.setAttribute('aria-expanded', 'false');
+    });
+  }
+  function makeMenu(label, items) {
+    items.forEach((n) => { n.setAttribute('role', 'menuitem'); n.className = 'fm-menu-item'; });
+    const list = el('div', { class: 'fm-menu-list', role: 'menu', hidden: '' }, items);
+    const btn = el('button', { class: 'fm-more-btn', type: 'button', 'aria-label': label, 'aria-haspopup': 'menu', 'aria-expanded': 'false', text: '⋯' });
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = list.hidden;
+      closeMenus();
+      list.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    list.addEventListener('click', () => { list.hidden = true; btn.setAttribute('aria-expanded', 'false'); });
+    return el('div', { class: 'fm-menu' }, [btn, list]);
+  }
 
   // ---------------------------------------------------------------- per-post engagement block
   F.hooks.post.push((card, post) => {
@@ -70,7 +99,10 @@
     if (!actions) { actions = el('div', { class: 'fm-post-actions' }); card.append(actions); }
     if (post.author_id === state.me?.user_id) actions.prepend(el('button', { class: 'fm-text-btn', type: 'button', text: 'Edit', onclick: () => editPost(post.id) }));
     if (state.isStaff) actions.append(el('button', { class: 'fm-text-btn', type: 'button', text: post.is_pinned ? 'Unpin (moderator)' : 'Pin to top (moderator)', onclick: () => pinPost(post) }));
-    actions.append(el('button', { class: 'fm-text-btn', type: 'button', text: 'Copy link', onclick: (e) => copyLink(post.id, e.currentTarget) }));
+    actions.append(el('button', { class: 'fm-text-btn', type: 'button', text: 'Copy link', onclick: () => copyLink(post.id, null, null, c => flash(cards.get(post.id), c)) }));
+    const items = [...actions.children];
+    actions.remove();
+    if (items.length) card.querySelector('.fm-post-head').append(makeMenu('Post options', items));
 
     cards.set(post.id, { card, post, ui, stats: null });
   });
@@ -200,13 +232,15 @@
       status
     );
   }
-  async function copyLink(id, btn, status) {
+  async function copyLink(id, btn, status, say) {
     try {
       await navigator.clipboard.writeText(postUrl(id));
       if (status) status.textContent = 'Link copied.';
+      else if (say) say('Link copied.');
       else { const t = btn.textContent; btn.textContent = 'Link copied ✓'; setTimeout(() => { btn.textContent = t; }, 1800); }
     } catch {
       if (status) status.textContent = postUrl(id);
+      else if (say) say(postUrl(id));
     }
   }
 
@@ -309,37 +343,40 @@
     const ownsPost = c.post.author_id === state.me?.user_id;
     const li = el('li', { class: `fm-c${cm.is_hidden ? ' is-hidden' : ''}`, id: `comment-${cm.id}` });
     const bubble = el('div', { class: 'fm-c-bubble' }, [
-      el('strong', { text: author.display_name || 'Member' }),
-      author.headline ? el('small', { class: 'fm-c-headline', text: author.headline }) : null,
+      el('strong', { title: author.headline || '', text: author.display_name || 'Member' }),
       cm.is_hidden ? el('span', { class: 'fm-post-tag', text: 'Hidden by a moderator' }) : null,
       richText(cm.body, 'fm-c-body'),
       likes ? el('span', { class: 'fm-c-likes', title: plural(likes, 'like', 'likes'), text: `👍 ${likes}` }) : null
     ]);
+    const tools = [];
+    if (mine) tools.push(el('button', { type: 'button', text: 'Edit', onclick: () => editComment(c, li, cm) }));
+    if (mine || ownsPost || state.isStaff) tools.push(el('button', { type: 'button', text: 'Delete', onclick: () => confirmInline(li.querySelector(':scope > .fm-c-main'), 'Delete this comment?', async () => {
+      const { error } = await db.from('forum_comments').delete().eq('id', cm.id);
+      if (!error) { await loadComments(c.post.id); loadStats([c.post.id]); }
+    }) }));
+    if (state.isStaff) tools.push(el('button', { type: 'button', text: cm.is_hidden ? 'Unhide (moderator)' : 'Hide (moderator)', onclick: async () => {
+      const { error } = await db.from('forum_comments').update({ is_hidden: !cm.is_hidden }).eq('id', cm.id);
+      if (!error) { await loadComments(c.post.id); loadStats([c.post.id]); }
+    } }));
+    const row = el('div', { class: 'fm-c-row' }, [bubble, tools.length ? makeMenu('Comment options', tools) : null]);
     const meta = el('div', { class: 'fm-c-meta' }, [
-      stamp(cm.created_at),
-      cm.edited_at ? el('span', { class: 'fm-edited', title: `Edited ${F.fullTime(cm.edited_at)}`, text: 'Edited' }) : null,
-      state.me ? el('button', { class: `fm-c-act${isLiked ? ' is-on' : ''}`, type: 'button', 'aria-pressed': String(isLiked), text: isLiked ? 'Liked' : 'Like', onclick: () => likeComment(c, cm.id, isLiked) }) : null,
+      el('time', { class: 'fm-c-time', datetime: cm.created_at, title: F.fullTime(cm.created_at), text: shortTime(cm.created_at) }),
+      state.me ? el('button', { class: `fm-c-act${isLiked ? ' is-on' : ''}`, type: 'button', 'aria-pressed': String(isLiked), text: 'Like', onclick: () => likeComment(c, cm.id, isLiked) }) : null,
       state.me ? el('button', { class: 'fm-c-act', type: 'button', text: 'Reply', onclick: () => openReply(c, li, cm) }) : null,
-      mine ? el('button', { class: 'fm-c-act', type: 'button', text: 'Edit', onclick: () => editComment(c, li, cm) }) : null,
-      (mine || ownsPost || state.isStaff) ? el('button', { class: 'fm-c-act', type: 'button', text: 'Delete', onclick: () => confirmInline(li, 'Delete this comment?', async () => {
-        const { error } = await db.from('forum_comments').delete().eq('id', cm.id);
-        if (!error) { await loadComments(c.post.id); loadStats([c.post.id]); }
-      }) }) : null,
-      state.isStaff ? el('button', { class: 'fm-c-act', type: 'button', text: cm.is_hidden ? 'Unhide' : 'Hide', onclick: async () => {
-        const { error } = await db.from('forum_comments').update({ is_hidden: !cm.is_hidden }).eq('id', cm.id);
-        if (!error) { await loadComments(c.post.id); loadStats([c.post.id]); }
-      } }) : null
+      cm.edited_at ? el('span', { class: 'fm-edited', title: `Edited ${F.fullTime(cm.edited_at)}`, text: 'Edited' }) : null
     ]);
-    li.append(av, el('div', { class: 'fm-c-main' }, [bubble, meta]));
+    li.append(av, el('div', { class: 'fm-c-main' }, [row, meta]));
     return li;
   }
 
+  const SEND_ICON = ['M22 2 11 13', 'M22 2 15 22l-4-9-9-4z'];
   function commentForm(c, parent) {
     const ta = el('textarea', { rows: '1', maxlength: '1500', placeholder: parent ? `Reply to ${parent.author?.display_name || 'this comment'}…` : 'Write a comment…', 'aria-label': parent ? 'Write a reply' : 'Write a comment' });
     const status = el('p', { class: 'fm-status', role: 'status' });
-    const send = el('button', { class: 'fm-c-send', type: 'submit', 'aria-label': 'Post comment', text: '➤' });
-    const form = el('form', { class: 'fm-c-form' }, [ta, send, status]);
-    const grow = () => { ta.style.height = 'auto'; ta.style.height = `${Math.min(ta.scrollHeight, 180)}px`; };
+    const send = el('button', { class: 'fm-c-send', type: 'submit', 'aria-label': parent ? 'Post reply' : 'Post comment', disabled: '' }, [icon(SEND_ICON)]);
+    const me = el('div', { class: 'fm-avatar fm-avatar-sm', 'aria-hidden': 'true' }); fillAvatar(me, state.me || {});
+    const form = el('form', { class: `fm-c-form${parent ? ' is-reply' : ''}` }, [me, el('div', { class: 'fm-c-input' }, [ta, send]), status]);
+    const grow = () => { ta.style.height = 'auto'; ta.style.height = `${Math.min(ta.scrollHeight, 160)}px`; send.disabled = !ta.value.trim(); };
     ta.addEventListener('input', grow);
     // Enter sends, Shift+Enter makes a new line (like Facebook and Instagram).
     ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); form.requestSubmit(); } });
@@ -349,8 +386,7 @@
       if (!body) return;
       send.disabled = true;
       const { error } = await db.from('forum_comments').insert({ post_id: c.post.id, author_id: state.me.user_id, body, parent_id: parent?.id || null });
-      send.disabled = false;
-      if (error) { status.textContent = /too fast/i.test(error.message) ? error.message : 'Your comment could not be posted.'; return; }
+      if (error) { send.disabled = false; status.textContent = /too fast/i.test(error.message) ? error.message : 'Your comment could not be posted.'; return; }
       await loadComments(c.post.id);
       loadStats([c.post.id]);
     });
@@ -363,7 +399,7 @@
     const form = commentForm(c, cm);
     host.querySelector(':scope > .fm-c-main').append(form);
     const ta = form.querySelector('textarea');
-    if (host !== li && cm.author?.display_name) ta.value = `@${cm.author.display_name} `;
+    if (host !== li && cm.author?.display_name) { ta.value = `@${cm.author.display_name} `; ta.dispatchEvent(new Event('input')); }
     ta.focus();
   }
   async function likeComment(c, id, isLiked) {
@@ -372,22 +408,32 @@
       : await db.from('forum_comment_likes').insert({ comment_id: id, user_id: state.me.user_id });
     if (!res.error) loadComments(c.post.id);
   }
+  // Edit in place: Enter saves, Esc cancels (like Facebook).
   function editComment(c, li, cm) {
     const main = li.querySelector(':scope > .fm-c-main');
-    if (main.querySelector('.fm-c-edit')) return;
-    const ta = el('textarea', { rows: '2', maxlength: '1500' }); ta.value = cm.body;
-    const form = el('form', { class: 'fm-c-edit' }, [ta, el('div', { class: 'fm-actions' }, [
-      el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Save' }),
-      el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel', onclick: () => form.remove() })
-    ])]);
+    const row = main.querySelector(':scope > .fm-c-row');
+    if (main.querySelector(':scope > .fm-c-edit')) return;
+    const ta = el('textarea', { rows: '1', maxlength: '1500', 'aria-label': 'Edit your comment' }); ta.value = cm.body;
+    const cancel = () => { form.remove(); row.hidden = false; };
+    const form = el('form', { class: 'fm-c-edit' }, [
+      el('div', { class: 'fm-c-input' }, [ta]),
+      el('p', { class: 'fm-c-edit-hint' }, ['Enter to save · ', el('button', { class: 'fm-c-act', type: 'button', text: 'Cancel', onclick: cancel })])
+    ]);
+    const grow = () => { ta.style.height = 'auto'; ta.style.height = `${Math.min(ta.scrollHeight, 160)}px`; };
+    ta.addEventListener('input', grow);
+    ta.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); cancel(); }
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); form.requestSubmit(); }
+    });
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const body = ta.value.trim(); if (!body) return;
       const { error } = await db.from('forum_comments').update({ body }).eq('id', cm.id);
       if (!error) loadComments(c.post.id);
     });
-    main.append(form);
-    ta.focus();
+    row.hidden = true;
+    row.after(form);
+    grow(); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
   }
 
   function flash(c, text) {
@@ -399,9 +445,11 @@
 
   // Close open reaction pickers when tapping elsewhere.
   document.addEventListener('click', (e) => {
+    if (!e.target.closest('.fm-menu')) closeMenus();
     if (e.target.closest('.fm-eng-likewrap')) return;
     cards.forEach((c, id) => { if (!c.ui.picker.hidden) showPicker(id, false); });
   });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
   // The feed is rebuilt on every reload; forget cards that are no longer on the page.
   F.hooks.feed.unshift(() => { cards.forEach((c, id) => { if (!c.card.isConnected) cards.delete(id); }); });
 })();
