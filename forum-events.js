@@ -118,7 +118,7 @@
           el('strong', { text: e.title }),
           e.parent_event ? el('small', { text: `On the margins of ${e.parent_event}` }) : null,
           el('small', { text: shortWhen(e) }),
-          el('small', { text: `${FORMATS[e.format].split(' (')[0]} · ${where(e)}` }),
+          el('small', { text: e.format === 'online' ? 'Online' : `${FORMATS[e.format].split(' (')[0]} · ${where(e)}` }),
           e.organizer_name ? el('small', { text: `Organised by ${e.organizer_name}` }) : null,
           extra || null,
           statusChip(e.status)
@@ -366,16 +366,26 @@
           e.theme ? el('p', { class: 'fm-ev-theme', text: e.theme }) : null,
           el('p', { class: 'fm-ev-when', text: when(e) }),
           localWhen(e) ? el('p', { class: 'fm-muted', text: localWhen(e) }) : null,
-          el('p', { class: 'fm-ev-where', text: `${FORMATS[e.format]} · ${where(e)}` }),
+          el('p', { class: 'fm-ev-where', text: e.format === 'online' ? 'Online event' : `${FORMATS[e.format]} · ${where(e)}` }),
           el('p', { class: 'fm-ev-org' }, [
             el('span', { class: 'fm-muted', text: 'Organised by ' }), el('strong', { text: organiser(e, host) }),
             e.co_organizers?.length ? el('span', { class: 'fm-muted', text: ` in partnership with ${e.co_organizers.join(', ')}` }) : null
           ]),
           e.sdgs?.length ? el('div', { class: 'fm-ev-sdgs', 'aria-label': 'Sustainable Development Goals' },
             [...e.sdgs].sort((a, b) => a - b).map((n) => el('span', { class: `fm-sdg sdg-${n}`, title: `SDG ${n}: ${SDGS[n - 1]}`, text: `SDG ${n}` }))) : null,
-          action,
-          status,
-          e.status === 'published' ? calendarLinks(e) : null,
+          el('div', { class: 'fm-ev-layout' }, [
+            el('aside', { class: 'fm-ev-aside', 'aria-label': 'Registration and practical information' }, [
+              el('div', { class: 'fm-ev-panel' }, [
+                action,
+                status,
+                e.status === 'published' ? calendarLinks(e) : null
+              ]),
+              el('div', { class: 'fm-ev-panel' }, [
+                el('h3', { text: 'Practical information' }),
+                el('dl', { class: 'fm-ev-facts' }, facts.flatMap(([k, v]) => [el('dt', { text: k }), el('dd', { text: v })]))
+              ])
+            ]),
+            el('div', { class: 'fm-ev-main' }, [
           section('About the event', el('p', { class: 'fm-ev-about', text: e.about })),
           agenda.length ? section('Programme', el('ol', { class: 'fm-ev-agenda' }, agenda.map((a) => el('li', {}, [
             el('span', { class: 'fm-ev-agenda-time', text: a.time || '' }),
@@ -389,10 +399,11 @@
               el('small', { text: [s.title, s.organization].filter(Boolean).join(', ') })
             ])]);
           }))) : null,
-          section('Practical information', el('dl', { class: 'fm-ev-facts' }, facts.flatMap(([k, v]) => [el('dt', { text: k }), el('dd', { text: v })]))),
           docs.length ? section('Documents and media', el('div', { class: 'fm-ev-docs' }, docs.map(([label, u]) => el('a', { class: 'fm-share-btn', href: u, target: '_blank', rel: 'noopener noreferrer', text: `${label} ↗` })))) : null,
           el('div', { class: 'fm-ev-hostline' }, [avatar, el('span', {}, [el('small', { text: 'Event page created by' }), el('strong', { text: host.display_name }), el('small', { text: host.headline || '' })])]),
-          el('p', { class: 'fm-small fm-muted', text: 'WHSF checks events before they are listed. Registration is always free: never pay anyone to attend, and report anything suspicious to info@worldhsfoundation.org.' }),
+          el('p', { class: 'fm-small fm-muted', text: 'WHSF checks events before they are listed. Registration is always free: never pay anyone to attend, and report anything suspicious to info@worldhsfoundation.org.' })
+            ])
+          ]),
           hostTools
         ])
       ])
