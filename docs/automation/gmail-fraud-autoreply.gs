@@ -6,6 +6,11 @@
  * prizes, fees, scams or fraud, and sends each sender ONE reply saying WHSF is not involved, asking
  * them to report it to the authorities near them, and linking the "Verify a WHSF employee" page.
  *
+ * It only answers people writing from a PERSONAL / PUBLIC mailbox (Gmail, Yahoo, Outlook, iCloud and
+ * similar). Business, corporate, organisation, school and any other private-domain email is an
+ * exception: it is never auto-replied to and is left for staff. Those threads get the label
+ * "WHSF/Fraud not auto-replied (business email)" so nothing is hidden.
+ *
  * It never deletes, archives or marks anything as read: staff still see every email.
  * Replied threads get the Gmail label "WHSF/Fraud auto-replied".
  *
@@ -15,6 +20,7 @@
 
 const CONFIG = {
   label: 'WHSF/Fraud auto-replied',
+  skippedLabel: 'WHSF/Fraud not auto-replied (business email)',
   lookBack: '2d',                      // only consider recent emails
   maxThreadsPerRun: 30,
   ownDomain: 'worldhsfoundation.org',  // never auto-reply to our own staff
@@ -33,9 +39,25 @@ const FRAUD_PATTERN = new RegExp([
   'whatsapp group', 'bank (details|account)', 'account number', 'investment opportunit'
 ].join('|'), 'i');
 
-/** Run once by hand: creates the label and the 10-minute trigger. */
+/**
+ * Public / personal mailbox providers. ONLY senders on these domains get the auto-reply.
+ * Anything else (a company, charity, school, government or any private custom domain) is treated
+ * as a business email and skipped. To also answer another personal provider, add its domain here.
+ */
+const PERSONAL_MAIL_DOMAINS = new RegExp('^(' + [
+  'gmail\\.com', 'googlemail\\.com',
+  'yahoo\\.(com|co\\.[a-z]{2}|com\\.[a-z]{2}|[a-z]{2})', 'ymail\\.com', 'rocketmail\\.com',
+  '(outlook|hotmail|live)\\.(com|co\\.[a-z]{2}|com\\.[a-z]{2}|[a-z]{2})', 'msn\\.com',
+  'icloud\\.com', 'me\\.com', 'mac\\.com',
+  'aol\\.com', 'proton\\.me', 'protonmail\\.com', 'pm\\.me',
+  'gmx\\.(com|net|[a-z]{2})', 'mail\\.com', 'zoho\\.com', 'zohomail\\.com', 'fastmail\\.com',
+  'yandex\\.(com|ru)', 'mail\\.ru', 'qq\\.com', '163\\.com', '126\\.com', 'tutanota\\.com', 'tuta\\.io'
+].join('|') + ')$', 'i');
+
+/** Run once by hand: creates the labels and the 10-minute trigger. */
 function setup() {
   getOrCreateLabel_();
+  getOrCreateLabel_(CONFIG.skippedLabel);
   ScriptApp.getProjectTriggers()
     .filter((t) => t.getHandlerFunction() === 'replyToFraudEmails')
     .forEach((t) => ScriptApp.deleteTrigger(t));
@@ -52,8 +74,9 @@ function turnOff() {
 
 function replyToFraudEmails() {
   const label = getOrCreateLabel_();
+  const skippedLabel = getOrCreateLabel_(CONFIG.skippedLabel);
   const query = 'in:inbox newer_than:' + CONFIG.lookBack + ' -label:"' + CONFIG.label + '" ' +
-    '-from:' + CONFIG.ownDomain + ' ' + CONFIG.searchTerms;
+    '-label:"' + CONFIG.skippedLabel + '" -from:' + CONFIG.ownDomain + ' ' + CONFIG.searchTerms;
   const threads = GmailApp.search(query, 0, CONFIG.maxThreadsPerRun);
   const repliedTo = PropertiesService.getScriptProperties();
   const today = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd');
@@ -67,6 +90,12 @@ function replyToFraudEmails() {
 
     const text = message.getSubject() + '\n' + message.getPlainBody();
     if (!FRAUD_PATTERN.test(text)) return; // search matched loosely; leave it for staff
+
+    // Exception: business, corporate and other private-domain email is never auto-replied to.
+    if (!isPersonalMailbox_(address) || !isPersonalMailbox_(replyAddress_(message, address))) {
+      thread.addLabel(skippedLabel);
+      return;
+    }
 
     // At most one auto-reply per sender per day.
     const key = 'r:' + address;
@@ -90,8 +119,23 @@ function isSafeToReply_(message, address) {
   return true;
 }
 
-function getOrCreateLabel_() {
-  return GmailApp.getUserLabelByName(CONFIG.label) || GmailApp.createLabel(CONFIG.label);
+/** True only when the address is on a public / personal mailbox provider (Gmail, Yahoo, Outlook ...). */
+function isPersonalMailbox_(address) {
+  const at = String(address || '').lastIndexOf('@');
+  if (at < 1) return false;
+  return PERSONAL_MAIL_DOMAINS.test(address.slice(at + 1).trim().toLowerCase());
+}
+
+/** The address a reply would actually go to: Reply-To when set, otherwise the sender. */
+function replyAddress_(message, fallback) {
+  const replyTo = (message.getReplyTo() || '').trim();
+  if (!replyTo) return fallback;
+  return (replyTo.match(/<([^>]+)>/) || [null, replyTo])[1].trim().toLowerCase();
+}
+
+function getOrCreateLabel_(name) {
+  const labelName = name || CONFIG.label;
+  return GmailApp.getUserLabelByName(labelName) || GmailApp.createLabel(labelName);
 }
 
 function htmlReply_(name) {
