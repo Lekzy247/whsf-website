@@ -42,7 +42,22 @@
   };
   const setStatus = (sel, text) => { const n = $(sel); if (n) n.textContent = text || ''; };
 
-  const state = { session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
+  // Forum spaces: every post belongs to one (must match forum_posts.topic in the database).
+  const SPACES = [
+    { key: 'exchange', name: 'International Exchange', emoji: '🌍', about: 'Fellowships, study abroad, cultural and professional exchange programmes.' },
+    { key: 'jobs', name: 'Jobs & Careers', emoji: '💼', about: 'Job openings, internships, CV and interview tips, career advice.' },
+    { key: 'conferences', name: 'Conferences & Summits', emoji: '🎤', about: 'Summits, calls for speakers, delegate places and event news.' },
+    { key: 'women_tech', name: 'Women in Tech', emoji: '👩🏾‍💻', about: 'Role models, mentors and opportunities for women and girls in technology.' },
+    { key: 'ngos', name: 'NGOs & Nonprofits', emoji: '🤝', about: 'Programme calls, partnerships, volunteers and capacity building.' },
+    { key: 'grants', name: 'Grants & Funding', emoji: '💡', about: 'Funding calls, proposal tips and co-applicant searches.' },
+    { key: 'mentorship', name: 'Mentorship', emoji: '🧭', about: 'Find a mentor, offer guidance and share lessons learned.' },
+    { key: 'volunteering', name: 'Volunteering', emoji: '🙌', about: 'Give your time and skills to causes and communities.' },
+    { key: 'digital_ai', name: 'Digital Skills & AI', emoji: '🤖', about: 'Coding, data, AI, cybersecurity and digital careers.' },
+    { key: 'media_literacy', name: 'Media Literacy', emoji: '🔎', about: 'Fact-checking, misinformation and the WHSF MIL Lab.' }
+  ];
+  const spaceOf = (key) => SPACES.find((sp) => sp.key === key);
+
+  const state = { topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
   const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite'];
@@ -56,6 +71,10 @@
     if (!state.profile && view === 'alerts') view = 'feed';
     if (!state.isStaff && view === 'idchecks') view = 'feed';
     views.forEach((v) => $$(`[data-fm-view="${v}"]`).forEach((n) => { n.hidden = v !== view; }));
+    const landing = !state.session && view !== 'rules';
+    document.body.classList.toggle('fm-guest', landing);
+    $('[data-fm-landing]').hidden = !landing;
+    $('[data-fm-topics]').hidden = !state.me || view !== 'feed';
     // Messages, events and adverts use the full page width (side panels hidden), like the Gelllez Forum.
     document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite'].includes(view));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
@@ -490,7 +509,7 @@
       if (!imageUrl) { button.disabled = false; return; }
     }
     const { error } = await db.from('forum_posts').insert({
-      author_id: state.me.user_id, body, kind: state.celebrate ? 'celebrate' : 'post',
+      author_id: state.me.user_id, body, kind: state.celebrate ? 'celebrate' : 'post', topic: postForm.topic.value || 'general',
       image_url: imageUrl, location: postForm.location.value.trim() || null
     });
     button.disabled = false;
@@ -516,10 +535,11 @@
     if (!state.me && !state.isStaff) { feed.replaceChildren(); $('[data-fm-more]').hidden = true; return; }
     if (reset) { state.feedOffset = 0; feed.replaceChildren(el('p', { class: 'fm-card fm-empty', text: 'Loading posts…' })); }
     let query = db.from('forum_posts')
-      .select('id,kind,body,image_url,location,created_at,is_hidden,author_id,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
+      .select('id,kind,topic,body,image_url,location,created_at,is_hidden,author_id,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
       .order('created_at', { ascending: false })
       .range(state.feedOffset, state.feedOffset + PAGE_SIZE - 1);
     if (state.scope === 'network') query = query.in('author_id', [state.me.user_id, ...state.following]);
+    if (state.topic) query = query.eq('topic', state.topic);
     const { data, error } = await query;
     if (reset) feed.replaceChildren();
     if (error) { feed.append(el('p', { class: 'fm-card fm-empty', text: 'Posts could not be loaded. Please refresh.' })); return; }
@@ -542,6 +562,8 @@
     const card = el('article', { class: `fm-card fm-post${post.kind === 'celebrate' ? ' is-celebrate' : ''}${post.is_hidden ? ' is-hidden' : ''}` }, [
       el('div', { class: 'fm-post-head' }, [avatar, meta])
     ]);
+    const sp = spaceOf(post.topic);
+    if (sp) card.append(el('button', { class: 'fm-space-chip', type: 'button', text: `${sp.emoji} ${sp.name}`, onclick: () => setTopic(sp.key) }));
     if (post.kind === 'celebrate') card.append(el('span', { class: 'fm-post-tag', text: '🎉 Celebrating' }));
     if (post.is_hidden) card.append(el('span', { class: 'fm-post-tag', text: 'Hidden by a moderator' }));
     card.append(el('p', { class: 'fm-post-body', text: post.body }));
@@ -654,7 +676,9 @@
 
   // ---------------------------------------------------------------- funding opportunities (public data)
   async function loadOpportunities() {
-    const list = $('[data-fm-opps]');
+    for (const list of $$('[data-fm-opps]')) await fillOpportunities(list);
+  }
+  async function fillOpportunities(list) {
     const today = new Date().toISOString().slice(0, 10);
     const { data, error } = await db.from('whsf_opportunities')
       .select('title,funder_name,deadline').eq('kind', 'grant').eq('review_status', 'published').neq('status', 'closed')
@@ -671,6 +695,51 @@
     });
   }
 
+  // ---------------------------------------------------------------- spaces (landing, left menu, feed chips, composer)
+  function setTopic(key) {
+    state.topic = key || null;
+    renderTopicChips();
+    $$('[data-fm-spaces-list] a').forEach((a) => (a.dataset.space === (state.topic || '') ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    if (location.hash && location.hash !== '#feed') location.hash = '#feed';
+    loadFeed(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function renderTopicChips() {
+    const box = $('[data-fm-topics]');
+    box.replaceChildren(
+      el('button', { type: 'button', class: `fm-topic${state.topic ? '' : ' is-on'}`, text: 'All spaces', onclick: () => setTopic(null) }),
+      ...SPACES.map((sp) => el('button', { type: 'button', class: `fm-topic${state.topic === sp.key ? ' is-on' : ''}`, text: `${sp.emoji} ${sp.name}`, onclick: () => setTopic(sp.key) }))
+    );
+  }
+  function goJoin() {
+    const auth = $('[data-fm-auth]');
+    auth.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => $('[data-fm-auth-form] input[name="email"]')?.focus({ preventScroll: true }), 400);
+  }
+  function renderSpaces() {
+    $('[data-fm-hero-spaces]').replaceChildren(...SPACES.slice(0, 6).map((sp) => el('button', { type: 'button', class: 'fm-hero-chip', text: `${sp.emoji} ${sp.name}`, onclick: goJoin })));
+    $('[data-fm-spaces-grid]').replaceChildren(...SPACES.map((sp) => el('button', { type: 'button', class: 'fm-space-card', onclick: () => (state.me ? setTopic(sp.key) : goJoin()) }, [
+      el('span', { class: 'fm-space-emoji', 'aria-hidden': 'true', text: sp.emoji }),
+      el('strong', { text: sp.name }),
+      el('small', { text: sp.about })
+    ])));
+    $('[data-fm-spaces-list]').replaceChildren(
+      el('a', { href: '#feed', 'data-space': '', text: '🏠 All spaces', onclick: (e) => { e.preventDefault(); setTopic(null); } }),
+      ...SPACES.map((sp) => el('a', { href: '#feed', 'data-space': sp.key, text: `${sp.emoji} ${sp.name}`, onclick: (e) => { e.preventDefault(); setTopic(sp.key); } }))
+    );
+    $('[data-fm-topic-select]').replaceChildren(
+      el('option', { value: 'general', text: '🏠 General' }),
+      ...SPACES.map((sp) => el('option', { value: sp.key, text: `${sp.emoji} ${sp.name}` }))
+    );
+    renderTopicChips();
+  }
+  renderSpaces();
+  $$('[data-fm-join-cta]').forEach((a) => a.addEventListener('click', (e) => {
+    if (state.session) return;
+    e.preventDefault();
+    signUpMode = true; renderAuthMode(); goJoin();
+  }));
+
   // ---------------------------------------------------------------- page state
   async function refresh() {
     const { data } = await db.auth.getSession();
@@ -684,6 +753,7 @@
     $$('[data-fm-staff-only]').forEach((n) => { n.hidden = !state.isStaff; });
     await renderVerify();
     $('[data-fm-composer]').hidden = !state.me;
+    $('[data-fm-spaces-nav]').hidden = !state.me;
     $('[data-fm-filter]').hidden = !state.me;
     if (signedIn && !state.profile) {
       const f = $('[data-fm-join-form]');
@@ -696,7 +766,7 @@
     loadFeed(true);
   }
 
-  window.WHSFForum = { db, state, hooks, el, $, $$, fillAvatar, timeAgo, setStatus, refresh };
+  window.WHSFForum = { db, state, hooks, el, $, $$, fillAvatar, timeAgo, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => { if (['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED'].includes(event)) refresh(); });
