@@ -554,3 +554,82 @@ a.fm-feed-banner { color: var(--wx-wine); }
   .fm-reaction-picker button { width: 38px; height: 38px; font-size: 23px; }
   .fm-c-replies { margin-left: -14px; }
 }
+
+/* ================================================================ type scale (keep last in this file)
+   One font (Inter) and six sizes for the whole Forum app, so every page reads the same:
+   12 micro labels · 13 meta (times, small print) · 14 controls + secondary text
+   15 body + names · 17 card/section titles · 18 brand.  The visitor landing hero keeps its own display sizes. */
+body.fm-app {
+  --fm-t-micro: 12px; --fm-t-meta: 13px; --fm-t-ctrl: 14px; --fm-t-body: 15px; --fm-t-title: 17px; --fm-t-brand: 18px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: var(--fm-t-body);
+  line-height: 1.6;
+}
+body.fm-app :is(button, input, select, textarea) { font-family: inherit; }
+
+/* Brand */
+body.fm-app .fm-brand { font-size: var(--fm-t-brand); font-weight: 700; }
+
+/* Card and section titles */
+body.fm-app main.fm :is(.fm-card h2, .fm-side-title, .fm-ev-section, .fm-sponsored h2, .fm-methods legend, .fm-idcheck h3),
+body.fm-app main.fm .fm-grid h2,
+body.fm-app .fm-me-menu h2 {
+  font-size: var(--fm-t-title) !important; font-weight: 700 !important; line-height: 1.3 !important; letter-spacing: -.01em !important;
+}
+body.fm-app .fm-name { font-size: var(--fm-t-title) !important; font-weight: 700; line-height: 1.3; }
+
+/* Names and item titles */
+body.fm-app main.fm h3,
+body.fm-app :is(.fm-post-head strong, .fm-person strong, .fm-opps a, .fm-up-row strong, .fm-ev-body strong, .fm-thread-text strong,
+  .fm-convo-head strong, .fm-me-head strong, .fm-me-menu a[role="menuitem"] strong, .fm-me-out strong, .fm-space-card strong,
+  .fm-method strong, .fm-ad-preview strong, .fm-c-bubble strong, .fm-reactors strong, .fm-alert-row strong, .fm-strength p) {
+  font-size: var(--fm-t-body) !important; font-weight: 700; line-height: 1.35 !important; letter-spacing: 0 !important;
+}
+body.fm-app .fm-alert-row strong { font-weight: 600; }
+
+/* Body text and form fields */
+body.fm-app :is(.fm-post-body, .fm-c-body, .fm-bubble p, .fm-steps, .fm-promo p, .fm-safety p, .fm-sponsored p, .fm-ad-preview p,
+  .fm-features p, .fm-how p, .fm-ticks li, .fm-l-head p),
+body.fm-app main.fm :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) {
+  font-size: var(--fm-t-body); line-height: 1.6;
+}
+body.fm-app main.fm :is(input, select) { line-height: 1.4; }
+
+/* Secondary text */
+body.fm-app :is(.fm-muted, .fm-headline, .fm-status, .fm-alert, .fm-auth-sub, .fm-handoff, .fm-method span, .fm-person span,
+  .fm-thread-text small, .fm-convo-head small, .fm-me-head small) {
+  font-size: var(--fm-t-ctrl); line-height: 1.5;
+}
+
+/* Buttons, links, tabs and chips */
+body.fm-app :is(.fm-text-btn, .fm-link, .fm-tool, .fm-filter button, .fm-topic, .fm-spaces-nav a, .fm-eng-btn, .fm-follow, .fm-more,
+  .fm-share-btn, .fm-strength a, .fm-donate, .fm-hero-chip, main.fm .hp-btn, .fm-me-menu .hp-btn, .fm-form label, .fm-location-input,
+  .fm-topic-pick select, .fm-thread) {
+  font-size: var(--fm-t-ctrl) !important; font-weight: 600; line-height: 1.4;
+}
+body.fm-app .fm-topic-pick select, body.fm-app .fm-thread { font-weight: 500; }
+
+/* Meta: times, places, counts, small print */
+body.fm-app :is(.fm-post-head span, .fm-time, .fm-location, .fm-note, .fm-stats a, main.fm small, .fm-opps small, .fm-up-row small,
+  .fm-ev-body small, .fm-c-meta, .fm-c-act, .fm-c-headline, .fm-foot, .fm-foot-links, .fm-reactors small, .fm-eng-reacts, .fm-eng-count,
+  .fm-thread-meta, .fm-alert-row small, .fm-me-menu a[role="menuitem"] small, .fm-idcheck-imgs figcaption, .fm-ad-stats small,
+  .fm-ev-hostline small, .fm-bubble small) {
+  font-size: var(--fm-t-meta) !important; line-height: 1.5;
+}
+body.fm-app .fm-c-act { font-weight: 700; }
+
+/* Micro labels: eyebrows, badges, tags, chips */
+body.fm-app :is(.fm-badge, .fm-reco-label, .fm-eyebrow, .fm-me-group, .fm-pinned, .fm-ev-cat, .fm-chip, .fm-post-tag, .fm-space-chip,
+  .fm-ev-date small, .fm-tabs a, .fm-me-btn) {
+  font-size: var(--fm-t-micro) !important; line-height: 1.35;
+}
+body.fm-app :is(.fm-badge, .fm-reco-label, .fm-eyebrow, .fm-me-group, .fm-pinned, .fm-ev-cat, .fm-post-tag, .fm-space-chip) { font-weight: 700; }
+body.fm-app :is(.fm-tabs a, .fm-me-btn) { font-weight: 600; }
+
+/* Big numbers stay one size */
+body.fm-app :is(.fm-stats strong, .fm-ad-stats b, .fm-ev-date b) { font-size: 20px !important; font-weight: 700; line-height: 1.2; }
+
+@media (max-width: 640px) {
+  body.fm-app :is(.fm-tabs a, .fm-me-btn) { font-size: 11px !important; }
+  body.fm-app .fm-eng-btn { font-size: var(--fm-t-meta) !important; }
+}
