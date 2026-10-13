@@ -859,3 +859,9 @@ body.fm-app main.fm .fm-ev-detail h2.fm-ev-title { margin: 0 0 4px; font-size: c
   .fm-ev-aside { grid-column: 1; grid-row: 1; }
   .fm-ev-main { grid-row: 2; }
 }
+
+/* Desktop: show every space / event-type chip (wrap to a second line) instead of a scrollbar */
+@media (min-width: 761px) {
+  .fm-topics { flex-wrap: wrap; overflow: visible; padding-bottom: 4px; }
+}
+.fm-topics { scrollbar-width: thin; scrollbar-color: var(--wx-line-strong) transparent; }
