@@ -911,3 +911,13 @@ main.fm .fm-hero h1 { color: #2a0a17; }
 /* "Me" profile box: regular weight text (owner request) */
 body.fm-app .fm-me-menu :is(strong, small, span, a[role="menuitem"]:not(.hp-btn), .fm-me-out, .fm-me-group) { font-weight: 400 !important; }
 body.fm-app .fm-me-menu .fm-me-head strong { font-weight: 500 !important; }
+
+/* Selfie step: live camera on the page */
+.vk-cam { display: grid; gap: 10px; margin: 6px 0 12px; padding: 12px; border: 1px solid var(--wx-line); border-radius: 16px; background: #fbf7f9; }
+.vk-cam[hidden] { display: none; }
+.vk-cam-video { width: 100%; max-height: 360px; border-radius: 12px; background: #1d1018; object-fit: cover; transform: scaleX(-1); }
+.vk-cam-hint { margin: 0; color: var(--wx-ink); font-weight: 600; text-align: center; }
+.vk-cam-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.vk-cam-status { margin: 0; color: var(--wx-wine); text-align: center; font-weight: 600; }
+.vk-cam-status:empty { display: none; }
+[data-fm-self-only] { display: grid; gap: 10px; }
