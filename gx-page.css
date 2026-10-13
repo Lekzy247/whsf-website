@@ -391,3 +391,9 @@
 .impact-reference .im-dashboard .metric-card h3 { color: var(--wx-wine); }
 .impact-reference .im-dashboard .metric-card p { color: #5b4a53; }
 .impact-reference .im-dashboard .source-note { border-color: var(--wx-gold-soft, #f0c535); background: #fff8e8; color: #554528; }
+
+/* Phones: page shortcuts centred, so a shorter last row sits in the middle */
+@media (max-width: 620px) {
+  .gx-shortcuts { display: flex; flex-wrap: wrap; justify-content: center; }
+  .gx-shortcuts li { flex: 0 0 calc((100% - 20px) / 3); }
+}
