@@ -830,3 +830,12 @@ body.fm-app main.fm .fm-ev-detail h2.fm-ev-title { margin: 0 0 4px; font-size: c
   .fm-ev-fs { padding: 12px; }
   .fm-ev-detail-body { padding: 16px 14px 20px; }
 }
+
+/* Phones: event pages edge to edge (no box inside a box), like Facebook events */
+@media (max-width: 760px) {
+  .fm-ev-detail { margin: 10px -12px 0; border: 0; border-radius: 0; }
+  .fm-ev-detail-body { padding: 14px 12px 18px; }
+  .fm-ev-reg { padding: 12px; }
+  .fm-ev-card img, .fm-ev-card .fm-ev-cover { aspect-ratio: 16 / 6; }
+  .fm-ev-formwrap .fm-ev-fs { margin-left: -4px; margin-right: -4px; }
+}
