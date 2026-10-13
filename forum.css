@@ -882,3 +882,8 @@ main.fm .fm-hero h1 { color: #2a0a17; }
 .fm-hero-chip { border-color: #e6c9d5; background: #fff; color: var(--wx-wine); }
 .fm-hero-chip:hover { background: #fbeff4; border-color: var(--wx-wine); }
 .fm-hero-auth .fm-card { box-shadow: 0 16px 40px rgb(123 33 66 / 14%); border-color: #f0dde5; }
+
+/* Phones: the visitor page keeps the light WHSF background (the grey gaps are for the member feed only) */
+@media (max-width: 760px) {
+  body.fm-guest main.fm { background: #fbf7f9; }
+}
