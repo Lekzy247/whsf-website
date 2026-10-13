@@ -255,7 +255,20 @@
     window.scrollTo(0, 0);
     pw1.focus();
   }
-  $$('[data-fm-signout]').forEach((b) => b.addEventListener('click', () => db.auth.signOut()));
+  // Sign out always works on this device: if the server says the session is already gone (403/404),
+  // clear the saved session ourselves, then reload the Forum signed out.
+  async function signOutNow() {
+    setMeMenu(false);
+    try {
+      const { error } = await db.auth.signOut({ scope: 'local' });
+      if (error) throw error;
+    } catch {
+      try { Object.keys(localStorage).filter((k) => k.startsWith('sb-')).forEach((k) => localStorage.removeItem(k)); } catch {}
+    }
+    location.replace(`${location.pathname}#feed`);
+    location.reload();
+  }
+  $$('[data-fm-signout]').forEach((b) => b.addEventListener('click', signOutNow));
 
   // ---------------------------------------------------------------- join (18+)
   $('[data-fm-join-form]').addEventListener('submit', async (event) => {
