@@ -213,6 +213,27 @@
     ]);
   }
 
+  // Invite people: the event link opens this page (registration needs a verified WHSF Forum account).
+  function shareEvent(e) {
+    const url = `${location.origin}${location.pathname}#events/${e.id}`;
+    const text = `Join "${e.title}" on the WHSF Forum`;
+    const enc = encodeURIComponent;
+    const status = el('small', { class: 'fm-muted', role: 'status' });
+    const copy = async () => {
+      try { await navigator.clipboard.writeText(url); status.textContent = 'Event link copied.'; }
+      catch { status.textContent = url; }
+    };
+    return el('div', { class: 'fm-ev-cal fm-ev-share' }, [
+      el('span', { class: 'fm-muted', text: 'Invite people:' }),
+      el('button', { class: 'fm-share-btn', type: 'button', text: '🔗 Copy event link', onclick: copy }),
+      navigator.share ? el('button', { class: 'fm-share-btn', type: 'button', text: '📱 Share…', onclick: () => navigator.share({ title: text, url }).catch(() => {}) }) : null,
+      el('a', { class: 'fm-share-btn', href: `https://wa.me/?text=${enc(`${text}: ${url}`)}`, target: '_blank', rel: 'noopener noreferrer', text: 'WhatsApp' }),
+      el('a', { class: 'fm-share-btn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`, target: '_blank', rel: 'noopener noreferrer', text: 'LinkedIn' }),
+      el('a', { class: 'fm-share-btn', href: `mailto:?subject=${enc(text)}&body=${enc(`${text}. Register here (free, WHSF Forum account needed): ${url}`)}`, text: 'Email' }),
+      status
+    ]);
+  }
+
   // ---------------------------------------------------------------- registration form (participant details)
   function registrationForm(e, onDone) {
     const status = el('p', { class: 'fm-status', role: 'status' });
@@ -378,7 +399,8 @@
               el('div', { class: 'fm-ev-panel' }, [
                 action,
                 status,
-                e.status === 'published' ? calendarLinks(e) : null
+                e.status === 'published' ? calendarLinks(e) : null,
+                e.status === 'published' ? shareEvent(e) : null
               ]),
               el('div', { class: 'fm-ev-panel' }, [
                 el('h3', { text: 'Practical information' }),
