@@ -839,3 +839,23 @@ body.fm-app main.fm .fm-ev-detail h2.fm-ev-title { margin: 0 0 4px; font-size: c
   .fm-ev-card img, .fm-ev-card .fm-ev-cover { aspect-ratio: 16 / 6; }
   .fm-ev-formwrap .fm-ev-fs { margin-left: -4px; margin-right: -4px; }
 }
+
+/* Event page: content left, registration and key facts right (wide screens) */
+.fm-ev-hero.fm-ev-cover { aspect-ratio: auto; height: 120px; }
+.fm-ev-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; margin-top: 16px; }
+.fm-ev-aside { grid-column: 2; grid-row: 1; display: grid; gap: 14px; }
+.fm-ev-main { grid-column: 1; grid-row: 1; min-width: 0; }
+.fm-ev-main > .fm-ev-sec:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.fm-ev-panel { padding: 16px; border: 1px solid var(--wx-line); border-radius: 16px; background: #fbf7f9; }
+.fm-ev-panel h3 { margin: 0 0 10px; }
+.fm-ev-panel .fm-ev-action { margin: 0; }
+.fm-ev-aside .fm-ev-facts { grid-template-columns: 1fr; gap: 2px; }
+.fm-ev-aside .fm-ev-facts dd { margin-bottom: 8px; }
+.fm-ev-aside .fm-two { grid-template-columns: 1fr; }
+.fm-ev-aside .fm-ev-reg { padding: 0; border: 0; background: none; }
+.fm-ev-aside .fm-ev-cal { margin-top: 10px; }
+@media (max-width: 1000px) {
+  .fm-ev-layout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .fm-ev-aside { grid-column: 1; grid-row: 1; }
+  .fm-ev-main { grid-row: 2; }
+}
