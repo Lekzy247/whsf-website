@@ -369,3 +369,16 @@
 .hp-slide-fit .hp-slide-bg { object-fit: cover; filter: blur(22px) saturate(1.15); transform: scale(1.2); opacity: .6; animation: none !important; }
 .hp-slide-fit img:not(.hp-slide-bg) { object-fit: contain; animation: none !important; }
 .hp-slide-fit .hp-slide-video { object-fit: contain; }
+
+/* Partner logos stand still (owner request 2026-10-13): no scrolling, each logo shown once, centred and wrapping. */
+.hp-partners-track { animation: none !important; transform: none !important; width: auto; justify-content: center; }
+.hp-partners-viewport { -webkit-mask-image: none; mask-image: none; overflow: visible; }
+.hp-partners-track > ul[aria-hidden="true"], .hp-partners-track li[aria-hidden="true"] { display: none; }
+.hp-partners-track > ul { flex: 1 1 auto; flex-wrap: wrap; justify-content: center; gap: 18px 8px; }
+.hp-partners-track li { padding: 0 22px; }
+@media (max-width: 620px) {
+  .hp-partners { justify-content: center; text-align: center; }
+  .hp-partners > span { flex-basis: 100%; }
+  .hp-partners-track li { padding: 0 12px; }
+  .hp-partners img { height: 38px; max-width: 120px; }
+}
