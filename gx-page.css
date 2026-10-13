@@ -274,7 +274,7 @@
 .gx-hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 /* full-width banner image above the copy, never cropped (for artwork with text, e.g. MIL Lab) */
 .gx-page-hero.gx-hero-banner { grid-template-columns: 1fr; row-gap: 32px; }
-.gx-hero-banner .gx-hero-visual { order: -1; min-height: 0; height: auto; aspect-ratio: 1695 / 928; }
+.gx-hero-banner .gx-hero-visual { order: -1; min-height: 0; height: auto; aspect-ratio: 1536 / 1024; }
 .gx-hero-banner .gx-hero-visual img { object-fit: contain; }
 @media (max-width: 980px) {
   .gx-page-hero.gx-hero-split { grid-template-columns: 1fr; row-gap: 28px; }
@@ -282,10 +282,10 @@
 }
 
 /* slider visual showing artwork with text (e.g. MIL Lab): never cropped, no zoom */
-.hp-slide-visual.hp-slide-art { width: 100%; min-height: 0; height: auto; align-self: center; aspect-ratio: 1695 / 928; background: #eef3fb; }
+.hp-slide-visual.hp-slide-art { width: 100%; min-height: 0; height: auto; align-self: center; aspect-ratio: 1536 / 1024; background: #eef3fb; }
 .hp-slide-visual.hp-slide-art img { object-fit: contain; animation: none !important; }
 /* every slide's picture uses the artwork's wide frame, so the slider never jumps in height */
-.hp-hero-wide .hp-slide-visual { width: 100%; min-height: 0; height: auto; align-self: center; aspect-ratio: 1695 / 928; }
+.hp-hero-wide .hp-slide-visual { width: 100%; min-height: 0; height: auto; align-self: center; aspect-ratio: 1536 / 1024; }
 
 /* responsive 16:9 video embed */
 .gx-video { position: relative; max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 22px; background: var(--wx-wine-night); box-shadow: 0 24px 60px rgb(78 17 42 / 18%); }
