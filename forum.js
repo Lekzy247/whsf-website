@@ -158,6 +158,7 @@
     const pw = $('[data-fm-auth-form] input[name="password"]');
     pw.autocomplete = signUpMode ? 'new-password' : 'current-password';
     pw.closest('label').hidden = resetMode;
+    if (!resetMode) $('[data-fm-auth-submit]').disabled = false;
     $('[data-fm-forgot]').hidden = resetMode || signUpMode;
     const sub = $('[data-fm-auth] .fm-auth-sub');
     if (sub) {
@@ -176,9 +177,20 @@
     const password = form.password.value;
     if (resetMode) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setStatus('[data-fm-auth-status]', 'Enter the email address you use for the Forum.');
-      setStatus('[data-fm-auth-status]', 'Sending…');
-      await db.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/forum.html` });
-      setStatus('[data-fm-auth-status]', 'If that email has a WHSF Forum account, a password reset link is on its way. Check your inbox (and spam).');
+      // One request per click: the email server can take several seconds, and repeated clicks hit the rate limit.
+      const button = $('[data-fm-auth-submit]');
+      if (button.disabled) return;
+      button.disabled = true;
+      setStatus('[data-fm-auth-status]', 'Sending your reset link… this can take a few seconds.');
+      const done = 'If that email has a WHSF Forum account, a password reset link is on its way. It can take a minute or two to arrive; check your inbox and spam. Use the newest email if you get more than one.';
+      const result = await Promise.race([
+        db.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/forum.html` }),
+        new Promise((resolve) => { setTimeout(() => resolve({ slow: true }), 6000); })
+      ]);
+      const status = result?.error?.status;
+      if (status === 429) setStatus('[data-fm-auth-status]', 'Too many reset requests. Please wait a few minutes before trying again, and check your email for a link we already sent.');
+      else setStatus('[data-fm-auth-status]', done);
+      setTimeout(() => { button.disabled = false; }, 30000); // allow another request after 30 seconds
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 8) {
