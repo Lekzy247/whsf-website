@@ -907,3 +907,7 @@ main.fm .fm-hero h1 { color: #2a0a17; }
   .fm-me-menu { max-height: 85dvh; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
 }
 .fm-me-menu { text-align: left; }
+
+/* "Me" profile box: regular weight text (owner request) */
+body.fm-app .fm-me-menu :is(strong, small, span, a[role="menuitem"]:not(.hp-btn), .fm-me-out, .fm-me-group) { font-weight: 400 !important; }
+body.fm-app .fm-me-menu .fm-me-head strong { font-weight: 500 !important; }
