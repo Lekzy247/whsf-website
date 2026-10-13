@@ -370,3 +370,24 @@
 @media (max-width: 560px) {
   .gx-mil-steps img { height: 150px; aspect-ratio: auto; object-position: center bottom; }
 }
+
+/* Impact page: "Impact by the numbers" in whitish light wine (owner request), dark text */
+.impact-reference .im-dashboard {
+  border: 1px solid #f0dde5;
+  background: radial-gradient(circle at 85% 8%, rgb(247 187 36 / 12%), transparent 38%), linear-gradient(135deg, #ffffff 0%, #fdf6f9 55%, #f7e3eb 100%);
+  color: var(--wx-ink);
+  box-shadow: 0 18px 50px rgb(123 33 66 / 8%);
+}
+.impact-reference .im-heading-light h2 { color: #2a0a17; }
+.impact-reference .im-heading-light > p:last-child { color: #4b3a43; }
+.impact-reference .im-heading-light .im-kicker { color: var(--wx-wine); }
+.impact-reference .im-dashboard .filter-panel { border-color: #ead3dd; background: #fff; }
+.impact-reference .im-dashboard .filter-panel label { color: var(--wx-wine); }
+.impact-reference .im-dashboard select { border-color: #e2cbd5; }
+.impact-reference .im-result { color: #6b5560; }
+.impact-reference .im-dashboard .metric-card { border-color: #f0dde5; background: #fff; color: var(--wx-ink); box-shadow: 0 8px 22px rgb(123 33 66 / 6%); }
+.impact-reference .im-dashboard .metric-card span { color: var(--wx-wine); }
+.impact-reference .im-dashboard .metric-card strong { color: #2a0a17; }
+.impact-reference .im-dashboard .metric-card h3 { color: var(--wx-wine); }
+.impact-reference .im-dashboard .metric-card p { color: #5b4a53; }
+.impact-reference .im-dashboard .source-note { border-color: var(--wx-gold-soft, #f0c535); background: #fff8e8; color: #554528; }
