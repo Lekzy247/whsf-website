@@ -759,3 +759,9 @@ body.fm-app .fm-c-input textarea { flex: 1; min-width: 0; min-height: 36px; max-
   .fm-more { margin: 8px auto 12px; }
   .fm-menu-list { right: -4px; }
 }
+
+/* Counts row (reactions left, comments and shares right) + "View more comments" */
+.fm-eng-counts { display: flex; gap: 12px; margin-left: auto; }
+.fm-eng-counts .fm-eng-count { margin-left: 0; }
+.fm-c-more { display: block; margin: 0 0 8px; padding: 2px 0; border: 0; background: none; color: var(--wx-muted); font: inherit; font-size: var(--fm-t-ctrl); font-weight: 700; cursor: pointer; }
+.fm-c-more:hover { color: var(--wx-ink); text-decoration: underline; }
