@@ -342,3 +342,25 @@
 /* one-slide hero (MIL Lab): no tabs, arrows or pause button */
 /* (no video any more, so the pause button is hidden too) */
 .hp-hero-single .hp-controls { display: none; }
+
+/* MIL Lab framework: Spot -> Verify -> Create -> Amplify illustrated steps */
+.gx-mil-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin: 0; padding: 0; list-style: none; counter-reset: none; }
+.gx-mil-steps li { --step: #8f2a52; --step-soft: #fdeef3; position: relative; display: flex; flex-direction: column; gap: 8px; padding: 0 0 22px; overflow: visible; border: 1px solid #eee0e7; border-radius: 22px; background: linear-gradient(180deg, var(--step-soft), #fff 70%); }
+.gx-mil-steps .gx-step-2 { --step: #1f5fd6; --step-soft: #eaf1fe; }
+.gx-mil-steps .gx-step-3 { --step: #e8650f; --step-soft: #fff3e6; }
+.gx-mil-steps .gx-step-4 { --step: #7a3fd6; --step-soft: #f3edfd; }
+.gx-mil-steps img { display: block; width: 100%; height: auto; aspect-ratio: 400 / 450; object-fit: cover; border-radius: 21px 21px 0 0; }
+.gx-mil-step-head { display: flex; gap: 12px; align-items: center; padding: 6px 20px 0; }
+.gx-mil-steps b { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--step); color: #fff; font-size: 16px; font-weight: 800; }
+.gx-mil-steps strong { color: var(--wx-ink); font-size: 24px; font-weight: 800; letter-spacing: -.03em; }
+.gx-mil-step-lead { margin: 0; padding: 0 20px; color: var(--wx-ink); font-size: 15px; font-weight: 600; line-height: 1.45; }
+.gx-mil-steps span { padding: 0 20px; color: #66575f; font-size: 14px; line-height: 1.55; }
+.gx-mil-steps li:not(:last-child)::after { content: "›"; position: absolute; top: 34%; right: -21px; z-index: 2; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #fff; box-shadow: 0 4px 14px rgb(42 10 23 / 14%); color: #1f2a6b; font-size: 26px; font-weight: 700; line-height: 1; }
+@media (max-width: 980px) {
+  .gx-mil-steps { grid-template-columns: 1fr 1fr; }
+  .gx-mil-steps li::after { display: none; }
+}
+@media (max-width: 560px) {
+  .gx-mil-steps { grid-template-columns: 1fr; gap: 16px; }
+  .gx-mil-steps img { aspect-ratio: 16 / 10; object-position: center 40%; }
+}
