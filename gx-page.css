@@ -364,3 +364,9 @@
   .gx-mil-steps { grid-template-columns: 1fr; gap: 16px; }
   .gx-mil-steps img { aspect-ratio: 16 / 10; object-position: center 40%; }
 }
+
+/* MIL Lab steps: smaller illustrations (owner request), shown whole on the step's soft colour */
+.gx-mil-steps img { width: 100%; height: 170px; aspect-ratio: auto; padding: 14px 14px 0; object-fit: contain; object-position: center bottom; border-radius: 21px 21px 0 0; background: transparent; }
+@media (max-width: 560px) {
+  .gx-mil-steps img { height: 150px; aspect-ratio: auto; object-position: center bottom; }
+}
