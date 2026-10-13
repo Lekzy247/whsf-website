@@ -135,7 +135,7 @@
     panel.dataset.kind = 'reactors'; panel.hidden = false;
     panel.replaceChildren(el('p', { class: 'fm-muted', text: 'Loading…' }));
     const { data, error } = await db.from('forum_reactions')
-      .select('kind,created_at,user_id,user:forum_profiles(display_name,headline,avatar_url)')
+      .select('kind,created_at,user_id,user:forum_profiles!forum_reactions_user_id_fkey(display_name,headline,avatar_url)')
       .eq('post_id', id).order('created_at', { ascending: false }).limit(200);
     if (error) { panel.replaceChildren(el('p', { class: 'fm-muted', text: 'Reactions could not be loaded.' })); return; }
     const counts = {};
@@ -273,7 +273,7 @@
     const box = c.ui.comments;
     box.replaceChildren(el('p', { class: 'fm-muted', text: 'Loading comments…' }));
     const { data, error } = await db.from('forum_comments')
-      .select('id,parent_id,body,created_at,edited_at,is_hidden,author_id,author:forum_profiles(display_name,headline,avatar_url),likes:forum_comment_likes(count)')
+      .select('id,parent_id,body,created_at,edited_at,is_hidden,author_id,author:forum_profiles!forum_comments_author_id_fkey(display_name,headline,avatar_url),likes:forum_comment_likes(count)')
       .eq('post_id', id).order('created_at', { ascending: true }).limit(300);
     if (error) { box.replaceChildren(el('p', { class: 'fm-muted', text: 'Comments could not be loaded.' })); return; }
     let liked = new Set();
