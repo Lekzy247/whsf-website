@@ -123,10 +123,20 @@
     menu.hidden = !open;
     $('[data-fm-me-scrim]').hidden = !open;
     $('[data-fm-me-toggle]').setAttribute('aria-expanded', String(open));
-    if (open) menu.querySelector('a, button')?.focus();
+    // The page stays still behind the open menu (like Facebook): the backdrop swallows scrolling and the menu
+    // keeps its own scrolling to itself (overscroll-behavior: contain in forum.css).
+    if (open) menu.querySelector('a, button')?.focus({ preventScroll: true });
   }
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !$('[data-fm-me-menu]').hidden) { setMeMenu(false); $('[data-fm-me-toggle]').focus(); } });
   $('[data-fm-me-toggle]').addEventListener('click', () => setMeMenu($('[data-fm-me-menu]').hidden));
   $('[data-fm-me-scrim]').addEventListener('click', () => setMeMenu(false));
+  ['wheel', 'touchmove'].forEach((type) => $('[data-fm-me-scrim]').addEventListener(type, (event) => event.preventDefault(), { passive: false }));
+  $('[data-fm-me-menu]').addEventListener('wheel', (event) => {
+    const m = event.currentTarget;
+    const atTop = m.scrollTop <= 0 && event.deltaY < 0;
+    const atEnd = m.scrollTop + m.clientHeight >= m.scrollHeight - 1 && event.deltaY > 0;
+    if (atTop || atEnd) event.preventDefault();
+  }, { passive: false });
   $('[data-fm-me-menu]').addEventListener('click', (event) => { if (event.target.closest('a')) setMeMenu(false); });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && !$('[data-fm-me-menu]').hidden) { setMeMenu(false); $('[data-fm-me-toggle]').focus(); }
