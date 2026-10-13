@@ -19,9 +19,9 @@ window.WHSF_IMPACT_DATA = {
       region: "africa",
       lat: 9.08,
       lng: 8.68,
-      programmes: ["girls-in-ict", "robotics-drones", "agrismart-ai"],
+      programmes: ["girls-in-ict", "robotics-drones"],
       beneficiaries: "Included within the published 7,500+ aggregate",
-      summary: "Technology education, Girls in ICT, robotics, drones and climate-smart learning."
+      summary: "Technology education, Girls in ICT, robotics and drones."
     },
     {
       id: "africa-regional",
@@ -80,6 +80,7 @@ window.WHSF_IMPACT_DATA = {
       url: "programme-robotics-drones.html"
     },
     "agrismart-ai": {
+      onImpactPage: false, // owner removed this programme from the Impact page (2026-10-13)
       title: "AgriSmart AI",
       shortTitle: "AgriSmart AI",
       eyebrow: "Climate-smart innovation",
@@ -97,6 +98,7 @@ window.WHSF_IMPACT_DATA = {
       url: "programme-agrismart-ai.html"
     },
     "career-pathways": {
+      onImpactPage: false, // owner removed this programme from the Impact page (2026-10-13)
       title: "AI Career Connect",
       shortTitle: "AI Career Connect",
       eyebrow: "Skills and opportunity",

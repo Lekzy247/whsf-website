@@ -75,7 +75,7 @@
 
   const programmeGrid = document.querySelector('[data-programme-outcomes]');
   if (programmeGrid) {
-    programmeGrid.innerHTML = Object.entries(data.programmes).map(([key, item]) => `
+    programmeGrid.innerHTML = Object.entries(data.programmes).filter(([, item]) => item.onImpactPage !== false).map(([key, item]) => `
       <article class="programme-outcome-card">
         <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.imageAlt)}" loading="lazy">
         <div><span>${escapeHtml(item.eyebrow)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p>

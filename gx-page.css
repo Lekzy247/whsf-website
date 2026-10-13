@@ -397,3 +397,7 @@
   .gx-shortcuts { display: flex; flex-wrap: wrap; justify-content: center; }
   .gx-shortcuts li { flex: 0 0 calc((100% - 20px) / 3); }
 }
+
+/* Two-card rows (e.g. Impact areas) */
+.gx-cards.gx-cards-2 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 620px) { .gx-cards.gx-cards-2 { grid-template-columns: 1fr; } }
