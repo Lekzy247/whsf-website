@@ -10,13 +10,19 @@ fees, scams or fraud automatically gets a reply that:
 - they can **verify any WHSF employee** by name, phone number and official WHSF email:
   https://www.worldhsfoundation.org/verify-certificate.html#staff-verification
 
+**Personal email only (owner rule, 2026-10-12).** The fraud advisory goes only to personal/public mailboxes
+(Gmail, Yahoo, Outlook/Hotmail/Live, iCloud, AOL, Proton, GMX, Zoho, Yandex and similar). Business, corporate,
+government, school and other private-domain addresses never get it; staff handle those emails themselves.
+The lists are `PERSONAL_MAIL_DOMAINS` in the Gmail script and in `api/contact.js`.
+
 There are two parts.
 
 ## 1. Website Contact form: already live, nothing to set up
 
 `api/contact.js` checks each enquiry. If the subject is **Fraud / Scam report**, or the message mentions things
 like disbursement, payouts, loans, prizes, promotions, fees, bank details, scams or fraud, the sender's
-acknowledgement is the fraud advisory above instead of the normal "we received your enquiry" email. Staff get the
+acknowledgement is the fraud advisory above instead of the normal "we received your enquiry" email (personal
+email addresses only; business senders get the normal acknowledgement). Staff get the
 enquiry with **FRAUD ALERT** in the subject, routed to the safeguarding inbox (`SAFEGUARDING_EMAIL`, or the
 default contact inbox if that isn't set).
 
@@ -38,10 +44,16 @@ That's it. Every 10 minutes it checks new inbox emails and replies once per send
 
 **What it does and doesn't do**
 
-- Replies only to matching emails from the last 2 days; never to @worldhsfoundation.org addresses, no-reply
-  senders, mailing lists or other automatic emails.
+- Replies only to matching emails from the last 2 days, and only to personal/public mailboxes. Business,
+  corporate and private-domain emails are never answered; they get the label
+  **WHSF/Fraud not auto-replied (business email)** so staff can follow up. It also never replies to
+  @worldhsfoundation.org addresses, no-reply senders, mailing lists or other automatic emails.
 - Never deletes, archives or marks emails as read. Staff still see and handle every email.
 - Adds the Gmail label **WHSF/Fraud auto-replied** to each thread it answered, so you can review them.
+
+**To update an installed script** open the project at https://script.google.com (signed in as info@), select
+all the code, paste in the new `gmail-fraud-autoreply.gs` and click **Save**. Then choose **setup** and click
+**Run** once (this creates the new label). The 10-minute trigger keeps running.
 
 **To change the wording** edit `htmlReply_` and `plainReply_` in the script and click **Save**.
 

@@ -36,6 +36,19 @@ const FRAUD_PATTERN = new RegExp([
   'whatsapp group', 'bank (details|account)', 'account number', 'investment opportunit'
 ].join('|'), 'i');
 
+// The fraud advisory goes only to personal/public mailboxes (Gmail, Yahoo, Outlook, iCloud, ...), the same
+// rule as the Gmail auto-reply (docs/automation/gmail-fraud-autoreply.gs). Business, corporate and other
+// private-domain senders get the normal acknowledgement and staff follow up personally.
+const PERSONAL_MAIL_DOMAINS = new Set([
+  'gmail.com', 'googlemail.com', 'ymail.com', 'rocketmail.com', 'msn.com', 'icloud.com', 'me.com', 'mac.com', 'aol.com', 'proton.me', 'protonmail.com', 'pm.me', 'mail.com', 'zoho.com', 'zohomail.com', 'fastmail.com', 'yandex.com', 'yandex.ru', 'mail.ru', 'qq.com', '163.com', '126.com', 'tutanota.com', 'tuta.io'
+]);
+function isPersonalEmail(address) {
+  const domain = String(address || '').split('@').pop().trim().toLowerCase();
+  return PERSONAL_MAIL_DOMAINS.has(domain) ||
+    /^(yahoo|outlook|hotmail|live)\.(com|co\.[a-z]{2}|com\.[a-z]{2}|[a-z]{2})$/.test(domain) ||
+    /^gmx\.(com|net|[a-z]{2})$/.test(domain);
+}
+
 function isFraudRelated(interest, message) {
   return interest === 'Fraud / Scam report' || FRAUD_PATTERN.test(message);
 }
@@ -150,6 +163,7 @@ export default async function handler(request, response) {
   }
 
   const fraudRelated = isFraudRelated(interest, message);
+  const sendAdvisory = fraudRelated && isPersonalEmail(email);
   const routeVariable = ROUTES[fraudRelated ? 'Fraud / Scam report' : interest];
   const recipient = (routeVariable && process.env[routeVariable]) || fallbackRecipient;
   const reference = 'WHSF-' + randomUUID().split('-')[0].toUpperCase();
@@ -175,13 +189,15 @@ export default async function handler(request, response) {
       '<strong>Email:</strong> ' + safe.email + '<br>' +
       '<strong>Phone:</strong> ' + safe.phone + '<br>' +
       '<strong>Route:</strong> ' + safe.interest + '</p>' +
-      (fraudRelated ? '<p><strong>Flagged as fraud-related.</strong> The sender was sent the fraud advisory with the Verify a WHSF employee link.</p>' : '') +
+      (fraudRelated ? (sendAdvisory
+        ? '<p><strong>Flagged as fraud-related.</strong> The sender was sent the fraud advisory with the Verify a WHSF employee link.</p>'
+        : '<p><strong>Flagged as fraud-related.</strong> The sender uses a business or private email domain, so no fraud advisory was sent (normal acknowledgement only). Please follow up personally.</p>') : '') +
       '<p><strong>Message</strong><br>' + safe.message + '</p>' +
       '<hr><p>Consent to use and retain this submission for follow-up: Yes<br>' +
       'Submitted: ' + submittedAt + '<br>Client record: ' + clientKey + '</p>'
   });
 
-  if (fraudRelated) {
+  if (sendAdvisory) {
     const advisory = fraudAdvisory(firstName, reference);
     await sendEmail(apiKey, {
       from,
