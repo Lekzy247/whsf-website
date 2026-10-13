@@ -20,13 +20,13 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=15">
+  <link rel="stylesheet" href="forum.css?v=16">
   <link rel="stylesheet" href="verify-kit.css?v=1">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=10" defer></script>
+  <script src="forum.js?v=11" defer></script>
   <script src="forum-engage.js?v=4" defer></script>
   <script src="forum-social.js?v=2" defer></script>
   <script src="verify-wizard.js?v=1" defer></script>
@@ -59,6 +59,7 @@
             <button type="button" class="fm-me-btn" aria-haspopup="menu" aria-expanded="false" data-fm-me-toggle><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true">?</span><span>Me ▾</span></button>
           </div>
         </nav>
+        <button type="button" class="fm-search-toggle" aria-label="Search members" aria-expanded="false" data-fm-search-toggle><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
         <a class="fm-donate" href="donor-portal.html" target="_blank" rel="noopener">Donate</a>
       </div>
     </div>
@@ -415,6 +416,7 @@
               <label class="fm-grow"><span class="sr-only">Start a conversation</span>
                 <textarea name="body" rows="2" maxlength="3000" placeholder="Start a conversation" required></textarea>
               </label>
+              <button type="button" class="fm-composer-photo" aria-label="Add a picture" data-fm-composer-photo><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></button>
             </div>
             <div class="fm-attach" data-fm-attach hidden>
               <img alt="Selected picture preview" data-fm-attach-img>
