@@ -921,3 +921,19 @@ body.fm-app .fm-me-menu .fm-me-head strong { font-weight: 500 !important; }
 .vk-cam-status { margin: 0; color: var(--wx-wine); text-align: center; font-weight: 600; }
 .vk-cam-status:empty { display: none; }
 [data-fm-self-only] { display: grid; gap: 10px; }
+
+/* Tickets and QR check-in */
+.fm-ticket canvas { width: 140px; height: 140px; }
+.fm-ticket-no { display: grid; gap: 0; margin: 2px 0; }
+.fm-ticket-no small { color: var(--wx-muted); font-size: var(--fm-t-micro); letter-spacing: .08em; text-transform: uppercase; }
+.fm-ticket-no b { font-family: ui-monospace, Consolas, monospace; font-size: 20px; letter-spacing: .04em; color: var(--wx-ink); }
+.fm-checkin-tools { display: grid; gap: 10px; }
+.fm-scan { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--wx-line); border-radius: 14px; background: #1d1018; }
+.fm-scan[hidden] { display: none; }
+.fm-scan-video { width: 100%; max-height: 340px; border-radius: 10px; object-fit: cover; background: #000; }
+.fm-scan .fm-muted { margin: 0; color: #f3e6ec; text-align: center; }
+.fm-checkin-result:empty { display: none; }
+.fm-checkin-msg { display: grid; gap: 2px; padding: 14px 16px; border-radius: 14px; }
+.fm-checkin-msg strong { font-size: 18px; }
+.fm-checkin-msg.is-ok { background: #e5f6ec; color: #135e33; border: 1px solid #b8e3c7; }
+.fm-checkin-msg.is-bad { background: #fdecef; color: #8a1b33; border: 1px solid #f3c2cd; }
