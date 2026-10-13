@@ -887,3 +887,9 @@ main.fm .fm-hero h1 { color: #2a0a17; }
 @media (max-width: 760px) {
   body.fm-guest main.fm { background: #fbf7f9; }
 }
+
+/* Form problems shown next to the field (events form) */
+.fm-form [aria-invalid="true"] { border-color: #c4314b !important; box-shadow: 0 0 0 3px rgb(196 49 75 / 15%) !important; }
+.fm-field-error { margin: -4px 0 4px; color: #b3243f; font-size: var(--fm-t-ctrl); font-weight: 600; }
+.fm-char-count { display: block; margin-top: -6px; color: var(--wx-muted); text-align: right; font-size: var(--fm-t-meta); }
+.fm-char-count.is-short { color: #b3243f; }

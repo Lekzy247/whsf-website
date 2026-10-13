@@ -521,6 +521,13 @@
     const zoneSel = el('select', { name: 'time_zone' }, zones().map((z) => el('option', { value: z, text: z.replace(/_/g, ' ') })));
     zoneSel.value = e?.time_zone || myZone;
     const about = el('textarea', { name: 'about', rows: '7', maxlength: '4000', placeholder: 'Background, objectives, who should attend and expected outcomes.' });
+    const aboutCount = el('small', { class: 'fm-char-count', 'aria-live': 'polite' });
+    const countAbout = () => {
+      const n = about.value.trim().length;
+      aboutCount.textContent = n < 20 ? `${n} / 20 characters minimum` : `${n} / 4000`;
+      aboutCount.classList.toggle('is-short', n < 20);
+    };
+    about.addEventListener('input', countAbout);
     const cover = el('input', { type: 'file', name: 'cover', accept: 'image/jpeg,image/png,image/webp' });
     const coOrgs = el('textarea', { name: 'co_organizers', rows: '3', maxlength: '2000', placeholder: 'One organisation per line' });
     const status = el('p', { class: 'fm-status', role: 'status' });
@@ -568,6 +575,7 @@
         field('Theme or subtitle', input('theme', { maxlength: '200', placeholder: 'One line that sums up the event' }), '(optional)'),
         field('On the margins of', input('parent_event', { maxlength: '160', placeholder: 'e.g. the High-level Political Forum 2027, UNGA 82, CSW71' }), '(optional, for side events)'),
         field('About the event', about, '(concept: background, objectives, audience, expected outcomes)'),
+        aboutCount,
         field('Cover image', cover, '(optional, JPG/PNG/WebP up to 5 MB, wide 16:5 works best)')),
       fieldset('2. Organisers', 'Name the lead organiser and any partners. Only use the names or logos of the UN or other organisations with their permission.',
         field('Lead organiser', input('organizer_name', { maxlength: '160', placeholder: 'e.g. World Humanitarian Support Foundation' })),
@@ -639,41 +647,57 @@
       catSel.value = 'side_event';
     }
     syncFormat();
+    countAbout();
 
     f.addEventListener('submit', async (ev) => {
       ev.preventDefault();
-      const say = (t) => { status.textContent = t; status.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+      f.querySelectorAll('.fm-field-error').forEach((n) => n.remove());
+      f.querySelectorAll('[aria-invalid="true"]').forEach((n) => n.removeAttribute('aria-invalid'));
+      const say = (t, field) => {
+        status.textContent = t;
+        const target = typeof field === 'string' ? f.elements[field] : field;
+        if (target && target.closest) {
+          target.setAttribute('aria-invalid', 'true');
+          const holder = target.closest('label') || target.closest('.fm-ev-rows') || target;
+          holder.after(el('p', { class: 'fm-field-error', role: 'alert', text: t }));
+          target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          setTimeout(() => target.focus?.({ preventScroll: true }), 350);
+        } else {
+          status.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      };
       const v = (k) => f.elements[k].value.trim();
       const zone = zoneSel.value;
-      if (v('title').length < 3) return say('Give your event a title.');
-      if (about.value.trim().length < 20) return say('Tell people more about the event (at least 20 characters).');
-      if (!v('starts') || !v('ends')) return say('Add a start and end time.');
+      if (v('title').length < 3) return say('Give your event a title.', 'title');
+      if (about.value.trim().length < 20) return say('Tell people more about the event (at least 20 characters).', about);
+      if (!v('starts') || !v('ends')) return say('Add a start and end time.', v('starts') ? 'ends' : 'starts');
       const starts = zonedToDate(v('starts'), zone); const ends = zonedToDate(v('ends'), zone);
-      if (!(ends > starts)) return say('The end time must be after the start time.');
-      if (!e && starts < new Date()) return say('The event must start in the future.');
+      if (!(ends > starts)) return say('The end time must be after the start time.', 'ends');
+      if (!e && starts < new Date()) return say('The event must start in the future.', 'starts');
       const deadline = v('deadline') ? zonedToDate(v('deadline'), zone) : null;
-      if (deadline && deadline > ends) return say('Registration must close before the event ends.');
+      if (deadline && deadline > ends) return say('Registration must close before the event ends.', 'deadline');
       const isUrl = (s) => !s || /^https:\/\/\S+$/.test(s);
-      if (!['meeting_link', 'livestream_url', 'concept_note_url', 'recording_url', 'report_url'].every((k) => isUrl(v(k)))) return say('Links must start with https://');
-      if (fmtSel.value !== 'in_person' && !v('meeting_link') && !v('livestream_url')) return say('Add a meeting link or livestream for online and hybrid events.');
-      if (fmtSel.value !== 'online' && !v('city')) return say('Add the city for in-person and hybrid events.');
-      if (v('contact_email') && !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v('contact_email'))) return say('Check the contact email address.');
+      const badLink = ['meeting_link', 'livestream_url', 'concept_note_url', 'recording_url', 'report_url'].find((k) => !isUrl(v(k)));
+      if (badLink) return say('Links must start with https://', badLink);
+      if (fmtSel.value !== 'in_person' && !v('meeting_link') && !v('livestream_url')) return say('Add a meeting link or livestream for online and hybrid events.', 'meeting_link');
+      if (fmtSel.value !== 'online' && !v('city')) return say('Add the city for in-person and hybrid events.', 'city');
+      if (v('contact_email') && !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v('contact_email'))) return say('Check the contact email address.', 'contact_email');
       let tag = v('hashtag'); if (tag && !tag.startsWith('#')) tag = `#${tag}`;
-      if (tag && !/^#[A-Za-z0-9_]{2,40}$/.test(tag)) return say('A hashtag can only use letters, numbers and _ (e.g. #MILLab).');
+      if (tag && !/^#[A-Za-z0-9_]{2,40}$/.test(tag)) return say('A hashtag can only use letters, numbers and _ (e.g. #MILLab).', 'hashtag');
       const partners = coOrgs.value.split('\n').map((s) => s.trim()).filter(Boolean);
-      if (partners.length > 15) return say('Add up to 15 co-organisers.');
+      if (partners.length > 15) return say('Add up to 15 co-organisers.', coOrgs);
       const langs = [...f.querySelectorAll('input[name="languages"]:checked')].map((c) => c.value)
         .concat(v('lang_other').split(',').map((s) => s.trim()).filter(Boolean)).slice(0, 8);
-      if (!langs.length) return say('Choose at least one language.');
+      if (!langs.length) return say('Choose at least one language.', f.querySelector('input[name="languages"]'));
       const agenda = readRows(agendaRows.list); const speakers = readRows(speakerRows.list);
-      if (agenda.some((a) => !a.title)) return say('Each programme item needs a title.');
-      if (speakers.some((s) => !s.name)) return say('Each speaker needs a name.');
+      if (agenda.some((a) => !a.title)) return say('Each programme item needs a title.', [...agendaRows.list.querySelectorAll('[data-k="title"]')].find((n) => !n.value.trim() && n.closest('.fm-ev-row').querySelector('[data-k="time"]').value.trim()) || agendaRows.list);
+      if (speakers.some((s) => !s.name)) return say('Each speaker needs a name.', [...speakerRows.list.querySelectorAll('[data-k="name"]')].find((n) => !n.value.trim()) || speakerRows.list);
       const button = f.querySelector('button[type="submit"]');
       button.disabled = true;
       let coverUrl = e?.cover_url || null;
       const file = cover.files[0];
       if (file) {
-        if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size > 5 * 1024 * 1024) { button.disabled = false; return say('Cover must be JPG, PNG or WebP up to 5 MB.'); }
+        if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size > 5 * 1024 * 1024) { button.disabled = false; return say('Cover must be JPG, PNG or WebP up to 5 MB.', cover); }
         const path = `${state.me.user_id}/${crypto.randomUUID()}.${file.type.split('/')[1].replace('jpeg', 'jpg')}`;
         const { error } = await db.storage.from('forum-images').upload(path, file, { contentType: file.type, upsert: false });
         if (error) { button.disabled = false; return say('Cover upload failed. Please try again.'); }
