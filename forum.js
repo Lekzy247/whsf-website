@@ -517,8 +517,23 @@
     state.file = file;
     $('[data-fm-attach-img]').src = URL.createObjectURL(file);
     $('[data-fm-attach]').hidden = false;
+    syncComposer();
   });
-  $('[data-fm-attach-remove]').addEventListener('click', () => { state.file = null; $('[data-fm-attach]').hidden = true; });
+  $('[data-fm-attach-remove]').addEventListener('click', () => { state.file = null; $('[data-fm-attach]').hidden = true; syncComposer(); });
+  // Phones: the post box stays one line ("Start a conversation" + photo button) until you tap it, like Facebook.
+  const composer = $('[data-fm-composer]');
+  function syncComposer() {
+    composer.classList.toggle('is-open', composer.contains(document.activeElement) || Boolean(postForm.body.value.trim()) || Boolean(state.file));
+  }
+  composer.addEventListener('focusin', syncComposer);
+  composer.addEventListener('focusout', () => setTimeout(syncComposer, 200));
+  $('[data-fm-composer-photo]').addEventListener('click', () => $('[data-fm-file]').click());
+  // Phones: the member search opens from the magnifier in the top bar.
+  $('[data-fm-search-toggle]').addEventListener('click', (e) => {
+    const open = $('.fm-bar').classList.toggle('is-search');
+    e.currentTarget.setAttribute('aria-expanded', String(open));
+    if (open) $('#fm-search').focus();
+  });
   $('[data-fm-celebrate]').addEventListener('click', (event) => {
     state.celebrate = !state.celebrate;
     event.currentTarget.setAttribute('aria-pressed', String(state.celebrate));
@@ -544,6 +559,7 @@
     postForm.reset(); state.file = null; state.celebrate = false;
     $('[data-fm-attach]').hidden = true; $('[data-fm-location-row]').hidden = true;
     $('[data-fm-celebrate]').setAttribute('aria-pressed', 'false');
+    document.activeElement?.blur(); syncComposer();
     setStatus('[data-fm-post-status]', 'Posted.');
     if ((location.hash || '#feed') !== '#feed') location.hash = '#feed';
     loadFeed(true);

@@ -142,7 +142,7 @@
   /* Phones: profile card first, then the main column, then the Donate card and the right column. */
   .fm-left { display: contents; }
   .fm-left .fm-profile, .fm-left .fm-guest { order: 0; }
-  .fm-center { order: 1; }
+  .fm-center { order: 1; min-width: 0; width: 100%; }
   .fm-left .fm-promo { order: 2; }
   .fm-right { order: 3; }
   .fm-post-btn { width: 100%; margin-left: 0; justify-content: center; }
@@ -689,4 +689,73 @@ body.fm-app .fm-c-input textarea { flex: 1; min-width: 0; min-height: 36px; max-
 @media (max-width: 640px) {
   .fm-c-replies { margin-left: 0; }
   .fm-menu-list { min-width: 190px; }
+}
+
+/* ================================================================ phones: Facebook-style mobile layout (keep last) */
+.fm-post { overflow: visible; }
+.fm-search-toggle, .fm-composer-photo { display: none; }
+
+@media (max-width: 760px) {
+  .fm { background: #e7e1e4; padding-bottom: 16px; }
+
+  /* Top bar: brand · search · Donate, then a full-width row of icon tabs with an underline on the current one */
+  .fm-bar-inner { width: 100%; gap: 0; padding: 0; min-height: 0; flex-wrap: wrap; }
+  body.fm-app .fm-brand { order: 0; padding: 10px 12px 8px; font-size: 20px; letter-spacing: -.02em; }
+  .fm-brand span { width: 30px; height: 30px; }
+  .fm-search-toggle { order: 1; display: grid; place-items: center; width: 38px; height: 38px; margin-left: auto; padding: 0; border: 0; border-radius: 50%; background: var(--wx-soft); color: var(--wx-ink); cursor: pointer; }
+  .fm-search-toggle svg { width: 20px; height: 20px; }
+  .fm-search-toggle[aria-expanded="true"] { background: var(--wx-wine); color: #fff; }
+  .fm-donate { order: 2; margin: 0 12px 0 8px; padding: 8px 14px; }
+  .fm-search { order: 3; display: none; flex-basis: calc(100% - 24px); max-width: none; margin: 0 12px 10px; }
+  .fm-bar.is-search .fm-search { display: flex; }
+  .fm-tabs { order: 4; width: 100%; margin: 0; gap: 0; justify-content: space-around; border-top: 1px solid var(--wx-line); }
+  .fm-tabs > a, .fm-tabs .fm-me { flex: 1 1 0; min-width: 0; }
+  .fm-tabs > a, .fm-tabs .fm-me-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-width: 0; height: 48px; padding: 0; gap: 0; border-radius: 0; border-bottom: 3px solid transparent; background: none !important; color: #65586a; }
+  .fm-tabs > a[aria-current="page"] { border-bottom-color: var(--wx-wine); color: var(--wx-wine); }
+  .fm-tabs > a[hidden] { display: none; }
+  .fm-tabs > a svg { width: 25px; height: 25px; }
+  .fm-tabs > a > span:not(.fm-tab-icon), .fm-tabs .fm-me-btn > span:not(.fm-me-dot) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .fm-tabs .fm-me-dot { width: 28px; height: 28px; font-size: 12px; }
+
+  /* Feed column first, edge to edge, with thin grey gaps between cards */
+  .fm-grid { display: flex; flex-direction: column; width: 100%; margin: 0; gap: 0; }
+  .fm-left { display: contents; }
+  .fm-center { order: 1; min-width: 0; width: 100%; }
+  .fm-left .fm-promo { order: 2; }
+  .fm-right { order: 3; display: block; }
+  .fm-left .fm-profile, .fm-left .fm-spaces-nav, .fm-center .fm-reco { display: none !important; }
+  .fm-left .fm-guest { order: 0; }
+  .fm-card { margin: 0 0 8px; padding: 14px 12px; border-left: 0; border-right: 0; border-radius: 0; }
+  .fm-wide .fm-grid { max-width: none; }
+
+  /* Post box: one line like "What's on your mind?" until tapped */
+  .fm-composer { padding: 12px; }
+  .fm-composer-row { gap: 8px; }
+  .fm-composer .fm-composer-row > .fm-avatar { width: 40px; height: 40px; font-size: 15px; }
+  .fm-composer:not(.is-open) textarea { height: 40px; min-height: 40px; padding: 8px 16px; border-radius: 20px; overflow: hidden; resize: none; }
+  .fm-composer:not(.is-open) .fm-tools, .fm-composer:not(.is-open) .fm-status:empty { display: none; }
+  .fm-composer:not(.is-open) .fm-composer-photo { display: grid; }
+  .fm-composer-photo { place-items: center; flex: none; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: none; color: #2f9e57; cursor: pointer; }
+  .fm-composer-photo svg { width: 24px; height: 24px; }
+  .fm-tools { gap: 2px; }
+  .fm-tool { padding: 8px; }
+
+  /* Spaces chips, Everyone / My network and post search as one white strip */
+  .fm-topics { margin: 0; padding: 10px 12px 6px; background: #fff; }
+  .fm-filter { margin: 0; padding: 4px 12px 10px; background: #fff; }
+  body.fm-app .fm-filter button { padding: 6px 14px; }
+  .fm-qform { margin: 0 0 8px; padding: 8px 12px; border: 0; border-top: 1px solid var(--wx-line); border-radius: 0; }
+  .fm-feed-banner { margin: 0 0 8px; border-radius: 0; }
+
+  /* Posts */
+  .fm-post { padding: 12px 12px 0; }
+  .fm-post-head { gap: 8px; }
+  .fm-post-head > .fm-avatar { width: 40px; height: 40px; font-size: 15px; }
+  .fm-post-body { margin-top: 10px; }
+  .fm-post-img { width: calc(100% + 24px); max-width: none; margin: 10px -12px 0; border-radius: 0; max-height: none; }
+  .fm-eng { margin-top: 10px; }
+  .fm-eng-bar { border-bottom: 0; }
+  .fm-comments { padding-bottom: 12px; }
+  .fm-more { margin: 8px auto 12px; }
+  .fm-menu-list { right: -4px; }
 }
