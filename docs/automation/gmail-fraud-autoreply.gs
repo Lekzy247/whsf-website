@@ -8,8 +8,7 @@
  *
  * It only answers people writing from a PERSONAL / PUBLIC mailbox (Gmail, Yahoo, Outlook, iCloud and
  * similar). Business, corporate, organisation, school and any other private-domain email is an
- * exception: it is never auto-replied to and is left for staff. Those threads get the label
- * "WHSF/Fraud not auto-replied (business email)" so nothing is hidden.
+ * exception: it is ignored completely (no auto-reply, no label, no flag) and stays a normal email.
  *
  * It never deletes, archives or marks anything as read: staff still see every email.
  * Replied threads get the Gmail label "WHSF/Fraud auto-replied".
@@ -20,7 +19,6 @@
 
 const CONFIG = {
   label: 'WHSF/Fraud auto-replied',
-  skippedLabel: 'WHSF/Fraud not auto-replied (business email)',
   lookBack: '2d',                      // only consider recent emails
   maxThreadsPerRun: 30,
   ownDomain: 'worldhsfoundation.org',  // never auto-reply to our own staff
@@ -42,7 +40,8 @@ const FRAUD_PATTERN = new RegExp([
 /**
  * Public / personal mailbox providers. ONLY senders on these domains get the auto-reply.
  * Anything else (a company, charity, school, government or any private custom domain) is treated
- * as a business email and skipped. To also answer another personal provider, add its domain here.
+ * as a business email and ignored. To also answer another personal provider, add its domain here
+ * and to PERSONAL_SEARCH below.
  */
 const PERSONAL_MAIL_DOMAINS = new RegExp('^(' + [
   'gmail\\.com', 'googlemail\\.com',
@@ -54,10 +53,15 @@ const PERSONAL_MAIL_DOMAINS = new RegExp('^(' + [
   'yandex\\.(com|ru)', 'mail\\.ru', 'qq\\.com', '163\\.com', '126\\.com', 'tutanota\\.com', 'tuta\\.io'
 ].join('|') + ')$', 'i');
 
-/** Run once by hand: creates the labels and the 10-minute trigger. */
+// Gmail search filter so business email is never even picked up (the regex above still makes the final call).
+const PERSONAL_SEARCH = '{' + ['gmail.com', 'googlemail.com', 'yahoo', 'ymail.com', 'rocketmail.com', 'outlook', 'hotmail',
+  'live', 'msn.com', 'icloud.com', 'me.com', 'mac.com', 'aol.com', 'proton.me', 'protonmail.com', 'pm.me', 'gmx', 'mail.com',
+  'zoho.com', 'zohomail.com', 'fastmail.com', 'yandex', 'mail.ru', 'qq.com', '163.com', '126.com', 'tutanota.com', 'tuta.io'
+].map((d) => 'from:' + d).join(' ') + '}';
+
+/** Run once by hand: creates the label and the 10-minute trigger. */
 function setup() {
   getOrCreateLabel_();
-  getOrCreateLabel_(CONFIG.skippedLabel);
   ScriptApp.getProjectTriggers()
     .filter((t) => t.getHandlerFunction() === 'replyToFraudEmails')
     .forEach((t) => ScriptApp.deleteTrigger(t));
@@ -74,9 +78,8 @@ function turnOff() {
 
 function replyToFraudEmails() {
   const label = getOrCreateLabel_();
-  const skippedLabel = getOrCreateLabel_(CONFIG.skippedLabel);
   const query = 'in:inbox newer_than:' + CONFIG.lookBack + ' -label:"' + CONFIG.label + '" ' +
-    '-label:"' + CONFIG.skippedLabel + '" -from:' + CONFIG.ownDomain + ' ' + CONFIG.searchTerms;
+    '-from:' + CONFIG.ownDomain + ' ' + PERSONAL_SEARCH + ' ' + CONFIG.searchTerms;
   const threads = GmailApp.search(query, 0, CONFIG.maxThreadsPerRun);
   const repliedTo = PropertiesService.getScriptProperties();
   const today = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd');
@@ -91,11 +94,8 @@ function replyToFraudEmails() {
     const text = message.getSubject() + '\n' + message.getPlainBody();
     if (!FRAUD_PATTERN.test(text)) return; // search matched loosely; leave it for staff
 
-    // Exception: business, corporate and other private-domain email is never auto-replied to.
-    if (!isPersonalMailbox_(address) || !isPersonalMailbox_(replyAddress_(message, address))) {
-      thread.addLabel(skippedLabel);
-      return;
-    }
+    // Exception: business, corporate and other private-domain email is ignored (no reply, no label).
+    if (!isPersonalMailbox_(address) || !isPersonalMailbox_(replyAddress_(message, address))) return;
 
     // At most one auto-reply per sender per day.
     const key = 'r:' + address;
