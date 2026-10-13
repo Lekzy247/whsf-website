@@ -898,3 +898,12 @@ main.fm .fm-hero h1 { color: #2a0a17; }
 .fm-newpass { width: min(520px, calc(100% - 32px)); margin: 28px auto 0; padding: 26px 26px 22px; box-shadow: 0 18px 46px rgb(123 33 66 / 12%); }
 .fm-newpass h2 { margin: 10px 0 6px; }
 @media (max-width: 760px) { .fm-newpass { width: auto; margin: 0 0 8px; border-radius: 0; } }
+
+/* "Me" menu: page stays still behind it, the menu scrolls on its own, soft dim backdrop */
+.fm-me-scrim { background: rgb(42 10 23 / 12%); touch-action: none; }
+.fm-me-menu { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+@media (max-width: 760px) {
+  .fm-me-scrim { background: rgb(42 10 23 / 35%); }
+  .fm-me-menu { max-height: 85dvh; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+}
+.fm-me-menu { text-align: left; }
