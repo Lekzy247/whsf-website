@@ -1,3 +1,4 @@
+import { postToTeams } from './_teams.js';
 import { createHash, randomUUID } from 'node:crypto';
 
 const recentRequests = globalThis.__whsfContactRequests || new Map();
@@ -195,6 +196,10 @@ export default async function handler(request, response) {
   });
 
   if (fraudRelated) {
+    await postToTeams('WHSF website: fraud report received', [
+      ['Reference', reference], ['From', firstName + ' ' + lastName], ['Email', email], ['Phone', phone || 'Not provided'],
+      ['Message', message.slice(0, 400)]
+    ], null, 'The sender was sent the fraud advisory with the Verify a WHSF employee link. Full details are in the safeguarding inbox.');
     const advisory = fraudAdvisory(firstName, reference);
     await sendEmail(apiKey, {
       from,
