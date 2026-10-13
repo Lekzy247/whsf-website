@@ -893,3 +893,8 @@ main.fm .fm-hero h1 { color: #2a0a17; }
 .fm-field-error { margin: -4px 0 4px; color: #b3243f; font-size: var(--fm-t-ctrl); font-weight: 600; }
 .fm-char-count { display: block; margin-top: -6px; color: var(--wx-muted); text-align: right; font-size: var(--fm-t-meta); }
 .fm-char-count.is-short { color: #b3243f; }
+
+/* Choose a new password (after the reset email link) */
+.fm-newpass { width: min(520px, calc(100% - 32px)); margin: 28px auto 0; padding: 26px 26px 22px; box-shadow: 0 18px 46px rgb(123 33 66 / 12%); }
+.fm-newpass h2 { margin: 10px 0 6px; }
+@media (max-width: 760px) { .fm-newpass { width: auto; margin: 0 0 8px; border-radius: 0; } }

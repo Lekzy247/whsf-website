@@ -150,18 +150,37 @@
 
   // ---------------------------------------------------------------- auth
   let signUpMode = new URLSearchParams(location.search).get('join') === '1';
+  let resetMode = false; // "Forgot password?": email only
   function renderAuthMode() {
-    $('[data-fm-auth-title]').textContent = signUpMode ? 'Create your WHSF Forum account' : 'Sign in to join the conversation';
-    $('[data-fm-auth-submit]').textContent = signUpMode ? 'Create account' : 'Sign in';
-    $('[data-fm-auth-toggle]').textContent = signUpMode ? 'Already a member? Sign in' : 'New here? Create an account';
-    $('[data-fm-auth-form] input[name="password"]').autocomplete = signUpMode ? 'new-password' : 'current-password';
+    $('[data-fm-auth-title]').textContent = resetMode ? 'Reset your password' : signUpMode ? 'Create your WHSF Forum account' : 'Sign in to join the conversation';
+    $('[data-fm-auth-submit]').textContent = resetMode ? 'Send reset link' : signUpMode ? 'Create account' : 'Sign in';
+    $('[data-fm-auth-toggle]').textContent = resetMode ? 'Back to sign in' : signUpMode ? 'Already a member? Sign in' : 'New here? Create an account';
+    const pw = $('[data-fm-auth-form] input[name="password"]');
+    pw.autocomplete = signUpMode ? 'new-password' : 'current-password';
+    pw.closest('label').hidden = resetMode;
+    $('[data-fm-forgot]').hidden = resetMode || signUpMode;
+    const sub = $('[data-fm-auth] .fm-auth-sub');
+    if (sub) {
+      sub.dataset.text = sub.dataset.text || sub.textContent;
+      sub.textContent = resetMode ? 'Enter the email you use for the WHSF Forum. We will email you a link to choose a new password.' : sub.dataset.text;
+    }
   }
-  $('[data-fm-auth-toggle]').addEventListener('click', () => { signUpMode = !signUpMode; renderAuthMode(); setStatus('[data-fm-auth-status]', ''); });
+  $('[data-fm-auth-toggle]').addEventListener('click', () => {
+    if (resetMode) resetMode = false; else signUpMode = !signUpMode;
+    renderAuthMode(); setStatus('[data-fm-auth-status]', '');
+  });
   $('[data-fm-auth-form]').addEventListener('submit', async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
     const email = form.email.value.trim();
     const password = form.password.value;
+    if (resetMode) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setStatus('[data-fm-auth-status]', 'Enter the email address you use for the Forum.');
+      setStatus('[data-fm-auth-status]', 'Sending…');
+      await db.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/forum.html` });
+      setStatus('[data-fm-auth-status]', 'If that email has a WHSF Forum account, a password reset link is on its way. Check your inbox (and spam).');
+      return;
+    }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 8) {
       setStatus('[data-fm-auth-status]', 'Enter a valid email and a password of at least 8 characters.');
       return;
@@ -176,12 +195,44 @@
       if (error) setStatus('[data-fm-auth-status]', 'Sign-in failed. Check your email and password.');
     }
   });
-  $('[data-fm-forgot]').addEventListener('click', async () => {
-    const email = $('[data-fm-auth-form]').email.value.trim();
-    if (!email) return setStatus('[data-fm-auth-status]', 'Enter your email above first.');
-    await db.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/forum.html` });
-    setStatus('[data-fm-auth-status]', 'If that email has an account, a password reset link is on its way.');
+  $('[data-fm-forgot]').addEventListener('click', () => {
+    resetMode = true; signUpMode = false;
+    renderAuthMode(); setStatus('[data-fm-auth-status]', '');
+    $('[data-fm-auth-form] input[name="email"]').focus();
   });
+
+  // Reset link from the email: ask for the new password (the link signs the member in for this one step).
+  function showNewPasswordForm() {
+    if ($('[data-fm-newpass]')) return;
+    const status = el('p', { class: 'fm-status', role: 'status' });
+    const pw1 = el('input', { type: 'password', name: 'pw1', autocomplete: 'new-password', minlength: '8', required: '' });
+    const pw2 = el('input', { type: 'password', name: 'pw2', autocomplete: 'new-password', minlength: '8', required: '' });
+    const form = el('form', { class: 'fm-form', novalidate: '' }, [
+      el('label', {}, ['New password', pw1]),
+      el('label', {}, ['Repeat new password', pw2]),
+      el('div', { class: 'fm-actions' }, [el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Save new password' })]),
+      status
+    ]);
+    const card = el('section', { class: 'fm-card fm-newpass', 'data-fm-newpass': '' }, [
+      el('span', { class: 'fm-badge', text: 'WHSF Forum account' }),
+      el('h2', { text: 'Choose a new password' }),
+      el('p', { class: 'fm-auth-sub', text: 'Use at least 8 characters. You will stay signed in after saving.' }),
+      form
+    ]);
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (pw1.value.length < 8) { status.textContent = 'Use at least 8 characters.'; pw1.focus(); return; }
+      if (pw1.value !== pw2.value) { status.textContent = 'The two passwords do not match.'; pw2.focus(); return; }
+      status.textContent = 'Saving…';
+      const { error } = await db.auth.updateUser({ password: pw1.value });
+      if (error) { status.textContent = error.message; return; }
+      card.replaceChildren(el('h2', { text: 'Password updated' }), el('p', { class: 'fm-auth-sub', text: 'Your new password is saved. You are signed in.' }),
+        el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Continue to the Forum', onclick: () => { card.remove(); location.hash = '#feed'; refresh(); } }));
+    });
+    $('.fm-bar').after(card);
+    window.scrollTo(0, 0);
+    pw1.focus();
+  }
   $$('[data-fm-signout]').forEach((b) => b.addEventListener('click', () => db.auth.signOut()));
 
   // ---------------------------------------------------------------- join (18+)
@@ -885,7 +936,10 @@
   window.WHSFForum = { alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
-  db.auth.onAuthStateChange((event) => { if (['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED'].includes(event)) refresh(); });
+  db.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') { showNewPasswordForm(); return; }
+    if (['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED'].includes(event)) refresh();
+  });
   refresh();
   loadOpportunities();
 })();
