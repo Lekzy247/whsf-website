@@ -4,7 +4,7 @@
 (() => {
   const F = window.WHSFForum;
   if (!F) return;
-  const { db, state, el, $, fillAvatar, timeAgo } = F;
+  const { db, state, el, $, fillAvatar, timeAgo, stamp } = F;
   const POLL_MS = 30000;
   let currentThread = null;
   let threadTimer = null;
@@ -112,7 +112,7 @@
       const mine = m.sender_id === state.me.user_id;
       box.append(el('div', { class: `fm-bubble${mine ? ' is-mine' : ''}` }, [
         el('p', { text: m.body }),
-        el('small', { text: timeAgo(m.created_at) })
+        el('small', {}, [stamp(m.created_at)])
       ]));
     });
     if (scroll || atBottom) box.scrollTop = box.scrollHeight;
@@ -167,7 +167,7 @@
   };
 
   // ---------------------------------------------------------------- alerts
-  const KIND_ICON = { follow: '👋', message: '💬', id_approved: '✅', id_rejected: '⚠️', event_registration: '🎟️', event_update: '📅', advert_approved: '📣', advert_rejected: '📣', invite_joined: '🎉' };
+  const KIND_ICON = { follow: '👋', message: '💬', id_approved: '✅', id_rejected: '⚠️', event_registration: '🎟️', event_update: '📅', advert_approved: '📣', advert_rejected: '📣', invite_joined: '🎉', reaction: '❤️', comment: '💬', reply: '↩️' };
   async function loadAlerts() {
     const list = $('[data-fm-alerts]');
     list.replaceChildren(el('p', { class: 'fm-muted', text: 'Loading alerts…' }));
@@ -178,7 +178,7 @@
     data.forEach((n) => {
       const row = el(n.link ? 'a' : 'div', { class: `fm-alert-row${n.read_at ? '' : ' is-new'}`, ...(n.link ? { href: n.link } : {}) }, [
         el('span', { class: 'fm-alert-icon', 'aria-hidden': 'true', text: KIND_ICON[n.kind] || '🔔' }),
-        el('span', {}, [el('strong', { text: n.body }), el('small', { text: `${timeAgo(n.created_at)} ago` })])
+        el('span', {}, [el('strong', { text: n.body }), el('small', {}, [stamp(n.created_at)])])
       ]);
       list.append(row);
     });

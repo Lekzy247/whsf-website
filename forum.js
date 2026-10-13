@@ -34,6 +34,22 @@
     const d = Math.round(h / 24); if (d < 30) return `${d}d`;
     return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
+  // Full date and time in the reader's own time zone, e.g. "Mon, 12 Oct 2026, 11:05 PM GMT+1".
+  const fullTime = (iso) => new Date(iso).toLocaleString(undefined, {
+    weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+  });
+  const agoLabel = (iso) => {
+    const s = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 1000));
+    if (s < 60) return 'just now';
+    const m = Math.round(s / 60); if (m < 60) return `${m} min ago`;
+    const h = Math.round(m / 60); if (h < 24) return `${h} hr ago`;
+    const d = Math.round(h / 24); if (d < 7) return d === 1 ? 'yesterday' : `${d} days ago`;
+    return '';
+  };
+  const stamp = (iso) => {
+    const ago = agoLabel(iso);
+    return el('time', { class: 'fm-time', datetime: iso, title: fullTime(iso), text: ago ? `${fullTime(iso)} · ${ago}` : fullTime(iso) });
+  };
   const fillAvatar = (node, profile) => {
     node.replaceChildren();
     const url = safeImage(profile?.avatar_url);
@@ -57,15 +73,19 @@
   ];
   const spaceOf = (key) => SPACES.find((sp) => sp.key === key);
 
-  const state = { topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
+  const state = { single: null, saved: false, q: '', feedKey: '|false', feedReady: false, topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
   const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite'];
   const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite'];
   // Add-on scripts (forum-social.js, …) register here to react to page refreshes and view changes.
-  const hooks = { refresh: [], view: [] };
+  const hooks = { refresh: [], view: [], post: [], feed: [] };
   function showView() {
-    let view = (location.hash || '#feed').slice(1).split('/')[0];
+    const parts = (location.hash || '#feed').slice(1).split('/');
+    let view = parts[0];
+    let single = null; let saved = false;
+    if (view === 'post' && /^[0-9a-f-]{36}$/.test(parts[1] || '')) { single = parts[1]; view = 'feed'; }
+    if (view === 'saved') { saved = Boolean(state.me); view = 'feed'; }
     if (!views.includes(view)) view = 'feed';
     if (!state.me && memberViews.includes(view)) view = 'feed';
     if (!state.profile && view === 'alerts') view = 'feed';
@@ -74,18 +94,25 @@
     const landing = !state.session && view !== 'rules';
     document.body.classList.toggle('fm-guest', landing);
     $('[data-fm-landing]').hidden = !landing;
-    $('[data-fm-topics]').hidden = !state.me || view !== 'feed';
+    const plainFeed = view === 'feed' && !single && !saved;
+    $('[data-fm-topics]').hidden = !state.me || !plainFeed;
+    $('[data-fm-qform]').hidden = !state.me || !plainFeed;
     // Messages, events and adverts use the full page width (side panels hidden), like the Gelllez Forum.
     document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite'].includes(view));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     $('[data-fm-reco]').hidden = view !== 'feed';
     // The post box and feed filter belong to the Home feed only, so a new post is always seen where it lands.
-    $('[data-fm-composer]').hidden = !state.me || view !== 'feed';
-    $('[data-fm-filter]').hidden = !state.me || view !== 'feed';
+    $('[data-fm-composer]').hidden = !state.me || !plainFeed;
+    $('[data-fm-filter]').hidden = !state.me || !plainFeed;
     if (view === 'people') loadPeople();
     if (view === 'me') fillMeForm();
     if (view === 'idchecks') loadIdChecks();
     hooks.view.forEach((fn) => fn(view));
+    const key = `${single || ''}|${saved}`;
+    if (key !== state.feedKey) {
+      state.feedKey = key; state.single = single; state.saved = saved;
+      if (state.feedReady) { loadFeed(true); window.scrollTo(0, 0); }
+    }
   }
   window.addEventListener('hashchange', () => { setMeMenu(false); showView(); });
 
@@ -529,26 +556,54 @@
     loadFeed(true);
   }));
   $('[data-fm-more]').addEventListener('click', () => loadFeed(false));
+  function setSearch(q) {
+    state.q = String(q || '').trim().slice(0, 60);
+    $('[data-fm-qform]').q.value = state.q;
+    if ((location.hash || '#feed') !== '#feed') location.hash = '#feed';
+    loadFeed(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  $('[data-fm-qform]').addEventListener('submit', (e) => { e.preventDefault(); setSearch(e.currentTarget.q.value); });
 
   async function loadFeed(reset) {
     const feed = $('[data-fm-feed]');
     if (!state.me && !state.isStaff) { feed.replaceChildren(); $('[data-fm-more]').hidden = true; return; }
     if (reset) { state.feedOffset = 0; feed.replaceChildren(el('p', { class: 'fm-card fm-empty', text: 'Loading posts…' })); }
     let query = db.from('forum_posts')
-      .select('id,kind,topic,body,image_url,location,created_at,is_hidden,author_id,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
+      .select('id,kind,topic,body,image_url,location,created_at,edited_at,is_pinned,is_hidden,author_id,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
+      .order('is_pinned', { ascending: false })
       .order('created_at', { ascending: false })
       .range(state.feedOffset, state.feedOffset + PAGE_SIZE - 1);
-    if (state.scope === 'network') query = query.in('author_id', [state.me.user_id, ...state.following]);
-    if (state.topic) query = query.eq('topic', state.topic);
+    let banner = null;
+    if (state.single) {
+      query = query.eq('id', state.single);
+      banner = el('a', { class: 'fm-feed-banner', href: '#feed', text: '← Back to all posts' });
+    } else if (state.saved) {
+      const { data: saves } = await db.from('forum_saves').select('post_id').eq('user_id', state.me.user_id).order('created_at', { ascending: false }).limit(200);
+      query = query.in('id', (saves || []).map((x) => x.post_id).concat('00000000-0000-0000-0000-000000000000'));
+      banner = el('div', { class: 'fm-feed-banner' }, [el('strong', { text: '🔖 Saved posts' }), el('a', { class: 'fm-text-btn', href: '#feed', text: 'Back to feed' })]);
+    } else {
+      if (state.scope === 'network') query = query.in('author_id', [state.me.user_id, ...state.following]);
+      if (state.topic) query = query.eq('topic', state.topic);
+      if (state.q) {
+        query = query.ilike('body', `%${state.q.replace(/[\\%_]/g, (c) => `\\${c}`)}%`);
+        banner = el('div', { class: 'fm-feed-banner' }, [el('span', { text: `Posts matching “${state.q}”` }), el('button', { class: 'fm-text-btn', type: 'button', text: 'Clear search', onclick: () => setSearch('') })]);
+      }
+    }
     const { data, error } = await query;
-    if (reset) feed.replaceChildren();
+    if (reset) feed.replaceChildren(...(banner ? [banner] : []));
     if (error) { feed.append(el('p', { class: 'fm-card fm-empty', text: 'Posts could not be loaded. Please refresh.' })); return; }
     if (reset && !data.length) {
-      feed.append(el('p', { class: 'fm-card fm-empty', text: state.scope === 'network' ? 'No posts from your network yet. Follow people under Network.' : 'No posts yet. Start the first conversation!' }));
+      const empty = state.single ? 'This post is no longer available.'
+        : state.saved ? 'You have not saved any posts yet. Tap Save on a post to keep it here.'
+        : state.q ? 'No posts match your search.'
+        : state.scope === 'network' ? 'No posts from your network yet. Follow people under Network.' : 'No posts yet. Start the first conversation!';
+      feed.append(el('p', { class: 'fm-card fm-empty', text: empty }));
     }
     data.forEach((post) => feed.append(renderPost(post)));
     state.feedOffset += data.length;
-    $('[data-fm-more]').hidden = data.length < PAGE_SIZE;
+    $('[data-fm-more]').hidden = data.length < PAGE_SIZE || Boolean(state.single);
+    hooks.feed.forEach((fn) => fn(data));
   }
 
   function renderPost(post) {
@@ -557,16 +612,30 @@
     const meta = el('div', {}, [
       el('strong', { text: author.display_name || 'Member' }),
       el('span', { text: author.headline || '' }),
-      el('span', { text: `${timeAgo(post.created_at)}${post.location ? ' · ' + post.location : ''}` })
+      el('span', { class: 'fm-post-when' }, [
+        el('a', { class: 'fm-post-link', href: `#post/${post.id}` }, [stamp(post.created_at)]),
+        post.edited_at ? el('span', { class: 'fm-edited', title: `Edited ${fullTime(post.edited_at)}`, text: ' · Edited' }) : null,
+        post.location ? el('span', { text: ` · 📍 ${post.location}` }) : null
+      ])
     ]);
-    const card = el('article', { class: `fm-card fm-post${post.kind === 'celebrate' ? ' is-celebrate' : ''}${post.is_hidden ? ' is-hidden' : ''}` }, [
+    const card = el('article', { class: `fm-card fm-post${post.kind === 'celebrate' ? ' is-celebrate' : ''}${post.is_hidden ? ' is-hidden' : ''}${post.is_pinned ? ' is-pinned' : ''}`, 'data-post-id': post.id }, [
       el('div', { class: 'fm-post-head' }, [avatar, meta])
     ]);
+    if (post.is_pinned) card.prepend(el('span', { class: 'fm-pinned', text: '📌 Pinned by WHSF' }));
     const sp = spaceOf(post.topic);
     if (sp) card.append(el('button', { class: 'fm-space-chip', type: 'button', text: `${sp.emoji} ${sp.name}`, onclick: () => setTopic(sp.key) }));
     if (post.kind === 'celebrate') card.append(el('span', { class: 'fm-post-tag', text: '🎉 Celebrating' }));
     if (post.is_hidden) card.append(el('span', { class: 'fm-post-tag', text: 'Hidden by a moderator' }));
-    card.append(el('p', { class: 'fm-post-body', text: post.body }));
+    const body = richText(post.body, 'fm-post-body');
+    card.append(body);
+    if (post.body.length > 420 || post.body.split('\n').length > 7) {
+      body.classList.add('is-clamped');
+      const more = el('button', { class: 'fm-text-btn fm-see-more', type: 'button', text: 'See more', onclick: () => {
+        const open = body.classList.toggle('is-clamped');
+        more.textContent = open ? 'See more' : 'See less';
+      } });
+      card.append(more);
+    }
     const img = safeImage(post.image_url);
     if (img) card.append(el('img', { class: 'fm-post-img', src: img, alt: 'Picture shared by ' + (author.display_name || 'a member'), loading: 'lazy' }));
 
@@ -591,7 +660,31 @@
       } }));
     }
     if (actions.childElementCount) card.append(actions);
+    hooks.post.forEach((fn) => fn(card, post));
     return card;
+  }
+
+  // Member text with clickable web links and #hashtags (built as DOM nodes, never as HTML).
+  function richText(text, cls) {
+    const p = el('p', { class: cls });
+    const re = /(https?:\/\/[^\s<>"']+|#[\p{L}\p{N}_]{2,40})/gu;
+    let last = 0;
+    for (const m of String(text).matchAll(re)) {
+      let token = m[0];
+      if (token.startsWith('http')) {
+        const trail = token.match(/[.,!?;:)\]]+$/);
+        if (trail) token = token.slice(0, -trail[0].length);
+      }
+      p.append(text.slice(last, m.index));
+      if (token.startsWith('#')) {
+        p.append(el('button', { class: 'fm-hashtag', type: 'button', text: token, onclick: () => setSearch(token) }));
+      } else {
+        p.append(el('a', { href: token, target: '_blank', rel: 'noopener noreferrer nofollow ugc', text: token.replace(/^https?:\/\//, '').slice(0, 60) + (token.length > 68 ? '…' : '') }));
+      }
+      last = m.index + token.length;
+    }
+    p.append(text.slice(last));
+    return p;
   }
 
   function confirmInline(card, question, onYes) {
@@ -763,10 +856,11 @@
     renderMeMenu();
     hooks.refresh.forEach((fn) => fn());
     showView();
+    state.feedReady = true;
     loadFeed(true);
   }
 
-  window.WHSFForum = { db, state, hooks, el, $, $$, fillAvatar, timeAgo, setStatus, refresh, SPACES };
+  window.WHSFForum = { db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => { if (['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED'].includes(event)) refresh(); });
