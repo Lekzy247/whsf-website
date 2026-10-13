@@ -696,6 +696,7 @@
         const { data, error } = await db.from('forum_events').insert({ ...row, host_id: state.me.user_id }).select('id').single();
         if (error) { button.disabled = false; return say(error.message); }
         eventId = data.id;
+        F.alertModerators?.('event', eventId);
       }
       const meeting = online ? v('meeting_link') || null : null;
       const { error: linkError } = await db.from('forum_event_private').upsert({ event_id: eventId, meeting_link: meeting });

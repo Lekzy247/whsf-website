@@ -422,7 +422,7 @@
     return el('article', { class: 'fm-idcheck' }, [
       el('h3', { text: check.forum_profiles?.display_name || 'Member' }),
       el('p', { class: 'fm-muted', text: `${METHODS[check.method] || 'Photo selfie'} · ${ID_TYPES[check.id_type] || check.id_type} · ${check.country} · code ${check.challenge_code} · submitted ${timeAgo(check.submitted_at)} ago` }),
-      isCall ? el('p', { class: 'fm-alert', text: 'Video call: wait until you have met this person on Google Meet, then tick the boxes and approve.' }) : null,
+      isCall ? el('p', { class: 'fm-alert', text: 'Video call: wait until you have met this person on the video call, then tick the boxes and approve.' }) : null,
       imgs, age, face, genuine,
       el('div', { class: 'fm-form' }, [el('label', {}, [document.createTextNode('Reason (shown to the member if rejected)'), reason])]),
       el('div', { class: 'fm-actions' }, [
@@ -876,7 +876,13 @@
     loadFeed(true);
   }
 
-  window.WHSFForum = { db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
+  // Tell WHSF moderators (Teams channel / email) about a new event or advert waiting for approval.
+  function alertModerators(kind, id) {
+    const token = state.session?.access_token;
+    if (token) fetch('/api/forum-review-alert', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ kind, id }) }).catch(() => {});
+  }
+
+  window.WHSFForum = { alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => { if (['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED'].includes(event)) refresh(); });

@@ -199,11 +199,12 @@
         imageUrl = `${IMAGE_PREFIX}${path}`;
       }
       const row = { headline: headline.value.trim(), body: body.value.trim(), link_url: link.value.trim(), cta: cta.value.trim() || 'Learn more', image_url: imageUrl };
-      const { error } = a
-        ? await db.from('forum_ads').update(row).eq('id', a.id)
-        : await db.from('forum_ads').insert({ ...row, owner_id: state.me.user_id });
+      const { data: saved, error } = a
+        ? await db.from('forum_ads').update(row).eq('id', a.id).select('id').single()
+        : await db.from('forum_ads').insert({ ...row, owner_id: state.me.user_id }).select('id').single();
       button.disabled = false;
       if (error) return say(error.message);
+      if (!a && saved?.id) F.alertModerators?.('advert', saved.id);
       location.hash = '#ads';
     });
     box.replaceChildren(back(), el('div', { class: 'fm-ad-editor' }, [
