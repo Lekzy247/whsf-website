@@ -234,6 +234,94 @@
     ]);
   }
 
+  // ---------------------------------------------------------------- tickets: ticket number + QR bound to the event
+  // The QR holds "WHSF-TICKET|<event id>|<ticket number>". Check-in is always confirmed by the database
+  // (forum_check_in), which only accepts a confirmed ticket for that exact event.
+  const ticketPayload = (eventId, code) => `WHSF-TICKET|${eventId}|${code}`;
+  function parseTicket(text) {
+    const raw = String(text || '').trim();
+    const m = raw.match(/^WHSF-TICKET\|([0-9a-f-]{36})\|(WHSF-[A-Z0-9]{8})$/i);
+    if (m) return { eventId: m[1].toLowerCase(), code: m[2].toUpperCase() };
+    const plain = raw.toUpperCase().match(/WHSF-[A-Z0-9]{8}/);
+    return plain ? { eventId: null, code: plain[0] } : null;
+  }
+  function saveTicket(e, ticket, qr) {
+    const W = 600; const H = 340;
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    g.fillStyle = '#ffffff'; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#7b2142'; g.fillRect(0, 0, W, 54);
+    g.fillStyle = '#ffffff'; g.font = '700 22px Inter, Arial, sans-serif'; g.fillText('WHSF Forum · Event ticket', 22, 35);
+    g.drawImage(qr, 22, 76, 200, 200);
+    g.fillStyle = '#2a0a17'; g.font = '700 20px Inter, Arial, sans-serif';
+    const words = e.title.split(' '); let line = ''; let y = 100;
+    words.forEach((w) => { if (g.measureText(`${line}${w} `).width > 340) { g.fillText(line, 240, y); line = ''; y += 26; } line += `${w} `; });
+    g.fillText(line, 240, y);
+    g.font = '400 15px Inter, Arial, sans-serif'; g.fillStyle = '#4b3a43';
+    g.fillText(shortWhen(e), 240, y + 32);
+    g.fillText(where(e).slice(0, 44), 240, y + 54);
+    g.fillStyle = '#7b2142'; g.font = '400 13px Inter, Arial, sans-serif'; g.fillText('TICKET NUMBER', 240, y + 92);
+    g.fillStyle = '#2a0a17'; g.font = '700 26px ui-monospace, Consolas, monospace'; g.fillText(ticket.code, 240, y + 122);
+    const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = `whsf-ticket-${ticket.code}.png`;
+    document.body.append(a); a.click(); a.remove();
+  }
+  // QR reading: the browser's BarcodeDetector when available, otherwise jsQR (loaded once, pinned + SRI).
+  let jsqrLoading = null;
+  const loadJsQR = () => jsqrLoading || (jsqrLoading = new Promise((resolve, reject) => {
+    if (window.jsQR) return resolve(window.jsQR);
+    const sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+    sc.integrity = 'sha384-b5Ya4Bq3qCyz39m2ISh+4DxjAIljdeFwK/BsXLuj9gugaNwAcj/ia15fxNZL9Nlx';
+    sc.crossOrigin = 'anonymous';
+    sc.onload = () => (window.jsQR ? resolve(window.jsQR) : reject(new Error('QR reader unavailable')));
+    sc.onerror = () => reject(new Error('QR reader unavailable'));
+    document.head.append(sc);
+  }));
+  function qrScanner(onCode) {
+    const video = el('video', { class: 'fm-scan-video', autoplay: '', playsinline: '', muted: '' });
+    video.muted = true;
+    const note = el('p', { class: 'fm-muted', text: 'Point the camera at the guest\'s QR code.' });
+    const box = el('div', { class: 'fm-scan', hidden: '' }, [video, note]);
+    let stream = null; let timer = null; let busy = false; let detector = null; let jsqr = null;
+    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const stop = () => { clearInterval(timer); timer = null; stream?.getTracks().forEach((t) => t.stop()); stream = null; video.srcObject = null; box.hidden = true; };
+    const tick = async () => {
+      if (busy || !stream || !video.videoWidth) return;
+      busy = true;
+      try {
+        let text = null;
+        if (detector) {
+          const found = await detector.detect(video);
+          text = found[0]?.rawValue || null;
+        } else if (jsqr) {
+          canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+          ctx.drawImage(video, 0, 0);
+          const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          text = jsqr(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' })?.data || null;
+        }
+        if (text) { await onCode(text); await new Promise((r) => setTimeout(r, 2200)); }
+      } catch { /* keep scanning */ }
+      busy = false;
+    };
+    const start = async () => {
+      box.hidden = false; note.textContent = 'Opening the camera…';
+      try {
+        if ('BarcodeDetector' in window && (await window.BarcodeDetector.getSupportedFormats?.())?.includes('qr_code')) detector = new window.BarcodeDetector({ formats: ['qr_code'] });
+        else jsqr = await loadJsQR();
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+      } catch (err) {
+        stop(); box.hidden = false;
+        note.textContent = err?.name === 'NotAllowedError' ? 'Camera access was blocked. Allow the camera for this site, or type the ticket number.' : 'The camera or QR reader is not available on this device. Type the ticket number instead.';
+        return;
+      }
+      video.srcObject = stream;
+      note.textContent = 'Point the camera at the guest\'s QR code. Keep scanning; each result shows below.';
+      timer = setInterval(tick, 350);
+    };
+    window.addEventListener('hashchange', stop, { once: true });
+    return { box, start, stop, get running() { return Boolean(stream); } };
+  }
+
   // ---------------------------------------------------------------- registration form (participant details)
   function registrationForm(e, onDone) {
     const status = el('p', { class: 'fm-status', role: 'status' });
@@ -308,8 +396,9 @@
         qr,
         el('div', {}, [
           el('strong', { text: ticket.status === 'checked_in' ? 'You are checked in' : 'Your place is confirmed' }),
-          el('p', { text: `Ticket code: ${ticket.code}` }),
-          el('small', { class: 'fm-muted', text: 'Show this code or QR code at the entrance.' }),
+          el('p', { class: 'fm-ticket-no' }, [el('small', { text: 'Ticket number' }), el('b', { text: ticket.code })]),
+          el('small', { class: 'fm-muted', text: 'Show this QR code or ticket number at the entrance. The organiser scans it to check you in.' }),
+          el('button', { class: 'fm-text-btn', type: 'button', text: 'Save ticket image', onclick: () => saveTicket(e, ticket, qr) }),
           safeUrl(priv?.meeting_link) ? el('a', { class: 'hp-btn hp-btn-primary', href: priv.meeting_link, target: '_blank', rel: 'noopener noreferrer', text: 'Join online' }) : null,
           ticket.status === 'registered' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel my registration', onclick: () => confirmBox(action, 'Cancel your registration?', async () => {
             const { error } = await db.rpc('forum_ticket_cancel', { p_ticket: ticket.id });
@@ -317,7 +406,7 @@
           }) }) : null
         ])
       ]));
-      if (window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticket.code, { width: 140, margin: 1, color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
+      if (window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticketPayload(e.id, ticket.code), { width: 160, margin: 1, errorCorrectionLevel: 'M', color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
     } else if (ticket && ['pending', 'waitlisted', 'declined'].includes(ticket.status)) {
       action.append(el('div', { class: `fm-ev-state is-${ticket.status}` }, [
         el('strong', { text: TICKET_LABEL[ticket.status] }),
@@ -468,21 +557,52 @@
       .eq('event_id', e.id).neq('status', 'cancelled').order('created_at');
     const names = await hostNames((tickets || []).map((t) => t.holder_id));
     const rows = tickets || [];
-    const result = el('p', { class: 'fm-status', role: 'status' });
-    const code = el('input', { type: 'text', placeholder: 'Ticket code, e.g. WHSF-1A2B3C4D', maxlength: '20', autocomplete: 'off', 'aria-label': 'Ticket code' });
+    const result = el('div', { class: 'fm-checkin-result', role: 'status', 'aria-live': 'assertive' });
+    const code = el('input', { type: 'text', placeholder: 'Ticket number, e.g. WHSF-1A2B3C4D', maxlength: '80', autocomplete: 'off', autocapitalize: 'characters', 'aria-label': 'Ticket number' });
     const tally = (s) => rows.filter((t) => s.includes(t.status)).length;
-    wrap.append(
+    let changed = false;
+    // Every check-in is confirmed by the event database (forum_check_in): only a confirmed ticket for this event passes.
+    const checkIn = async (text, via) => {
+      const t = parseTicket(text);
+      const show = (ok, title, detail) => result.replaceChildren(el('div', { class: `fm-checkin-msg ${ok ? 'is-ok' : 'is-bad'}` }, [
+        el('strong', { text: `${ok ? '✓' : '✕'} ${title}` }), detail ? el('small', { text: detail }) : null
+      ]));
+      if (!t) return show(false, 'Not a WHSF ticket', 'Scan the QR on the guest\'s WHSF ticket or type a ticket number like WHSF-1A2B3C4D.');
+      if (t.eventId && t.eventId !== e.id) return show(false, 'Ticket for a different event', `${t.code} is not valid for this event.`);
+      const { data, error } = await db.rpc('forum_check_in', { p_event: e.id, p_code: t.code });
+      if (error) return show(false, 'Not checked in', `${t.code}: ${error.message}`);
+      const already = /already checked in/i.test(data || '');
+      show(true, already ? 'Already checked in' : 'Checked in', `${String(data).replace(/ \(already checked in\)$/, '')} · ${t.code} · ${via === 'qr' ? 'QR code' : 'ticket number'} · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+      if (!already) changed = true;
+    };
+    // A QR held in front of the camera is read once; the same ticket is ignored for 10 seconds.
+    let lastScan = { text: '', at: 0 };
+    const scanner = qrScanner((text) => {
+      if (text === lastScan.text && Date.now() - lastScan.at < 10000) return Promise.resolve();
+      lastScan = { text, at: Date.now() };
+      return checkIn(text, 'qr');
+    });
+    const scanBtn = el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: '📷 Scan QR code', onclick: () => {
+      if (scanner.running) { scanner.stop(); scanBtn.textContent = '📷 Scan QR code'; if (changed) renderDetail(e.id); return; }
+      scanner.start(); scanBtn.textContent = 'Stop scanning';
+    } });
+    wrap.append(...[
       el('p', { class: 'fm-muted', text: `${tally(['registered', 'checked_in'])} confirmed · ${tally(['checked_in'])} checked in · ${tally(['pending'])} to approve · ${tally(['waitlisted'])} on waitlist` }),
-      el('form', { class: 'fm-checkin', onsubmit: async (ev) => {
-        ev.preventDefault();
-        if (!code.value.trim()) return;
-        const { data, error } = await db.rpc('forum_check_in', { p_event: e.id, p_code: code.value });
-        result.textContent = error ? error.message : `Checked in: ${data}`;
-        if (!error) { code.value = ''; setTimeout(() => renderDetail(e.id), 900); }
-      } }, [code, el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Check in' })]),
+      el('p', { class: 'fm-small fm-muted', text: 'Check guests in by scanning their ticket QR code, by typing their ticket number, or both.' }),
+      el('div', { class: 'fm-checkin-tools' }, [
+        scanBtn,
+        el('form', { class: 'fm-checkin', onsubmit: async (ev) => {
+          ev.preventDefault();
+          if (!code.value.trim()) return;
+          await checkIn(code.value, 'number');
+          code.value = '';
+          if (changed) setTimeout(() => renderDetail(e.id), 1500);
+        } }, [code, el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Check in' })])
+      ]),
+      scanner.box,
       result,
       rows.length ? el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Download list (CSV)', onclick: () => exportCsv(e, rows, names) }) : null
-    );
+    ].filter(Boolean));
     const list = el('ul', { class: 'fm-ev-guests' });
     rows.forEach((t) => {
       const decide = (approve) => async () => {
