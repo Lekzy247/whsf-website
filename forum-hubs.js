@@ -45,7 +45,8 @@
         el('span', { class: 'fm-hub-icon' }, [icon(h.icon)]),
         el('strong', { text: h.name }),
         el('small', { text: h.about })
-      ])))
+      ]))),
+      el('a', { class: 'fm-text-btn fm-hubs-more', href: '#spaces', text: 'Browse all spaces →' })
     ]);
   }
 
@@ -154,7 +155,7 @@
   async function render() {
     const slot = $('[data-fm-hubs-slot]');
     if (!slot) return;
-    const plainFeed = (location.hash || '#feed').replace('#', '') === 'feed' || !location.hash;
+    const plainFeed = ((location.hash || '#feed').replace('#', '') === 'feed' || !location.hash) && !state.topic;
     if (!state.me || !plainFeed || state.q) { slot.replaceChildren(); return; }
     await loadMine();
     slot.replaceChildren(...[getStartedCard(), hubsCard()].filter(Boolean));

@@ -55,7 +55,7 @@
   const ROLES = ['Opening remarks', 'Keynote', 'Moderator', 'Speaker', 'Panellist', 'Discussant', 'Closing remarks'];
   const TICKET_LABEL = { registered: 'Confirmed', checked_in: 'Checked in', pending: 'Waiting for the organiser', waitlisted: 'On the waitlist', declined: 'Not accepted', cancelled: 'Cancelled' };
   let catFilter = null;
-  const COLS = 'id,host_id,category,title,theme,parent_event,about,format,starts_at,ends_at,time_zone,venue_name,address,city,country,livestream_url,capacity,cover_url,status,review_note,organizer_name,co_organizers,sdgs,languages,interpretation,accessibility,registration_deadline,approval_required,contact_email,concept_note_url,report_url,recording_url,hashtag,agenda,speakers';
+  const COLS = 'id,host_id,space,category,title,theme,parent_event,about,format,starts_at,ends_at,time_zone,venue_name,address,city,country,livestream_url,capacity,cover_url,status,review_note,organizer_name,co_organizers,sdgs,languages,interpretation,accessibility,registration_deadline,approval_required,contact_email,concept_note_url,report_url,recording_url,hashtag,agenda,speakers';
   const myZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
   const root = () => $('[data-fm-events]');
 
@@ -861,6 +861,8 @@
     const f = el('form', { class: 'fm-form fm-ev-form', novalidate: '' });
     const fmtSel = el('select', { name: 'format' }, Object.entries(FORMATS).map(([v, t]) => el('option', { value: v, text: t })));
     const catSel = el('select', { name: 'category' }, Object.entries(CATS).map(([v, t]) => el('option', { value: v, text: t })));
+    const spaceSel = el('select', { name: 'space' }, [el('option', { value: '', text: 'No particular space' }), ...F.SPACES.map((s) => el('option', { value: s.key, text: `${s.emoji} ${s.name}` }))]);
+    spaceSel.value = e?.space || state.topic || '';
     const zoneSel = el('select', { name: 'time_zone' }, zones().map((z) => el('option', { value: z, text: z.replace(/_/g, ' ') })));
     zoneSel.value = e?.time_zone || myZone;
     const about = el('textarea', { name: 'about', rows: '7', maxlength: '4000', placeholder: 'Background, objectives, who should attend and expected outcomes.' });
@@ -914,6 +916,7 @@
     f.append(
       fieldset('1. The event', null,
         field('Type of event', catSel),
+        field('Forum space', spaceSel, '(optional: the event also shows on that space’s page)'),
         field('Event title', input('title', { maxlength: '120', required: '', placeholder: 'e.g. Youth, AI and Information Integrity' })),
         field('Theme or subtitle', input('theme', { maxlength: '200', placeholder: 'One line that sums up the event' }), '(optional)'),
         field('On the margins of', input('parent_event', { maxlength: '160', placeholder: 'e.g. the High-level Political Forum 2027, UNGA 82, CSW71' }), '(optional, for side events)'),
@@ -1051,7 +1054,7 @@
       const orNull = (k) => v(k) || null;
       const row = {
         title: v('title'), theme: orNull('theme'), parent_event: orNull('parent_event'), about: about.value.trim(),
-        format: fmtSel.value, category: catSel.value,
+        format: fmtSel.value, category: catSel.value, space: spaceSel.value || null,
         starts_at: starts.toISOString(), ends_at: ends.toISOString(), time_zone: zone,
         venue_name: place ? orNull('venue_name') : null, address: place ? orNull('address') : null,
         city: place ? orNull('city') : null, country: place ? orNull('country') : null,
