@@ -551,6 +551,7 @@
           el('span', { class: 'fm-ticket-name', text: state.me.display_name || '' }),
           el('p', { class: 'fm-ticket-no' }, [el('small', { text: 'Ticket number' }), el('b', { text: ticket.code })]),
           el('small', { class: 'fm-muted', text: 'Show this QR code or ticket number at the entrance. The organiser scans it to check you in.' }),
+          el('a', { class: 'hp-btn hp-btn-outline', href: `#events/${e.id}/confirmation`, text: 'View confirmation' }),
           el('button', { class: 'fm-text-btn', type: 'button', text: 'Save ticket image', onclick: () => saveTicket(e, ticket, qr) }),
           changePhoto,
           safeUrl(priv?.meeting_link) ? el('a', { class: 'hp-btn hp-btn-primary', href: priv.meeting_link, target: '_blank', rel: 'noopener noreferrer', text: 'Join online' }) : null,
@@ -569,6 +570,7 @@
           waitlisted: 'The event is full. If a place opens up you will be moved in automatically and alerted.',
           declined: 'The organiser could not offer you a place this time.'
         }[ticket.status] }),
+        ticket.status !== 'declined' ? el('a', { class: 'fm-text-btn', href: `#events/${e.id}/confirmation`, text: 'View your registration' }) : null,
         ticket.status !== 'declined' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Withdraw', onclick: () => confirmBox(action, 'Withdraw your request?', async () => {
           const { error } = await db.rpc('forum_ticket_cancel', { p_ticket: ticket.id });
           if (error) status.textContent = error.message; else renderDetail(e.id);
@@ -582,7 +584,7 @@
       const full = e.capacity && c.going >= e.capacity && !e.approval_required;
       action.append(el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: e.approval_required ? 'Request to attend' : full ? 'Join the waitlist' : 'Register (free)', onclick: (ev) => {
         ev.currentTarget.hidden = true;
-        action.append(registrationForm(e, () => renderDetail(e.id)));
+        action.append(registrationForm(e, () => { location.hash = `#events/${e.id}/confirmation`; }));
       } }));
       if (e.registration_deadline) action.append(el('small', { class: 'fm-muted', text: `Registration closes ${fmt(e.registration_deadline, e.time_zone, { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}` }));
     }
@@ -1066,6 +1068,117 @@
     );
   }
 
+  // ---------------------------------------------------------------- registration confirmation: #events/<id>/confirmation
+  // A formal, printable record of the registration: participant (with photo), ticket number + QR and the
+  // full event details. "Print or save as PDF" prints only this page.
+  async function renderConfirmation(id) {
+    const box = root();
+    box.replaceChildren(el('p', { class: 'fm-muted', text: 'Loading your confirmation…' }));
+    const [{ data: e }, { data: t }] = await Promise.all([
+      db.from('forum_events').select(COLS).eq('id', id).maybeSingle(),
+      db.from('forum_tickets').select('id,code,status,created_at,organization,job_title,country,participant_type,access_needs,photo_path')
+        .eq('event_id', id).eq('holder_id', state.me.user_id).neq('status', 'cancelled').maybeSingle()
+    ]);
+    if (!e || !t) { box.replaceChildren(back(), el('p', { text: 'We could not find a registration for this event on your account.' })); return; }
+    const hosts = await hostNames([e.host_id]);
+    const host = hosts.get(e.host_id);
+    const confirmed = ['registered', 'checked_in'].includes(t.status);
+    const head = {
+      registered: ['✓', 'Registration confirmed', 'Your place is confirmed. Keep this page: it is your proof of registration.'],
+      checked_in: ['✓', 'You are checked in', 'Your attendance has been recorded by the organiser.'],
+      pending: ['⏳', 'Registration received', 'The organiser reviews every request. You will get a Forum alert when it is decided; your ticket and QR code appear here once approved.'],
+      waitlisted: ['⏳', 'You are on the waitlist', 'The event is full. If a place opens up you will be moved in automatically and alerted; your ticket and QR code then appear here.'],
+      declined: ['✕', 'Registration not accepted', 'The organiser could not offer you a place this time.']
+    }[t.status] || ['', TICKET_LABEL[t.status] || t.status, ''];
+    const row = (label, value) => (value ? [el('dt', { text: label }), el('dd', { text: value })] : []);
+    const dl = (pairs) => el('dl', { class: 'fm-cf-dl' }, pairs.flat());
+    const sec = (title, ...kids) => el('section', { class: 'fm-cf-sec' }, [el('h3', { text: title }), ...kids]);
+
+    const face = el('div', { class: 'fm-cf-photo' }, [el('span', { class: 'fm-photo-empty', text: '🙂' })]);
+    if (t.photo_path) photoUrl(t.photo_path).then((u) => { if (u) face.replaceChildren(el('img', { src: u, alt: `Photo of ${state.me.display_name || 'the participant'}` })); });
+    const qr = confirmed ? el('canvas', { width: '180', height: '180', 'aria-label': `QR code for ticket ${t.code}` }) : null;
+    const registeredOn = fmt(t.created_at, myZone, { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+    const place = e.format === 'online' ? 'Online' : [e.venue_name, e.address, e.city, e.country].filter(Boolean).join(', ');
+    const steps = [
+      confirmed && e.format !== 'online' ? 'Bring this confirmation or your ticket (QR code or ticket number) on your phone or printed.' : null,
+      confirmed && e.format !== 'online' ? 'Bring a photo ID. The organiser compares your face with the photo on this registration.' : null,
+      confirmed && e.format !== 'online' ? 'Arrive 20–30 minutes early to allow time for check-in and security.' : null,
+      confirmed && e.format !== 'in_person' ? 'To join online, open the event page and press "Join online". The organiser adds the link there.' : null,
+      'Add the event to your calendar so you do not miss it.',
+      confirmed ? 'If you can no longer attend, cancel your registration on the event page so your place can go to someone else.' : null,
+      e.contact_email ? `Questions about the event? Contact the organiser at ${e.contact_email}.` : null
+    ].filter(Boolean);
+
+    box.replaceChildren(
+      el('div', { class: 'fm-cf-bar' }, [
+        el('a', { class: 'fm-text-btn', href: `#events/${e.id}`, text: '← Event page' }),
+        el('div', { class: 'fm-cf-bar-actions' }, [
+          el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: '🖨 Print or save as PDF', onclick: () => window.print() }),
+          confirmed ? el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Save ticket image', onclick: () => saveTicket(e, t, qr) }) : null
+        ])
+      ]),
+      el('article', { class: `fm-cf is-${t.status}`, 'aria-labelledby': 'fm-cf-title' }, [
+        el('header', { class: 'fm-cf-head' }, [
+          el('div', { class: 'fm-cf-brand' }, [el('strong', { text: 'World Humanitarian Support Foundation' }), el('span', { text: 'WHSF Forum · Event registration' })]),
+          el('div', { class: 'fm-cf-status' }, [
+            el('span', { class: 'fm-cf-mark', 'aria-hidden': 'true', text: head[0] }),
+            el('div', {}, [el('h2', { id: 'fm-cf-title', text: head[1] }), el('p', { text: head[2] })])
+          ]),
+          el('div', { class: 'fm-cf-ref' }, [
+            el('span', {}, [el('small', { text: 'Ticket number' }), el('b', { text: confirmed ? t.code : '—' })]),
+            el('span', {}, [el('small', { text: 'Status' }), el('b', { text: TICKET_LABEL[t.status] || t.status })]),
+            el('span', {}, [el('small', { text: 'Registered on' }), el('b', { text: registeredOn })])
+          ])
+        ]),
+        el('div', { class: 'fm-cf-grid' }, [
+          sec('Participant',
+            el('div', { class: 'fm-cf-person' }, [
+              face,
+              dl([
+                row('Name', state.me.display_name || ''),
+                row('Organisation', t.organization),
+                row('Job title', t.job_title),
+                row('Country', t.country),
+                row('Participating as', PTYPES[t.participant_type] || t.participant_type),
+                row('Accessibility needs', t.access_needs)
+              ])
+            ])),
+          confirmed ? sec('Admission',
+            el('div', { class: 'fm-cf-ticket' }, [
+              qr,
+              el('p', { class: 'fm-ticket-no' }, [el('small', { text: 'Ticket number' }), el('b', { text: t.code })]),
+              el('small', { class: 'fm-muted', text: 'Show this QR code or ticket number at check-in. It is valid only for this event and only for you.' })
+            ])) : null
+        ]),
+        sec('Event details',
+          el('p', { class: 'fm-cf-event-title', text: e.title }),
+          e.theme ? el('p', { class: 'fm-cf-theme', text: e.theme }) : null,
+          dl([
+            row('Event type', (CATS[e.category] || '').replace(/^\S+\s/, '')),
+            row('On the margins of', e.parent_event),
+            row('Date and time', when(e)),
+            row('Your local time', localWhen(e).replace(/^Your time: /, '')),
+            row('Format', FORMATS[e.format]),
+            row(e.format === 'online' ? 'Location' : 'Venue', place),
+            row('Organised by', organiser(e, host)),
+            row('In partnership with', e.co_organizers?.length ? e.co_organizers.join(', ') : ''),
+            row('Languages', (e.languages || []).join(', ')),
+            row('Interpretation', e.interpretation),
+            row('Organiser contact', e.contact_email),
+            row('Event page', `${location.origin}${location.pathname}#events/${e.id}`)
+          ])),
+        t.status !== 'declined' ? sec('Before the event', el('ol', { class: 'fm-cf-steps' }, steps.map((x) => el('li', { text: x })))) : null,
+        t.status !== 'declined' ? el('div', { class: 'fm-cf-noprint' }, [calendarLinks(e)]) : null,
+        el('footer', { class: 'fm-cf-foot' }, [
+          el('p', { text: 'Registration through the WHSF Forum is always free. WHSF and event organisers never ask for payment to attend. Report anything suspicious to info@worldhsfoundation.org.' }),
+          el('p', { text: `Your name, photo and registration details are shared only with the organiser and WHSF to manage this event. Generated ${fmt(new Date().toISOString(), myZone, { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}.` })
+        ])
+      ])
+    );
+    if (qr && window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticketPayload(e.id, t.code), { width: 180, margin: 1, errorCorrectionLevel: 'M', color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
+    window.scrollTo(0, 0); document.scrollingElement?.scrollTo?.(0, 0); document.body.scrollTo?.(0, 0);
+  }
+
   // ---------------------------------------------------------------- routing
   function route() {
     if (!state.me) return;
@@ -1073,6 +1186,7 @@
     if (parts[0] !== 'events') return;
     if (parts[1] === 'new') renderForm(null);
     else if (parts[1] === 'edit' && parts[2]) renderForm(parts[2]);
+    else if (parts[1] && /^[0-9a-f-]{36}$/.test(parts[1]) && parts[2] === 'confirmation') renderConfirmation(parts[1]);
     else if (parts[1] && /^[0-9a-f-]{36}$/.test(parts[1])) renderDetail(parts[1]);
     else renderList();
   }
