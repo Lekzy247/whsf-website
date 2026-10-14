@@ -18,11 +18,30 @@
     webinar: '💻 Webinar', workshop: '🛠️ Workshop', exchange: '🌍 Exchange programme', career_fair: '💼 Career fair',
     networking: '🤝 Networking', meetup: '☕ Meetup'
   };
-  const PTYPES = {
-    member_state: 'Government / Member State delegation', un_system: 'United Nations system', igo: 'Intergovernmental organisation',
-    ngo: 'NGO / civil society', academia: 'Academia / research', private_sector: 'Private sector', media: 'Media',
-    individual: 'Individual', other: 'Other'
-  };
+  // "Participating as" groups (must match forum_tickets.participant_type in the database), shown in sections.
+  const PTYPE_GROUPS = [
+    ['Government and international', [
+      ['member_state', 'Government / Member State delegation'], ['local_government', 'Local or regional government'],
+      ['parliament', 'Parliamentarian'], ['diplomatic', 'Embassy / diplomatic mission'],
+      ['un_system', 'United Nations system'], ['igo', 'Intergovernmental organisation']]],
+    ['Civil society', [
+      ['ngo', 'NGO / civil society (national or local)'], ['international_ngo', 'International NGO'],
+      ['cbo', 'Community-based organisation'], ['faith_based', 'Faith-based organisation'],
+      ['womens_org', "Women's organisation"], ['youth_org', 'Youth / youth organisation']]],
+    ['Education and research', [
+      ['academia', 'Academia / research institution'], ['student', 'Student'], ['educator', 'Teacher / educator']]],
+    ['Business and funding', [
+      ['private_sector', 'Private sector / business'], ['startup', 'Entrepreneur / start-up'],
+      ['philanthropy', 'Foundation / donor / philanthropy'], ['trade_union', 'Workers / trade union']]],
+    ['Communities', [
+      ['farmers', 'Farmers / agriculture'], ['indigenous', 'Indigenous peoples'],
+      ['disability', 'Persons with disabilities / disability organisation'], ['older_persons', 'Older persons'],
+      ['migrants', 'Migrants / refugees']]],
+    ['Other', [
+      ['media', 'Media / journalist'], ['speaker', 'Speaker / panellist'], ['volunteer', 'Volunteer'],
+      ['individual', 'Individual'], ['other', 'Other']]]
+  ];
+  const PTYPES = Object.fromEntries(PTYPE_GROUPS.flatMap(([, items]) => items));
   const ACCESS = {
     wheelchair: 'Wheelchair-accessible venue', captions: 'Live captions', sign_language: 'Sign language interpretation',
     accessible_documents: 'Accessible documents', hearing_loop: 'Hearing loop', quiet_room: 'Quiet room'
@@ -325,7 +344,10 @@
   // ---------------------------------------------------------------- registration form (participant details)
   function registrationForm(e, onDone) {
     const status = el('p', { class: 'fm-status', role: 'status' });
-    const typeSel = el('select', { name: 'participant_type', required: '' }, [el('option', { value: '', text: 'Choose…' }), ...Object.entries(PTYPES).map(([v, t]) => el('option', { value: v, text: t }))]);
+    const typeSel = el('select', { name: 'participant_type', required: '' }, [
+      el('option', { value: '', text: 'Choose…' }),
+      ...PTYPE_GROUPS.map(([label, items]) => el('optgroup', { label }, items.map(([v, t]) => el('option', { value: v, text: t }))))
+    ]);
     const f = el('form', { class: 'fm-form fm-ev-reg', novalidate: '' }, [
       el('h3', { text: e.approval_required ? 'Request to attend' : 'Register' }),
       el('div', { class: 'fm-two' }, [
