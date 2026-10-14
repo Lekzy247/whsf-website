@@ -20,21 +20,22 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=41">
+  <link rel="stylesheet" href="forum.css?v=42">
   <link rel="stylesheet" href="verify-kit.css?v=1">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=25" defer></script>
+  <script src="forum.js?v=26" defer></script>
   <script src="forum-security.js?v=1" defer></script>
   <script src="forum-tags.js?v=1" defer></script>
   <script src="forum-hubs.js?v=2" defer></script>
   <script src="forum-compose.js?v=1" defer></script>
   <script src="forum-spaces.js?v=1" defer></script>
   <script src="forum-admin.js?v=1" defer></script>
+  <script src="forum-network.js?v=1" defer></script>
   <script src="forum-engage.js?v=7" defer></script>
-  <script src="forum-social.js?v=4" defer></script>
+  <script src="forum-social.js?v=5" defer></script>
   <script src="verify-wizard.js?v=1" defer></script>
   <script src="selfie-camera.js?v=1" defer></script>
   <script src="forum-events.js?v=14" defer></script>
@@ -482,6 +483,11 @@
           <p class="fm-muted">Follow members to stay in touch. People who follow each other are connections. Press Message to start a private conversation.</p>
           <p class="fm-status" role="status" data-fm-people-status></p>
           <div class="fm-people" data-fm-people></div>
+        </section>
+
+        <!-- Member profile -->
+        <section class="fm-card fm-profile-view" data-fm-view="profile" hidden>
+          <div data-fm-profile-page></div>
         </section>
 
         <!-- Me -->

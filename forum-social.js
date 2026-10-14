@@ -167,7 +167,7 @@
   };
 
   // ---------------------------------------------------------------- alerts
-  const KIND_ICON = { follow: '👋', message: '💬', id_approved: '✅', id_rejected: '⚠️', event_registration: '🎟️', event_update: '📅', advert_approved: '📣', advert_rejected: '📣', invite_joined: '🎉', reaction: '❤️', comment: '💬', reply: '↩️', security: '🛡️', mention: '🏷️' };
+  const KIND_ICON = { follow: '👋', message: '💬', id_approved: '✅', id_rejected: '⚠️', event_registration: '🎟️', event_update: '📅', advert_approved: '📣', advert_rejected: '📣', invite_joined: '🎉', reaction: '❤️', comment: '💬', reply: '↩️', security: '🛡️', mention: '🏷️', connect_request: '🤝', connect_accepted: '✅', collab_invite: '🤝', collab_accepted: '🎉' };
   async function loadAlerts() {
     const list = $('[data-fm-alerts]');
     list.replaceChildren(el('p', { class: 'fm-muted', text: 'Loading alerts…' }));

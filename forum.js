@@ -76,8 +76,8 @@
   const state = { single: null, saved: false, q: '', feedKey: '|false', feedReady: false, topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
-  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding', 'spaces', 'admin'];
-  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite', 'funding', 'spaces'];
+  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding', 'spaces', 'admin', 'profile'];
+  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite', 'funding', 'spaces', 'profile'];
   // Add-on scripts (forum-social.js, …) register here to react to page refreshes and view changes.
   const hooks = { refresh: [], view: [], post: [], feed: [] };
   function showView() {
@@ -86,6 +86,8 @@
     let single = null; let saved = false;
     if (view === 'post' && /^[0-9a-f-]{36}$/.test(parts[1] || '')) { single = parts[1]; view = 'feed'; }
     if (view === 'saved') { saved = Boolean(state.me); view = 'feed'; }
+    if (view === 'network') view = 'people';
+    if (view === 'profile' && !/^[0-9a-f-]{36}$/.test(parts[1] || '')) view = 'me';
     // Space pages: #space/<key> shows that space's page and feed; #feed shows everything.
     let topic = null;
     if (view === 'space') { topic = SPACES.some((s) => s.key === parts[1]) ? parts[1] : null; view = 'feed'; }
@@ -856,7 +858,7 @@
     const author = post.author || {};
     const avatar = el('div', { class: 'fm-avatar', 'aria-hidden': 'true' }); fillAvatar(avatar, author);
     const meta = el('div', {}, [
-      el('strong', { text: author.display_name || 'Member' }),
+      el('a', { class: 'fm-author-link', href: `#profile/${post.author_id}` }, [el('strong', { text: author.display_name || 'Member' })]),
       el('span', { text: author.headline || '' }),
       el('span', { class: 'fm-post-when' }, [
         el('a', { class: 'fm-post-link', href: `#post/${post.id}` }, [stamp(post.created_at)]),
@@ -929,11 +931,7 @@
     return String(text || '').replace(MENTION_RE, (m, name, id) => { ta._mentions.set(name, id); return `@${name}`; });
   }
   const plainText = (text) => String(text || '').replace(MENTION_RE, (m, name) => `@${name}`);
-  function openMember(name) {
-    const search = $('#fm-search');
-    if (search) search.value = name;
-    if (location.hash !== '#people') location.hash = '#people'; else loadPeople();
-  }
+
   function richText(text, cls) {
     const p = el('p', { class: cls });
     const re = /(@\[[^\]\n]{1,80}\]\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)|https?:\/\/[^\s<>"']+|#[\p{L}\p{N}_]{2,40})/gu;
@@ -947,7 +945,8 @@
       p.append(text.slice(last, m.index));
       if (token.startsWith('@[')) {
         const name = token.slice(2, token.indexOf(']('));
-        p.append(el('button', { class: 'fm-mention', type: 'button', text: `@${name}`, title: `See ${name}`, onclick: () => openMember(name) }));
+        const uid = token.slice(token.indexOf('](') + 2, -1);
+        p.append(el('a', { class: 'fm-mention', href: `#profile/${uid}`, text: `@${name}`, title: `See ${name}'s profile` }));
       } else if (token.startsWith('#')) {
         p.append(el('button', { class: 'fm-hashtag', type: 'button', text: token, onclick: () => setSearch(token) }));
       } else {
@@ -1022,7 +1021,7 @@
         button.setAttribute('aria-pressed', String(now));
       });
       list.append(el('div', { class: 'fm-person' }, [avatar, el('div', {}, [
-        el('strong', { text: p.display_name }),
+        el('a', { class: 'fm-author-link', href: `#profile/${p.user_id}` }, [el('strong', { text: p.display_name })]),
         el('span', { text: [p.headline, p.location].filter(Boolean).join(' · ') })
       ]), el('div', { class: 'fm-person-actions' }, [
         el('button', { class: 'fm-follow', type: 'button', text: 'Message', onclick: () => window.WHSFForum.startMessage?.(p.user_id) }),

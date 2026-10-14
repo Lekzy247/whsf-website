@@ -1389,3 +1389,76 @@ body.fm-stepup .fm-center > :not([data-fm-stepup]) { display: none !important; }
   .fm-admin-tab { white-space: nowrap; }
   .fm-queues, .fm-stats { grid-template-columns: 1fr 1fr; }
 }
+
+/* Professional profiles and networking */
+.fm-author-link { color: inherit; text-decoration: none; }
+.fm-author-link:hover strong { text-decoration: underline; }
+a.fm-mention { color: var(--wx-wine); font-weight: 600; text-decoration: none; }
+a.fm-mention:hover { text-decoration: underline; }
+.fm-profile-view { padding: 0 !important; overflow: hidden; }
+.fm-profile-view > div > .fm-text-btn { display: inline-block; margin: 12px 16px 0; }
+.fm-profile-head { position: relative; }
+.fm-profile-cover { height: 120px; margin-top: 10px; background: linear-gradient(135deg, var(--wx-wine-deep, #4a1027), var(--wx-wine) 55%, var(--wx-gold, #e2a72e)); }
+.fm-profile-main { display: flex; gap: 16px; align-items: flex-end; margin-top: -48px; padding: 0 20px; }
+.fm-avatar-xl { flex: none; width: 112px !important; height: 112px !important; border: 4px solid #fff; font-size: 38px !important; }
+.fm-profile-id { padding-bottom: 6px; min-width: 0; }
+.fm-profile-id h2 { margin: 0; font-size: 24px; }
+.fm-verified { color: #1d6fd1; font-size: 18px; }
+.fm-profile-headline { margin: 2px 0; font-size: 16px; color: #3d2b35; }
+.fm-profile-id p { margin: 0; }
+.fm-open-to { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+.fm-open-label { color: var(--wx-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.fm-open-chip { padding: 3px 10px; border-radius: 999px; background: #e9f6ee; color: #1d6b3a; font-size: 12.5px; font-weight: 600; }
+.fm-profile-actions { padding: 14px 20px 18px; border-bottom: 1px solid var(--wx-line); flex-wrap: wrap; }
+.fm-profile-sec { padding: 16px 20px; border-bottom: 1px solid var(--wx-line); }
+.fm-profile-sec h3 { margin: 0 0 10px; font-size: 16px; }
+.fm-profile-about { margin: 0; white-space: pre-line; }
+.fm-skill-tags span { background: #f6e8ee; color: var(--wx-wine); font-weight: 600; }
+.fm-exp { display: grid; gap: 14px; margin: 0; padding: 0 0 0 16px; list-style: none; border-left: 2px solid var(--wx-line); }
+.fm-exp li { display: grid; gap: 2px; position: relative; }
+.fm-exp li::before { content: ""; position: absolute; left: -22px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--wx-wine); }
+.fm-exp p { margin: 4px 0 0; font-size: 14px; color: #4b3a43; }
+.fm-chip-link { padding: 3px 10px; border-radius: 999px; background: #f2edf0; color: #4b3a43; font-size: 12.5px; text-decoration: none; }
+.fm-collab-invite { display: grid; gap: 8px; margin: 0 20px 16px; padding: 12px; border: 1px solid #f0dfe6; border-radius: 12px; background: #fbf3f6; }
+.fm-collab-invite textarea, .fm-pro-edit input, .fm-pro-edit textarea { width: 100%; min-height: 42px; padding: 8px 12px; border: 1px solid var(--wx-line-strong); border-radius: 10px; font: inherit; font-size: 15px; box-sizing: border-box; background: #fff; }
+.fm-net-tabs { margin-top: 6px; }
+.fm-net-panel[hidden], .fm-people[hidden] { display: none; }
+.fm-net-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.fm-net-card { display: grid; gap: 8px; align-content: start; padding: 14px; border: 1px solid var(--wx-line); border-radius: 14px; background: #fff; }
+.fm-net-who { display: flex; gap: 10px; align-items: center; color: inherit; text-decoration: none; min-width: 0; }
+.fm-net-who > span { display: grid; min-width: 0; }
+.fm-net-who strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-net-who small { color: var(--wx-muted); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.fm-net-reason { color: var(--wx-wine); font-size: 12.5px; font-weight: 600; }
+.fm-net-note { margin: 0; font-size: 13.5px; color: #4b3a43; }
+.fm-net-card .hp-btn { width: 100%; justify-content: center; }
+.fm-net-badge { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 2px; padding: 0 5px; border-radius: 999px; background: #c62828; color: #fff; font-size: 11px; font-weight: 700; }
+.fm-net-badge[hidden] { display: none; }
+.fm-pro-edit { display: grid; gap: 14px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--wx-line); }
+.fm-pro-edit h2 { margin: 0; }
+.fm-pro-edit > p { margin: 0; }
+.fm-pro-block { display: grid; gap: 8px; }
+.fm-skill-edit span { display: inline-flex; gap: 4px; align-items: center; }
+.fm-skill-edit button { padding: 0 2px; border: 0; background: none; color: inherit; font-size: 15px; cursor: pointer; }
+.fm-check-chip { display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border: 1px solid var(--wx-line-strong); border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.fm-check-chip:has(input:checked) { border-color: var(--wx-wine); background: #fbf3f6; color: var(--wx-wine); }
+.fm-check-chip input { width: 16px; height: 16px; min-height: 0; margin: 0; accent-color: #7b2142; }
+.fm-rep { display: grid; gap: 10px; }
+.fm-rep-row { display: grid; grid-template-columns: 1fr 1fr 150px 150px; gap: 8px; padding: 10px; border: 1px solid var(--wx-line); border-radius: 12px; background: #fcfafb; }
+.fm-rep-row textarea { grid-column: 1 / -1; }
+.fm-rep-row > .fm-text-btn { grid-column: 1 / -1; justify-self: end; }
+.fm-rep-row.is-port { grid-template-columns: 1fr 1fr; }
+.fm-rep-row.is-port input[data-k="about"] { grid-column: 1 / -1; }
+@media (max-width: 760px) {
+  .fm-profile-main { flex-direction: column; align-items: flex-start; gap: 8px; margin-top: -40px; padding: 0 16px; }
+  .fm-avatar-xl { width: 92px !important; height: 92px !important; font-size: 30px !important; }
+  .fm-profile-id h2 { font-size: 21px; }
+  .fm-profile-actions { padding: 12px 16px 16px; }
+  .fm-profile-actions .hp-btn { flex: 1 1 140px; justify-content: center; }
+  .fm-profile-sec { padding: 14px 16px; }
+  .fm-rep-row, .fm-rep-row.is-port { grid-template-columns: 1fr; }
+  .fm-net-grid { grid-template-columns: 1fr; }
+}
+.fm-profile-main { display: block; margin-top: -56px; padding: 0 20px; }
+.fm-profile-id { padding: 10px 0 0; }
+@media (max-width: 760px) { .fm-profile-main { margin-top: -46px; padding: 0 16px; } }
