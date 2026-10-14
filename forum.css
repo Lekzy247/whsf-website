@@ -723,7 +723,7 @@ body.fm-app .fm-c-input textarea { flex: 1; min-width: 0; min-height: 36px; max-
   .fm-center { order: 1; min-width: 0; width: 100%; }
   .fm-left .fm-promo { order: 2; }
   .fm-right { order: 3; display: block; }
-  .fm-left .fm-profile, .fm-left .fm-spaces-nav, .fm-center .fm-reco { display: none !important; }
+  .fm-left .fm-profile, .fm-left .fm-spaces-nav { display: none !important; }
   .fm-left .fm-guest { order: 0; }
   .fm-card { margin: 0 0 8px; padding: 14px 12px; border-left: 0; border-right: 0; border-radius: 0; }
   .fm-wide .fm-grid { max-width: none; }
@@ -1040,3 +1040,19 @@ div.fm-cf-banner small { font-size: 14px; opacity: .92; }
   .fm-cf-sec, .fm-cf-grid { break-inside: avoid; }
   @page { margin: 14mm; }
 }
+
+/* WHSF advert on the feed (replaces "Recommended for you", space chips and Everyone/My network) */
+.fm-whsf-ad { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 0; padding: 0 !important; overflow: hidden; }
+.fm-whsf-ad[hidden] { display: none; }
+.fm-whsf-ad-img { width: 100%; height: 100%; min-height: 180px; object-fit: cover; }
+.fm-whsf-ad-body { display: grid; gap: 8px; align-content: center; justify-items: start; padding: 18px 20px; }
+.fm-whsf-ad-body h2 { margin: 0; font-size: 18px; line-height: 1.3; color: var(--wx-ink); }
+.fm-whsf-ad-body p { margin: 0; }
+.fm-whsf-ad-body > p:not(.fm-reco-label) { color: var(--wx-muted); font-size: 14px; }
+@media (max-width: 760px) {
+  .fm-whsf-ad { grid-template-columns: 1fr; }
+  .fm-whsf-ad-img { aspect-ratio: 16 / 8; min-height: 0; height: auto; }
+  .fm-whsf-ad-body { padding: 14px 12px; }
+}
+.fm-l-ad:empty { display: none; }
+.fm-l-ad .fm-whsf-ad { margin: 0; }

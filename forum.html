@@ -20,13 +20,13 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=33">
+  <link rel="stylesheet" href="forum.css?v=34">
   <link rel="stylesheet" href="verify-kit.css?v=1">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=16" defer></script>
+  <script src="forum.js?v=17" defer></script>
   <script src="forum-engage.js?v=5" defer></script>
   <script src="forum-social.js?v=2" defer></script>
   <script src="verify-wizard.js?v=1" defer></script>
@@ -139,6 +139,7 @@
         </div>
       </div>
 
+      <div class="fm-l-section fm-l-ad" data-fm-whsf-ad-landing></div>
       <section class="fm-l-section" aria-labelledby="fm-spaces-title">
         <div class="fm-l-head">
           <span class="fm-eyebrow">Forum spaces</span>
@@ -437,22 +438,21 @@
           </form>
         </section>
 
-        <section class="fm-card fm-reco" data-fm-reco>
-          <p class="fm-reco-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/></svg>Recommended for you</p>
-          <h2>Find funding for your project or organisation</h2>
-          <div class="fm-actions">
-            <a class="hp-btn hp-btn-primary" href="grants.html">Take a look →</a>
-            <a class="fm-text-btn" href="grants-account.html">Get matched to grants</a>
+        <!-- WHSF advert: shown to everyone (moved to the landing page for visitors by forum.js) -->
+        <div data-fm-whsf-ad-feed>
+        <section class="fm-card fm-whsf-ad" data-fm-whsf-ad aria-label="From WHSF">
+          <img class="fm-whsf-ad-img" src="assets/programs/whsf-programmes-technology.jpg" alt="WHSF trainer showing young adults how a drone works" loading="lazy" data-fm-whsf-ad-img>
+          <div class="fm-whsf-ad-body">
+            <p class="fm-reco-label" data-fm-whsf-ad-kicker>From WHSF · Programmes</p>
+            <h2 data-fm-whsf-ad-title>Hands-on technology skills for young adults</h2>
+            <p data-fm-whsf-ad-text>Drones, digital skills and AI training with the World Humanitarian Support Foundation. Free to apply.</p>
+            <a class="hp-btn hp-btn-primary" href="programs.html" data-fm-whsf-ad-cta>Explore our programmes →</a>
           </div>
         </section>
+        </div>
 
         <!-- Feed -->
         <div data-fm-view="feed">
-          <div class="fm-topics" aria-label="Filter by space" data-fm-topics hidden></div>
-          <div class="fm-filter" role="tablist" aria-label="Feed" data-fm-filter hidden>
-            <button type="button" role="tab" aria-selected="true" data-fm-scope="everyone">Everyone</button>
-            <button type="button" role="tab" aria-selected="false" data-fm-scope="network">My network</button>
-          </div>
           <form class="fm-qform" role="search" data-fm-qform hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
             <input type="search" name="q" maxlength="60" placeholder="Search posts or #hashtags" aria-label="Search posts">

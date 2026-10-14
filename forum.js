@@ -95,15 +95,17 @@
     document.body.classList.toggle('fm-guest', landing);
     $('[data-fm-landing]').hidden = !landing;
     const plainFeed = view === 'feed' && !single && !saved;
-    $('[data-fm-topics]').hidden = !state.me || !plainFeed;
     $('[data-fm-qform]').hidden = !state.me || !plainFeed;
     // Messages, events and adverts use the full page width (side panels hidden), like the Gelllez Forum.
     document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite'].includes(view));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
-    $('[data-fm-reco]').hidden = view !== 'feed';
+    // The WHSF advert is seen by everyone: on the landing page for visitors, above the feed for members.
+    const whsfAd = $('[data-fm-whsf-ad]');
+    const adSpot = landing ? $('[data-fm-whsf-ad-landing]') : $('[data-fm-whsf-ad-feed]');
+    if (adSpot && whsfAd.parentElement !== adSpot) adSpot.append(whsfAd);
+    whsfAd.hidden = !landing && view !== 'feed';
     // The post box and feed filter belong to the Home feed only, so a new post is always seen where it lands.
     $('[data-fm-composer]').hidden = !state.me || !plainFeed;
-    $('[data-fm-filter]').hidden = !state.me || !plainFeed;
     if (view === 'people') loadPeople();
     if (view === 'me') fillMeForm();
     if (view === 'idchecks') loadIdChecks();
@@ -652,6 +654,20 @@
   });
 
   // ---------------------------------------------------------------- feed
+  // WHSF advert on the feed, seen by everyone (members and visitors). One WHSF programme per visit.
+  const WHSF_ADS = [
+    { kicker: 'From WHSF · Programmes', title: 'Hands-on technology skills for young adults', text: 'Drones, digital skills and AI training with the World Humanitarian Support Foundation. Free to apply.', cta: 'Explore our programmes →', href: 'programs.html', img: 'assets/programs/whsf-programmes-technology.jpg', alt: 'WHSF trainer showing young adults how a drone works' },
+    { kicker: 'From WHSF · MIL Lab', title: 'Spot, verify, create, amplify', text: 'Join the WHSF Media and Information Literacy Lab: learn to check facts, spot deepfakes and share trusted information.', cta: 'Visit the MIL Lab →', href: 'mil-lab.html', img: 'assets/programs/mil-lab-hero-v2-900.jpg', alt: 'Young adults checking news and spotting fake content together' }
+  ];
+  (() => {
+    const box = $('[data-fm-whsf-ad]'); if (!box) return;
+    const ad = WHSF_ADS[Math.floor(Math.random() * WHSF_ADS.length)];
+    const img = $('[data-fm-whsf-ad-img]'); img.src = ad.img; img.alt = ad.alt;
+    $('[data-fm-whsf-ad-kicker]').textContent = ad.kicker;
+    $('[data-fm-whsf-ad-title]').textContent = ad.title;
+    $('[data-fm-whsf-ad-text]').textContent = ad.text;
+    const cta = $('[data-fm-whsf-ad-cta]'); cta.textContent = ad.cta; cta.href = ad.href;
+  })();
   $$('[data-fm-scope]').forEach((b) => b.addEventListener('click', () => {
     state.scope = b.dataset.fmScope;
     $$('[data-fm-scope]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
@@ -901,6 +917,7 @@
   }
   function renderTopicChips() {
     const box = $('[data-fm-topics]');
+    if (!box) return;
     box.replaceChildren(
       el('button', { type: 'button', class: `fm-topic${state.topic ? '' : ' is-on'}`, text: 'All spaces', onclick: () => setTopic(null) }),
       ...SPACES.map((sp) => el('button', { type: 'button', class: `fm-topic${state.topic === sp.key ? ' is-on' : ''}`, text: `${sp.emoji} ${sp.name}`, onclick: () => setTopic(sp.key) }))
@@ -949,7 +966,6 @@
     await renderVerify();
     $('[data-fm-composer]').hidden = !state.me;
     $('[data-fm-spaces-nav]').hidden = !state.me;
-    $('[data-fm-filter]').hidden = !state.me;
     if (signedIn && !state.profile) {
       const f = $('[data-fm-join-form]');
       if (!f.display_name.value) f.display_name.value = state.session.user.user_metadata?.full_name || '';
