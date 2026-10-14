@@ -713,7 +713,7 @@
   $('[data-fm-location-toggle]').addEventListener('click', () => { const row = $('[data-fm-location-row]'); row.hidden = !row.hidden; if (!row.hidden) row.querySelector('input').focus(); });
   postForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const body = postForm.body.value.trim();
+    const body = encodeTags(postForm.body);
     if (!body) return setStatus('[data-fm-post-status]', 'Write something first.');
     const button = postForm.querySelector('button[type="submit"]');
     button.disabled = true;
@@ -728,7 +728,7 @@
     });
     button.disabled = false;
     if (error) return setStatus('[data-fm-post-status]', error.message);
-    postForm.reset(); state.file = null; state.celebrate = false;
+    postForm.reset(); postForm.body._mentions = new Map(); state.file = null; state.celebrate = false;
     $('[data-fm-attach]').hidden = true; $('[data-fm-location-row]').hidden = true;
     $('[data-fm-celebrate]').setAttribute('aria-pressed', 'false');
     document.activeElement?.blur(); syncComposer();
@@ -788,8 +788,10 @@
       if (state.scope === 'network') query = query.in('author_id', [state.me.user_id, ...state.following]);
       if (state.topic) query = query.eq('topic', state.topic);
       if (state.q) {
-        query = query.ilike('body', `%${state.q.replace(/[\\%_]/g, (c) => `\\${c}`)}%`);
-        banner = el('div', { class: 'fm-feed-banner' }, [el('span', { text: `Posts matching “${state.q}”` }), el('button', { class: 'fm-text-btn', type: 'button', text: 'Clear search', onclick: () => setSearch('') })]);
+        const tag = state.q.match(/^#([\p{L}\p{N}_]{2,40})$/u);
+        // A #hashtag matches that exact tag (not longer tags that start the same way).
+        query = tag ? query.imatch('body', `#${tag[1]}([^[:alnum:]_]|$)`) : query.ilike('body', `%${state.q.replace(/[\\%_]/g, (c) => `\\${c}`)}%`);
+        banner = el('div', { class: 'fm-feed-banner' }, [el('span', { text: tag ? `Posts tagged #${tag[1]}` : `Posts matching “${state.q}”` }), el('button', { class: 'fm-text-btn', type: 'button', text: 'Clear search', onclick: () => setSearch('') })]);
       }
     }
     const { data, error } = await query;
@@ -866,10 +868,31 @@
     return card;
   }
 
-  // Member text with clickable web links and #hashtags (built as DOM nodes, never as HTML).
+  // Member text with clickable web links, @mentions and #hashtags (built as DOM nodes, never as HTML).
+  // A mention is stored as @[Display Name](user id) and shown as @Display Name.
+  const MENTION_RE = /@\[([^\]\n]{1,80})\]\(([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\)/g;
+  const escapeRe = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // Textarea text with "@Name" -> stored text with mention tokens (names picked from the suggestion list).
+  function encodeTags(ta) {
+    let text = ta.value.trim();
+    const names = [...(ta._mentions || new Map()).entries()].sort((a, b) => b[0].length - a[0].length);
+    names.forEach(([name, id]) => { text = text.replace(new RegExp(`@${escapeRe(name)}(?![\\p{L}\\p{N}_\\]])`, 'gu'), `@[${name}](${id})`); });
+    return text;
+  }
+  // Stored text -> textarea text (for editing), remembering who was mentioned.
+  function decodeTags(ta, text) {
+    ta._mentions = new Map();
+    return String(text || '').replace(MENTION_RE, (m, name, id) => { ta._mentions.set(name, id); return `@${name}`; });
+  }
+  const plainText = (text) => String(text || '').replace(MENTION_RE, (m, name) => `@${name}`);
+  function openMember(name) {
+    const search = $('#fm-search');
+    if (search) search.value = name;
+    if (location.hash !== '#people') location.hash = '#people'; else loadPeople();
+  }
   function richText(text, cls) {
     const p = el('p', { class: cls });
-    const re = /(https?:\/\/[^\s<>"']+|#[\p{L}\p{N}_]{2,40})/gu;
+    const re = /(@\[[^\]\n]{1,80}\]\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)|https?:\/\/[^\s<>"']+|#[\p{L}\p{N}_]{2,40})/gu;
     let last = 0;
     for (const m of String(text).matchAll(re)) {
       let token = m[0];
@@ -878,7 +901,10 @@
         if (trail) token = token.slice(0, -trail[0].length);
       }
       p.append(text.slice(last, m.index));
-      if (token.startsWith('#')) {
+      if (token.startsWith('@[')) {
+        const name = token.slice(2, token.indexOf(']('));
+        p.append(el('button', { class: 'fm-mention', type: 'button', text: `@${name}`, title: `See ${name}`, onclick: () => openMember(name) }));
+      } else if (token.startsWith('#')) {
         p.append(el('button', { class: 'fm-hashtag', type: 'button', text: token, onclick: () => setSearch(token) }));
       } else {
         p.append(el('a', { href: token, target: '_blank', rel: 'noopener noreferrer nofollow ugc', text: token.replace(/^https?:\/\//, '').slice(0, 60) + (token.length > 68 ? '…' : '') }));
@@ -1069,7 +1095,7 @@
     if (token) fetch('/api/forum-review-alert', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ kind, id }) }).catch(() => {});
   }
 
-  window.WHSFForum = { deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
+  window.WHSFForum = { encodeTags, decodeTags, plainText, deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => {

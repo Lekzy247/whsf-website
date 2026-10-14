@@ -1081,3 +1081,25 @@ body.fm-stepup .fm-center > :not([data-fm-stepup]) { display: none !important; }
 .fm-sec-devices li { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; background: var(--wx-soft); }
 .fm-sec-devices li > div { display: grid; gap: 2px; flex: 1; min-width: 0; }
 .fm-sec-dev-icon { font-size: 20px; }
+
+/* @mentions, #hashtag suggestions, trending hashtags */
+.fm-mention { padding: 0; border: 0; background: none; color: var(--wx-wine); font: inherit; font-weight: 600; cursor: pointer; }
+.fm-mention:hover { text-decoration: underline; }
+.fm-tag-host { position: relative; }
+.fm-tag-menu { position: absolute; z-index: 40; top: calc(100% + 4px); left: 0; right: 0; max-width: 360px; margin: 0; padding: 6px; list-style: none; border: 1px solid var(--wx-line); border-radius: 12px; background: #fff; box-shadow: 0 10px 30px rgb(42 10 23 / 14%); }
+.fm-tag-menu[hidden] { display: none; }
+.fm-tag-menu li { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.fm-tag-menu li.is-active, .fm-tag-menu li:hover { background: var(--wx-soft); }
+.fm-tag-text { display: grid; min-width: 0; text-align: left; }
+.fm-tag-text strong { font-size: 14px; color: var(--wx-ink); }
+.fm-tag-text small { overflow: hidden; color: var(--wx-muted); font-size: 12px; white-space: nowrap; text-overflow: ellipsis; }
+.fm-tag-hash { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--wx-soft); color: var(--wx-wine); font-weight: 700; }
+.fm-trending h2 { margin: 0 0 8px; font-size: 17px; }
+.fm-trend-list { display: grid; gap: 2px; margin: 0 0 8px; padding: 0; list-style: none; }
+.fm-trend { display: flex; gap: 10px; align-items: center; width: 100%; padding: 8px; border: 0; border-radius: 10px; background: none; font: inherit; text-align: left; cursor: pointer; }
+.fm-trend:hover { background: var(--wx-soft); }
+.fm-trend-rank { width: 18px; color: var(--wx-muted); font-weight: 600; text-align: center; }
+.fm-trend-text { display: grid; }
+.fm-trend-text strong { color: var(--wx-wine); font-size: 14px; }
+.fm-trend-text small { color: var(--wx-muted); font-size: 12px; }
+.fm-trending p { margin: 0; }
