@@ -1209,3 +1209,80 @@ body.fm-stepup .fm-center > :not([data-fm-stepup]) { display: none !important; }
   .fm-start-steps li.is-done { padding: 6px 10px; }
   .fm-start-steps li.is-done .fm-start-mark { width: 22px; height: 22px; font-size: 12px; }
 }
+
+/* Rich posts: composer panels */
+.fm-compose-panel { display: grid; gap: 10px; margin-top: 12px; padding: 12px; border: 1px solid var(--wx-line); border-radius: 14px; background: #fcfafb; }
+.fm-compose-panel[hidden] { display: none; }
+.fm-compose-head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.fm-compose-head strong { font-size: 15px; }
+.fm-compose-head small { flex: 1 1 220px; }
+.fm-compose-head .fm-text-btn { margin-left: auto; }
+.fm-poll-inputs { display: grid; gap: 8px; }
+.fm-poll-inputs input, .fm-compose-panel select, .fm-collab-fields input { width: 100%; min-height: 42px; padding: 8px 12px; border: 1px solid var(--wx-line-strong); border-radius: 10px; background: #fff; font: inherit; font-size: 15px; box-sizing: border-box; }
+.fm-inline-label { display: flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 600; }
+.fm-inline-label select { width: auto; }
+.fm-collab-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.fm-collab-fields label { display: grid; gap: 5px; font-size: 13.5px; font-weight: 600; }
+.fm-file-pick { justify-self: start; cursor: pointer; }
+.fm-file-chosen { display: flex; gap: 10px; align-items: center; }
+.fm-file-chosen:empty { display: none; }
+.fm-file-chosen > span:last-child { display: grid; min-width: 0; }
+.fm-file-chosen strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-video-preview { width: 120px; max-height: 80px; border-radius: 8px; background: #000; }
+.fm-tool[aria-pressed="true"] { background: var(--wx-soft); color: var(--wx-wine); }
+
+/* Rich posts: in the feed */
+.fm-file { display: flex; gap: 12px; align-items: center; margin: 10px 0; padding: 12px; border: 1px solid var(--wx-line); border-radius: 12px; background: #fcfafb; }
+.fm-file.is-video { display: block; padding: 0; border: 0; background: none; }
+.fm-post-video { display: block; width: 100%; max-height: 520px; border-radius: 12px; background: #000; }
+.fm-file-badge { flex: none; display: grid; place-items: center; width: 44px; height: 52px; border-radius: 8px; background: #c62828; color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+.fm-file-text { display: grid; flex: 1; min-width: 0; }
+.fm-file-text strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-file-text small { color: var(--wx-muted); font-size: 12.5px; }
+.fm-file-actions { display: flex; gap: 6px; flex: none; }
+.fm-poll { display: grid; gap: 8px; margin: 10px 0; }
+.fm-poll.is-busy { opacity: .6; pointer-events: none; }
+.fm-poll-opt { width: 100%; min-height: 44px; padding: 10px 14px; border: 2px solid var(--wx-wine); border-radius: 999px; background: #fff; color: var(--wx-wine); font: inherit; font-weight: 700; text-align: center; cursor: pointer; }
+.fm-poll-opt:hover { background: var(--wx-soft); }
+.fm-poll-result { position: relative; display: flex; gap: 10px; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; overflow: hidden; padding: 10px 14px; border: 1px solid var(--wx-line); border-radius: 10px; background: #fff; color: var(--wx-ink); font: inherit; text-align: left; cursor: pointer; }
+.fm-poll-result:disabled { cursor: default; }
+.fm-poll-result i { position: absolute; inset: 0 auto 0 0; background: #f1e6eb; }
+.fm-poll-result.is-mine i { background: #ead2dc; }
+.fm-poll-result span, .fm-poll-result b { position: relative; }
+.fm-poll-result.is-mine span { font-weight: 700; color: var(--wx-wine); }
+.fm-poll-meta { margin: 0; color: var(--wx-muted); font-size: 13px; }
+.fm-poll-meta .fm-text-btn { padding: 0; min-height: 0; font-size: 13px; }
+.fm-post-event { display: block; margin: 10px 0; overflow: hidden; border: 1px solid var(--wx-line); border-radius: 12px; background: #fff; color: inherit; text-decoration: none; }
+.fm-post-event:hover { border-color: var(--wx-wine); }
+.fm-post-event img { display: block; width: 100%; aspect-ratio: 16 / 6; object-fit: cover; }
+.fm-post-event-body { display: flex; gap: 12px; align-items: center; padding: 12px; }
+.fm-post-event-date { flex: none; display: grid; place-items: center; width: 52px; height: 56px; border-radius: 10px; background: var(--wx-soft); color: var(--wx-wine); }
+.fm-post-event-date b { font-size: 20px; line-height: 1; }
+.fm-post-event-date small { font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+.fm-post-event-text { display: grid; gap: 2px; min-width: 0; }
+.fm-post-event-text strong { color: var(--wx-ink); }
+.fm-post-event-text small { color: var(--wx-muted); font-size: 13px; }
+.fm-post-event-cta { color: var(--wx-wine); font-size: 13.5px; font-weight: 700; }
+.fm-collab { display: grid; gap: 8px; justify-items: start; margin: 10px 0; padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #fbf3f6, #fffaf0); border: 1px solid #f0dfe6; }
+.fm-collab-head { display: flex; gap: 10px; align-items: center; }
+.fm-collab-head > span:first-child { font-size: 26px; }
+.fm-collab-head > span:last-child { display: grid; }
+.fm-collab-head small { color: var(--wx-muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.fm-collab-head strong { font-size: 16px; color: var(--wx-ink); }
+.fm-collab p { margin: 0; }
+
+@media (max-width: 760px) {
+  .fm-tools { flex-wrap: wrap; row-gap: 4px; }
+  .fm-tools .fm-tool { font-size: 0; gap: 0; padding: 9px; }
+  .fm-tools .fm-tool svg { width: 22px; height: 22px; }
+  .fm-collab-fields { grid-template-columns: 1fr; }
+  .fm-file { flex-wrap: wrap; }
+  .fm-file-actions { width: 100%; }
+  .fm-file-actions .fm-chip-btn { flex: 1; }
+}
+.fm-poll .fm-status:empty { display: none; }
+.fm-poll-meta .fm-text-btn { margin-left: 6px; }
+@media (max-width: 760px) {
+  body.fm-app main.fm .fm-tools .fm-tool { font-size: 0 !important; gap: 0; padding: 9px; min-width: 42px; justify-content: center; }
+  body.fm-app .fm-tools .fm-tool svg { width: 22px; height: 22px; }
+}
