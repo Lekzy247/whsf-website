@@ -1118,8 +1118,16 @@
         ])
       ]),
       el('article', { class: `fm-cf is-${t.status}`, 'aria-labelledby': 'fm-cf-title' }, [
+        // Header = the host's event banner (the cover image they uploaded), or a branded banner with the title.
+        safeCover(e.cover_url)
+          ? el('img', { class: 'fm-cf-banner', src: safeCover(e.cover_url), alt: `${e.title} banner` })
+          : el('div', { class: 'fm-cf-banner fm-ev-cover' }, [
+            el('span', { text: (CATS[e.category] || '').replace(/^\S+\s/, '') }),
+            el('strong', { text: e.title }),
+            el('small', { text: `${organiser(e, host)} · Event registration · WHSF Forum` })
+          ]),
         el('header', { class: 'fm-cf-head' }, [
-          el('div', { class: 'fm-cf-brand' }, [el('strong', { text: 'World Humanitarian Support Foundation' }), el('span', { text: 'WHSF Forum · Event registration' })]),
+          safeCover(e.cover_url) ? el('div', { class: 'fm-cf-brand' }, [el('strong', { text: organiser(e, host) }), el('span', { text: 'Event registration · WHSF Forum' })]) : null,
           el('div', { class: 'fm-cf-status' }, [
             el('span', { class: 'fm-cf-mark', 'aria-hidden': 'true', text: head[0] }),
             el('div', {}, [el('h2', { id: 'fm-cf-title', text: head[1] }), el('p', { text: head[2] })])

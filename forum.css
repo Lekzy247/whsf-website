@@ -973,6 +973,11 @@ body.fm-app .fm-me-menu .fm-me-head strong { font-weight: 500 !important; }
 .fm-cf-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 0 0 14px; }
 .fm-cf-bar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .fm-cf { max-width: 860px; margin: 0 auto; overflow: hidden; border: 1px solid var(--wx-line); border-radius: 18px; background: #fff; }
+.fm-cf-banner { display: block; width: 100%; aspect-ratio: 16 / 5; object-fit: cover; }
+div.fm-cf-banner { display: grid; align-content: end; gap: 4px; aspect-ratio: auto; min-height: 170px; padding: 22px 24px; color: #fff; }
+div.fm-cf-banner span { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; opacity: .9; }
+div.fm-cf-banner strong { font-size: 26px; line-height: 1.2; }
+div.fm-cf-banner small { font-size: 14px; opacity: .92; }
 .fm-cf-head { display: grid; gap: 16px; padding: 22px 24px; background: linear-gradient(180deg, #fbf3f6, #fff); border-bottom: 1px solid var(--wx-line); }
 .fm-cf-brand { display: grid; gap: 2px; padding-bottom: 12px; border-bottom: 3px solid var(--wx-wine); }
 .fm-cf-brand strong { color: var(--wx-wine); font-size: 17px; letter-spacing: .01em; }
@@ -1011,6 +1016,9 @@ body.fm-app .fm-me-menu .fm-me-head strong { font-weight: 500 !important; }
 .fm-cf-foot p:last-child { margin: 0; }
 @media (max-width: 720px) {
   .fm-cf-head, .fm-cf-sec { padding: 16px; }
+  .fm-cf-banner { aspect-ratio: 16 / 7; }
+  div.fm-cf-banner { min-height: 140px; padding: 16px; }
+  div.fm-cf-banner strong { font-size: 20px; }
   .fm-cf-ref { grid-template-columns: 1fr; }
   .fm-cf-grid { grid-template-columns: 1fr; }
   .fm-cf-grid > .fm-cf-sec + .fm-cf-sec { border-left: 0; border-top: 1px solid var(--wx-line); }
@@ -1026,6 +1034,7 @@ body.fm-app .fm-me-menu .fm-me-head strong { font-weight: 500 !important; }
   body:has(.fm-cf) .fm-cf { position: absolute; inset: 0 auto auto 0; width: 100%; max-width: none; border: 0; border-radius: 0; }
   .fm-cf-noprint, .fm-cf-bar { display: none !important; }
   .fm-cf-head { background: #fff; }
+  .fm-cf-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .fm-cf-sec, .fm-cf-grid { break-inside: avoid; }
   @page { margin: 14mm; }
 }
