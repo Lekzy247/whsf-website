@@ -745,17 +745,26 @@
     if (!body) return setStatus('[data-fm-post-status]', 'Write something first.');
     const button = postForm.querySelector('button[type="submit"]');
     button.disabled = true;
-    let imageUrl = null;
-    if (state.file) {
-      imageUrl = await uploadImage(state.file, '[data-fm-post-status]');
-      if (!imageUrl) { button.disabled = false; return; }
+    const topic = postForm.topic.value || 'general';
+    const where = postForm.location.value.trim() || null;
+    // Polls, documents, videos, events and collaboration requests (forum-compose.js).
+    setStatus('[data-fm-post-status]', 'Posting…');
+    const extra = window.WHSFForum.composeExtra ? await window.WHSFForum.composeExtra({ body, topic, location: where }) : null;
+    if (extra?.error) { button.disabled = false; return setStatus('[data-fm-post-status]', extra.error); }
+    if (!extra?.done) {
+      let imageUrl = null;
+      if (state.file) {
+        imageUrl = await uploadImage(state.file, '[data-fm-post-status]');
+        if (!imageUrl) { button.disabled = false; extra?.cleanup?.(); return; }
+      }
+      const { error } = await db.from('forum_posts').insert({
+        author_id: state.me.user_id, body, kind: state.celebrate ? 'celebrate' : 'post', topic,
+        image_url: imageUrl, location: where, ...(extra?.fields || {})
+      });
+      if (error) { button.disabled = false; extra?.cleanup?.(); return setStatus('[data-fm-post-status]', error.message); }
     }
-    const { error } = await db.from('forum_posts').insert({
-      author_id: state.me.user_id, body, kind: state.celebrate ? 'celebrate' : 'post', topic: postForm.topic.value || 'general',
-      image_url: imageUrl, location: postForm.location.value.trim() || null
-    });
     button.disabled = false;
-    if (error) return setStatus('[data-fm-post-status]', error.message);
+    window.WHSFForum.composeReset?.();
     postForm.reset(); postForm.body._mentions = new Map(); state.file = null; state.celebrate = false;
     $('[data-fm-attach]').hidden = true; $('[data-fm-location-row]').hidden = true;
     $('[data-fm-celebrate]').setAttribute('aria-pressed', 'false');
@@ -800,7 +809,7 @@
     if (!state.me && !state.isStaff) { feed.replaceChildren(); $('[data-fm-more]').hidden = true; return; }
     if (reset) { state.feedOffset = 0; feed.replaceChildren(el('p', { class: 'fm-card fm-empty', text: 'Loading posts…' })); }
     let query = db.from('forum_posts')
-      .select('id,kind,topic,body,image_url,location,created_at,edited_at,is_pinned,is_hidden,author_id,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
+      .select('id,kind,topic,body,image_url,location,created_at,edited_at,is_pinned,is_hidden,author_id,attachment_path,attachment_name,attachment_kind,attachment_size,event_id,poll_closes_at,collab_need,collab_skills,collab_deadline,collab_where,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
       .order('is_pinned', { ascending: false })
       .order('created_at', { ascending: false })
       .range(state.feedOffset, state.feedOffset + PAGE_SIZE - 1);
@@ -857,6 +866,8 @@
     const sp = spaceOf(post.topic);
     if (sp) card.append(el('button', { class: 'fm-space-chip', type: 'button', text: `${sp.emoji} ${sp.name}`, onclick: () => setTopic(sp.key) }));
     if (post.kind === 'celebrate') card.append(el('span', { class: 'fm-post-tag', text: '🎉 Celebrating' }));
+    if (post.kind === 'poll') card.append(el('span', { class: 'fm-post-tag', text: '📊 Poll' }));
+    if (post.kind === 'event') card.append(el('span', { class: 'fm-post-tag', text: '📅 Event' }));
     if (post.is_hidden) card.append(el('span', { class: 'fm-post-tag', text: 'Hidden by a moderator' }));
     const body = richText(post.body, 'fm-post-body');
     card.append(body);
