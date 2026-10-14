@@ -76,8 +76,8 @@
   const state = { single: null, saved: false, q: '', feedKey: '|false', feedReady: false, topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
-  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite'];
-  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite'];
+  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding'];
+  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite', 'funding'];
   // Add-on scripts (forum-social.js, …) register here to react to page refreshes and view changes.
   const hooks = { refresh: [], view: [], post: [], feed: [] };
   function showView() {
@@ -103,7 +103,7 @@
     const plainFeed = view === 'feed' && !single && !saved;
     $('[data-fm-qform]').hidden = !state.me || !plainFeed;
     // Messages, events and adverts use the full page width (side panels hidden), like the Gelllez Forum.
-    document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite'].includes(view));
+    document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite', 'funding'].includes(view));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     // The WHSF advert is seen by everyone: on the landing page for visitors, above the feed for members.
     const whsfAd = $('[data-fm-whsf-ad]');
@@ -1030,7 +1030,7 @@
   async function fillOpportunities(list) {
     const today = new Date().toISOString().slice(0, 10);
     const { data, error } = await db.from('whsf_opportunities')
-      .select('title,funder_name,deadline').eq('kind', 'grant').eq('review_status', 'published').neq('status', 'closed')
+      .select('title,funder_name,deadline,url').eq('kind', 'grant').eq('review_status', 'published').neq('status', 'closed')
       .gte('deadline', today).order('deadline', { ascending: true }).limit(5);
     list.replaceChildren();
     if (error || !data?.length) { list.append(el('li', { class: 'fm-muted', text: 'See the grants portal for open opportunities.' })); return; }
@@ -1038,7 +1038,7 @@
     data.forEach((g) => {
       const due = g.deadline ? new Date(g.deadline + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
       list.append(el('li', {}, [icon(), el('div', {}, [
-        el('a', { href: 'grants.html#grant-search', text: g.title }),
+        el('a', /^https:\/\/\S+$/.test(g.url || '') ? { href: g.url, target: '_blank', rel: 'noopener noreferrer', text: g.title, title: 'Opens the official source' } : { href: 'grants.html#grant-search', text: g.title }),
         el('small', { text: [g.funder_name, due && `Closes ${due}`].filter(Boolean).join(' · ') })
       ])]));
     });
@@ -1123,7 +1123,7 @@
     if (token) fetch('/api/forum-review-alert', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ kind, id }) }).catch(() => {});
   }
 
-  window.WHSFForum = { encodeTags, decodeTags, plainText, deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
+  window.WHSFForum = { setTopic, encodeTags, decodeTags, plainText, deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => {
