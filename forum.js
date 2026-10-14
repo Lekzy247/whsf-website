@@ -298,7 +298,91 @@
     state.profile = data || null;
     // Only ID-verified, active profiles are members (the database enforces the same rule).
     state.me = data && !data.is_suspended && data.verification_status === 'approved' ? data : null;
+    // Suspicious sign-in (new device or country): the member must confirm it's them before using the Forum.
+    // The database enforces this too (forum_is_member() only accepts trusted sign-in sessions).
+    state.stepUp = null;
+    if (state.me) { const r = await sessionCheck(); if (r !== 'ok') { state.stepUp = r; state.me = null; } }
     if (data?.is_suspended) setStatus('[data-fm-join-status]', 'Your forum account is suspended. Contact WHSF if you think this is a mistake.');
+  }
+
+  // ---------------------------------------------------------------- sign-in security: confirm it's you
+  // Each browser keeps a random device key; the database stores only its hash. A new device, a new country or an
+  // old account's first sign-in asks for a one-time email code, or the authenticator app if the member turned it on.
+  const DEVICE_KEY = 'whsf-forum-device';
+  let memDeviceKey = null;
+  const newDeviceKey = () => btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  function deviceKey() {
+    try {
+      let k = localStorage.getItem(DEVICE_KEY);
+      if (!k || !/^[A-Za-z0-9_-]{32,128}$/.test(k)) { k = newDeviceKey(); localStorage.setItem(DEVICE_KEY, k); }
+      return k;
+    } catch { return memDeviceKey || (memDeviceKey = newDeviceKey()); }
+  }
+  function deviceLabel() {
+    const ua = navigator.userAgent;
+    const browser = /Edg\//.test(ua) ? 'Edge' : /OPR\//.test(ua) ? 'Opera' : /Firefox\//.test(ua) ? 'Firefox' : /Chrome\//.test(ua) ? 'Chrome' : /Safari\//.test(ua) ? 'Safari' : 'Browser';
+    const os = /iPhone|iPad/.test(ua) ? 'iPhone/iPad' : /Android/.test(ua) ? 'Android' : /Windows/.test(ua) ? 'Windows' : /Mac OS X/.test(ua) ? 'Mac' : /Linux/.test(ua) ? 'Linux' : 'a device';
+    return `${browser} on ${os}`;
+  }
+  async function sessionCheck() {
+    const { data, error } = await db.rpc('forum_session_check', { p_device: deviceKey(), p_label: deviceLabel() });
+    if (error) return 'email';
+    const row = Array.isArray(data) ? data[0] : data;
+    return row?.status === 'ok' ? 'ok' : (row?.method === 'authenticator' ? 'authenticator' : 'email');
+  }
+  function renderStepUp() {
+    document.body.classList.toggle('fm-stepup', Boolean(state.stepUp));
+    $('[data-fm-stepup]')?.remove();
+    if (!state.stepUp) return;
+    const isApp = state.stepUp === 'authenticator';
+    const email = state.session?.user?.email || '';
+    const masked = email.replace(/^(.)(.*)(@.*)$/, (m, a, b, c) => a + '•'.repeat(Math.min(b.length, 6)) + c);
+    const status = el('p', { class: 'fm-status', role: 'status', 'aria-live': 'polite' });
+    const code = el('input', { name: 'code', inputmode: 'numeric', autocomplete: 'one-time-code', maxlength: '10', placeholder: '123456', 'aria-label': 'Code' });
+    const send = el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: '✉ Email me a code', onclick: async () => {
+      send.disabled = true; status.textContent = 'Sending your code…';
+      const { error } = await db.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: `${location.origin}/forum.html` } });
+      if (error) status.textContent = error.status === 429 ? 'A code was sent a moment ago. Please wait a minute, then ask again.' : 'The code could not be sent. Please try again in a minute.';
+      else { status.textContent = `Code sent to ${masked}. Enter it below. It works once.`; code.focus(); }
+      setTimeout(() => { send.disabled = false; send.textContent = '✉ Send a new code'; }, 60000);
+    } });
+    const confirmBtn = el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Confirm' });
+    const form = el('form', { class: 'fm-stepup-form', novalidate: '', onsubmit: async (ev) => {
+      ev.preventDefault();
+      const token = code.value.replace(/\D/g, '');
+      if (token.length < 6) { status.textContent = 'Enter the 6-digit code.'; code.focus(); return; }
+      confirmBtn.disabled = true; status.textContent = 'Checking…';
+      let error = null;
+      if (isApp) {
+        const { data: f, error: listError } = await db.auth.mfa.listFactors();
+        const factor = (f?.totp || []).find((x) => x.status === 'verified');
+        if (listError || !factor) error = listError || new Error('none');
+        else ({ error } = await db.auth.mfa.challengeAndVerify({ factorId: factor.id, code: token }));
+      } else {
+        ({ error } = await db.auth.verifyOtp({ email, token, type: 'email' }));
+      }
+      confirmBtn.disabled = false;
+      if (error) { status.textContent = 'That code did not work. Check it and try again' + (isApp ? '.' : ', or ask for a new code.'); return; }
+      status.textContent = 'Thank you. Opening the Forum…';
+      await refresh();
+    } }, [
+      el('label', {}, [isApp ? 'Code from your authenticator app' : 'Code from the email', code]),
+      confirmBtn
+    ]);
+    $('.fm-center').prepend(el('section', { class: 'fm-card fm-stepup', 'data-fm-stepup': '', 'aria-labelledby': 'fm-stepup-title' }, [
+      el('span', { class: 'fm-stepup-icon', 'aria-hidden': 'true', text: '🛡️' }),
+      el('h2', { id: 'fm-stepup-title', text: "Confirm it's you" }),
+      el('p', { text: isApp
+        ? "We don't recognise this device or location. Open your authenticator app (for example Microsoft or Google Authenticator) and enter the 6-digit code for WHSF Forum."
+        : `We don't recognise this device or location, so we need to check it's really you before you continue. We'll email a one-time code to ${masked}.` }),
+      isApp ? null : send,
+      form,
+      status,
+      el('p', { class: 'fm-small fm-muted', text: isApp
+        ? 'Lost access to your authenticator app? Email info@worldhsfoundation.org from your account email and WHSF will help you get back in.'
+        : "Can't find the email? Check your spam or junk folder. You can also open the sign-in link in that email on this device." }),
+      el('button', { class: 'fm-text-btn', type: 'button', text: 'Not you? Sign out', onclick: () => signOutNow() })
+    ]));
   }
 
   // ---------------------------------------------------------------- age verification (official photo ID + selfie)
@@ -964,6 +1048,7 @@
     $('[data-fm-join]').hidden = !signedIn || Boolean(state.profile);
     $$('[data-fm-staff-only]').forEach((n) => { n.hidden = !state.isStaff; });
     await renderVerify();
+    renderStepUp();
     $('[data-fm-composer]').hidden = !state.me;
     $('[data-fm-spaces-nav]').hidden = !state.me;
     if (signedIn && !state.profile) {
@@ -984,7 +1069,7 @@
     if (token) fetch('/api/forum-review-alert', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ kind, id }) }).catch(() => {});
   }
 
-  window.WHSFForum = { alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
+  window.WHSFForum = { deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => {
