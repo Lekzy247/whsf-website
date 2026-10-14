@@ -340,11 +340,20 @@
     const status = el('p', { class: 'fm-status', role: 'status', 'aria-live': 'polite' });
     const code = el('input', { name: 'code', inputmode: 'numeric', autocomplete: 'one-time-code', maxlength: '10', placeholder: '123456', 'aria-label': 'Code' });
     const send = el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: '✉ Email me a code', onclick: async () => {
-      send.disabled = true; status.textContent = 'Sending your code…';
+      send.disabled = true; send.textContent = 'Sending…';
+      status.textContent = `Sending a code to ${masked}…`;
       const { error } = await db.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: `${location.origin}/forum.html` } });
-      if (error) status.textContent = error.status === 429 ? 'A code was sent a moment ago. Please wait a minute, then ask again.' : 'The code could not be sent. Please try again in a minute.';
-      else { status.textContent = `Code sent to ${masked}. Enter it below. It works once.`; code.focus(); }
-      setTimeout(() => { send.disabled = false; send.textContent = '✉ Send a new code'; }, 60000);
+      if (error) {
+        status.textContent = error.status === 429
+          ? 'A code was sent a moment ago. Check your inbox (and spam), or wait a minute and ask again.'
+          : 'We could not send the code just now. Please press "Send a new code" in a few seconds.';
+        setTimeout(() => { send.disabled = false; send.textContent = '✉ Send a new code'; }, error.status === 429 ? 60000 : 8000);
+        return;
+      }
+      status.textContent = `Code sent to ${masked}. Enter it below. It works once.`;
+      code.focus();
+      send.textContent = '✉ Send a new code';
+      setTimeout(() => { send.disabled = false; }, 60000);
     } });
     const confirmBtn = el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Confirm' });
     const form = el('form', { class: 'fm-stepup-form', novalidate: '', onsubmit: async (ev) => {
