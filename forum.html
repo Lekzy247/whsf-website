@@ -20,15 +20,16 @@
   <link rel="stylesheet" href="styles.css?v=153">
   <link rel="stylesheet" href="gx.css?v=5">
   <link rel="stylesheet" href="gx-page.css?v=4">
-  <link rel="stylesheet" href="forum.css?v=37">
+  <link rel="stylesheet" href="forum.css?v=38">
   <link rel="stylesheet" href="verify-kit.css?v=1">
   <link rel="stylesheet" href="/theme.css?v=3">
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=21" defer></script>
+  <script src="forum.js?v=22" defer></script>
   <script src="forum-security.js?v=1" defer></script>
   <script src="forum-tags.js?v=1" defer></script>
+  <script src="forum-hubs.js?v=1" defer></script>
   <script src="forum-engage.js?v=7" defer></script>
   <script src="forum-social.js?v=4" defer></script>
   <script src="verify-wizard.js?v=1" defer></script>
@@ -440,6 +441,9 @@
           </form>
         </section>
 
+        <!-- Forum 2.0: get-started journey + hubs (forum-hubs.js) -->
+        <div data-fm-hubs-slot></div>
+
         <!-- WHSF advert: shown to everyone (moved to the landing page for visitors by forum.js) -->
         <div data-fm-whsf-ad-feed>
         <section class="fm-card fm-whsf-ad" data-fm-whsf-ad aria-label="From WHSF">
@@ -518,6 +522,11 @@
           <div data-fm-events></div>
         </section>
 
+        <!-- Grants & Scholarships finder -->
+        <section class="fm-card fm-funding" data-fm-view="funding" hidden>
+          <div data-fm-funding></div>
+        </section>
+
         <!-- Advertise on WHSF -->
         <section class="fm-card" data-fm-view="ads" hidden>
           <div data-fm-ads></div>
@@ -565,7 +574,7 @@
         <section class="fm-card">
           <h2 class="fm-side-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>Funding opportunities</h2>
           <ul class="fm-opps" data-fm-opps><li class="fm-muted">Loading…</li></ul>
-          <a class="fm-link" href="grants.html">All opportunities →</a>
+          <a class="fm-link" href="#funding">Search all funding →</a>
         </section>
         <section class="fm-card fm-safety">
           <h2 class="fm-side-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Stay safe</h2>
