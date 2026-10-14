@@ -1103,3 +1103,30 @@ body.fm-stepup .fm-center > :not([data-fm-stepup]) { display: none !important; }
 .fm-trend-text strong { color: var(--wx-wine); font-size: 14px; }
 .fm-trend-text small { color: var(--wx-muted); font-size: 12px; }
 .fm-trending p { margin: 0; }
+
+/* Always fit the phone screen: nothing wider than the screen, and no automatic zoom when a box is tapped
+   (iPhones zoom into any input with text smaller than 16px). */
+.fm fieldset { min-width: 0; max-width: 100%; }
+.fm input, .fm select, .fm textarea, .fm img, .fm video, .fm canvas, .fm table { max-width: 100%; }
+.fm-post-body, .fm-c-body, .fm-ev-detail, .fm-cf { overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  body.fm-app input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  body.fm-app select, body.fm-app textarea { font-size: 16px !important; }
+  body.fm-app .fm-stepup-form input { font-size: 22px !important; }
+}
+
+/* Like / Comment bar: one clean row on every screen. Tap Like = like; hold (phone) or hover (computer) = reactions.
+   The small reaction button is kept for keyboard users only (shown when focused). */
+.fm-eng-likewrap { flex: 1; }
+.fm-eng-likewrap .fm-eng-like { flex: 1; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.fm-eng-pick { position: absolute; width: 1px !important; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.fm-eng-pick:focus-visible { position: static; width: 28px !important; height: 28px; clip: auto; }
+.fm-eng-btn { white-space: nowrap; touch-action: manipulation; }
+.fm-c-act { touch-action: manipulation; }
+@media (max-width: 360px) {
+  .fm-eng-btn { gap: 4px; padding: 6px 0; }
+  .fm-eng-btn svg { width: 16px; height: 16px; }
+}
+.fm-ev-fs, .fm-ev-form { grid-template-columns: minmax(0, 1fr); }
+.fm-ev-fs > *, .fm-form > * { min-width: 0; }
+.fm-ev-fs input, .fm-ev-fs select, .fm-ev-fs textarea { width: 100%; box-sizing: border-box; }

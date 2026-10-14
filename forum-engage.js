@@ -80,6 +80,16 @@
     ui.picker = el('div', { class: 'fm-reaction-picker', role: 'group', 'aria-label': 'Reactions', hidden: '' },
       REACTIONS.map((r) => el('button', { type: 'button', title: r.t, 'aria-label': r.t, text: r.e, onclick: () => react(post.id, r.k) })));
     const likeWrap = el('div', { class: 'fm-eng-likewrap' }, [ui.likeBtn, ui.pickBtn, ui.picker]);
+    // Phone: press and hold Like to choose a reaction (a plain tap just likes), like Facebook.
+    let pressTimer; let longPressed = false;
+    ui.likeBtn.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') return;
+      longPressed = false;
+      pressTimer = setTimeout(() => { longPressed = true; showPicker(post.id, true); navigator.vibrate?.(15); }, 450);
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach((t) => ui.likeBtn.addEventListener(t, () => clearTimeout(pressTimer)));
+    ui.likeBtn.addEventListener('click', (e) => { if (longPressed) { e.stopImmediatePropagation(); longPressed = false; } }, true);
+    ui.likeBtn.addEventListener('contextmenu', (e) => e.preventDefault());
     // Desktop: hovering the Like button opens the reactions, like Facebook.
     let hoverTimer;
     likeWrap.addEventListener('mouseenter', () => { if (!matchMedia('(hover: hover)').matches) return; clearTimeout(hoverTimer); hoverTimer = setTimeout(() => showPicker(post.id, true), 450); });
@@ -88,7 +98,7 @@
     ui.saveBtn = el('button', { class: 'fm-eng-btn', type: 'button', 'aria-pressed': 'false', onclick: () => toggleSave(post.id) }, [icon(ICONS.save), el('span', { text: 'Save' })]);
     ui.bar = el('div', { class: 'fm-eng-bar' }, [
       member ? likeWrap : null,
-      el('button', { class: 'fm-eng-btn', type: 'button', onclick: () => toggleComments(post.id, null, true) }, [icon(ICONS.comment), el('span', { text: 'Comment' })]),
+      el('button', { class: 'fm-eng-btn', type: 'button', onclick: () => toggleComments(post.id, true, true) }, [icon(ICONS.comment), el('span', { text: 'Comment' })]),
       el('button', { class: 'fm-eng-btn', type: 'button', onclick: () => toggleShare(post.id) }, [icon(ICONS.share), el('span', { text: 'Share' })]),
       member ? ui.saveBtn : null
     ]);
@@ -150,20 +160,35 @@
   }
 
   // ---------------------------------------------------------------- reactions
+  document.addEventListener('pointerdown', (e) => {
+    cards.forEach((c, id) => { if (!c.ui.picker.hidden && !c.ui.picker.parentElement.contains(e.target)) showPicker(id, false); });
+  });
   function showPicker(id, open) {
     const c = cards.get(id); if (!c) return;
     c.ui.picker.hidden = !open;
     c.ui.pickBtn.setAttribute('aria-expanded', String(open));
   }
   async function react(id, kind) {
-    const c = cards.get(id); if (!c || !state.me) return;
+    const c = cards.get(id); if (!c || !state.me || c.reacting) return;
     showPicker(id, false);
     const current = c.stats?.my_reaction || null;
     const next = kind === null ? (current ? null : 'like') : (kind === current ? null : kind);
+    // Show the change straight away; the database confirms it a moment later.
+    if (c.stats) {
+      const s = c.stats; const r = { ...(s.reactions || {}) };
+      if (current) { r[current] = Math.max(0, (r[current] || 1) - 1); if (!r[current]) delete r[current]; }
+      if (next) r[next] = (r[next] || 0) + 1;
+      s.reactions = r;
+      s.reaction_total = Math.max(0, (s.reaction_total || 0) + (next ? 1 : 0) - (current ? 1 : 0));
+      s.my_reaction = next;
+      paint(c);
+    }
+    c.reacting = true;
     const res = next
       ? await db.from('forum_reactions').upsert({ post_id: id, user_id: state.me.user_id, kind: next }, { onConflict: 'post_id,user_id' })
       : await db.from('forum_reactions').delete().eq('post_id', id).eq('user_id', state.me.user_id);
-    if (res.error) return flash(c, 'Your reaction could not be saved. Please try again.');
+    c.reacting = false;
+    if (res.error) { await loadStats([id]); return flash(c, 'Your reaction could not be saved. Please try again.'); }
     await loadStats([id]);
     if (!c.ui.panel.hidden && c.ui.panel.dataset.kind === 'reactors') showReactors(id);
   }
@@ -319,7 +344,7 @@
     c.ui.commentSum.setAttribute('aria-expanded', String(show));
     if (!show) return;
     if (!c.commentsLoaded) loadComments(id, focus);
-    else if (focus) box.querySelector(':scope > .fm-c-form textarea')?.focus();
+    else if (focus) focusCommentBox(box);
   }
 
   const COMMENT_COLS = 'id,post_id,parent_id,body,created_at,edited_at,is_hidden,author_id,author:forum_profiles!forum_comments_author_id_fkey(display_name,headline,avatar_url),likes:forum_comment_likes(count)';
@@ -353,7 +378,13 @@
     c.liked = await myLikes(data);
     c.commentsLoaded = true;
     renderComments(c);
-    if (focus) box.querySelector(':scope > .fm-c-form textarea')?.focus();
+    if (focus) focusCommentBox(box);
+  }
+  function focusCommentBox(box) {
+    const ta = box.querySelector(':scope > .fm-c-form textarea');
+    if (!ta) return;
+    ta.focus({ preventScroll: true });
+    ta.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
   // Like Facebook: the two latest comments show first, with "View N more comments" above them.
   function renderComments(c) {
@@ -370,11 +401,18 @@
       item.querySelector('.fm-c-main').append(sub);
       list.append(item);
     });
-    c.ui.comments.replaceChildren(
+    // Keep a comment that is being typed when the list refreshes (for example after a Like).
+    const draft = c.ui.comments.querySelector(':scope > .fm-c-form textarea');
+    const keep = draft && draft.value ? { value: draft.value, mentions: draft._mentions } : null;
+    c.ui.comments.replaceChildren(...[
       hiddenCount ? el('button', { class: 'fm-c-more', type: 'button', text: `View ${plural(hiddenCount, 'more comment', 'more comments')}`, onclick: () => { c.expanded = true; renderComments(c); } }) : null,
       data.length ? list : el('p', { class: 'fm-muted fm-c-empty', text: 'No comments yet. Be the first to comment.' }),
       state.me ? commentForm(c, null) : null
-    );
+    ].filter(Boolean));
+    if (keep) {
+      const ta = c.ui.comments.querySelector(':scope > .fm-c-form textarea');
+      if (ta) { ta.value = keep.value; ta._mentions = keep.mentions; ta.dispatchEvent(new Event('input')); }
+    }
   }
 
   function renderComment(c, cm, liked) {
@@ -452,10 +490,19 @@
     ta.focus();
   }
   async function likeComment(c, id, isLiked) {
+    if (c.likingComment) return;
+    // Show the change straight away, then save it.
+    const cm = (c.commentData || []).find((x) => x.id === id);
+    c.liked = new Set(c.liked || []);
+    if (isLiked) c.liked.delete(id); else c.liked.add(id);
+    if (cm) cm.likes = [{ count: Math.max(0, (cm.likes?.[0]?.count || 0) + (isLiked ? -1 : 1)) }];
+    renderComments(c);
+    c.likingComment = true;
     const res = isLiked
       ? await db.from('forum_comment_likes').delete().eq('comment_id', id).eq('user_id', state.me.user_id)
       : await db.from('forum_comment_likes').insert({ comment_id: id, user_id: state.me.user_id });
-    if (!res.error) loadComments(c.post.id);
+    c.likingComment = false;
+    if (res.error) loadComments(c.post.id);
   }
   // Edit in place: Enter saves, Esc cancels (like Facebook).
   function editComment(c, li, cm) {
