@@ -264,14 +264,26 @@
     const plain = raw.toUpperCase().match(/WHSF-[A-Z0-9]{8}/);
     return plain ? { eventId: null, code: plain[0] } : null;
   }
-  function saveTicket(e, ticket, qr) {
-    const W = 600; const H = 340;
+  async function saveTicket(e, ticket, qr) {
+    let face = null;
+    try {
+      const u = ticket.photo_path ? await photoUrl(ticket.photo_path) : null;
+      if (u) { const blob = await (await fetch(u)).blob(); face = await createImageBitmap(blob); }
+    } catch { face = null; }
+    const W = 760; const H = 340;
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const g = c.getContext('2d');
     g.fillStyle = '#ffffff'; g.fillRect(0, 0, W, H);
     g.fillStyle = '#7b2142'; g.fillRect(0, 0, W, 54);
     g.fillStyle = '#ffffff'; g.font = '700 22px Inter, Arial, sans-serif'; g.fillText('WHSF Forum · Event ticket', 22, 35);
     g.drawImage(qr, 22, 76, 200, 200);
+    if (face) {
+      const s2 = Math.min(face.width, face.height);
+      g.save(); g.beginPath(); g.roundRect(W - 172, 76, 150, 190, 14); g.clip();
+      g.drawImage(face, (face.width - s2 * 150 / 190) / 2, (face.height - s2) / 2, s2 * 150 / 190, s2, W - 172, 76, 150, 190);
+      g.restore();
+      g.fillStyle = '#4b3a43'; g.font = '400 13px Inter, Arial, sans-serif'; g.fillText((state.me.display_name || '').slice(0, 22), W - 172, 290);
+    }
     g.fillStyle = '#2a0a17'; g.font = '700 20px Inter, Arial, sans-serif';
     const words = e.title.split(' '); let line = ''; let y = 100;
     words.forEach((w) => { if (g.measureText(`${line}${w} `).width > 340) { g.fillText(line, 240, y); line = ''; y += 26; } line += `${w} `; });
@@ -341,9 +353,96 @@
     return { box, start, stop, get running() { return Boolean(stream); } };
   }
 
+  // ---------------------------------------------------------------- participant photo (registration, ticket, check-in)
+  // Private bucket forum-event-photos, path <event id>/<user id>/<random>.jpg. Only the participant, the host
+  // and WHSF moderators can open it (signed links that expire after an hour).
+  const PHOTO_BUCKET = 'forum-event-photos';
+  const photoUrls = new Map();
+  async function photoUrl(path) {
+    if (!path) return null;
+    if (photoUrls.has(path)) return photoUrls.get(path);
+    const { data } = await db.storage.from(PHOTO_BUCKET).createSignedUrl(path, 3600);
+    const url = data?.signedUrl || null;
+    if (url) photoUrls.set(path, url);
+    return url;
+  }
+  async function photoUrlsFor(paths) {
+    const need = [...new Set(paths.filter((p) => p && !photoUrls.has(p)))];
+    if (need.length) {
+      const { data } = await db.storage.from(PHOTO_BUCKET).createSignedUrls(need, 3600);
+      (data || []).forEach((d) => { if (d.signedUrl) photoUrls.set(d.path, d.signedUrl); });
+    }
+    return photoUrls;
+  }
+  // Shrink to a clear face photo (max 900px, JPEG) before upload.
+  async function toJpeg(file) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = new Image(); img.src = url; await img.decode();
+      const scale = Math.min(1, 900 / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      const blob = await new Promise((resolve) => c.toBlob(resolve, 'image/jpeg', 0.88));
+      return blob ? new File([blob], 'photo.jpg', { type: 'image/jpeg' }) : file;
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async function uploadEventPhoto(e, file) {
+    const jpg = await toJpeg(file);
+    if (jpg.size > 5 * 1024 * 1024) throw new Error('The photo must be 5 MB or smaller.');
+    const path = `${e.id}/${state.me.user_id}/${crypto.randomUUID()}.jpg`;
+    const { error } = await db.storage.from(PHOTO_BUCKET).upload(path, jpg, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw new Error('Your photo could not be uploaded. Please try again.');
+    return path;
+  }
+  // Photo picker: live camera (front) or upload, with a preview. getFile() returns the chosen image.
+  function photoPicker(required) {
+    let chosen = null; let stream = null;
+    const preview = el('img', { class: 'fm-photo-preview', alt: 'Your photo', hidden: '' });
+    const empty = el('span', { class: 'fm-photo-empty', 'aria-hidden': 'true', text: '🙂' });
+    const video = el('video', { class: 'fm-photo-cam', autoplay: '', playsinline: '', muted: '', hidden: '' }); video.muted = true;
+    const note = el('small', { class: 'fm-muted', text: required ? 'Required: a clear photo of your face (no hat or sunglasses). It appears on your ticket and is used to identify you at check-in.' : 'Optional for online events: a clear photo of your face for your ticket.' });
+    const fileIn = el('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp', hidden: '' });
+    const setFile = (file) => {
+      chosen = file;
+      if (preview.dataset.url) URL.revokeObjectURL(preview.dataset.url);
+      preview.dataset.url = URL.createObjectURL(file); preview.src = preview.dataset.url;
+      preview.hidden = false; empty.hidden = true;
+    };
+    const stopCam = () => { stream?.getTracks().forEach((t) => t.stop()); stream = null; video.hidden = true; snap.hidden = true; camBtn.hidden = false; };
+    const snap = el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: '📸 Take photo', hidden: '', onclick: () => {
+      if (!video.videoWidth) return;
+      const c = document.createElement('canvas'); c.width = video.videoWidth; c.height = video.videoHeight;
+      c.getContext('2d').drawImage(video, 0, 0);
+      c.toBlob((b) => { if (b) setFile(new File([b], 'photo.jpg', { type: 'image/jpeg' })); stopCam(); }, 'image/jpeg', 0.9);
+    } });
+    const camBtn = el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: '📷 Take a selfie', onclick: async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+        video.srcObject = stream; video.hidden = false; snap.hidden = false; camBtn.hidden = true;
+      } catch { note.textContent = 'The camera could not be opened. Use "Upload a photo" instead, or allow the camera for this site.'; }
+    } });
+    fileIn.addEventListener('change', () => { const file = fileIn.files[0]; fileIn.value = ''; if (!file) return; if (!/^image\/(jpeg|png|webp)$/.test(file.type)) { note.textContent = 'Use a JPG, PNG or WebP photo.'; return; } stopCam(); setFile(file); });
+    const node = el('div', { class: 'fm-photo-pick' }, [
+      el('span', { class: 'fm-photo-label', text: required ? 'Your photo for check-in' : 'Your photo (optional)' }),
+      el('div', { class: 'fm-photo-row' }, [
+        el('div', { class: 'fm-photo-frame' }, [empty, preview, video]),
+        el('div', { class: 'fm-photo-actions' }, [
+          navigator.mediaDevices?.getUserMedia ? camBtn : null, snap,
+          el('label', { class: 'hp-btn hp-btn-outline fm-photo-upload' }, ['⬆ Upload a photo', fileIn]),
+          note
+        ])
+      ])
+    ]);
+    window.addEventListener('hashchange', stopCam, { once: true });
+    return { node, getFile: () => chosen, stop: stopCam };
+  }
+
   // ---------------------------------------------------------------- registration form (participant details)
   function registrationForm(e, onDone) {
     const status = el('p', { class: 'fm-status', role: 'status' });
+    const photoRequired = e.format !== 'online';
+    const picker = photoPicker(photoRequired);
     const typeSel = el('select', { name: 'participant_type', required: '' }, [
       el('option', { value: '', text: 'Choose…' }),
       ...PTYPE_GROUPS.map(([label, items]) => el('optgroup', { label }, items.map(([v, t]) => el('option', { value: v, text: t }))))
@@ -359,7 +458,8 @@
         el('label', {}, ['Participating as', typeSel])
       ]),
       el('label', {}, ['Accessibility or interpretation needs', el('small', { text: ' (optional)' }), el('input', { name: 'access_needs', maxlength: '300', placeholder: 'e.g. wheelchair access, captions, French interpretation' })]),
-      el('label', { class: 'fm-check' }, [el('input', { type: 'checkbox', name: 'consent' }), el('span', { text: `I agree that my name and these details are shared with the organiser (${e.organizer_name || 'the event host'}) and WHSF to manage this event.` })]),
+      picker.node,
+      el('label', { class: 'fm-check' }, [el('input', { type: 'checkbox', name: 'consent' }), el('span', { text: `I agree that my name, photo and these details are shared with the organiser (${e.organizer_name || 'the event host'}) and WHSF to manage this event and identify me at check-in.` })]),
       el('div', { class: 'fm-actions' }, [
         el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: e.approval_required ? 'Send request' : 'Register (free)' }),
         el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel', onclick: () => f.remove() })
@@ -372,14 +472,25 @@
       if (v('organization').length < 2) { status.textContent = 'Please enter your organisation (or "Independent").'; return; }
       if (v('country').length < 2) { status.textContent = 'Please enter your country.'; return; }
       if (!typeSel.value) { status.textContent = 'Please choose how you are participating.'; return; }
+      if (photoRequired && !picker.getFile()) { status.textContent = 'Please add a clear photo of your face (take a selfie or upload a photo).'; picker.node.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
       if (!f.elements.consent.checked) { status.textContent = 'Please tick the box to agree to share your details with the organiser.'; return; }
       const btn = f.querySelector('button[type="submit"]'); btn.disabled = true;
+      let photoPath = null;
+      if (picker.getFile()) {
+        status.textContent = 'Uploading your photo…';
+        try { photoPath = await uploadEventPhoto(e, picker.getFile()); } catch (err) { btn.disabled = false; status.textContent = err.message; return; }
+      }
+      status.textContent = 'Registering…';
       const { error } = await db.rpc('forum_event_register_v2', { p_event: e.id, p_details: {
         organization: v('organization'), job_title: v('job_title'), country: v('country'), participant_type: typeSel.value,
-        access_needs: v('access_needs'), consent: true
+        access_needs: v('access_needs'), consent: true, photo_path: photoPath
       } });
       btn.disabled = false;
-      if (error) { status.textContent = error.message; return; }
+      if (error) {
+        if (photoPath) db.storage.from(PHOTO_BUCKET).remove([photoPath]).catch(() => {});
+        status.textContent = error.message; return;
+      }
+      picker.stop();
       onDone();
     });
     return f;
@@ -394,7 +505,7 @@
     const isHost = e.host_id === state.me.user_id;
     const [hosts, cmap, { data: ticket }, { data: priv }] = await Promise.all([
       hostNames([e.host_id]), counts([e.id]),
-      db.from('forum_tickets').select('id,code,status').eq('event_id', e.id).eq('holder_id', state.me.user_id).neq('status', 'cancelled').maybeSingle(),
+      db.from('forum_tickets').select('id,code,status,photo_path').eq('event_id', e.id).eq('holder_id', state.me.user_id).neq('status', 'cancelled').maybeSingle(),
       db.from('forum_event_private').select('meeting_link').eq('event_id', e.id).maybeSingle()
     ]);
     const host = hosts.get(e.host_id) || { display_name: 'Member' };
@@ -414,13 +525,34 @@
       action.append(el('p', { class: 'fm-muted', text: `You are the host · ${seatsText(e, c)}${c.pending ? ` · ${c.pending} waiting for your approval` : ''}` }));
     } else if (ticket && ['registered', 'checked_in'].includes(ticket.status)) {
       const qr = el('canvas', { width: '140', height: '140', 'aria-label': `QR code for ticket ${ticket.code}` });
+      const face = el('div', { class: 'fm-ticket-photo' }, [el('span', { class: 'fm-photo-empty', text: '🙂' })]);
+      if (ticket.photo_path) photoUrl(ticket.photo_path).then((u) => { if (u) face.replaceChildren(el('img', { src: u, alt: `Photo of ${state.me.display_name || 'the ticket holder'}` })); });
+      const changePhoto = ticket.status === 'registered' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: ticket.photo_path ? 'Change photo' : 'Add your photo', onclick: (ev) => {
+        ev.currentTarget.hidden = true;
+        const picker = photoPicker(e.format !== 'online');
+        const save = el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Save photo', onclick: async () => {
+          if (!picker.getFile()) { status.textContent = 'Take a selfie or upload a photo first.'; return; }
+          save.disabled = true; status.textContent = 'Uploading your photo…';
+          try {
+            const path = await uploadEventPhoto(e, picker.getFile());
+            const { error } = await db.rpc('forum_ticket_set_photo', { p_ticket: ticket.id, p_path: path });
+            if (error) throw new Error(error.message);
+            if (ticket.photo_path) db.storage.from(PHOTO_BUCKET).remove([ticket.photo_path]).catch(() => {});
+            picker.stop(); renderDetail(e.id);
+          } catch (err) { save.disabled = false; status.textContent = err.message; }
+        } });
+        action.append(el('div', { class: 'fm-ev-reg' }, [picker.node, save]));
+      } }) : null;
       action.append(el('div', { class: 'fm-ticket' }, [
+        face,
         qr,
         el('div', {}, [
           el('strong', { text: ticket.status === 'checked_in' ? 'You are checked in' : 'Your place is confirmed' }),
+          el('span', { class: 'fm-ticket-name', text: state.me.display_name || '' }),
           el('p', { class: 'fm-ticket-no' }, [el('small', { text: 'Ticket number' }), el('b', { text: ticket.code })]),
           el('small', { class: 'fm-muted', text: 'Show this QR code or ticket number at the entrance. The organiser scans it to check you in.' }),
           el('button', { class: 'fm-text-btn', type: 'button', text: 'Save ticket image', onclick: () => saveTicket(e, ticket, qr) }),
+          changePhoto,
           safeUrl(priv?.meeting_link) ? el('a', { class: 'hp-btn hp-btn-primary', href: priv.meeting_link, target: '_blank', rel: 'noopener noreferrer', text: 'Join online' }) : null,
           ticket.status === 'registered' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel my registration', onclick: () => confirmBox(action, 'Cancel your registration?', async () => {
             const { error } = await db.rpc('forum_ticket_cancel', { p_ticket: ticket.id });
@@ -575,10 +707,11 @@
   async function attendees(e) {
     const wrap = el('div', { class: 'fm-ev-attendees' }, [el('h3', { text: 'Registrations and check-in' })]);
     const { data: tickets } = await db.from('forum_tickets')
-      .select('id,code,status,holder_id,checked_in_at,created_at,organization,job_title,country,participant_type,access_needs')
+      .select('id,code,status,holder_id,checked_in_at,created_at,organization,job_title,country,participant_type,access_needs,photo_path')
       .eq('event_id', e.id).neq('status', 'cancelled').order('created_at');
     const names = await hostNames((tickets || []).map((t) => t.holder_id));
     const rows = tickets || [];
+    const urls = await photoUrlsFor(rows.map((t) => t.photo_path));
     const result = el('div', { class: 'fm-checkin-result', role: 'status', 'aria-live': 'assertive' });
     const code = el('input', { type: 'text', placeholder: 'Ticket number, e.g. WHSF-1A2B3C4D', maxlength: '80', autocomplete: 'off', autocapitalize: 'characters', 'aria-label': 'Ticket number' });
     const tally = (s) => rows.filter((t) => s.includes(t.status)).length;
@@ -586,15 +719,27 @@
     // Every check-in is confirmed by the event database (forum_check_in): only a confirmed ticket for this event passes.
     const checkIn = async (text, via) => {
       const t = parseTicket(text);
-      const show = (ok, title, detail) => result.replaceChildren(el('div', { class: `fm-checkin-msg ${ok ? 'is-ok' : 'is-bad'}` }, [
-        el('strong', { text: `${ok ? '✓' : '✕'} ${title}` }), detail ? el('small', { text: detail }) : null
+      const show = (ok, title, detail, guest) => result.replaceChildren(el('div', { class: `fm-checkin-msg ${ok ? 'is-ok' : 'is-bad'}${guest ? ' has-photo' : ''}` }, [
+        guest ? el('div', { class: 'fm-checkin-face' }, [guest.url ? el('img', { src: guest.url, alt: `Photo of ${guest.name}` }) : el('span', { class: 'fm-photo-empty', text: 'No photo' })]) : null,
+        el('div', {}, [
+          el('strong', { text: `${ok ? '✓' : '✕'} ${title}` }),
+          guest ? el('span', { class: 'fm-checkin-name', text: guest.name }) : null,
+          detail ? el('small', { text: detail }) : null,
+          guest ? el('small', { class: 'fm-checkin-compare', text: 'Compare the photo with the person in front of you.' }) : null
+        ])
       ]));
       if (!t) return show(false, 'Not a WHSF ticket', 'Scan the QR on the guest\'s WHSF ticket or type a ticket number like WHSF-1A2B3C4D.');
       if (t.eventId && t.eventId !== e.id) return show(false, 'Ticket for a different event', `${t.code} is not valid for this event.`);
       const { data, error } = await db.rpc('forum_check_in', { p_event: e.id, p_code: t.code });
       if (error) return show(false, 'Not checked in', `${t.code}: ${error.message}`);
       const already = /already checked in/i.test(data || '');
-      show(true, already ? 'Already checked in' : 'Checked in', `${String(data).replace(/ \(already checked in\)$/, '')} · ${t.code} · ${via === 'qr' ? 'QR code' : 'ticket number'} · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+      const name = String(data).replace(/ \(already checked in\)$/, '');
+      let row = rows.find((r) => r.code === t.code);
+      if (!row) { const { data: fresh } = await db.from('forum_tickets').select('code,photo_path,organization,country').eq('event_id', e.id).eq('code', t.code).maybeSingle(); row = fresh || null; }
+      const url = row?.photo_path ? (urls.get(row.photo_path) || await photoUrl(row.photo_path)) : null;
+      show(true, already ? 'Already checked in' : 'Checked in',
+        `${t.code} · ${[row?.organization, row?.country].filter(Boolean).join(' · ')}${row?.organization || row?.country ? ' · ' : ''}${via === 'qr' ? 'QR code' : 'ticket number'} · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+        { name, url });
       if (!already) changed = true;
     };
     // A QR held in front of the camera is read once; the same ticket is ignored for 10 seconds.
@@ -623,7 +768,13 @@
       ]),
       scanner.box,
       result,
-      rows.length ? el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Download list (CSV)', onclick: () => exportCsv(e, rows, names) }) : null
+      rows.length ? el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Download list (CSV)', onclick: () => exportCsv(e, rows, names) }) : null,
+      rows.some((t) => t.photo_path) ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Delete all participant photos', onclick: (ev) => confirmBox(ev.currentTarget.parentElement, 'Delete every participant photo for this event? Do this after the event; it cannot be undone.', async () => {
+        const withPhoto = rows.filter((t) => t.photo_path);
+        await db.storage.from(PHOTO_BUCKET).remove(withPhoto.map((t) => t.photo_path));
+        await Promise.all(withPhoto.map((t) => db.rpc('forum_ticket_set_photo', { p_ticket: t.id, p_path: null })));
+        renderDetail(e.id);
+      }) }) : null
     ].filter(Boolean));
     const list = el('ul', { class: 'fm-ev-guests' });
     rows.forEach((t) => {
@@ -631,7 +782,9 @@
         const { error } = await db.rpc('forum_ticket_decide', { p_ticket: t.id, p_approve: approve });
         if (error) result.textContent = error.message; else renderDetail(e.id);
       };
+      const thumb = urls.get(t.photo_path);
       list.append(el('li', { class: `is-${t.status}` }, [
+        el('span', { class: 'fm-guest-photo' }, [thumb ? el('img', { src: thumb, alt: '', loading: 'lazy' }) : el('span', { text: '🙂', 'aria-hidden': 'true' })]),
         el('span', {}, [
           el('strong', { text: names.get(t.holder_id)?.display_name || 'Member' }),
           el('small', { text: [t.job_title, t.organization, t.country].filter(Boolean).join(' · ') }),
