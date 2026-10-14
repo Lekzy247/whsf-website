@@ -1,0 +1,51 @@
+/* "Take part" panel on WHSF programme pages (programme-join.js). Self-contained so it fits every page style. */
+.tp-section { padding: 56px 16px; background: linear-gradient(180deg, #fbf3f6 0%, #fff 100%); scroll-margin-top: 80px; }
+.tp-shell { max-width: 1120px; margin: 0 auto; font-family: Inter, Arial, sans-serif; color: #2a0a17; }
+.tp-head { max-width: 720px; margin-bottom: 18px; }
+.tp-eyebrow { display: inline-block; margin-bottom: 6px; color: #7b2142; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.tp-head h2 { margin: 0 0 6px; font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; color: #2a0a17; }
+.tp-head p { margin: 0; color: #5b4852; font-size: 16px; }
+.tp-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.tp-tab { padding: 9px 16px; border: 1px solid #d9c3cd; border-radius: 999px; background: #fff; color: #4b3a43; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.tp-tab.is-on { border-color: #7b2142; background: #7b2142; color: #fff; }
+.tp-who { margin: 0 0 16px; color: #5b4852; font-size: 15px; }
+.tp-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.tp-card { display: grid; align-content: start; gap: 8px; padding: 18px; border: 1px solid #efdfe6; border-radius: 18px; background: #fff; box-shadow: 0 6px 20px rgb(42 10 23 / 6%); }
+.tp-num { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #f6e8ee; color: #7b2142; font-weight: 800; }
+.tp-card h3 { margin: 0; font-size: 18px; color: #2a0a17; }
+.tp-card p { margin: 0 0 4px; color: #5b4852; font-size: 14.5px; line-height: 1.5; }
+.tp-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 18px; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; }
+.tp-btn-primary { border: 0; background: #7b2142; color: #fff; }
+.tp-btn-primary:hover { background: #64182f; }
+.tp-btn-primary:disabled { opacity: .6; cursor: default; }
+.tp-btn-outline { border: 1.5px solid #7b2142; background: #fff; color: #7b2142; }
+.tp-trainings { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tp-trainings a { color: #2a0a17; font-weight: 700; font-size: 14.5px; }
+.tp-trainings small { display: block; color: #7a6570; font-size: 13px; }
+.tp-muted { color: #7a6570; font-size: 14px; }
+.tp-form-slot { margin-top: 16px; }
+.tp-form-slot[hidden] { display: none; }
+.tp-form { display: grid; gap: 12px; max-width: 760px; padding: 20px; border: 1px solid #efdfe6; border-radius: 18px; background: #fff; }
+.tp-form label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; color: #2a0a17; }
+.tp-form input, .tp-form select, .tp-form textarea { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #d9c3cd; border-radius: 10px; background: #fff; font: inherit; font-size: 16px; box-sizing: border-box; color: #2a0a17; }
+.tp-form textarea { resize: vertical; }
+.tp-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.tp-check { display: flex !important; grid-template-columns: none; flex-direction: row; gap: 10px; align-items: flex-start; font-weight: 500 !important; }
+.tp-check[hidden] { display: none !important; }
+.tp-check input { width: 20px; min-height: 20px; height: 20px; margin-top: 2px; flex: none; }
+.tp-hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.tp-note { margin: 0; padding: 10px 12px; border-radius: 10px; background: #fff7e0; color: #6b4b00; font-size: 14px; }
+.tp-status { margin: 0; font-size: 14px; color: #4b3a43; }
+.tp-status:empty { display: none; }
+.tp-status.is-error { color: #a3122e; font-weight: 600; }
+.tp-done { display: grid; gap: 8px; justify-items: start; max-width: 760px; padding: 20px; border: 1px solid #b8e3c7; border-radius: 18px; background: #eefaf2; }
+.tp-done strong { color: #135e33; font-size: 18px; }
+.tp-done p { margin: 0; }
+@media (max-width: 980px) { .tp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+  .tp-section { padding: 40px 16px; }
+  .tp-grid { grid-template-columns: 1fr; }
+  .tp-row { grid-template-columns: 1fr; }
+  .tp-card .tp-btn { width: 100%; }
+  .tp-form { padding: 16px; }
+}
