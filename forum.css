@@ -923,14 +923,16 @@ body.fm-app .fm-me-menu .fm-me-head strong { font-weight: 500 !important; }
 [data-fm-self-only] { display: grid; gap: 10px; }
 
 /* Tickets and QR check-in */
-.fm-ticket canvas { width: 140px; height: 140px; }
+.fm-ticket canvas { width: 170px; height: 170px; }
 .fm-ticket-no { display: grid; gap: 0; margin: 2px 0; }
 .fm-ticket-no small { color: var(--wx-muted); font-size: var(--fm-t-micro); letter-spacing: .08em; text-transform: uppercase; }
 .fm-ticket-no b { font-family: ui-monospace, Consolas, monospace; font-size: 20px; letter-spacing: .04em; color: var(--wx-ink); }
 .fm-checkin-tools { display: grid; gap: 10px; }
 .fm-scan { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--wx-line); border-radius: 14px; background: #1d1018; }
 .fm-scan[hidden] { display: none; }
-.fm-scan-video { width: 100%; max-height: 340px; border-radius: 10px; object-fit: cover; background: #000; }
+.fm-scan-view { position: relative; overflow: hidden; border-radius: 10px; background: #000; }
+.fm-scan-video { display: block; width: 100%; max-height: 340px; object-fit: cover; background: #000; }
+.fm-scan-aim { position: absolute; top: 50%; left: 50%; width: min(60%, 220px); aspect-ratio: 1; transform: translate(-50%, -50%); border: 3px solid #fff; border-radius: 16px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, .35); pointer-events: none; }
 .fm-scan .fm-muted { margin: 0; color: #f3e6ec; text-align: center; }
 .fm-checkin-result:empty { display: none; }
 .fm-checkin-msg { display: grid; gap: 2px; padding: 14px 16px; border-radius: 14px; }
@@ -1006,7 +1008,7 @@ div.fm-cf-banner small { font-size: 14px; opacity: .92; }
 .fm-cf-dl dd { margin: 0; color: var(--wx-ink); overflow-wrap: anywhere; }
 .fm-cf-person .fm-cf-dl { grid-template-columns: 130px minmax(0, 1fr); flex: 1; min-width: 0; }
 .fm-cf-ticket { display: grid; gap: 8px; justify-items: center; text-align: center; }
-.fm-cf-ticket canvas { width: 180px; height: 180px; border-radius: 8px; }
+.fm-cf-ticket canvas { width: 200px; height: 200px; border-radius: 8px; }
 .fm-cf-event-title { margin: 0 0 4px; font-size: 20px; font-weight: 700; color: var(--wx-ink); }
 .fm-cf-theme { margin: 0 0 14px; color: var(--wx-muted); font-style: italic; }
 .fm-cf-steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }

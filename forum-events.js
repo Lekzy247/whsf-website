@@ -310,44 +310,67 @@
   }));
   function qrScanner(onCode) {
     const video = el('video', { class: 'fm-scan-video', autoplay: '', playsinline: '', muted: '' });
-    video.muted = true;
+    video.muted = true; video.setAttribute('webkit-playsinline', '');
+    const aim = el('span', { class: 'fm-scan-aim', 'aria-hidden': 'true' });
     const note = el('p', { class: 'fm-muted', text: 'Point the camera at the guest\'s QR code.' });
-    const box = el('div', { class: 'fm-scan', hidden: '' }, [video, note]);
-    let stream = null; let timer = null; let busy = false; let detector = null; let jsqr = null;
+    const box = el('div', { class: 'fm-scan', hidden: '' }, [el('div', { class: 'fm-scan-view' }, [video, aim]), note]);
+    let stream = null; let timer = null; let busy = false; let detector = null; let jsqr = null; let frames = 0;
     const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const stop = () => { clearInterval(timer); timer = null; stream?.getTracks().forEach((t) => t.stop()); stream = null; video.srcObject = null; box.hidden = true; };
+    // Read one frame: centre square first (where the guide box is), then the whole frame, both scaled down
+    // so phones stay fast. jsQR tries normal and inverted (dark-mode) codes.
+    const readJsQR = () => {
+      const vw = video.videoWidth; const vh = video.videoHeight; const side = Math.min(vw, vh);
+      const tries = [[(vw - side * 0.75) / 2, (vh - side * 0.75) / 2, side * 0.75, side * 0.75], [0, 0, vw, vh]];
+      for (const [sx, sy, sw, sh] of tries) {
+        const scale = Math.min(1, 640 / Math.max(sw, sh));
+        canvas.width = Math.round(sw * scale); canvas.height = Math.round(sh * scale);
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+        const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const hit = jsqr(img.data, img.width, img.height, { inversionAttempts: 'attemptBoth' });
+        if (hit?.data) return hit.data;
+      }
+      return null;
+    };
     const tick = async () => {
       if (busy || !stream || !video.videoWidth) return;
       busy = true;
       try {
         let text = null;
         if (detector) {
-          const found = await detector.detect(video);
-          text = found[0]?.rawValue || null;
-        } else if (jsqr) {
-          canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-          ctx.drawImage(video, 0, 0);
-          const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          text = jsqr(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' })?.data || null;
+          try { text = (await detector.detect(video))[0]?.rawValue || null; }
+          catch { detector = null; jsqr = await loadJsQR(); }
         }
-        if (text) { await onCode(text); await new Promise((r) => setTimeout(r, 2200)); }
+        if (!text && jsqr) text = readJsQR();
+        frames += 1;
+        if (!text && frames % 6 === 0) note.textContent = 'Scanning… hold the QR code inside the box, about 20 cm away. Ask the guest to turn up their screen brightness.';
+        if (text) {
+          navigator.vibrate?.(120);
+          note.textContent = 'QR code found. Checking the ticket…';
+          await onCode(text);
+          note.textContent = 'Ready for the next guest.';
+          await new Promise((r) => setTimeout(r, 1800));
+        }
       } catch { /* keep scanning */ }
       busy = false;
     };
     const start = async () => {
-      box.hidden = false; note.textContent = 'Opening the camera…';
+      box.hidden = false; note.textContent = 'Opening the camera…'; frames = 0;
       try {
+        detector = null; jsqr = null;
         if ('BarcodeDetector' in window && (await window.BarcodeDetector.getSupportedFormats?.())?.includes('qr_code')) detector = new window.BarcodeDetector({ formats: ['qr_code'] });
         else jsqr = await loadJsQR();
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
       } catch (err) {
         stop(); box.hidden = false;
         note.textContent = err?.name === 'NotAllowedError' ? 'Camera access was blocked. Allow the camera for this site, or type the ticket number.' : 'The camera or QR reader is not available on this device. Type the ticket number instead.';
         return;
       }
       video.srcObject = stream;
-      note.textContent = 'Point the camera at the guest\'s QR code. Keep scanning; each result shows below.';
-      timer = setInterval(tick, 350);
+      try { await video.play(); } catch { /* autoplay already running */ }
+      note.textContent = 'Hold the guest\'s QR code inside the box. The result appears above.';
+      timer = setInterval(tick, 300);
+      box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     };
     window.addEventListener('hashchange', stop, { once: true });
     return { box, start, stop, get running() { return Boolean(stream); } };
@@ -561,7 +584,7 @@
           }) }) : null
         ])
       ]));
-      if (window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticketPayload(e.id, ticket.code), { width: 160, margin: 1, errorCorrectionLevel: 'M', color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
+      if (window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticketPayload(e.id, ticket.code), { width: 200, margin: 3, errorCorrectionLevel: 'M', color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
     } else if (ticket && ['pending', 'waitlisted', 'declined'].includes(ticket.status)) {
       action.append(el('div', { class: `fm-ev-state is-${ticket.status}` }, [
         el('strong', { text: TICKET_LABEL[ticket.status] }),
@@ -721,7 +744,8 @@
     // Every check-in is confirmed by the event database (forum_check_in): only a confirmed ticket for this event passes.
     const checkIn = async (text, via) => {
       const t = parseTicket(text);
-      const show = (ok, title, detail, guest) => result.replaceChildren(el('div', { class: `fm-checkin-msg ${ok ? 'is-ok' : 'is-bad'}${guest ? ' has-photo' : ''}` }, [
+      const show = (ok, title, detail, guest) => { showMsg(ok, title, detail, guest); result.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); };
+      const showMsg = (ok, title, detail, guest) => result.replaceChildren(el('div', { class: `fm-checkin-msg ${ok ? 'is-ok' : 'is-bad'}${guest ? ' has-photo' : ''}` }, [
         guest ? el('div', { class: 'fm-checkin-face' }, [guest.url ? el('img', { src: guest.url, alt: `Photo of ${guest.name}` }) : el('span', { class: 'fm-photo-empty', text: 'No photo' })]) : null,
         el('div', {}, [
           el('strong', { text: `${ok ? '✓' : '✕'} ${title}` }),
@@ -768,8 +792,8 @@
           if (changed) setTimeout(() => renderDetail(e.id), 1500);
         } }, [code, el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Check in' })])
       ]),
-      scanner.box,
       result,
+      scanner.box,
       rows.length ? el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Download list (CSV)', onclick: () => exportCsv(e, rows, names) }) : null,
       rows.some((t) => t.photo_path) ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Delete all participant photos', onclick: (ev) => confirmBox(ev.currentTarget.parentElement, 'Delete every participant photo for this event? Do this after the event; it cannot be undone.', async () => {
         const withPhoto = rows.filter((t) => t.photo_path);
@@ -1183,7 +1207,7 @@
         ])
       ])
     );
-    if (qr && window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticketPayload(e.id, t.code), { width: 180, margin: 1, errorCorrectionLevel: 'M', color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
+    if (qr && window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticketPayload(e.id, t.code), { width: 220, margin: 3, errorCorrectionLevel: 'M', color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
     window.scrollTo(0, 0); document.scrollingElement?.scrollTo?.(0, 0); document.body.scrollTo?.(0, 0);
   }
 
