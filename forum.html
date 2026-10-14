@@ -26,11 +26,11 @@
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha384-GFr3yTh5lJznCbZfpTtXnwboFsxqtTQoeTZCRHhE0579KrRmlCzen5AA8ohaB5ug" crossorigin="anonymous" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js" integrity="sha384-VT1EeewTCEXgndcPMQ0PzV+uVFYjxFIjmAA7s5gcMX9t4Dt5TD+OVQIn7NJWIXn7" crossorigin="anonymous" defer></script>
-  <script src="forum.js?v=20" defer></script>
+  <script src="forum.js?v=21" defer></script>
   <script src="forum-security.js?v=1" defer></script>
   <script src="forum-tags.js?v=1" defer></script>
   <script src="forum-engage.js?v=7" defer></script>
-  <script src="forum-social.js?v=3" defer></script>
+  <script src="forum-social.js?v=4" defer></script>
   <script src="verify-wizard.js?v=1" defer></script>
   <script src="selfie-camera.js?v=1" defer></script>
   <script src="forum-events.js?v=13" defer></script>
@@ -59,7 +59,7 @@
           <a href="#alerts" data-fm-tab="alerts" data-fm-profile-tab hidden><span class="fm-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><b class="fm-badge-n" data-fm-badge-alerts hidden></b></span><span>Alerts</span></a>
           <a href="#idchecks" data-fm-tab="idchecks" data-fm-staff-only hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/></svg><span>ID checks</span></a>
           <div class="fm-me" data-fm-me>
-            <button type="button" class="fm-me-btn" aria-haspopup="menu" aria-expanded="false" data-fm-me-toggle><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true">?</span><span>Me ▾</span></button>
+            <button type="button" class="fm-me-btn" aria-haspopup="menu" aria-expanded="false" data-fm-me-toggle><span class="fm-me-dot" data-fm-me-avatar aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span>Me ▾</span></button>
           </div>
         </nav>
         <button type="button" class="fm-search-toggle" aria-label="Search members" aria-expanded="false" data-fm-search-toggle><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
@@ -467,7 +467,7 @@
         <!-- People -->
         <section class="fm-card" data-fm-view="people" hidden>
           <h2>People in the forum</h2>
-          <p class="fm-muted">Follow members to see their posts under <em>My network</em>. People who follow each other are connections.</p>
+          <p class="fm-muted">Follow members to stay in touch. People who follow each other are connections. Press Message to start a private conversation.</p>
           <p class="fm-status" role="status" data-fm-people-status></p>
           <div class="fm-people" data-fm-people></div>
         </section>

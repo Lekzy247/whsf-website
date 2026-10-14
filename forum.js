@@ -87,7 +87,13 @@
     if (view === 'post' && /^[0-9a-f-]{36}$/.test(parts[1] || '')) { single = parts[1]; view = 'feed'; }
     if (view === 'saved') { saved = Boolean(state.me); view = 'feed'; }
     if (!views.includes(view)) view = 'feed';
-    if (!state.me && memberViews.includes(view)) view = 'feed';
+    if (!state.me && memberViews.includes(view)) {
+      if (!state.session && document.readyState === 'complete' && $('[data-fm-auth]')) {
+        setStatus('[data-fm-auth-status]', 'Sign in or create a free account to see members, events and messages.');
+        setTimeout(goJoin, 50);
+      }
+      view = 'feed';
+    }
     if (!state.profile && view === 'alerts') view = 'feed';
     if (!state.isStaff && view === 'idchecks') view = 'feed';
     views.forEach((v) => $$(`[data-fm-view="${v}"]`).forEach((n) => { n.hidden = v !== view; }));
@@ -301,7 +307,10 @@
     // Suspicious sign-in (new device or country): the member must confirm it's them before using the Forum.
     // The database enforces this too (forum_is_member() only accepts trusted sign-in sessions).
     state.stepUp = null;
-    if (state.me) { const r = await sessionCheck(); if (r !== 'ok') { state.stepUp = r; state.me = null; } }
+    if (state.me || state.isStaff) {
+      const r = await sessionCheck();
+      if (r !== 'ok') { state.stepUp = r; state.me = null; state.isStaff = false; }
+    }
     if (data?.is_suspended) setStatus('[data-fm-join-status]', 'Your forum account is suspended. Contact WHSF if you think this is a mistake.');
   }
 
@@ -628,7 +637,17 @@
     const me = state.me;
     $('[data-fm-profile-card]').hidden = !me;
     $('[data-fm-guest-card]').hidden = Boolean(me);
-    $$('[data-fm-me-avatar]').forEach((n) => fillAvatar(n, me));
+    // Signed out (or not a member yet): a plain person icon instead of "?".
+    $$('[data-fm-me-avatar]').forEach((n) => {
+      if (me) { fillAvatar(n, me); return; }
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('width', '16'); svg.setAttribute('height', '16');
+      svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '2');
+      svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+      ['M4 21a8 8 0 0 1 16 0'].forEach((d) => { const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', d); svg.append(p); });
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('cx', '12'); c.setAttribute('cy', '8'); c.setAttribute('r', '4'); svg.append(c);
+      n.replaceChildren(svg);
+    });
     if (!me) return;
     $$('[data-fm-avatar]').forEach((n) => fillAvatar(n, me));
     $('[data-fm-name]').textContent = me.display_name;
