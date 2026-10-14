@@ -76,8 +76,8 @@
   const state = { single: null, saved: false, q: '', feedKey: '|false', feedReady: false, topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
-  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding'];
-  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite', 'funding'];
+  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding', 'spaces'];
+  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite', 'funding', 'spaces'];
   // Add-on scripts (forum-social.js, …) register here to react to page refreshes and view changes.
   const hooks = { refresh: [], view: [], post: [], feed: [] };
   function showView() {
@@ -86,6 +86,11 @@
     let single = null; let saved = false;
     if (view === 'post' && /^[0-9a-f-]{36}$/.test(parts[1] || '')) { single = parts[1]; view = 'feed'; }
     if (view === 'saved') { saved = Boolean(state.me); view = 'feed'; }
+    // Space pages: #space/<key> shows that space's page and feed; #feed shows everything.
+    let topic = null;
+    if (view === 'space') { topic = SPACES.some((s) => s.key === parts[1]) ? parts[1] : null; view = 'feed'; }
+    if (view === 'feed' && !single && !saved) state.topic = topic;
+    $$('[data-fm-spaces-list] a').forEach((a) => (a.dataset.space === (state.topic || '') ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
     if (!views.includes(view)) view = 'feed';
     if (!state.me && memberViews.includes(view)) {
       if (!state.session && document.readyState === 'complete' && $('[data-fm-auth]')) {
@@ -103,20 +108,20 @@
     const plainFeed = view === 'feed' && !single && !saved;
     $('[data-fm-qform]').hidden = !state.me || !plainFeed;
     // Messages, events and adverts use the full page width (side panels hidden), like the Gelllez Forum.
-    document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite', 'funding'].includes(view));
+    document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite', 'funding', 'spaces'].includes(view));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     // The WHSF advert is seen by everyone: on the landing page for visitors, above the feed for members.
     const whsfAd = $('[data-fm-whsf-ad]');
     const adSpot = landing ? $('[data-fm-whsf-ad-landing]') : $('[data-fm-whsf-ad-feed]');
     if (adSpot && whsfAd.parentElement !== adSpot) adSpot.append(whsfAd);
-    whsfAd.hidden = !landing && view !== 'feed';
+    whsfAd.hidden = !landing && (view !== 'feed' || Boolean(state.topic));
     // The post box and feed filter belong to the Home feed only, so a new post is always seen where it lands.
     $('[data-fm-composer]').hidden = !state.me || !plainFeed;
     if (view === 'people') loadPeople();
     if (view === 'me') fillMeForm();
     if (view === 'idchecks') loadIdChecks();
     hooks.view.forEach((fn) => fn(view));
-    const key = `${single || ''}|${saved}`;
+    const key = `${single || ''}|${saved}|${state.topic || ''}`;
     if (key !== state.feedKey) {
       state.feedKey = key; state.single = single; state.saved = saved;
       if (state.feedReady) { loadFeed(true); window.scrollTo(0, 0); }
@@ -809,7 +814,7 @@
     if (!state.me && !state.isStaff) { feed.replaceChildren(); $('[data-fm-more]').hidden = true; return; }
     if (reset) { state.feedOffset = 0; feed.replaceChildren(el('p', { class: 'fm-card fm-empty', text: 'Loading posts…' })); }
     let query = db.from('forum_posts')
-      .select('id,kind,topic,body,image_url,location,created_at,edited_at,is_pinned,is_hidden,author_id,attachment_path,attachment_name,attachment_kind,attachment_size,event_id,poll_closes_at,collab_need,collab_skills,collab_deadline,collab_where,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
+      .select('id,kind,topic,body,image_url,location,created_at,edited_at,is_pinned,is_hidden,featured_at,author_id,attachment_path,attachment_name,attachment_kind,attachment_size,event_id,poll_closes_at,collab_need,collab_skills,collab_deadline,collab_where,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
       .order('is_pinned', { ascending: false })
       .order('created_at', { ascending: false })
       .range(state.feedOffset, state.feedOffset + PAGE_SIZE - 1);
@@ -1057,12 +1062,9 @@
 
   // ---------------------------------------------------------------- spaces (landing, left menu, feed chips, composer)
   function setTopic(key) {
-    state.topic = key || null;
-    renderTopicChips();
-    $$('[data-fm-spaces-list] a').forEach((a) => (a.dataset.space === (state.topic || '') ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
-    if (location.hash && location.hash !== '#feed') location.hash = '#feed';
-    loadFeed(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const target = key ? `#space/${key}` : '#feed';
+    if (location.hash === target) { showView(); return; }
+    location.hash = target;
   }
   function renderTopicChips() {
     const box = $('[data-fm-topics]');
