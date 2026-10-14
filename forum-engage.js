@@ -265,7 +265,7 @@
     const c = cards.get(id);
     if (c.card.querySelector('.fm-edit-form')) return;
     const { post } = c;
-    const body = el('textarea', { name: 'body', rows: '5', maxlength: '3000', required: '' }); body.value = post.body;
+    const body = el('textarea', { name: 'body', rows: '5', maxlength: '3000', required: '' }); body.value = F.decodeTags(body, post.body);
     const topic = el('select', { name: 'topic' }, [
       el('option', { value: 'general', text: '🏠 General' }),
       ...F.SPACES.map((sp) => el('option', { value: sp.key, text: `${sp.emoji} ${sp.name}` }))
@@ -284,7 +284,7 @@
     ]);
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const text = body.value.trim();
+      const text = F.encodeTags(body);
       if (!text) { status.textContent = 'Write something first.'; return; }
       const { data, error } = await db.from('forum_posts')
         .update({ body: text, topic: topic.value, location: where.value.trim() || null })
@@ -294,6 +294,7 @@
       replaceCard(id);
     });
     c.card.insertBefore(form, c.card.querySelector('.fm-eng'));
+    F.attachTagging?.(body);
     body.focus();
   }
   async function pinPost(post) {
@@ -420,11 +421,12 @@
     const form = el('form', { class: `fm-c-form${parent ? ' is-reply' : ''}` }, [me, el('div', { class: 'fm-c-input' }, [ta, send]), status]);
     const grow = () => { ta.style.height = 'auto'; ta.style.height = `${Math.min(ta.scrollHeight, 160)}px`; send.disabled = !ta.value.trim(); };
     ta.addEventListener('input', grow);
+    F.attachTagging?.(ta);
     // Enter sends, Shift+Enter makes a new line (like Facebook and Instagram).
     ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); form.requestSubmit(); } });
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const body = ta.value.trim();
+      const body = F.encodeTags(ta);
       if (!body) return;
       send.disabled = true;
       const { error } = await db.from('forum_comments').insert({ post_id: c.post.id, author_id: state.me.user_id, body, parent_id: parent?.id || null });
@@ -442,7 +444,11 @@
     const form = commentForm(c, cm);
     host.querySelector(':scope > .fm-c-main').append(form);
     const ta = form.querySelector('textarea');
-    if (host !== li && cm.author?.display_name) { ta.value = `@${cm.author.display_name} `; ta.dispatchEvent(new Event('input')); }
+    if (host !== li && cm.author?.display_name) {
+      const name = cm.author.display_name.replace(/[[\]\n]/g, '').slice(0, 80);
+      ta._mentions = new Map([[name, cm.author_id]]);
+      ta.value = `@${name} `; ta.dispatchEvent(new Event('input'));
+    }
     ta.focus();
   }
   async function likeComment(c, id, isLiked) {
@@ -456,7 +462,7 @@
     const main = li.querySelector(':scope > .fm-c-main');
     const row = main.querySelector(':scope > .fm-c-row');
     if (main.querySelector(':scope > .fm-c-edit')) return;
-    const ta = el('textarea', { rows: '1', maxlength: '1500', 'aria-label': 'Edit your comment' }); ta.value = cm.body;
+    const ta = el('textarea', { rows: '1', maxlength: '1500', 'aria-label': 'Edit your comment' }); ta.value = F.decodeTags(ta, cm.body);
     const cancel = () => { form.remove(); row.hidden = false; };
     const form = el('form', { class: 'fm-c-edit' }, [
       el('div', { class: 'fm-c-input' }, [ta]),
@@ -470,12 +476,13 @@
     });
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const body = ta.value.trim(); if (!body) return;
+      const body = F.encodeTags(ta); if (!body) return;
       const { error } = await db.from('forum_comments').update({ body }).eq('id', cm.id);
       if (!error) loadComments(c.post.id);
     });
     row.hidden = true;
     row.after(form);
+    F.attachTagging?.(ta);
     grow(); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
   }
 
