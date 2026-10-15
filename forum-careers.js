@@ -44,7 +44,7 @@
   }
 
   // ---------------------------------------------------------------- Career Center
-  const TABS = [['jobs', 'Find jobs'], ['applications', 'My applications'], ['employer', 'For employers']];
+  const TABS = [['jobs', 'Find jobs'], ['africa', 'Jobs in Africa'], ['remote', 'Remote abroad'], ['applications', 'My applications'], ['employer', 'For employers']];
   async function renderCareers() {
     const box = $('[data-fm-careers]');
     if (!box || !state.me) return;
@@ -52,7 +52,7 @@
     const body = el('div', { class: 'fm-careers-body' }, [el('p', { class: 'fm-muted', text: 'Loading…' })]);
     box.replaceChildren(
       el('div', { class: 'fm-fund-head' }, [
-        el('div', {}, [el('h2', { text: 'Career Center' }), el('p', { class: 'fm-muted', text: 'Jobs, internships and fellowships from organisations verified by WHSF. Applying is always free: never pay anyone for a job.' })]),
+        el('div', {}, [el('h2', { text: 'Career Center' }), el('p', { class: 'fm-muted', text: 'Jobs from organisations verified by WHSF, plus jobs across Africa and remote jobs abroad from trusted job boards, updated every day. Applying is always free: never pay anyone for a job.' })]),
         el('a', { class: 'fm-text-btn', href: '#orgs', text: 'Verified organisations →' })
       ]),
       el('nav', { class: 'fm-admin-tabs', 'aria-label': 'Career Center' }, TABS.map(([k, t]) => { const a = el('a', { href: `#careers/${k}`, class: `fm-admin-tab${k === tab ? ' is-on' : ''}`, text: t }); if (k === tab) a.setAttribute('aria-current', 'page'); return a; })),
@@ -61,6 +61,7 @@
     await loadMeSkills();
     if (tab === 'applications') return applications(body);
     if (tab === 'employer') return employer(body);
+    if (tab === 'africa' || tab === 'remote') return partnerJobs(body, tab, decodeURIComponent(location.hash.split('/')[2] || ''));
     return jobs(body);
   }
 
@@ -95,7 +96,10 @@
       const rows = (data || []).filter((j) => j.org?.status === 'verified');
       const mine = mySkills();
       list.replaceChildren(...(error ? [el('p', { class: 'fm-muted', text: 'Jobs could not be loaded.' })]
-        : rows.length ? rows.map((j) => jobCard(j, matchOf(j.skills, mine))) : [el('p', { class: 'fm-empty', text: 'No open jobs match these filters yet. Verified organisations post here, and new roles appear straight away.' })]));
+        : rows.length ? rows.map((j) => jobCard(j, matchOf(j.skills, mine))) : [el('p', { class: 'fm-empty' }, [
+          'No open jobs from WHSF-verified organisations match these filters yet. ',
+          el('a', { href: '#careers/africa', text: 'Browse jobs in Africa' }), ' or ', el('a', { href: '#careers/remote', text: 'remote jobs abroad' }), ' (updated daily).'
+        ])]));
     };
     const sel = (key, label, opts) => { const s = el('select', { 'aria-label': label }, [el('option', { value: '', text: label }), ...Object.entries(opts).map(([v, t]) => el('option', { value: v, text: t }))]); s.addEventListener('change', () => { f[key] = s.value; run(); }); return s; };
     const search = el('input', { type: 'search', placeholder: 'Search job titles', 'aria-label': 'Search jobs', maxlength: '80' });
@@ -118,6 +122,124 @@
     } else if (!mySkills().length) {
       rec.replaceChildren(el('p', { class: 'fm-small fm-callout' }, ['Add your skills under ', el('a', { href: '#me', text: 'Me → Professional profile' }), ' to see jobs that match you.']));
     }
+  }
+
+  // ---------------------------------------------------------------- jobs from partner job boards
+  // Filled once a day by api/jobs-sync.js (Himalayas + Jobicy). Their terms: credit the source and apply through
+  // their own link, so every card opens the source's job page in a new tab and says where it comes from.
+  const AFRICA = ['Nigeria', 'Kenya', 'South Africa', 'Ghana', 'Egypt', 'Ethiopia', 'Rwanda', 'Uganda', 'Tanzania', 'Morocco',
+    'Tunisia', 'Algeria', 'Senegal', "Côte d'Ivoire", 'Cameroon', 'Zambia', 'Zimbabwe', 'Malawi', 'Mozambique', 'Botswana',
+    'Namibia', 'DR Congo', 'Sierra Leone', 'Liberia', 'Gambia', 'Benin', 'Togo', 'Burkina Faso', 'Mali', 'Niger', 'Sudan',
+    'South Sudan', 'Somalia', 'Madagascar', 'Mauritius', 'Angola'];
+  const SOURCES = { himalayas: ['Himalayas', 'https://himalayas.app'], jobicy: ['Jobicy', 'https://jobicy.com'] };
+  const PJ_COLS = 'id,source,title,company,company_logo,url,location_restrictions,restriction_count,worldwide,employment_type,seniority,category,salary_min,salary_max,currency,salary_period,published_at,first_seen_at';
+  const PJ_PAGE = 30;
+  const PJ_TYPES = { full: 'Full-time', part: 'Part-time', contract: 'Contract', intern: 'Internship', volunteer: 'Volunteer' };
+  const isNew = (j) => j.first_seen_at && Date.now() - new Date(j.first_seen_at) < 86400000;
+  let pjCounts = null;
+  async function partnerCounts() {
+    if (pjCounts) return pjCounts;
+    const { data } = await db.rpc('forum_partner_job_counts');
+    pjCounts = Object.fromEntries((data || []).map((r) => [r.country, r]));
+    return pjCounts;
+  }
+  function openTo(j) {
+    if (j.restriction_count && j.restriction_count <= 4) return `Open to people in ${j.location_restrictions.join(', ')}`;
+    if (j.restriction_count) return `Open to people in ${j.restriction_count} countries`;
+    return 'Open to people anywhere';
+  }
+  function partnerCard(j) {
+    const [srcName] = SOURCES[j.source] || ['the job board'];
+    const per = { annual: 'year', yearly: 'year', monthly: 'month', weekly: 'week', daily: 'day', hourly: 'hour' }[String(j.salary_period || '').toLowerCase()] || j.salary_period;
+    const sal = j.salary_min || j.salary_max ? salary({ salary_min: j.salary_min, salary_max: j.salary_max === j.salary_min ? null : j.salary_max, salary_currency: j.currency, salary_period: per }) : null;
+    const pic = j.company_logo
+      ? el('img', { class: 'fm-org-logo fm-org-logo-img', src: j.company_logo, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onerror: (e) => e.target.replaceWith(logo({ name: j.company })) })
+      : logo({ name: j.company });
+    return el('a', { class: 'fm-job-card', href: j.url, target: '_blank', rel: 'noopener', 'aria-label': `${j.title} at ${j.company || 'a company'} (opens ${srcName} in a new tab)` }, [
+      pic,
+      el('span', { class: 'fm-job-main' }, [
+        el('strong', { text: j.title }),
+        el('span', { class: 'fm-job-org', text: j.company || 'Company' }),
+        el('small', { class: 'fm-muted', text: [j.employment_type, j.seniority, j.category].filter(Boolean).join(' · ') }),
+        el('small', { class: 'fm-muted', text: openTo(j) }),
+        sal ? el('small', { class: 'fm-job-pay', text: sal }) : null,
+        el('small', { class: 'fm-muted', text: `${j.published_at ? `Posted ${ago(j.published_at)} · ` : ''}via ${srcName} ↗` })
+      ]),
+      isNew(j) ? el('span', { class: 'fm-match', text: 'New' }) : null
+    ]);
+  }
+
+  async function partnerJobs(body, kind, pick) {
+    const counts = await partnerCounts();
+    const africa = kind === 'africa';
+    const myPlace = AFRICA.find((c) => (state.me?.location || '').toLowerCase().includes(c.toLowerCase()));
+    const f = { q: '', type: '', country: africa ? (AFRICA.includes(pick) ? pick : myPlace || '') : '' };
+    let from = 0;
+    const list = el('div', { class: 'fm-job-list' });
+    const more = el('button', { type: 'button', class: 'fm-chip-btn', text: 'Show more jobs', hidden: '' });
+    const summary = el('p', { class: 'fm-small fm-muted' });
+
+    const query = () => {
+      let q = db.from('forum_partner_jobs').select(PJ_COLS, { count: 'exact' }); // expired jobs are hidden by the database policy
+      if (africa) q = f.country ? q.contains('match_countries', [f.country]) : q.not('match_countries', 'eq', '{}');
+      else q = q.eq('worldwide', true);
+      if (f.q) { const like = `%${f.q.replace(/[%_,()\\.*:"']/g, ' ').trim()}%`; q = q.or(`title.ilike.${like},company.ilike.${like}`); }
+      if (f.type) q = q.ilike('employment_type', `%${f.type}%`);
+      if (africa && f.country) q = q.order('restriction_count', { ascending: true }).order('published_at', { ascending: false });
+      else q = q.order('published_at', { ascending: false });
+      return q.range(from, from + PJ_PAGE - 1);
+    };
+    const run = async (append = false) => {
+      if (!append) { from = 0; list.replaceChildren(el('p', { class: 'fm-muted', text: 'Searching…' })); }
+      more.disabled = true;
+      const { data, count, error } = await query();
+      more.disabled = false;
+      if (error) { list.replaceChildren(el('p', { class: 'fm-muted', text: 'Jobs could not be loaded. Please try again.' })); more.hidden = true; return; }
+      const cards = (data || []).map(partnerCard);
+      if (append) list.append(...cards);
+      else list.replaceChildren(...(cards.length ? cards : [el('p', { class: 'fm-empty', text: 'No jobs match these filters right now. New jobs arrive every morning.' })]));
+      from += (data || []).length;
+      more.hidden = from >= (count || 0);
+      const where = africa ? (f.country ? `open to people in ${f.country}` : 'across Africa') : 'open to people anywhere';
+      summary.textContent = count ? `${count.toLocaleString()} job${count === 1 ? '' : 's'} ${where}${africa && f.country ? ' (jobs only for this country first)' : ''}.` : '';
+    };
+    more.addEventListener('click', () => run(true));
+
+    const chips = africa ? el('div', { class: 'fm-chips fm-country-chips', role: 'group', 'aria-label': 'Choose a country' },
+      [['', 'All Africa'], ...AFRICA.map((c) => [c, c])].map(([value, label]) => {
+        const n = value ? counts[value]?.jobs : null;
+        const b = el('button', { type: 'button', class: `fm-chip-btn${value === f.country ? ' is-on' : ''}`, 'aria-pressed': String(value === f.country), text: n ? `${label} · ${n}` : label });
+        if (value && !n && Object.keys(counts).length && value !== f.country) b.hidden = true; // no open jobs for this country yet
+        b.addEventListener('click', () => {
+          f.country = value;
+          chips.querySelectorAll('.fm-chip-btn').forEach((x) => { x.classList.toggle('is-on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+          history.replaceState(null, '', `#careers/africa${value ? `/${encodeURIComponent(value)}` : ''}`);
+          run();
+        });
+        return b;
+      })) : null;
+
+    const search = el('input', { type: 'search', placeholder: africa ? 'Search job titles or companies' : 'Search remote jobs (e.g. developer, finance, health)', 'aria-label': 'Search jobs', maxlength: '80' });
+    let t; search.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { f.q = search.value.trim(); run(); }, 350); });
+    const type = el('select', { 'aria-label': 'Job type' }, [el('option', { value: '', text: 'Any job type' }), ...Object.entries(PJ_TYPES).map(([v, x]) => el('option', { value: v, text: x }))]);
+    type.addEventListener('change', () => { f.type = type.value; run(); });
+
+    const fresh = africa ? null : counts.__worldwide__?.new_today;
+    body.replaceChildren(...[
+      el('div', { class: 'fm-small fm-callout' }, [
+        el('strong', { text: africa ? 'Jobs open to people living in African countries. ' : 'Remote jobs abroad you can do from anywhere. ' }),
+        'Updated every morning from trusted job boards (', el('a', { href: SOURCES.himalayas[1], target: '_blank', rel: 'noopener', text: 'Himalayas' }), ' and ',
+        el('a', { href: SOURCES.jobicy[1], target: '_blank', rel: 'noopener', text: 'Jobicy' }), '). You apply on their site. WHSF has not checked these employers: ',
+        'never pay to apply, and never send bank details or ID before a real interview.'
+      ]),
+      chips,
+      el('div', { class: 'fm-fund-filters' }, [search, type]),
+      fresh ? el('p', { class: 'fm-small', text: `✨ ${fresh} new today` }) : null,
+      summary,
+      list,
+      more
+    ].filter(Boolean));
+    run();
   }
 
   // ---------------------------------------------------------------- job page
