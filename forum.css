@@ -1621,3 +1621,22 @@ a.fm-mention:hover { text-decoration: underline; }
   .fm-check-answer .fm-two, .fm-check-src-rows .fm-two { grid-template-columns: 1fr; }
   .fm-mil-cta .hp-btn { width: 100%; justify-content: center; }
 }
+/* Mobile polish: long links never push a row off screen; touch targets at least 36px on touch screens */
+.fm-alert-row > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+:is(.fm-admin-card, .fm-ment-card, .fm-profile-sec, .fm-profile-id, .fm-org-form, .fm-mil-module, .fm-opp, .fm-net-who span) { min-width: 0; overflow-wrap: anywhere; }
+@media (pointer: coarse) {
+  .fm-space-chip { min-height: 36px; padding: 6px 12px; }
+  .fm-skill-edit button { min-width: 36px; min-height: 36px; margin: -6px -8px -6px 0; }
+  main.fm a.fm-text-btn, main.fm button.fm-text-btn { min-height: 36px; display: inline-flex; align-items: center; }
+}
+:is(.fm-org-card, .fm-org-card > span, .fm-org-grid > *, .fm-job-list, .fm-job-card, .fm-job-main, .fm-job-top, .fm-job-top > div, .fm-ad-row, .fm-ad-preview, .fm-ad-side, .fm-ad-stats) { min-width: 0; overflow-wrap: anywhere; }
+.fm-ad-row > *, .fm-job-card > *, .fm-job-top > * { min-width: 0; max-width: 100%; }
+.fm-job-card, .fm-ad-preview, .fm-ad-side { max-width: 100%; box-sizing: border-box; }
+/* Like: white thumb until you react, then the yellow 👍 (or your chosen reaction) */
+.fm-eng-like svg { fill: #fff; stroke: #4b3a43; }
+.fm-eng-like.is-on .fm-eng-emoji { font-size: 20px; }
+.fm-reaction-picker { flex-wrap: wrap; justify-content: center; width: max-content; max-width: min(480px, calc(100vw - 40px)); border-radius: 22px; }
+@media (max-width: 640px) {
+  .fm-reaction-picker { left: -4px; max-width: calc(100vw - 32px); padding: 6px; }
+  .fm-reaction-picker button { width: 44px; height: 44px; }
+}
