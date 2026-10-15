@@ -1633,8 +1633,19 @@ a.fm-mention:hover { text-decoration: underline; }
 .fm-ad-row > *, .fm-job-card > *, .fm-job-top > * { min-width: 0; max-width: 100%; }
 .fm-job-card, .fm-ad-preview, .fm-ad-side { max-width: 100%; box-sizing: border-box; }
 /* Like: white thumb until you react, then the yellow 👍 (or your chosen reaction) */
-.fm-eng-like svg { fill: #fff; stroke: #4b3a43; }
+/* Like (Facebook style): plain outline thumb like Comment/Share/Save until you react;
+   then Like = filled purple thumb, Love = red, other reactions show their emoji with a coloured label */
+.fm-eng-like svg { fill: none; stroke: currentColor; }
+.fm-eng-like.is-on[data-reaction="like"] svg { fill: currentColor; stroke: currentColor; }
 .fm-eng-like.is-on .fm-eng-emoji { font-size: 20px; }
+.fm-eng-emojis { display: inline-flex; align-items: center; letter-spacing: 0; }
+.fm-rbadge { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; border: 2px solid #fff; font-size: 13px; line-height: 1; box-sizing: content-box; }
+.fm-rbadge + .fm-rbadge { margin-left: -5px; }
+.fm-rbadge svg { width: 11px; height: 11px; fill: #fff; stroke: #fff; }
+.fm-rbadge.is-like { background: linear-gradient(180deg, #9b5cf6, #6d28d9); }
+.fm-rbadge.is-love { background: linear-gradient(180deg, #ff6680, #e61739); }
+.fm-rbadge.is-emoji { background: #fff; font-size: 15px; }
+.fm-c-act.is-on { color: #6d28d9; }
 .fm-reaction-picker { flex-wrap: wrap; justify-content: center; width: max-content; max-width: min(480px, calc(100vw - 40px)); border-radius: 22px; }
 @media (max-width: 640px) {
   .fm-reaction-picker { left: -4px; max-width: calc(100vw - 32px); padding: 6px; }
