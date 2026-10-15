@@ -172,7 +172,7 @@
       !mine ? icon(ICONS.like) : mine.k === 'like' ? icon(ICONS.like) : el('span', { class: 'fm-eng-emoji', text: mine.e }),
       el('span', { text: mine ? mine.t : 'Like' }));
     ui.likeBtn.dataset.reaction = mine ? mine.k : '';
-    ui.likeBtn.style.color = mine ? mine.c : '';
+    ui.likeBtn.style.color = '';
     ui.saveBtn.setAttribute('aria-pressed', String(Boolean(stats.saved)));
     ui.saveBtn.classList.toggle('is-on', Boolean(stats.saved));
     ui.saveBtn.querySelector('span').textContent = stats.saved ? 'Saved' : 'Save';

@@ -1748,3 +1748,14 @@ main.fm .fm-post { text-align: left; }
 .fm-person > .fm-avatar { flex: 0 0 48px; width: 48px; height: 48px; min-width: 48px; aspect-ratio: 1; border-radius: 50%; }
 .fm-person > .fm-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .fm-person > .fm-person-actions { flex: none; }
+/* Official WHSF accounts: badge next to the name; "Latest from WHSF" for visitors */
+.fm-official { display: inline-flex; align-items: center; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #f4e6ec; color: var(--wx-wine); font-size: 11.5px; font-weight: 700; vertical-align: middle; white-space: nowrap; }
+.fm-author-link strong { display: inline !important; }
+.fm-official-banner { display: grid; gap: 2px; text-align: left; }
+.fm-official-banner span { color: var(--wx-muted); font-size: 13.5px; }
+/* Like uses the same colour as Comment, Share and Save; once you react the thumb is solid in that colour */
+.fm-eng-like.is-on { color: #4b3a43 !important; }
+.fm-eng-like.is-on[data-reaction="like"] svg { fill: currentColor; stroke: currentColor; }
+.fm-l-latest[hidden] { display: none; }
+.fm-l-latest-list { display: grid; gap: 14px; max-width: 680px; margin: 0 auto; text-align: left; }
+.fm-post-head .fm-official { display: inline-flex !important; width: auto; margin: 0 0 0 6px; color: var(--wx-wine) !important; font-size: 11.5px !important; }
