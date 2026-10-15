@@ -420,7 +420,7 @@
       el('label', {}, [isApp ? 'Code from your authenticator app' : 'Code from the email', code]),
       confirmBtn
     ]);
-    $('.fm-center').prepend(el('section', { class: 'fm-card fm-stepup', 'data-fm-stepup': '', 'aria-labelledby': 'fm-stepup-title' }, [
+    $('.fm-center').prepend(el('section', { class: 'fm-card fm-stepup-card', 'data-fm-stepup': '', 'aria-labelledby': 'fm-stepup-title' }, [
       el('span', { class: 'fm-stepup-icon', 'aria-hidden': 'true', text: '🛡️' }),
       el('h2', { id: 'fm-stepup-title', text: "Confirm it's you" }),
       el('p', { text: isApp
