@@ -951,8 +951,12 @@
     }
     if (mine || state.isStaff) {
       actions.append(el('button', { class: 'fm-text-btn', type: 'button', text: 'Delete', onclick: () => confirmInline(card, 'Delete this post?', async () => {
-        const { error } = await db.from('forum_posts').delete().eq('id', post.id);
-        if (!error) card.remove();
+        // .select() returns the deleted rows, so a delete the database quietly refused (0 rows) is caught too.
+        const { data, error } = await db.from('forum_posts').delete().eq('id', post.id).select('id');
+        if (error) return `Could not delete the post: ${error.message}`;
+        if (!data?.length) return 'Could not delete the post. Refresh the page (you may need to confirm it\'s you) and try again.';
+        card.remove();
+        return null;
       }) }));
     }
     if (state.isStaff) {
@@ -1132,16 +1136,29 @@
     return el('div', { class: 'fm-fmt' }, [bar, colours, fonts, preview]);
   }
 
+  // Inline "Are you sure?" box. Shown just under the post header (not at the bottom of a long card,
+  // where it was off-screen), scrolled into view, focus on Yes. onYes may return an error message
+  // to show in the box instead of closing it.
   function confirmInline(card, question, onYes) {
-    if (card.querySelector('.fm-report')) return;
-    const box = el('div', { class: 'fm-report' }, [
+    const open = card.querySelector('[data-fm-confirm]');
+    if (open) { open.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
+    const status = el('p', { class: 'fm-status', role: 'status' });
+    const yes = el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Yes', onclick: async () => {
+      yes.disabled = true; status.textContent = 'Working…';
+      let problem;
+      try { problem = await onYes(); } catch (err) { problem = err?.message || 'Something went wrong. Please try again.'; }
+      if (problem) { status.textContent = problem; yes.disabled = false; return; }
+      box.remove();
+    } });
+    const box = el('div', { class: 'fm-report fm-confirm', 'data-fm-confirm': '', role: 'alertdialog', 'aria-label': question }, [
       el('p', { class: 'fm-muted', text: question }),
-      el('div', { class: 'fm-actions' }, [
-        el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Yes', onclick: async () => { await onYes(); box.remove(); } }),
-        el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel', onclick: () => box.remove() })
-      ])
+      el('div', { class: 'fm-actions' }, [yes, el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel', onclick: () => box.remove() })]),
+      status
     ]);
-    card.append(box);
+    const head = card.querySelector(':scope > .fm-post-head');
+    if (head) head.after(box); else card.append(box);
+    box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    yes.focus({ preventScroll: true });
   }
   function openReport(card, post) {
     if (card.querySelector('.fm-report')) return;

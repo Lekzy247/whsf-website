@@ -456,8 +456,11 @@
     const tools = [];
     if (mine) tools.push(el('button', { type: 'button', text: 'Edit', onclick: () => editComment(c, li, cm) }));
     if (mine || ownsPost || state.isStaff) tools.push(el('button', { type: 'button', text: 'Delete', onclick: () => confirmInline(li.querySelector(':scope > .fm-c-main'), 'Delete this comment?', async () => {
-      const { error } = await db.from('forum_comments').delete().eq('id', cm.id);
-      if (!error) { await loadComments(c.post.id); loadStats([c.post.id]); }
+      const { data, error } = await db.from('forum_comments').delete().eq('id', cm.id).select('id');
+      if (error) return `Could not delete the comment: ${error.message}`;
+      if (!data?.length) return 'Could not delete the comment. Refresh the page and try again.';
+      await loadComments(c.post.id); loadStats([c.post.id]);
+      return null;
     }) }));
     if (state.isStaff) tools.push(el('button', { type: 'button', text: cm.is_hidden ? 'Unhide (moderator)' : 'Hide (moderator)', onclick: async () => {
       const { error } = await db.from('forum_comments').update({ is_hidden: !cm.is_hidden }).eq('id', cm.id);
