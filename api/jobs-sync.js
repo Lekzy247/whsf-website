@@ -31,9 +31,10 @@ const iso = (v) => { if (v == null || v === '') return null; const d = typeof v 
 const firstOf = (v) => { if (Array.isArray(v)) return v[0]; try { const a = JSON.parse(String(v).replace(/'/g, '"')); return Array.isArray(a) ? a[0] : v; } catch { return v; } };
 
 async function getJson(url) {
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < 4; attempt += 1) {
     const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
-    if (res.status === 429) { await sleep(Number(res.headers.get('retry-after')) * 1000 || 5000); continue; }
+    // Rate-limited: wait as long as asked (or 10s, 20s, 30s), then try again.
+    if (res.status === 429) { await sleep(Math.min(Number(res.headers.get('retry-after')) * 1000 || 10000 * (attempt + 1), 30000)); continue; }
     if (!res.ok) throw new Error(`${new URL(url).host} answered ${res.status}`);
     return res.json();
   }
@@ -109,7 +110,7 @@ export default async function handler(request, response) {
         const got = (d.jobs || []).length;
         if (!got || page * (Number(d.limit) || 19) >= (Number(d.totalCount) || 0)) break; // last page reached
       } catch (err) { problems.push(`Himalayas ${code}: ${err.message}`); break; }
-      await sleep(400);
+      await sleep(700);
     }
   }
   for (let page = 1; page <= WORLDWIDE_PAGES; page += 1) {
@@ -117,7 +118,7 @@ export default async function handler(request, response) {
       const d = await getJson(`https://himalayas.app/jobs/api/search?worldwide=true&sort=recent&page=${page}`);
       (d.jobs || []).forEach((j) => add(fromHimalayas(j, null, true)));
     } catch (err) { problems.push(`Himalayas worldwide: ${err.message}`); break; }
-    await sleep(400);
+    await sleep(700);
   }
   try {
     const d = await getJson('https://jobicy.com/api/v2/remote-jobs?count=100&geo=anywhere');
