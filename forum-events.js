@@ -578,10 +578,12 @@
           el('button', { class: 'fm-text-btn', type: 'button', text: 'Save ticket image', onclick: () => saveTicket(e, ticket, qr) }),
           changePhoto,
           safeUrl(priv?.meeting_link) ? el('a', { class: 'hp-btn hp-btn-primary', href: priv.meeting_link, target: '_blank', rel: 'noopener noreferrer', text: 'Join online' }) : null,
-          ticket.status === 'registered' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel my registration', onclick: () => confirmBox(action, 'Cancel your registration?', async () => {
+          ticket.status === 'registered' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel my registration', onclick: (ev) => confirmBox(action, 'Cancel your registration?', async () => {
             const { error } = await db.rpc('forum_ticket_cancel', { p_ticket: ticket.id });
-            if (error) status.textContent = error.message; else renderDetail(e.id);
-          }) }) : null
+            if (error) return `Could not cancel your registration: ${error.message}`;
+            renderDetail(e.id);
+            return null;
+          }, ev.currentTarget) }) : null
         ])
       ]));
       if (window.QRCode?.toCanvas) window.QRCode.toCanvas(qr, ticketPayload(e.id, ticket.code), { width: 200, margin: 3, errorCorrectionLevel: 'M', color: { dark: '#2a0a17', light: '#ffffff' } }).catch(() => {});
@@ -594,10 +596,12 @@
           declined: 'The organiser could not offer you a place this time.'
         }[ticket.status] }),
         ticket.status !== 'declined' ? el('a', { class: 'fm-text-btn', href: `#events/${e.id}/confirmation`, text: 'View your registration' }) : null,
-        ticket.status !== 'declined' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Withdraw', onclick: () => confirmBox(action, 'Withdraw your request?', async () => {
+        ticket.status !== 'declined' && !ended ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Withdraw', onclick: (ev) => confirmBox(action, 'Withdraw your request?', async () => {
           const { error } = await db.rpc('forum_ticket_cancel', { p_ticket: ticket.id });
-          if (error) status.textContent = error.message; else renderDetail(e.id);
-        }) }) : null
+          if (error) return `Could not withdraw your request: ${error.message}`;
+          renderDetail(e.id);
+          return null;
+        }, ev.currentTarget) }) : null
       ]));
     } else if (ended) {
       action.append(el('p', { class: 'fm-muted', text: 'This event has ended.' }));
@@ -617,10 +621,14 @@
     if (isHost || state.isStaff) {
       if (isHost && e.status !== 'cancelled') hostTools.append(el('a', { class: 'hp-btn hp-btn-outline', href: `#events/edit/${e.id}`, text: 'Edit event' }));
       if (isHost && ['pending', 'published'].includes(e.status) && !ended) {
-        hostTools.append(el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel event', onclick: () => confirmBox(hostTools, 'Cancel this event? Everyone registered will get an alert.', async () => {
-          const { error } = await db.from('forum_events').update({ status: 'cancelled' }).eq('id', e.id);
-          if (error) status.textContent = error.message; else renderDetail(e.id);
-        }) }));
+        hostTools.append(el('button', { class: 'fm-text-btn', type: 'button', text: 'Cancel event', onclick: (ev) => confirmBox(hostTools, 'Cancel this event? Everyone registered will get an alert.', async () => {
+          // .select() returns the changed row, so an update the database quietly refused is reported too.
+          const { data, error } = await db.from('forum_events').update({ status: 'cancelled' }).eq('id', e.id).select('id,status');
+          if (error) return `Could not cancel the event: ${error.message}`;
+          if (data?.[0]?.status !== 'cancelled') return 'Could not cancel the event. Refresh the page (you may need to confirm it\'s you) and try again.';
+          renderDetail(e.id);
+          return null;
+        }, ev.currentTarget) }));
       }
       if (state.isStaff && e.status === 'pending') hostTools.append(reviewBox(e, status));
       if (e.status === 'published') hostTools.append(await attendees(e));
@@ -700,15 +708,29 @@
     );
   }
 
-  function confirmBox(anchor, text, onYes) {
-    const box = el('div', { class: 'fm-confirm' }, [
+  // "Are you sure?" box. It opens right after the button that was pressed (it used to go at the end of the
+  // section, e.g. below a long guest list, where nobody saw it), scrolls into view and puts focus on Yes.
+  // onYes may return an error message; it then stays in the box instead of closing it.
+  function confirmBox(anchor, text, onYes, trigger) {
+    anchor.querySelector(':scope > .fm-confirm, :scope .fm-confirm')?.remove();
+    const status = el('p', { class: 'fm-status', role: 'status' });
+    const yes = el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Yes', onclick: async () => {
+      yes.disabled = true; status.textContent = 'Working…';
+      let problem;
+      try { problem = await onYes(); } catch (err) { problem = err?.message || 'Something went wrong. Please try again.'; }
+      if (problem) { status.textContent = problem; yes.disabled = false; return; }
+      box.remove();
+    } });
+    const box = el('div', { class: 'fm-confirm', role: 'alertdialog', 'aria-label': text }, [
       el('p', { text }),
-      el('div', { class: 'fm-actions' }, [
-        el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Yes', onclick: () => { box.remove(); onYes(); } }),
-        el('button', { class: 'fm-text-btn', type: 'button', text: 'No', onclick: () => box.remove() })
-      ])
+      el('div', { class: 'fm-actions' }, [yes, el('button', { class: 'fm-text-btn', type: 'button', text: 'No', onclick: () => box.remove() })]),
+      status
     ]);
-    anchor.append(box);
+    let spot = trigger && anchor.contains(trigger) ? trigger : null;
+    while (spot && spot.parentElement !== anchor) spot = spot.parentElement;
+    if (spot) spot.after(box); else anchor.prepend(box);
+    box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    yes.focus({ preventScroll: true });
   }
 
   function reviewBox(e, status) {
@@ -797,10 +819,12 @@
       rows.length ? el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Download list (CSV)', onclick: () => exportCsv(e, rows, names) }) : null,
       rows.some((t) => t.photo_path) ? el('button', { class: 'fm-text-btn', type: 'button', text: 'Delete all participant photos', onclick: (ev) => confirmBox(ev.currentTarget.parentElement, 'Delete every participant photo for this event? Do this after the event; it cannot be undone.', async () => {
         const withPhoto = rows.filter((t) => t.photo_path);
-        await db.storage.from(PHOTO_BUCKET).remove(withPhoto.map((t) => t.photo_path));
+        const { error } = await db.storage.from(PHOTO_BUCKET).remove(withPhoto.map((t) => t.photo_path));
+        if (error) return `Could not delete the photos: ${error.message}`;
         await Promise.all(withPhoto.map((t) => db.rpc('forum_ticket_set_photo', { p_ticket: t.id, p_path: null })));
         renderDetail(e.id);
-      }) }) : null
+        return null;
+      }, ev.currentTarget) }) : null
     ].filter(Boolean));
     const list = el('ul', { class: 'fm-ev-guests' });
     rows.forEach((t) => {
