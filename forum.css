@@ -1682,3 +1682,4 @@ body.fm-stepup .fm-stepup { margin-top: 12px; }
 .fm-post-head { min-width: 0; }
 .fm-post-head > :not(.fm-menu) { min-width: 0; overflow-wrap: anywhere; }
 .fm-post-head .fm-menu { flex: none; }
+.fm-name { font-weight: 700; color: var(--wx-ink); }
