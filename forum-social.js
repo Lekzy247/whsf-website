@@ -178,7 +178,7 @@
     data.forEach((n) => {
       const row = el(n.link ? 'a' : 'div', { class: `fm-alert-row${n.read_at ? '' : ' is-new'}`, ...(n.link ? { href: n.link } : {}) }, [
         el('span', { class: 'fm-alert-icon', 'aria-hidden': 'true', text: KIND_ICON[n.kind] || '🔔' }),
-        el('span', {}, [el('strong', { text: n.body }), el('small', {}, [stamp(n.created_at)])])
+        el('span', {}, [el('strong', { text: F.plainText(n.body) }), el('small', {}, [stamp(n.created_at)])])
       ]);
       list.append(row);
     });

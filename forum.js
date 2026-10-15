@@ -902,7 +902,7 @@
     if (post.kind === 'poll') card.append(el('span', { class: 'fm-post-tag', text: '📊 Poll' }));
     if (post.kind === 'event') card.append(el('span', { class: 'fm-post-tag', text: '📅 Event' }));
     if (post.is_hidden) card.append(el('span', { class: 'fm-post-tag', text: 'Hidden by a moderator' }));
-    const body = richText(post.body, 'fm-post-body');
+    const body = postBody(post.body);
     card.append(body);
     if (post.body.length > 420 || post.body.split('\n').length > 7) {
       body.classList.add('is-clamped');
@@ -956,10 +956,97 @@
     ta._mentions = new Map();
     return String(text || '').replace(MENTION_RE, (m, name, id) => { ta._mentions.set(name, id); return `@${name}`; });
   }
-  const plainText = (text) => String(text || '').replace(MENTION_RE, (m, name) => `@${name}`);
+  // ---------------------------------------------------------------- post formatting
+  // Stored as plain markers and drawn with fixed classes (never as HTML, so nothing can be injected):
+  //   **bold**   *italic*   __underline__   {c:red}colour{/c}   {f:serif}font{/f}
+  const FMT_COLORS = { wine: 'Wine', red: 'Red', orange: 'Orange', green: 'Green', blue: 'Blue', purple: 'Purple', grey: 'Grey' };
+  const FMT_FONTS = { serif: 'Classic', mono: 'Typewriter', hand: 'Handwritten', large: 'Large' };
+  const FMT_RE = /\*\*|__|\*|\{c:([a-z]+)\}|\{\/c\}|\{f:([a-z]+)\}|\{\/f\}/g;
+  const FMT_STRIP_RE = /\*\*|__|\{c:[a-z]+\}|\{\/c\}|\{f:[a-z]+\}|\{\/f\}/g;
+  function formatTokens(text) {
+    const items = [];
+    let last = 0;
+    for (const m of text.matchAll(FMT_RE)) {
+      if (m.index > last) items.push({ t: 'text', v: text.slice(last, m.index) });
+      const tok = m[0];
+      let it = null;
+      if (tok === '**' || tok === '__' || tok === '*') {
+        const before = text[m.index - 1]; const after = text[m.index + tok.length];
+        it = { t: 'tok', kind: tok === '**' ? 'b' : tok === '__' ? 'u' : 'i', toggle: true,
+          canOpen: after !== undefined && !/\s/.test(after), canClose: before !== undefined && !/\s/.test(before) };
+      } else if (tok.startsWith('{c:')) { if (FMT_COLORS[m[1]]) it = { t: 'tok', kind: 'c', val: m[1], open: true }; }
+      else if (tok === '{/c}') it = { t: 'tok', kind: 'c', open: false };
+      else if (tok.startsWith('{f:')) { if (FMT_FONTS[m[2]]) it = { t: 'tok', kind: 'f', val: m[2], open: true }; }
+      else if (tok === '{/f}') it = { t: 'tok', kind: 'f', open: false };
+      items.push(it ? { ...it, raw: tok } : { t: 'text', v: tok });
+      last = m.index + tok.length;
+    }
+    if (last < text.length) items.push({ t: 'text', v: text.slice(last) });
+    // Pair the markers; bold/italic/underline must close on the same line. Anything unpaired is shown as typed.
+    const open = {}; const stacks = { c: [], f: [] };
+    items.forEach((it, i) => {
+      if (it.t === 'text') { if (it.v.includes('\n')) Object.keys(open).forEach((k) => delete open[k]); return; }
+      if (!it.toggle) {
+        if (it.open) stacks[it.kind].push(i);
+        else { const j = stacks[it.kind].pop(); if (j !== undefined) { items[j].pair = i; it.pair = j; } }
+        return;
+      }
+      if (open[it.kind] !== undefined && it.canClose) { const j = open[it.kind]; items[j].pair = i; it.pair = j; delete open[it.kind]; }
+      else if (it.canOpen) open[it.kind] = i;
+    });
+    items.forEach((it) => { if (it.t === 'tok' && it.pair === undefined) { it.t = 'text'; it.v = it.raw; } });
+    return items;
+  }
+  const plainText = (text) => String(text || '').replace(MENTION_RE, (m, name) => `@${name}`).replace(FMT_STRIP_RE, '');
 
   function richText(text, cls) {
     const p = el('p', { class: cls });
+    const stack = [p]; const openAt = [];
+    formatTokens(String(text || '')).forEach((it, i) => {
+      if (it.t === 'text') { linkify(stack[stack.length - 1], it.v); return; }
+      if (it.pair > i) {
+        const node = it.kind === 'b' ? el('strong', { class: 'fm-fmt-b' }) : it.kind === 'i' ? el('em', { class: 'fm-fmt-i' })
+          : it.kind === 'u' ? el('span', { class: 'fm-fmt-u' }) : el('span', { class: `fm-fmt-${it.kind}-${it.val}` });
+        stack[stack.length - 1].append(node); stack.push(node); openAt.push(i);
+      } else {
+        const k = openAt.lastIndexOf(it.pair);
+        if (k === -1) return; // already closed by an overlapping marker
+        while (openAt.length > k) { openAt.pop(); stack.pop(); }
+      }
+    });
+    return p;
+  }
+  // A post body. Posts written as "Label: value" lines (calls for proposals, jobs, events) are laid out as an
+  // aligned panel, and a short first line above them becomes the title. Everything else is normal paragraphs.
+  const KV_RE = /^([^\s:/][^:\n]{0,32}?):[ \t]+(\S.*)$/;
+  const isKv = (line) => KV_RE.test(line) && !/https?$/i.test(line.split(':')[0]);
+  function postBody(text, cls = 'fm-post-body') {
+    const lines = String(text || '').split('\n');
+    if (lines.filter(isKv).length < 2) return richText(text, cls);
+    const box = el('div', { class: `${cls} is-structured` });
+    let i = 0;
+    // The first line is the title when it is short text, or a long headline that happens to contain a colon.
+    const first = lines[0] || '';
+    if (first.length <= 160 && (!isKv(first) || (first.length > 60 && lines.slice(1).filter(isKv).length >= 2))) { box.append(richText(first, 'fm-post-title')); i = 1; }
+    let para = []; let dl = null;
+    const flush = () => { if (para.length) { box.append(richText(para.join('\n'), 'fm-post-para')); para = []; } };
+    for (; i < lines.length; i += 1) {
+      const m = lines[i].match(KV_RE);
+      if (m && isKv(lines[i])) {
+        flush();
+        if (!dl) { dl = el('dl', { class: 'fm-kv' }); box.append(dl); }
+        const dd = richText(m[2], 'fm-kv-v');
+        dl.append(el('dt', { text: plainText(m[1]) }), el('dd', {}, [...dd.childNodes]));
+      } else {
+        dl = lines[i].trim() ? null : dl;
+        if (lines[i].trim() || para.length) para.push(lines[i]);
+      }
+    }
+    flush();
+    return box;
+  }
+  // Web links, @mentions and #hashtags inside a piece of text.
+  function linkify(p, text) {
     const re = /(@\[[^\]\n]{1,80}\]\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)|https?:\/\/[^\s<>"']+|#[\p{L}\p{N}_]{2,40})/gu;
     let last = 0;
     for (const m of String(text).matchAll(re)) {
@@ -981,7 +1068,42 @@
       last = m.index + token.length;
     }
     p.append(text.slice(last));
-    return p;
+  }
+
+  // Formatting bar for a post box: select text, then tap a button. A live preview shows the result.
+  function formatBar(ta) {
+    const keep = (b) => { b.addEventListener('pointerdown', (e) => e.preventDefault()); return b; }; // keep the selection
+    const wrap = (a, b) => {
+      const s = ta.selectionStart; const e = ta.selectionEnd; const v = ta.value; const sel = v.slice(s, e);
+      const lead = sel.match(/^\s*/)[0]; const trail = sel.match(/\s*$/)[0]; const core = sel.trim();
+      ta.value = v.slice(0, s) + lead + a + core + b + trail + v.slice(e);
+      const start = s + lead.length + a.length;
+      ta.focus(); ta.setSelectionRange(start, start + core.length);
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+    const btn = (label, title, cls, a, b) => keep(el('button', { type: 'button', class: `fm-fmt-btn ${cls}`, title, 'aria-label': title, text: label, onclick: () => wrap(a, b) }));
+    const colours = el('div', { class: 'fm-fmt-pop', role: 'group', 'aria-label': 'Text colour', hidden: '' },
+      Object.entries(FMT_COLORS).map(([k, t]) => keep(el('button', { type: 'button', class: `fm-fmt-swatch fm-fmt-sw-${k}`, title: t, 'aria-label': t, onclick: () => { colours.hidden = true; wrap(`{c:${k}}`, '{/c}'); } }))));
+    const fonts = el('div', { class: 'fm-fmt-pop', role: 'group', 'aria-label': 'Font style', hidden: '' },
+      Object.entries(FMT_FONTS).map(([k, t]) => keep(el('button', { type: 'button', class: `fm-fmt-fontbtn fm-fmt-f-${k}`, text: t, onclick: () => { fonts.hidden = true; wrap(`{f:${k}}`, '{/f}'); } }))));
+    const toggle = (pop, other) => () => { other.hidden = true; pop.hidden = !pop.hidden; };
+    const preview = el('div', { class: 'fm-fmt-preview', hidden: '', 'aria-live': 'polite' });
+    const update = () => {
+      const has = formatTokens(ta.value).some((x) => x.t === 'tok');
+      preview.hidden = !has;
+      if (has) preview.replaceChildren(el('span', { class: 'fm-fmt-preview-label', text: 'Preview' }), postBody(encodeTags(ta)));
+    };
+    ta.addEventListener('input', update);
+    ta.form?.addEventListener('reset', () => setTimeout(update, 0));
+    const bar = el('div', { class: 'fm-fmt-bar', role: 'toolbar', 'aria-label': 'Text formatting' }, [
+      btn('B', 'Bold', 'is-b', '**', '**'),
+      btn('I', 'Italic', 'is-i', '*', '*'),
+      btn('U', 'Underline', 'is-u', '__', '__'),
+      keep(el('button', { type: 'button', class: 'fm-fmt-btn is-colour', title: 'Text colour', 'aria-label': 'Text colour', onclick: toggle(colours, fonts) }, [el('span', { class: 'fm-fmt-a', text: 'A' })])),
+      keep(el('button', { type: 'button', class: 'fm-fmt-btn is-font', title: 'Font style', 'aria-label': 'Font style', text: 'Aa', onclick: toggle(fonts, colours) })),
+      el('span', { class: 'fm-fmt-hint', text: 'Select text, then choose a style' })
+    ]);
+    return el('div', { class: 'fm-fmt' }, [bar, colours, fonts, preview]);
   }
 
   function confirmInline(card, question, onYes) {
@@ -1178,7 +1300,9 @@
     if (token) fetch('/api/forum-review-alert', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ kind, id }) }).catch(() => {});
   }
 
-  window.WHSFForum = { setTopic, encodeTags, decodeTags, plainText, deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
+  // Formatting bar under the post box (after the colour and font lists above are defined).
+  postForm.querySelector('.fm-composer-row').after(formatBar(postForm.body));
+  window.WHSFForum = { setTopic, encodeTags, decodeTags, plainText, formatBar, postBody, deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => {
