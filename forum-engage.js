@@ -319,6 +319,7 @@
     const status = el('p', { class: 'fm-status', role: 'status' });
     const form = el('form', { class: 'fm-edit-form' }, [
       el('label', { class: 'fm-field' }, [el('span', { text: 'Edit your post' }), body]),
+      F.formatBar(body),
       el('div', { class: 'fm-edit-row' }, [topic, where]),
       el('div', { class: 'fm-actions' }, [
         el('button', { class: 'hp-btn hp-btn-primary', type: 'submit', text: 'Save changes' }),
