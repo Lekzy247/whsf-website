@@ -90,7 +90,7 @@
   ];
   const spaceOf = (key) => SPACES.find((sp) => sp.key === key);
 
-  const state = { single: null, saved: false, q: '', feedKey: '|false', feedReady: false, topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
+  const state = { single: null, saved: false, q: '', feedKey: '|false', feedReady: false, topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null, official: new Set() };
 
   // ---------------------------------------------------------------- views
   const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding', 'spaces', 'admin', 'profile', 'careers', 'job', 'orgs', 'org', 'mentorship', 'mil'];
@@ -837,9 +837,34 @@
   }
   $('[data-fm-qform]').addEventListener('submit', (e) => { e.preventDefault(); setSearch(e.currentTarget.q.value); });
 
+  // Visitors and members still waiting for their ID check see posts from official WHSF accounts (read-only).
+  async function loadOfficialFeed(feed, reset) {
+    const landing = $('[data-fm-landing-latest]');
+    if (!state.session && landing) {
+      feed.replaceChildren(); $('[data-fm-more]').hidden = true;
+      const { data } = await db.rpc('forum_official_posts', { p_limit: 6, p_offset: 0 });
+      const list = $('[data-fm-landing-posts]');
+      list.replaceChildren(...(data || []).map((r) => renderPost({ ...r, author: { display_name: r.author_name, headline: r.author_headline, avatar_url: r.author_avatar } })));
+      landing.hidden = !data?.length;
+      return;
+    }
+    if (landing) landing.hidden = true;
+    if (reset) state.feedOffset = 0;
+    const { data, error } = await db.rpc('forum_official_posts', { p_limit: PAGE_SIZE, p_offset: state.feedOffset });
+    if (reset) feed.replaceChildren();
+    if (error || !data?.length) { $('[data-fm-more]').hidden = true; if (reset) feed.replaceChildren(); return; }
+    if (reset) feed.append(el('div', { class: 'fm-feed-banner fm-official-banner' }, [
+      el('strong', { text: 'Latest from WHSF' }),
+      el('span', { text: state.session ? 'Posts from members appear once your ID check is approved.' : 'Join free to follow WHSF, react and comment.' })
+    ]));
+    data.forEach((r) => feed.append(renderPost({ ...r, author: { display_name: r.author_name, headline: r.author_headline, avatar_url: r.author_avatar } })));
+    state.feedOffset += data.length;
+    $('[data-fm-more]').hidden = data.length < PAGE_SIZE;
+  }
+
   async function loadFeed(reset) {
     const feed = $('[data-fm-feed]');
-    if (!state.me && !state.isStaff) { feed.replaceChildren(); $('[data-fm-more]').hidden = true; return; }
+    if (!state.me && !state.isStaff) { await loadOfficialFeed(feed, reset); return; }
     if (reset) { state.feedOffset = 0; feed.replaceChildren(el('p', { class: 'fm-card fm-empty', text: 'Loading posts…' })); }
     let query = db.from('forum_posts')
       .select('id,kind,topic,body,image_url,location,created_at,edited_at,is_pinned,is_hidden,featured_at,author_id,attachment_path,attachment_name,attachment_kind,attachment_size,event_id,poll_closes_at,collab_need,collab_skills,collab_deadline,collab_where,author:forum_profiles!forum_posts_author_id_fkey(display_name,headline,avatar_url)')
@@ -855,7 +880,7 @@
       query = query.in('id', (saves || []).map((x) => x.post_id).concat('00000000-0000-0000-0000-000000000000'));
       banner = el('div', { class: 'fm-feed-banner' }, [el('strong', { text: '🔖 Saved posts' }), el('a', { class: 'fm-text-btn', href: '#feed', text: 'Back to feed' })]);
     } else {
-      if (state.scope === 'network') query = query.in('author_id', [state.me.user_id, ...state.following]);
+      if (state.scope === 'network') query = query.in('author_id', [state.me.user_id, ...state.following, ...state.official]);
       if (state.topic) query = query.eq('topic', state.topic);
       if (state.q) {
         const tag = state.q.match(/^#([\p{L}\p{N}_]{2,40})$/u);
@@ -884,7 +909,8 @@
     const author = post.author || {};
     const avatar = el('div', { class: 'fm-avatar', 'aria-hidden': 'true' }); fillAvatar(avatar, author);
     const meta = el('div', {}, [
-      el('a', { class: 'fm-author-link', href: `#profile/${post.author_id}` }, [el('strong', { text: author.display_name || 'Member' })]),
+      el('a', { class: 'fm-author-link', href: `#profile/${post.author_id}` }, [el('strong', { text: author.display_name || 'Member' }),
+        state.official.has(post.author_id) ? el('span', { class: 'fm-official', title: 'Official World Humanitarian Support Foundation account', text: '✔ Official WHSF' }) : null].filter(Boolean)),
       el('span', { text: author.headline || '' }),
       el('span', { class: 'fm-post-when' }, [
         el('a', { class: 'fm-post-link', href: `#post/${post.id}` }, [stamp(post.created_at)]),
@@ -1274,6 +1300,7 @@
     state.isStaff = ['admin', 'teacher'].includes(state.session?.user?.app_metadata?.role);
     try { await withTimeout(loadMe(), 12000); } catch (err) { console.error('Profile load failed', err); }
     try { await withTimeout(loadFollows(), 8000); } catch (err) { console.error('Follows load failed', err); }
+    try { const { data } = await withTimeout(db.rpc('forum_official_ids'), 8000); state.official = new Set(data || []); } catch (err) { console.error('Official accounts load failed', err); }
     const signedIn = Boolean(state.session);
     $('[data-fm-auth]').hidden = signedIn;
     $('[data-fm-join]').hidden = !signedIn || Boolean(state.profile);
