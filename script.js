@@ -1938,17 +1938,26 @@ function initWhsfCookieConsent() {
     updatedAt: ''
   };
 
-  const readConsent = () => {
+  // The choice is kept in browser storage AND a first-party cookie (Safari and private browsing often clear one of
+  // them), so the banner only comes back when no choice is saved or the choice is more than 12 months old.
+  const CONSENT_COOKIE = 'whsf_consent';
+  const CONSENT_MAX_AGE_DAYS = 365;
+  const readStored = () => {
+    try { const v = localStorage.getItem(WHSF_CONSENT_KEY); if (v) return JSON.parse(v); } catch { /* storage blocked */ }
     try {
-      return { ...defaultConsent, ...JSON.parse(localStorage.getItem(WHSF_CONSENT_KEY) || '{}') };
-    } catch {
-      return defaultConsent;
-    }
+      const m = document.cookie.match(/(?:^|;\s*)whsf_consent=([^;]+)/);
+      if (m) return JSON.parse(decodeURIComponent(m[1]));
+    } catch { /* cookie unreadable */ }
+    return null;
   };
+  const isFresh = (c) => Boolean(c && c.updatedAt && (Date.now() - Date.parse(c.updatedAt)) < CONSENT_MAX_AGE_DAYS * 864e5);
+  const readConsent = () => ({ ...defaultConsent, ...(readStored() || {}) });
 
   const saveConsent = (preferences) => {
     const nextConsent = { ...defaultConsent, ...preferences, updatedAt: new Date().toISOString() };
-    localStorage.setItem(WHSF_CONSENT_KEY, JSON.stringify(nextConsent));
+    const text = JSON.stringify(nextConsent);
+    try { localStorage.setItem(WHSF_CONSENT_KEY, text); } catch { /* storage blocked */ }
+    try { document.cookie = `${CONSENT_COOKIE}=${encodeURIComponent(text)}; Max-Age=${CONSENT_MAX_AGE_DAYS * 86400}; Path=/; SameSite=Lax; Secure`; } catch { /* cookies blocked */ }
     document.documentElement.dataset.whsfConsent = 'saved';
     return nextConsent;
   };
@@ -1966,13 +1975,19 @@ function initWhsfCookieConsent() {
   const banner = document.createElement('section');
   banner.className = 'whsf-consent-banner';
   banner.setAttribute('aria-label', 'Cookie and data processing consent');
-  banner.hidden = Boolean(localStorage.getItem(WHSF_CONSENT_KEY));
+  const stored = readStored();
+  banner.hidden = isFresh(stored);
+  // Copy a saved choice (with its original date) into both places so it survives the next storage clean-up.
+  if (banner.hidden) {
+    const text = JSON.stringify(stored);
+    try { if (!localStorage.getItem(WHSF_CONSENT_KEY)) localStorage.setItem(WHSF_CONSENT_KEY, text); } catch { /* storage blocked */ }
+    try { if (!/(?:^|;\s*)whsf_consent=/.test(document.cookie)) document.cookie = `whsf_consent=${encodeURIComponent(text)}; Max-Age=${CONSENT_MAX_AGE_DAYS * 86400}; Path=/; SameSite=Lax; Secure`; } catch { /* cookies blocked */ }
+  }
   banner.innerHTML = `
     <div class="whsf-consent-copy">
-      <span>Privacy choices</span>
-      <h2>Consent to Cookies & Data Processing</h2>
+      <h2>Cookies on WHSF</h2>
       <p>
-        WHSF uses necessary website functions and may use similar technologies to improve access, integrate content such as videos or external services, understand website performance and support secure public services such as e-learning, certificate verification, staff verification, donations and contact forms. You can accept all, reject non-essential processing or manage your preferences. Your choice is voluntary and can be changed using “Privacy settings” at the bottom of the website.
+        We use necessary cookies to run this site. With your permission we also use optional ones for videos, external services and site statistics. You can change your choice any time in “Privacy settings” at the bottom of the page.
       </p>
     </div>
     <div class="whsf-consent-actions">

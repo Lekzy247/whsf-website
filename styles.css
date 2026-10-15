@@ -7565,4 +7565,16 @@ body {
   .home-programme-card-grid { grid-template-columns: 1fr; }
   .home-programme-intro .hero-actions { align-items: stretch; }
   .home-programme-intro .button { width: 100%; text-align: center; }
+}/* Cookie banner: a slim bar, not a big panel (owner request 2026-10-15) */
+.whsf-consent-banner { max-width: 960px; gap: 16px; padding: 14px 18px; border-radius: 16px; box-shadow: 0 12px 36px rgba(59,7,17,.18); }
+.whsf-consent-copy h2 { margin: 0 0 4px; font-size: 1.05rem; }
+.whsf-consent-copy p { font-size: .86rem; font-weight: 500; line-height: 1.45; }
+.whsf-consent-actions { min-width: 0; gap: 8px; align-items: center; }
+.whsf-consent-actions .button { min-height: 40px; padding: 8px 16px; }
+@media (max-width: 760px) {
+  .whsf-consent-banner { left: 8px; right: 8px; bottom: 8px; gap: 10px; padding: 12px 14px; border-radius: 14px; }
+  .whsf-consent-copy p { font-size: .8rem; }
+  .whsf-consent-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .whsf-consent-actions .button { width: 100%; min-height: 40px; }
+  .whsf-consent-actions .text-button { grid-column: 1 / -1; width: auto; min-height: 32px; padding: 4px; font-size: .85rem; }
 }

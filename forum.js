@@ -345,12 +345,20 @@
   const DEVICE_KEY = 'whsf-forum-device';
   let memDeviceKey = null;
   const newDeviceKey = () => btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  // The key is kept in both browser storage and a first-party cookie, so clearing one does not make a known
+  // phone look new. (The database also trusts the same kind of device in the same country; see forum_session_check.)
+  const validKey = (k) => typeof k === 'string' && /^[A-Za-z0-9_-]{32,128}$/.test(k);
+  const readCookieKey = () => { try { return (document.cookie.match(/(?:^|;\s*)whsf_fdk=([A-Za-z0-9_-]{32,128})/) || [])[1] || null; } catch { return null; } };
+  const writeCookieKey = (k) => { try { document.cookie = `whsf_fdk=${k}; Max-Age=31536000; Path=/; SameSite=Lax; Secure`; } catch { /* cookies blocked */ } };
   function deviceKey() {
-    try {
-      let k = localStorage.getItem(DEVICE_KEY);
-      if (!k || !/^[A-Za-z0-9_-]{32,128}$/.test(k)) { k = newDeviceKey(); localStorage.setItem(DEVICE_KEY, k); }
-      return k;
-    } catch { return memDeviceKey || (memDeviceKey = newDeviceKey()); }
+    let k = null;
+    try { k = localStorage.getItem(DEVICE_KEY); } catch { /* storage blocked */ }
+    if (!validKey(k)) k = readCookieKey();
+    if (!validKey(k)) k = memDeviceKey || newDeviceKey();
+    memDeviceKey = k;
+    try { localStorage.setItem(DEVICE_KEY, k); } catch { /* storage blocked */ }
+    if (readCookieKey() !== k) writeCookieKey(k);
+    return k;
   }
   function deviceLabel() {
     const ua = navigator.userAgent;
