@@ -8,8 +8,25 @@
   const PAGE_SIZE = 20;
   const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
-  if (!window.supabase?.createClient) return;
+  // Never leave a blank page: until the Forum has drawn itself, a loading card shows; if something fails
+  // (no connection, a blocked script, a stuck sign-in check) it turns into a message with Try again.
+  function bootProblem(text) {
+    const box = document.querySelector('[data-fm-boot]');
+    if (!box) return;
+    box.hidden = false;
+    box.replaceChildren();
+    const p = document.createElement('p'); p.textContent = text;
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'hp-btn hp-btn-primary'; b.textContent = 'Try again';
+    b.addEventListener('click', () => location.reload());
+    box.append(p, b);
+  }
+  if (!window.supabase?.createClient) {
+    bootProblem('The WHSF Forum could not load. Check your internet connection and try again.');
+    return;
+  }
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let booted = false;
+  const bootTimer = setTimeout(() => { if (!booted) bootProblem('The WHSF Forum is taking longer than usual to load. Check your connection and try again.'); }, 15000);
 
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -123,7 +140,7 @@
     if (view === 'people') loadPeople();
     if (view === 'me') fillMeForm();
     if (view === 'idchecks') loadIdChecks();
-    hooks.view.forEach((fn) => fn(view));
+    hooks.view.forEach((fn) => { try { fn(view); } catch (err) { console.error('Forum view add-on failed', err); } });
     const key = `${single || ''}|${saved}|${state.topic || ''}`;
     if (key !== state.feedKey) {
       state.feedKey = key; state.single = single; state.saved = saved;
@@ -1104,17 +1121,34 @@
   }));
 
   // ---------------------------------------------------------------- page state
+  // A sign-in check that never answers (it can happen when the Forum reopens from a phone's home screen)
+  // must not hold the page: give up after a few seconds and carry on.
+  const withTimeout = (promise, ms) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))]);
   async function refresh() {
-    const { data } = await db.auth.getSession();
-    state.session = data.session;
+    try {
+      await refreshInner();
+    } catch (err) {
+      console.error('Forum refresh failed', err);
+      try { showView(); } catch (e) { console.error(e); }
+      if (!booted) bootProblem('Part of the WHSF Forum could not load. Check your connection and try again.');
+      return;
+    }
+    booted = true;
+    clearTimeout(bootTimer);
+    const boot = $('[data-fm-boot]'); if (boot) boot.hidden = true;
+  }
+  async function refreshInner() {
+    let session = null;
+    try { ({ data: { session } } = await withTimeout(db.auth.getSession(), 8000)); } catch (err) { console.error('Session check failed', err); }
+    state.session = session;
     state.isStaff = ['admin', 'teacher'].includes(state.session?.user?.app_metadata?.role);
-    await loadMe();
-    await loadFollows();
+    try { await withTimeout(loadMe(), 12000); } catch (err) { console.error('Profile load failed', err); }
+    try { await withTimeout(loadFollows(), 8000); } catch (err) { console.error('Follows load failed', err); }
     const signedIn = Boolean(state.session);
     $('[data-fm-auth]').hidden = signedIn;
     $('[data-fm-join]').hidden = !signedIn || Boolean(state.profile);
     $$('[data-fm-staff-only]').forEach((n) => { n.hidden = !state.isStaff; });
-    await renderVerify();
+    try { await renderVerify(); } catch (err) { console.error('Verification panel failed', err); }
     renderStepUp();
     $('[data-fm-composer]').hidden = !state.me;
     $('[data-fm-spaces-nav]').hidden = !state.me;
@@ -1124,7 +1158,7 @@
     }
     renderProfileCard();
     renderMeMenu();
-    hooks.refresh.forEach((fn) => fn());
+    hooks.refresh.forEach((fn) => { try { const r = fn(); if (r?.catch) r.catch((err) => console.error('Forum add-on failed', err)); } catch (err) { console.error('Forum add-on failed', err); } });
     showView();
     state.feedReady = true;
     loadFeed(true);
