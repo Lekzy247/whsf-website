@@ -1640,3 +1640,8 @@ a.fm-mention:hover { text-decoration: underline; }
   .fm-reaction-picker { left: -4px; max-width: calc(100vw - 32px); padding: 6px; }
   .fm-reaction-picker button { width: 44px; height: 44px; }
 }
+/* Comments open only when asked, and collapse again */
+.fm-comments[hidden] { display: none; }
+.fm-c-hide { display: block; margin: 6px 0 2px auto; min-height: 36px; padding: 6px 10px; border: 0; border-radius: 8px; background: none; color: var(--wx-muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.fm-c-hide:hover { background: var(--wx-soft); color: var(--wx-wine); }
+.fm-eng-comment[aria-expanded="true"] { color: var(--wx-wine); }
