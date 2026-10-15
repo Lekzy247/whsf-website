@@ -8,19 +8,29 @@
   const { db, state, el, $, fillAvatar, stamp, richText, confirmInline } = F;
 
   const REACTIONS = [
-    { k: 'like', e: '👍', t: 'Like' },
-    { k: 'love', e: '❤️', t: 'Love' },
-    { k: 'celebrate', e: '🎉', t: 'Celebrate' },
-    { k: 'support', e: '🤝', t: 'Support' },
-    { k: 'insightful', e: '💡', t: 'Insightful' },
-    { k: 'funny', e: '😄', t: 'Funny' },
-    { k: 'care', e: '🤗', t: 'Care' },
-    { k: 'wow', e: '😮', t: 'Wow' },
-    { k: 'sad', e: '😢', t: 'Sad' },
-    { k: 'applause', e: '👏', t: 'Applause' },
-    { k: 'thanks', e: '🙏', t: 'Thank you' }
+    // c = the colour of the button label once chosen (Facebook style: Like purple, Love red, faces amber).
+    { k: 'like', e: '👍', t: 'Like', c: '#6d28d9' },
+    { k: 'love', e: '❤️', t: 'Love', c: '#f33e58' },
+    { k: 'care', e: '🤗', t: 'Care', c: '#e8a20c' },
+    { k: 'funny', e: '😆', t: 'Haha', c: '#e8a20c' },
+    { k: 'wow', e: '😮', t: 'Wow', c: '#e8a20c' },
+    { k: 'sad', e: '😢', t: 'Sad', c: '#e8a20c' },
+    { k: 'celebrate', e: '🎉', t: 'Celebrate', c: '#1f8a4c' },
+    { k: 'support', e: '🤝', t: 'Support', c: '#0f8b8d' },
+    { k: 'insightful', e: '💡', t: 'Insightful', c: '#c98a00' },
+    { k: 'applause', e: '👏', t: 'Applause', c: '#e8a20c' },
+    { k: 'thanks', e: '🙏', t: 'Thank you', c: '#e9710f' }
   ];
   const R = Object.fromEntries(REACTIONS.map((r) => [r.k, r]));
+  // Facebook-style round badges: Like = white thumb on purple, Love = white heart on red; the rest use their emoji.
+  const HEART = 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z';
+  function reactionBadge(k) {
+    if (k === 'like' || k === 'love') {
+      const svg = icon(k === 'like' ? ICONS.like : [HEART]);
+      return el('span', { class: `fm-rbadge is-${k}`, title: R[k].t }, [svg]);
+    }
+    return el('span', { class: 'fm-rbadge is-emoji', title: R[k]?.t || '', text: R[k]?.e || '' });
+  }
   const cards = new Map(); // post id -> { card, post, ui }
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
   const icon = (paths) => {
@@ -147,8 +157,8 @@
   function paint(c) {
     const { ui, stats } = c;
     if (!stats) return;
-    const top = Object.entries(stats.reactions || {}).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => R[k]?.e || '');
-    ui.reactSum.replaceChildren(el('span', { class: 'fm-eng-emojis', 'aria-hidden': 'true', text: top.join('') }), el('span', { text: String(stats.reaction_total) }));
+    const topKeys = Object.entries(stats.reactions || {}).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k).filter((k) => R[k]);
+    ui.reactSum.replaceChildren(el('span', { class: 'fm-eng-emojis', 'aria-hidden': 'true' }, topKeys.map(reactionBadge)), el('span', { text: String(stats.reaction_total) }));
     ui.reactSum.setAttribute('aria-label', `${plural(stats.reaction_total, 'reaction', 'reactions')}. See who reacted.`);
     ui.reactSum.hidden = !stats.reaction_total;
     ui.commentSum.textContent = plural(stats.comment_total, 'comment', 'comments');
@@ -158,7 +168,11 @@
     const mine = stats.my_reaction ? R[stats.my_reaction] : null;
     ui.likeBtn.setAttribute('aria-pressed', String(Boolean(mine)));
     ui.likeBtn.classList.toggle('is-on', Boolean(mine));
-    ui.likeBtn.replaceChildren(mine ? el('span', { class: 'fm-eng-emoji', text: mine.e }) : icon(ICONS.like), el('span', { text: mine ? mine.t : 'Like' }));
+    ui.likeBtn.replaceChildren(
+      !mine ? icon(ICONS.like) : mine.k === 'like' ? icon(ICONS.like) : el('span', { class: 'fm-eng-emoji', text: mine.e }),
+      el('span', { text: mine ? mine.t : 'Like' }));
+    ui.likeBtn.dataset.reaction = mine ? mine.k : '';
+    ui.likeBtn.style.color = mine ? mine.c : '';
     ui.saveBtn.setAttribute('aria-pressed', String(Boolean(stats.saved)));
     ui.saveBtn.classList.toggle('is-on', Boolean(stats.saved));
     ui.saveBtn.querySelector('span').textContent = stats.saved ? 'Saved' : 'Save';
@@ -451,7 +465,7 @@
     const row = el('div', { class: 'fm-c-row' }, [bubble, tools.length ? makeMenu('Comment options', tools) : null]);
     const meta = el('div', { class: 'fm-c-meta' }, [
       el('time', { class: 'fm-c-time', datetime: cm.created_at, title: F.fullTime(cm.created_at), text: shortTime(cm.created_at) }),
-      state.me ? el('button', { class: `fm-c-act${isLiked ? ' is-on' : ''}`, type: 'button', 'aria-pressed': String(isLiked), text: isLiked ? '👍 Liked' : 'Like', onclick: () => likeComment(c, cm.id, isLiked) }) : null,
+      state.me ? el('button', { class: `fm-c-act${isLiked ? ' is-on' : ''}`, type: 'button', 'aria-pressed': String(isLiked), text: 'Like', onclick: () => likeComment(c, cm.id, isLiked) }) : null,
       state.me ? el('button', { class: 'fm-c-act', type: 'button', text: 'Reply', onclick: () => openReply(c, li, cm) }) : null,
       cm.edited_at ? el('span', { class: 'fm-edited', title: `Edited ${F.fullTime(cm.edited_at)}`, text: 'Edited' }) : null
     ]);
