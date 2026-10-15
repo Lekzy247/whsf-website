@@ -103,7 +103,7 @@
     ui.saveBtn = el('button', { class: 'fm-eng-btn', type: 'button', 'aria-pressed': 'false', onclick: () => toggleSave(post.id) }, [icon(ICONS.save), el('span', { text: 'Save' })]);
     ui.bar = el('div', { class: 'fm-eng-bar' }, [
       member ? likeWrap : null,
-      el('button', { class: 'fm-eng-btn', type: 'button', onclick: () => toggleComments(post.id, true, true) }, [icon(ICONS.comment), el('span', { text: 'Comment' })]),
+      el('button', { class: 'fm-eng-btn fm-eng-comment', type: 'button', 'aria-expanded': 'false', onclick: () => toggleComments(post.id, null, true) }, [icon(ICONS.comment), el('span', { text: 'Comment' })]),
       el('button', { class: 'fm-eng-btn', type: 'button', onclick: () => toggleShare(post.id) }, [icon(ICONS.share), el('span', { text: 'Share' })]),
       member ? ui.saveBtn : null
     ]);
@@ -347,7 +347,12 @@
     const show = open === null ? box.hidden : open;
     box.hidden = !show;
     c.ui.commentSum.setAttribute('aria-expanded', String(show));
-    if (!show) return;
+    c.ui.bar.querySelector('.fm-eng-comment')?.setAttribute('aria-expanded', String(show));
+    if (!show) {
+      // Keep the post in view after a long thread collapses.
+      if (c.card.getBoundingClientRect().top < 0) c.card.scrollIntoView({ block: 'start' });
+      return;
+    }
     if (!c.commentsLoaded) loadComments(id, focus);
     else if (focus) focusCommentBox(box);
   }
@@ -369,8 +374,6 @@
       c.liked = liked;
       c.commentsLoaded = true;
       renderComments(c);
-      c.ui.comments.hidden = false;
-      c.ui.commentSum.setAttribute('aria-expanded', 'true');
     });
   }
   async function loadComments(id, focus = false) {
@@ -412,7 +415,8 @@
     c.ui.comments.replaceChildren(...[
       hiddenCount ? el('button', { class: 'fm-c-more', type: 'button', text: `View ${plural(hiddenCount, 'more comment', 'more comments')}`, onclick: () => { c.expanded = true; renderComments(c); } }) : null,
       data.length ? list : el('p', { class: 'fm-muted fm-c-empty', text: 'No comments yet. Be the first to comment.' }),
-      state.me ? commentForm(c, null) : null
+      state.me ? commentForm(c, null) : null,
+      el('button', { class: 'fm-c-hide', type: 'button', text: 'Hide comments ▲', onclick: () => toggleComments(c.post.id, false) })
     ].filter(Boolean));
     if (keep) {
       const ta = c.ui.comments.querySelector(':scope > .fm-c-form textarea');
