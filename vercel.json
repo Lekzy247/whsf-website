@@ -1,6 +1,12 @@
 {
   "cleanUrls": false,
   "trailingSlash": false,
+  "crons": [
+    { "path": "/api/jobs-sync", "schedule": "0 5 * * *" }
+  ],
+  "functions": {
+    "api/jobs-sync.js": { "maxDuration": 300 }
+  },
   "rewrites": [
     {
       "source": "/media-information-library",

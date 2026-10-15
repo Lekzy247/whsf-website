@@ -1477,6 +1477,12 @@ a.fm-mention:hover { text-decoration: underline; }
 .fm-match { flex: none; align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: #e9f6ee; color: #1d6b3a; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .fm-job-rec .fm-job-card { border-color: #d5ebdc; background: #fbfefc; }
 .fm-callout { padding: 10px 12px; border-radius: 10px; background: var(--wx-soft); }
+/* Career Center: jobs from partner job boards */
+.fm-careers-body > .fm-callout { margin-bottom: 12px; line-height: 1.5; }
+.fm-country-chips { flex-wrap: nowrap; overflow-x: auto; margin-bottom: 12px; padding-bottom: 6px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+.fm-country-chips .fm-chip-btn { flex: none; white-space: nowrap; }
+.fm-org-logo-img { object-fit: contain; padding: 4px; border: 1px solid var(--wx-line); background: #fff; }
+.fm-careers-body > .fm-chip-btn[hidden] { display: none; }
 .fm-job-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; margin-top: 10px; }
 .fm-job-detail h3 { margin: 18px 0 8px; font-size: 16px; }
 .fm-job-top { display: flex; gap: 14px; align-items: flex-start; }
