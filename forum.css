@@ -1563,3 +1563,61 @@ a.fm-mention:hover { text-decoration: underline; }
 }
 /* Person cards (Network, Mentorship): normal-size photo, no overlap */
 .fm-net-who .fm-avatar-lg { flex: none; width: 52px; height: 52px; margin: 0; border: 0; font-size: 18px; box-shadow: none; }
+/* MIL Lab community: fact-checks, lessons, badges */
+.fm-mil-body { display: grid; gap: 14px; }
+.fm-mil-body > input[type=search], .fm-check-team input[type=search] { width: 100%; min-height: 42px; padding: 8px 12px; border: 1px solid var(--wx-line-strong); border-radius: 10px; font: inherit; font-size: 15px; box-sizing: border-box; background: #fff; }
+.fm-mil-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--wx-soft); }
+.fm-mil-cta p { margin: 0; flex: 1 1 260px; }
+.fm-check-list { display: grid; gap: 12px; }
+.fm-check-card { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--wx-line); border-radius: 14px; background: #fff; min-width: 0; overflow-wrap: anywhere; }
+.fm-admin-card > .fm-check-card { padding: 0; border: 0; }
+.fm-check-card p { margin: 0; }
+.fm-check-head, .fm-check-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.fm-check-foot { justify-content: space-between; }
+.fm-check-label { display: block; margin-bottom: 2px; color: #7a6570; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.fm-check-claim { font-size: 16px; font-weight: 600; }
+.fm-check-summary { color: #3b2f35; line-height: 1.55; white-space: pre-line; }
+.fm-check-sources ol { margin: 4px 0 0; padding-left: 20px; }
+.fm-check-sources li { margin: 2px 0; }
+.fm-check-by { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.fm-verdict { padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap; }
+.fm-verdict.is-true { background: #e9f6ee; color: #1d6b3a; }
+.fm-verdict.is-false { background: #fdecee; color: #a3182f; }
+.fm-verdict.is-misleading { background: #fff3e0; color: #8a4b00; }
+.fm-verdict.is-missing_context { background: #fff8db; color: #6d5600; }
+.fm-verdict.is-unproven { background: #eef1f5; color: #3d4a5c; }
+.fm-check-src-rows { display: grid; gap: 8px; }
+.fm-check-answer { margin-top: 10px; }
+.fm-check-person { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.fm-check-team { display: grid; gap: 10px; margin-top: 8px; }
+.fm-mil-learn-head { display: grid; gap: 10px; padding: 16px; border-radius: 14px; background: var(--wx-soft); }
+.fm-mil-learn-head p { margin: 4px 0 0; }
+.fm-mil-progress { height: 10px; border-radius: 999px; background: #fff; overflow: hidden; }
+.fm-mil-progress span { display: block; height: 100%; border-radius: 999px; background: var(--wx-wine); }
+.fm-mil-modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; align-items: start; }
+.fm-mil-module { display: grid; gap: 10px; padding: 16px; border: 1px solid var(--wx-line); border-radius: 14px; background: #fff; min-width: 0; }
+.fm-mil-module.is-done { border-color: #bfe3cb; }
+.fm-mil-module-head { display: flex; gap: 12px; align-items: flex-start; }
+.fm-mil-module-head p { margin: 4px 0 0; }
+.fm-mil-num { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--wx-soft); color: var(--wx-wine); font-weight: 800; }
+.fm-mil-module.is-done .fm-mil-num { background: #e9f6ee; color: #1d6b3a; }
+.fm-mil-module > .hp-btn { justify-self: start; }
+.fm-mil-lesson { display: grid; gap: 10px; }
+.fm-mil-lesson[hidden] { display: none; }
+.fm-mil-points { margin: 0; padding-left: 20px; line-height: 1.5; }
+.fm-mil-points li { margin: 4px 0; }
+.fm-mil-quiz { display: grid; gap: 8px; padding: 12px; border-radius: 12px; background: #fcfafb; border: 1px solid var(--wx-line); }
+.fm-mil-quiz p { margin: 0; }
+.fm-mil-answers { display: grid; gap: 6px; }
+.fm-mil-answer { padding: 10px 12px; border: 1px solid var(--wx-line-strong); border-radius: 10px; background: #fff; font: inherit; font-size: 15px; text-align: left; cursor: pointer; color: inherit; }
+.fm-mil-answer.is-right { border-color: #1d6b3a; background: #e9f6ee; }
+.fm-mil-answer.is-wrong { border-color: #a3182f; background: #fdecee; }
+.fm-pbadges { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.fm-pbadge { padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; }
+.fm-pbadge.is-mil { background: #f4e6ec; color: var(--wx-wine); }
+.fm-pbadge.is-checker { background: #eef4fb; color: #1d4f86; }
+@media (max-width: 640px) {
+  .fm-mil-modules { grid-template-columns: 1fr; }
+  .fm-check-answer .fm-two, .fm-check-src-rows .fm-two { grid-template-columns: 1fr; }
+  .fm-mil-cta .hp-btn { width: 100%; justify-content: center; }
+}

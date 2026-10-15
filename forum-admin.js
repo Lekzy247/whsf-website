@@ -14,7 +14,8 @@
     'member.verification_approved': 'approved an ID check', 'member.verification_rejected': 'rejected an ID check', 'report.resolve': 'resolved a report',
     'report.reopen': 'reopened a report', 'space.moderator_add': 'added a space moderator', 'space.moderator_remove': 'removed a space moderator',
     'space.resource_add': 'added a space resource', 'space.resource_remove': 'removed a space resource',
-    'organisation.verified': 'verified an organisation', 'organisation.rejected': 'did not verify an organisation', 'organisation.suspended': 'suspended an organisation'
+    'organisation.verified': 'verified an organisation', 'organisation.rejected': 'did not verify an organisation', 'organisation.suspended': 'suspended an organisation',
+    'member.factchecker_add': 'appointed a fact-checker', 'member.factchecker_remove': 'removed a fact-checker'
   };
   const when = (iso) => (iso ? new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—');
   const root = () => $('[data-fm-admin]');
