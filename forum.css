@@ -1645,3 +1645,8 @@ a.fm-mention:hover { text-decoration: underline; }
 .fm-c-hide { display: block; margin: 6px 0 2px auto; min-height: 36px; padding: 6px 10px; border: 0; border-radius: 8px; background: none; color: var(--wx-muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .fm-c-hide:hover { background: var(--wx-soft); color: var(--wx-wine); }
 .fm-eng-comment[aria-expanded="true"] { color: var(--wx-wine); }
+/* Loading / problem card shown until the Forum has drawn itself */
+.fm-boot { display: grid; gap: 12px; justify-items: center; padding: 28px 20px !important; text-align: center; color: var(--wx-muted); }
+.fm-boot[hidden] { display: none !important; }
+.fm-boot p { margin: 0; font-size: 16px; }
+main.fm > .fm-boot { max-width: 560px; margin: 16px auto; }
