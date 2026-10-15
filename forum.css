@@ -1174,6 +1174,7 @@ body.fm-stepup .fm-center > :not([data-fm-stepup]) { display: none !important; }
 .fm-fund-filters .fm-chip-btn { min-height: 42px; }
 .fm-fund-results { display: grid; gap: 10px; margin-bottom: 12px; }
 .fm-opp { display: grid; gap: 6px; padding: 14px 16px; border: 1px solid var(--wx-line); border-radius: 14px; background: #fff; }
+.fm-opp { min-width: 0; } .fm-opp-sum { overflow-wrap: anywhere; } .fm-opp-actions .hp-btn { white-space: normal; text-align: center; }
 .fm-opp h3 { margin: 0; font-size: 16px; line-height: 1.35; overflow-wrap: anywhere; }
 .fm-opp p { margin: 0; }
 .fm-opp-top { display: flex; flex-wrap: wrap; gap: 6px 12px; justify-content: space-between; font-size: 13px; }

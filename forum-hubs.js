@@ -166,59 +166,103 @@
   // ---------------------------------------------------------------- funding finder (#funding)
   const SECTOR_LABEL = { education: 'Education', ict: 'Digital / ICT', stem: 'STEM', youth: 'Youth', economic_development: 'Economic development', health: 'Health', ai: 'AI', climate: 'Climate', agriculture: 'Agriculture', humanitarian: 'Humanitarian' };
   const WHO_LABEL = { any: 'Anyone', individual: 'Individuals', nonprofit: 'Nonprofits / NGOs', us_nonprofit: 'US nonprofits', university: 'Universities', school: 'Schools', business: 'Businesses', government: 'Government', other: 'Other organisations' };
-  const SOURCE_LABEL = { grants_gov: 'Grants.gov (US Government)', eu: 'EU Funding & Tenders', manual: 'WHSF verified' };
+  const SOURCE_LABEL = { grants_gov: 'Grants.gov (US Government)', eu: 'EU Funding & Tenders', eu_ft: 'EU Funding & Tenders', manual: 'WHSF verified',
+    ofa: 'Opportunities for Africans', asa: 'After School Africa', oc: 'Opportunities Corners' };
+  const LEVEL_LABEL = { undergraduate: 'Undergraduate', masters: "Master's", phd: 'PhD', short_course: 'Short course' };
+  const FUNDING_LABEL = { fully_funded: 'Fully funded', funded: 'Funded (check what is covered)' };
+  // Grants come from official funder databases; scholarships and funded events are collected daily by
+  // api/opportunities-sync.js from three opportunity sites (cards link to their page, which links to the official one).
+  const KINDS = [['grant', 'Grants'], ['scholarship', 'Scholarships'], ['funded_event', 'Funded events']];
+  const KIND_TEXT = {
+    grant: 'open grants from official funder databases',
+    scholarship: 'open scholarships for students, updated every day',
+    funded_event: 'open fully or partly funded conferences, summits, exchanges and trainings, updated every day'
+  };
+  const KIND_NOTE = {
+    grant: 'Opportunities come from official funder databases and are checked by WHSF before they are listed. Eligibility and amounts can change: confirm on the official page before applying.',
+    scholarship: 'Scholarships are collected every day from Opportunities for Africans, After School Africa and Opportunities Corners, which link to the official programme. Always apply on the official website. Real scholarships never ask you to pay a fee to apply.',
+    funded_event: 'Funded events are collected every day from Opportunities for Africans, After School Africa and Opportunities Corners. "Fully funded" means the organiser says travel and stay are covered: check the official page for exactly what is paid. Never pay anyone to secure a place.'
+  };
   const COUNTRY = (c) => { try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(c) || c; } catch { return c; } };
   const nice = (map, k) => map[k] || String(k).replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
   const money = (n) => `$${Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
-  const COLS = 'id,title,funder_name,summary,url,countries,sectors,applicant_types,amount_min_usd,amount_max_usd,amount_note,deadline,source';
-  const filters = { q: '', sector: '', who: '', country: '', amount: '', due: '', source: '', saved: false };
-  let facets = null; let offset = 0;
+  const COLS = 'id,kind,title,funder_name,summary,url,countries,sectors,applicant_types,amount_min_usd,amount_max_usd,amount_note,deadline,source,funding,study_levels';
+  const filters = { kind: 'grant', q: '', sector: '', who: '', country: '', amount: '', due: '', source: '', level: '', funding: '', saved: false };
+  const facetsByKind = {}; let kindTotals = null; let offset = 0;
 
-  async function loadFacets() {
-    if (facets) return facets;
+  async function loadFacets(kind) {
+    if (facetsByKind[kind]) return facetsByKind[kind];
     const today = new Date().toISOString().slice(0, 10);
-    const { data } = await db.from('whsf_opportunities').select('countries,sectors,applicant_types,source')
-      .eq('kind', 'grant').eq('review_status', 'published').neq('status', 'closed').gte('deadline', today).limit(1000);
-    const count = (key) => { const m = new Map(); (data || []).forEach((r) => [].concat(r[key] || []).forEach((v) => m.set(v, (m.get(v) || 0) + 1))); return [...m.entries()].sort((a, b) => b[1] - a[1]); };
-    facets = { sectors: count('sectors'), who: count('applicant_types'), countries: count('countries'), sources: count('source'), total: (data || []).length };
-    return facets;
+    const { data } = await db.from('whsf_opportunities').select('countries,sectors,applicant_types,source,study_levels,funding')
+      .eq('kind', kind).eq('review_status', 'published').neq('status', 'closed').gte('deadline', today).limit(1000);
+    const count = (key) => { const m = new Map(); (data || []).forEach((r) => [].concat(r[key] || []).forEach((v) => v && m.set(v, (m.get(v) || 0) + 1))); return [...m.entries()].sort((a, b) => b[1] - a[1]); };
+    facetsByKind[kind] = { sectors: count('sectors'), who: count('applicant_types'), countries: count('countries'), sources: count('source'), levels: count('study_levels'), funding: count('funding'), total: (data || []).length };
+    return facetsByKind[kind];
+  }
+  async function loadKindTotals() {
+    if (kindTotals) return kindTotals;
+    const today = new Date().toISOString().slice(0, 10);
+    const counts = await Promise.all(KINDS.map(([k]) => db.from('whsf_opportunities').select('id', { count: 'exact', head: true })
+      .eq('kind', k).eq('review_status', 'published').neq('status', 'closed').gte('deadline', today)));
+    kindTotals = Object.fromEntries(KINDS.map(([k], i) => [k, counts[i].count || 0]));
+    return kindTotals;
+  }
+  function setKind(kind) {
+    Object.assign(filters, { kind, sector: '', who: '', country: '', amount: '', source: '', level: '', funding: '' });
+    offset = 0;
+    history.replaceState(null, '', kind === 'grant' ? '#funding' : `#funding/${kind}`);
+    renderFunding();
   }
 
   async function renderFunding() {
     const box = $('[data-fm-funding]');
     if (!box || !state.me) return;
     await loadMine();
-    const f = await loadFacets();
+    const fromHash = (location.hash.split('/')[1] || '');
+    if (KINDS.some(([k]) => k === fromHash) && fromHash !== filters.kind) Object.assign(filters, { kind: fromHash });
+    const kind = filters.kind;
+    const [f, totals] = await Promise.all([loadFacets(kind), loadKindTotals()]);
     const select = (name, label, options) => {
       const s = el('select', { name, 'aria-label': label }, [el('option', { value: '', text: label }), ...options.map(([v, t]) => el('option', { value: v, text: t }))]);
       s.value = filters[name];
       s.addEventListener('change', () => { filters[name] = s.value; offset = 0; runSearch(); });
       return s;
     };
-    const q = el('input', { type: 'search', name: 'q', maxlength: '80', placeholder: 'Search title or funder', 'aria-label': 'Search funding' });
+    const q = el('input', { type: 'search', name: 'q', maxlength: '80', placeholder: kind === 'grant' ? 'Search title or funder' : kind === 'scholarship' ? 'Search scholarships (e.g. Chevening, Germany, nursing)' : 'Search funded events (e.g. summit, youth, climate)', 'aria-label': 'Search funding' });
     q.value = filters.q;
     let t; q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { filters.q = q.value.trim(); offset = 0; runSearch(); }, 350); });
     const savedBtn = el('button', { type: 'button', class: `fm-chip-btn${filters.saved ? ' is-on' : ''}`, 'aria-pressed': String(filters.saved), text: `🔖 Saved (${savedIds.size})`, onclick: () => { filters.saved = !filters.saved; offset = 0; renderFunding(); } });
-    box.replaceChildren(
-      el('div', { class: 'fm-fund-head' }, [
-        el('div', {}, [
-          el('h2', { text: 'Grants & Scholarships' }),
-          el('p', { class: 'fm-muted', text: `${f.total} open opportunities from official sources. Always apply on the funder's own website: WHSF never charges fees and never asks for bank details.` })
-        ]),
-        el('a', { class: 'fm-text-btn', href: 'grants-account.html', target: '_blank', rel: 'noopener', text: 'Deadline reminders by email →' })
-      ]),
-      el('div', { class: 'fm-fund-filters' }, [
-        q,
+    const grant = kind === 'grant';
+    const due = select('due', 'Any deadline', [['14', 'Closes within 2 weeks'], ['30', 'Closes within 30 days'], ['90', 'Closes within 3 months']]);
+    const filtersRow = grant
+      ? [q,
         select('sector', 'All sectors', f.sectors.map(([k, n]) => [k, `${nice(SECTOR_LABEL, k)} (${n})`])),
         select('who', 'Who can apply', f.who.map(([k, n]) => [k, `${nice(WHO_LABEL, k)} (${n})`])),
         select('country', 'Any country', f.countries.map(([k, n]) => [k, `${COUNTRY(k)} (${n})`])),
         select('amount', 'Any amount', [['50000', '$50,000 or more'], ['250000', '$250,000 or more'], ['1000000', '$1 million or more']]),
-        select('due', 'Any deadline', [['14', 'Closes within 2 weeks'], ['30', 'Closes within 30 days'], ['90', 'Closes within 3 months']]),
-        select('source', 'All sources', f.sources.map(([k, n]) => [k, `${nice(SOURCE_LABEL, k)} (${n})`])),
-        savedBtn
-      ]),
+        due]
+      : [q,
+        kind === 'scholarship' ? select('level', 'Any study level', f.levels.map(([k, n]) => [k, `${nice(LEVEL_LABEL, k)} (${n})`])) : null,
+        select('funding', 'Fully or partly funded', f.funding.map(([k, n]) => [k, `${k === 'fully_funded' ? 'Fully funded only' : 'Partly funded'} (${n})`])),
+        due];
+    filtersRow.push(select('source', 'All sources', f.sources.map(([k, n]) => [k, `${nice(SOURCE_LABEL, k)} (${n})`])), savedBtn);
+    const tabs = el('nav', { class: 'fm-chips fm-fund-kinds', 'aria-label': 'Type of opportunity' }, KINDS.map(([k, label]) => {
+      const b = el('button', { type: 'button', class: `fm-chip-btn${k === kind ? ' is-on' : ''}`, 'aria-pressed': String(k === kind), text: `${label} · ${totals[k] ?? 0}` });
+      b.addEventListener('click', () => { if (k !== filters.kind) setKind(k); });
+      return b;
+    }));
+    box.replaceChildren(
+      el('div', { class: 'fm-fund-head' }, [
+        el('div', {}, [
+          el('h2', { text: 'Grants & Scholarships' }),
+          el('p', { class: 'fm-muted', text: `${f.total} ${KIND_TEXT[kind]}. Always apply on the official website: WHSF never charges fees and never asks for bank details.` })
+        ]),
+        grant ? el('a', { class: 'fm-text-btn', href: 'grants-account.html', target: '_blank', rel: 'noopener', text: 'Deadline reminders by email →' }) : null
+      ].filter(Boolean)),
+      tabs,
+      el('div', { class: 'fm-fund-filters' }, filtersRow.filter(Boolean)),
       el('div', { class: 'fm-fund-results', 'data-fm-fund-results': '' }),
-      el('p', { class: 'fm-small fm-muted', text: 'Opportunities come from official funder databases and are checked by WHSF before they are listed. Eligibility and amounts can change: confirm on the official page before applying.' })
+      el('p', { class: 'fm-small fm-muted', text: KIND_NOTE[kind] })
     );
     runSearch();
   }
@@ -228,7 +272,9 @@
     if (!out) return;
     if (!append) out.replaceChildren(el('p', { class: 'fm-muted', text: 'Searching…' }));
     const today = new Date().toISOString().slice(0, 10);
-    let query = db.from('whsf_opportunities').select(COLS).eq('kind', 'grant').eq('review_status', 'published').neq('status', 'closed').gte('deadline', today);
+    let query = db.from('whsf_opportunities').select(COLS).eq('kind', filters.kind).eq('review_status', 'published').neq('status', 'closed').gte('deadline', today);
+    if (filters.level) query = query.contains('study_levels', [filters.level]);
+    if (filters.funding) query = query.eq('funding', filters.funding);
     if (filters.saved) query = query.in('id', [...savedIds, '00000000-0000-0000-0000-000000000000']);
     if (filters.q) { const like = `%${filters.q.replace(/[%_,()\\]/g, ' ')}%`; query = query.or(`title.ilike.${like},funder_name.ilike.${like}`); }
     if (filters.sector) query = query.contains('sectors', [filters.sector]);
@@ -248,6 +294,7 @@
 
   function oppCard(o) {
     const official = typeof o.url === 'string' && /^https:\/\/\S+$/.test(o.url) ? o.url : null;
+    const partner = o.kind === 'scholarship' || o.kind === 'funded_event';
     const today0 = new Date(); today0.setHours(0, 0, 0, 0);
     const days = Math.round((new Date(`${o.deadline}T00:00:00`) - today0) / 86400000);
     const due = new Date(`${o.deadline}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -271,15 +318,18 @@
         el('span', { class: 'fm-opp-src', text: nice(SOURCE_LABEL, o.source) })
       ]),
       el('h3', { text: o.title }),
-      el('p', { class: 'fm-opp-funder', text: `${o.funder_name || 'Funder'} · ${amount}` }),
+      partner
+        ? el('p', { class: 'fm-opp-funder', text: FUNDING_LABEL[o.funding] || 'Funding: see details' })
+        : el('p', { class: 'fm-opp-funder', text: `${o.funder_name || 'Funder'} · ${amount}` }),
       o.summary ? el('p', { class: 'fm-opp-sum', text: o.summary.length > 260 ? `${o.summary.slice(0, 257)}…` : o.summary }) : null,
       el('div', { class: 'fm-opp-tags' }, [
+        ...(o.study_levels || []).map((s) => el('span', { text: nice(LEVEL_LABEL, s) })),
         ...(o.sectors || []).slice(0, 3).map((s) => el('span', { text: nice(SECTOR_LABEL, s) })),
         ...(o.applicant_types || []).slice(0, 2).map((s) => el('span', { class: 'is-who', text: nice(WHO_LABEL, s) })),
-        ...(o.countries || []).slice(0, 2).map((c) => el('span', { class: 'is-where', text: COUNTRY(c) }))
+        ...(o.countries || []).filter((c) => /^[A-Z]{2}$/.test(c)).slice(0, 2).map((c) => el('span', { class: 'is-where', text: COUNTRY(c) }))
       ]),
       el('div', { class: 'fm-opp-actions' }, [
-        official ? el('a', { class: 'hp-btn hp-btn-primary', href: official, target: '_blank', rel: 'noopener noreferrer', text: 'Official source ↗' }) : el('span', { class: 'fm-muted', text: 'Official link coming soon' }),
+        official ? el('a', { class: 'hp-btn hp-btn-primary', href: official, target: '_blank', rel: 'noopener noreferrer', text: partner ? 'Details & how to apply ↗' : 'Official source ↗' }) : el('span', { class: 'fm-muted', text: 'Official link coming soon' }),
         saveBtn
       ])
     ]);

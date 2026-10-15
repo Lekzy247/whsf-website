@@ -2,10 +2,12 @@
   "cleanUrls": false,
   "trailingSlash": false,
   "crons": [
-    { "path": "/api/jobs-sync", "schedule": "0 5 * * *" }
+    { "path": "/api/jobs-sync", "schedule": "0 5 * * *" },
+    { "path": "/api/opportunities-sync", "schedule": "30 5 * * *" }
   ],
   "functions": {
-    "api/jobs-sync.js": { "maxDuration": 300 }
+    "api/jobs-sync.js": { "maxDuration": 300 },
+    "api/opportunities-sync.js": { "maxDuration": 180 }
   },
   "rewrites": [
     {

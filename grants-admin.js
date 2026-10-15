@@ -14,7 +14,7 @@
     nonprofit: 'Nonprofits', us_nonprofit: 'US 501(c)(3)', school: 'Schools', university: 'Universities',
     government: 'Government', business: 'Businesses', individual: 'Individuals', any: 'Unrestricted',
   };
-  const SOURCE_LABELS = { manual: 'WHSF', grants_gov: 'Grants.gov', eu_ft: 'EU F&T', indico_un: 'Indico.UN', grant_alerts: 'Grant emails' };
+  const SOURCE_LABELS = { manual: 'WHSF', grants_gov: 'Grants.gov', eu_ft: 'EU F&T', indico_un: 'Indico.UN', grant_alerts: 'Grant emails', ofa: 'Opportunities for Africans', asa: 'After School Africa', oc: 'Opportunities Corners' };
 
   const $ = (selector) => document.querySelector(selector);
   function el(tag, attrs = {}, children = []) {
@@ -150,7 +150,7 @@
           url ? el('a', { href: url, target: '_blank', rel: 'noopener noreferrer', text: row.title }) : row.title,
           el('div', { class: 'grant-admin-muted', text: [row.funder_name, row.kind === 'event' ? row.location : (row.countries || []).join(', ')].filter(Boolean).join(' · ') }),
         ]),
-        el('td', { text: `${SOURCE_LABELS[row.source] || row.source}${row.kind === 'event' ? ' (event)' : ''}` }),
+        el('td', { text: `${SOURCE_LABELS[row.source] || row.source}${({ event: ' (event)', scholarship: ' (scholarship)', funded_event: ' (funded event)' })[row.kind] || ''}` }),
         el('td', { text: row.status === 'forecasted' ? `${when} (forecast)` : when }),
         el('td', { text: (row.sectors || []).map((s) => SECTORS[s] || s).join(', ') }),
         el('td', {}, actions),
