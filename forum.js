@@ -76,8 +76,8 @@
   const state = { single: null, saved: false, q: '', feedKey: '|false', feedReady: false, topic: null, session: null, profile: null, me: null, isStaff: false, scope: 'everyone', following: new Set(), followers: new Set(), feedOffset: 0, celebrate: false, file: null };
 
   // ---------------------------------------------------------------- views
-  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding', 'spaces', 'admin', 'profile'];
-  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite', 'funding', 'spaces', 'profile'];
+  const views = ['feed', 'people', 'me', 'rules', 'idchecks', 'messages', 'alerts', 'events', 'ads', 'invite', 'funding', 'spaces', 'admin', 'profile', 'careers', 'job', 'orgs', 'org'];
+  const memberViews = ['people', 'me', 'messages', 'events', 'ads', 'invite', 'funding', 'spaces', 'profile', 'careers', 'job', 'orgs', 'org'];
   // Add-on scripts (forum-social.js, …) register here to react to page refreshes and view changes.
   const hooks = { refresh: [], view: [], post: [], feed: [] };
   function showView() {
@@ -88,6 +88,7 @@
     if (view === 'saved') { saved = Boolean(state.me); view = 'feed'; }
     if (view === 'network') view = 'people';
     if (view === 'profile' && !/^[0-9a-f-]{36}$/.test(parts[1] || '')) view = 'me';
+    if ((view === 'job' || view === 'org') && !/^[0-9a-f-]{36}$/.test(parts[1] || '')) view = view === 'job' ? 'careers' : 'orgs';
     // Space pages: #space/<key> shows that space's page and feed; #feed shows everything.
     let topic = null;
     if (view === 'space') { topic = SPACES.some((s) => s.key === parts[1]) ? parts[1] : null; view = 'feed'; }
@@ -110,7 +111,7 @@
     const plainFeed = view === 'feed' && !single && !saved;
     $('[data-fm-qform]').hidden = !state.me || !plainFeed;
     // Messages, events and adverts use the full page width (side panels hidden), like the Gelllez Forum.
-    document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite', 'funding', 'spaces', 'admin'].includes(view));
+    document.body.classList.toggle('fm-wide', ['messages', 'events', 'ads', 'invite', 'funding', 'spaces', 'admin', 'careers', 'job', 'orgs', 'org'].includes(view));
     $$('[data-fm-tab]').forEach((a) => (a.dataset.fmTab === view ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     // The WHSF advert is seen by everyone: on the landing page for visitors, above the feed for members.
     const whsfAd = $('[data-fm-whsf-ad]');
