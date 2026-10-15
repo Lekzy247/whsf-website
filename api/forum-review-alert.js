@@ -7,7 +7,7 @@ import { postToTeams, teamsConfigured } from './_teams.js';
 const SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
 const SITE = 'https://www.worldhsfoundation.org/forum.html';
-const LABEL = { event: 'event', advert: 'advert' };
+const LABEL = { event: 'event', advert: 'advert', org: 'organisation (verification)' };
 
 function escapeHtml(value) {
   return String(value || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -53,12 +53,12 @@ export default async function handler(request, response) {
   const item = Array.isArray(rows) ? rows[0] : null;
   if (!item) return response.status(200).json({ sent: false });
 
-  const link = kind === 'event' ? `${SITE}#events/${id}` : `${SITE}#ads`;
+  const link = kind === 'event' ? `${SITE}#events/${id}` : kind === 'org' ? `${SITE}#admin/orgs` : `${SITE}#ads`;
   const title = `WHSF Forum: new ${LABEL[kind]} waiting for approval`;
   const facts = [
-    [kind === 'event' ? 'Event' : 'Advert', item.title],
+    [kind === 'event' ? 'Event' : kind === 'org' ? 'Organisation' : 'Advert', item.title],
     ['Submitted by', item.member_name],
-    [kind === 'event' ? 'Type and time' : 'Links to', item.detail]
+    [kind === 'event' ? 'Type and time' : kind === 'org' ? 'Website and country' : 'Links to', item.detail]
   ];
   const teams = await postToTeams(title, facts, { title: 'Review it', url: link }, 'Sign in with a WHSF admin or teacher account to approve or reject.');
   let email = false;

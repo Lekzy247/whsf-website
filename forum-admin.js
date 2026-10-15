@@ -5,7 +5,7 @@
   const F = window.WHSFForum;
   if (!F) return;
   const { db, state, el, $ } = F;
-  const TABS = [['overview', 'Overview'], ['reports', 'Reports'], ['registrations', 'Registrations'], ['members', 'Members'], ['audit', 'Audit log']];
+  const TABS = [['overview', 'Overview'], ['reports', 'Reports'], ['orgs', 'Organisations'], ['registrations', 'Registrations'], ['members', 'Members'], ['audit', 'Audit log']];
   const PROGRAMMES = { digital_skills: 'Digital Skills', girls_in_ict: 'Girls in ICT', robotics_drones: 'Robotics & Drones', mil_lab: 'MIL Lab' };
   const ROLES = { participant: 'Participant (18+)', parent_guardian: 'Parent / guardian', teacher_school: 'Teacher / school', partner_org: 'Partner organisation', volunteer_mentor: 'Volunteer / mentor' };
   const ACTIONS = {
@@ -13,7 +13,8 @@
     'post.feature': 'featured a post', 'post.unfeature': 'unfeatured a post', 'member.suspend': 'suspended a member', 'member.restore': 'restored a member',
     'member.verification_approved': 'approved an ID check', 'member.verification_rejected': 'rejected an ID check', 'report.resolve': 'resolved a report',
     'report.reopen': 'reopened a report', 'space.moderator_add': 'added a space moderator', 'space.moderator_remove': 'removed a space moderator',
-    'space.resource_add': 'added a space resource', 'space.resource_remove': 'removed a space resource'
+    'space.resource_add': 'added a space resource', 'space.resource_remove': 'removed a space resource',
+    'organisation.verified': 'verified an organisation', 'organisation.rejected': 'did not verify an organisation', 'organisation.suspended': 'suspended an organisation'
   };
   const when = (iso) => (iso ? new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—');
   const root = () => $('[data-fm-admin]');
@@ -40,6 +41,7 @@
     const body = box.querySelector('[data-fm-admin-body]');
     try {
       if (tab === 'reports') await reports(body);
+      else if (tab === 'orgs') await orgs(body);
       else if (tab === 'registrations') await registrations(body);
       else if (tab === 'members') await members(body);
       else if (tab === 'audit') await audit(body);
@@ -66,7 +68,8 @@
         queue(s.id_checks_pending, 'ID checks waiting', '#idchecks'),
         queue(s.events_pending, 'Events to review', '#events'),
         queue(s.ads_pending, 'Adverts to review', '#ads'),
-        queue(s.registrations_new, 'New programme registrations', '#admin/registrations')
+        queue(s.registrations_new, 'New programme registrations', '#admin/registrations'),
+        queue(s.orgs_pending, 'Organisations to verify', '#admin/orgs')
       ]),
       el('h3', { class: 'fm-admin-h', text: 'Community' }),
       el('div', { class: 'fm-stats' }, [
@@ -76,6 +79,7 @@
         tile(s.posts_7d, 'Posts this week', `${s.posts_30d} in 30 days`),
         tile(s.comments_7d, 'Comments this week', `${s.reactions_7d} reactions`),
         tile(s.events_upcoming, 'Upcoming events', null),
+        tile(s.jobs_open, 'Open jobs', `${s.applications_7d || 0} applications this week`),
         tile(s.members_pending, 'Waiting for ID check', null),
         tile(s.members_suspended, 'Suspended', null)
       ]),
@@ -161,6 +165,67 @@
     ]);
     anchor.append(box);
     reason.focus();
+  }
+
+  // ---------------------------------------------------------------- organisations (employer / NGO verification)
+  async function orgs(body, filter = 'pending') {
+    const KINDS = { employer: 'Employer', ngo: 'NGO / nonprofit', both: 'NGO that also hires' };
+    const { data, error } = await db.from('forum_orgs').select('id,owner_id,name,kind,website,country,sector,about,status,review_note,created_at').eq('status', filter).order('created_at', { ascending: filter === 'pending' }).limit(100);
+    if (error) throw error;
+    const ids = (data || []).map((o) => o.id);
+    const owners = [...new Set((data || []).map((o) => o.owner_id))];
+    const [{ data: priv }, { data: profs }] = await Promise.all([
+      ids.length ? db.from('forum_org_private').select('org_id,registration_number,tax_id,certificate_path,contact_email').in('org_id', ids) : { data: [] },
+      owners.length ? db.from('forum_profiles').select('user_id,display_name').in('user_id', owners) : { data: [] }
+    ]);
+    const pm = new Map((priv || []).map((p) => [p.org_id, p]));
+    const om = new Map((profs || []).map((p) => [p.user_id, p.display_name]));
+    const filters = el('div', { class: 'fm-chips' }, [['pending', 'Waiting'], ['verified', 'Verified'], ['rejected', 'Not verified'], ['suspended', 'Suspended']].map(([k, t]) => el('button', {
+      type: 'button', class: `fm-chip-btn${k === filter ? ' is-on' : ''}`, text: t, onclick: () => orgs(body, k)
+    })));
+    const list = el('div', { class: 'fm-admin-list' }, (data || []).map((o) => {
+      const p = pm.get(o.id) || {};
+      const msg = el('p', { class: 'fm-status', role: 'status' });
+      const note = el('input', { maxlength: '500', placeholder: 'Note to the organisation (required to reject)', 'aria-label': 'Review note' });
+      const decide = async (approve) => {
+        const { error: e } = await db.rpc('forum_org_review', { p_org: o.id, p_approve: approve, p_note: note.value });
+        if (e) msg.textContent = e.message; else orgs(body, filter);
+      };
+      return el('article', { class: 'fm-admin-card' }, [
+        el('div', { class: 'fm-admin-card-head' }, [el('strong', { text: o.name }), el('small', { class: 'fm-muted', text: `${KINDS[o.kind]} · submitted ${when(o.created_at)}` })]),
+        el('p', { class: 'fm-small' }, [el('a', { href: o.website, target: '_blank', rel: 'noopener noreferrer', text: `${o.website} ↗` }), ` · ${o.country}${o.sector ? ` · ${o.sector}` : ''}`]),
+        el('p', { class: 'fm-small' }, ['Registered by ', el('a', { href: `#profile/${o.owner_id}`, text: om.get(o.owner_id) || 'member' }), p.contact_email ? ` · ${p.contact_email}` : '']),
+        el('dl', { class: 'fm-org-check' }, [
+          el('dt', { text: 'Registration no.' }), el('dd', { text: p.registration_number || '—' }),
+          el('dt', { text: 'Tax ID / EIN' }), el('dd', { text: p.tax_id || '—' })
+        ]),
+        o.about ? el('blockquote', { class: 'fm-admin-quote', text: o.about }) : null,
+        o.review_note ? el('p', { class: 'fm-small fm-muted', text: `Note: ${o.review_note}` }) : null,
+        el('p', { class: 'fm-small fm-muted', text: 'Check: the certificate matches the name and number, the website is real and belongs to them, and the tax ID matches the registry.' }),
+        el('div', { class: 'fm-admin-row' }, [
+          p.certificate_path ? el('button', { type: 'button', class: 'hp-btn hp-btn-outline', text: '📄 Open certificate', onclick: async () => {
+            const { data: u } = await db.storage.from('forum-org-docs').createSignedUrl(p.certificate_path, 300);
+            if (u?.signedUrl) window.open(u.signedUrl, '_blank', 'noopener'); else msg.textContent = 'The certificate could not be opened.';
+          } }) : el('span', { class: 'fm-small', text: 'No certificate uploaded' }),
+          el('button', { type: 'button', class: 'fm-text-btn', text: 'Message', onclick: () => F.startMessage?.(o.owner_id) })
+        ]),
+        filter === 'verified'
+          ? el('div', { class: 'fm-actions' }, [el('button', { type: 'button', class: 'fm-text-btn', text: 'Suspend organisation', onclick: async () => {
+            const { error: e } = await db.from('forum_orgs').update({ status: 'suspended', review_note: 'Suspended by WHSF' }).eq('id', o.id);
+            if (e) msg.textContent = e.message; else orgs(body, filter);
+          } })])
+          : el('div', { class: 'fm-admin-row' }, [note,
+            el('button', { type: 'button', class: 'hp-btn hp-btn-primary', text: '✔ Verify', onclick: () => decide(true) }),
+            el('button', { type: 'button', class: 'hp-btn hp-btn-outline', text: 'Not verified', onclick: () => decide(false) })]),
+        msg
+      ].filter(Boolean));
+    }));
+    body.replaceChildren(
+      el('h3', { class: 'fm-admin-h', text: 'Organisations' }),
+      el('p', { class: 'fm-small fm-muted', text: 'Employers and NGOs are verified by their registration certificate, official website and Tax ID / EIN before they can post jobs.' }),
+      filters,
+      data?.length ? list : el('p', { class: 'fm-empty', text: 'Nothing here.' })
+    );
   }
 
   // ---------------------------------------------------------------- programme registrations
