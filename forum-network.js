@@ -82,11 +82,13 @@
     const box = $('[data-fm-profile-page]');
     if (!box || !state.me) return;
     box.replaceChildren(el('p', { class: 'fm-muted', text: 'Loading profile…' }));
-    const [{ data: p }, rows, { data: count }, { data: spaces }] = await Promise.all([
+    const [{ data: p }, rows, { data: count }, { data: spaces }, { count: milDone }, { data: checkerRow }] = await Promise.all([
       db.from('forum_profiles').select(PRO_COLS).eq('user_id', id).maybeSingle(),
       myRelations(),
       db.rpc('forum_connection_count', { p_user: id }),
-      db.from('forum_space_members').select('space').eq('user_id', id)
+      db.from('forum_space_members').select('space').eq('user_id', id),
+      db.from('forum_mil_progress').select('module', { count: 'exact', head: true }).eq('user_id', id),
+      db.from('forum_factcheckers').select('user_id').eq('user_id', id).maybeSingle()
     ]);
     if (!p) { box.replaceChildren(el('p', { text: 'This member is not available.' }), el('a', { class: 'fm-text-btn', href: '#people', text: '← Network' })); return; }
     const mine = id === state.me.user_id;
@@ -109,6 +111,10 @@
         el('div', { class: 'fm-profile-id' }, [
           el('h2', {}, [p.display_name, el('span', { class: 'fm-verified', title: 'ID verified by WHSF', text: ' ✔' })]),
           p.headline ? el('p', { class: 'fm-profile-headline', text: p.headline }) : null,
+          milDone >= 6 || checkerRow ? el('div', { class: 'fm-pbadges' }, [
+            milDone >= 6 ? el('a', { class: 'fm-pbadge is-mil', href: '#mil/learn', title: 'Completed all six WHSF MIL Lab modules', text: '🎓 MIL Ambassador' }) : null,
+            checkerRow ? el('a', { class: 'fm-pbadge is-checker', href: '#mil', title: 'Appointed by WHSF to answer fact-check requests', text: '🔎 WHSF Fact-checker' }) : null
+          ].filter(Boolean)) : null,
           el('p', { class: 'fm-muted fm-small', text: [p.location ? `📍 ${p.location}` : null, `${count || 0} connection${count === 1 ? '' : 's'}`, `Member since ${new Date(p.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`].filter(Boolean).join(' · ') }),
           p.open_to?.length ? el('div', { class: 'fm-open-to' }, [el('span', { class: 'fm-open-label', text: 'Open to' }), ...p.open_to.map((k) => el('span', { class: 'fm-open-chip', text: OPEN_TO[k] || k }))]) : null
         ])
