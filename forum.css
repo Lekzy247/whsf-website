@@ -68,6 +68,8 @@
 .fm-form input:focus, .fm-form textarea:focus, .fm-composer textarea:focus { outline: 3px solid rgb(123 33 66 / 14%); border-color: var(--wx-wine); }
 .fm-check { display: flex !important; gap: 10px !important; align-items: flex-start; font-weight: 500 !important; }
 .fm-check input { margin-top: 3px; accent-color: var(--wx-wine); }
+.fm-check > input[type="checkbox"], .fm-check > input[type="radio"] { flex: none !important; width: 20px !important; height: 20px !important; min-height: 0 !important; padding: 0 !important; margin: 2px 0 0 !important; }
+.fm-check > span { flex: 1; min-width: 0; text-align: left; }
 .fm-composer-row { display: flex; gap: 12px; align-items: center; }
 .fm-grow { flex: 1; }
 .fm-composer textarea { min-height: 52px; border-radius: 26px; resize: vertical; }

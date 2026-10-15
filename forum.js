@@ -790,11 +790,13 @@
         imageUrl = await uploadImage(state.file, '[data-fm-post-status]');
         if (!imageUrl) { button.disabled = false; extra?.cleanup?.(); return; }
       }
-      const { error } = await db.from('forum_posts').insert({
+      const { data: saved, error } = await db.from('forum_posts').insert({
         author_id: state.me.user_id, body, kind: state.celebrate ? 'celebrate' : 'post', topic,
         image_url: imageUrl, location: where, ...(extra?.fields || {})
-      });
+      }).select('is_hidden,hidden_reason').maybeSingle();
       if (error) { button.disabled = false; extra?.cleanup?.(); return setStatus('[data-fm-post-status]', error.message); }
+      // The database holds posts with risky links (shorteners, chat invites, look-alike sites...) for a moderator.
+      state.heldNote = saved?.is_hidden ? (saved.hidden_reason || 'Your post is waiting for a WHSF moderator') : null;
     }
     button.disabled = false;
     window.WHSFForum.composeReset?.();
@@ -802,7 +804,8 @@
     $('[data-fm-attach]').hidden = true; $('[data-fm-location-row]').hidden = true;
     $('[data-fm-celebrate]').setAttribute('aria-pressed', 'false');
     document.activeElement?.blur(); syncComposer();
-    setStatus('[data-fm-post-status]', 'Posted.');
+    setStatus('[data-fm-post-status]', state.heldNote ? `${state.heldNote}. Only you can see it until a WHSF moderator checks it.` : 'Posted.');
+    state.heldNote = null;
     if ((location.hash || '#feed') !== '#feed') location.hash = '#feed';
     loadFeed(true);
   });
