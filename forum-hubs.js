@@ -34,7 +34,7 @@
       icon: [P('m11 17 2 2a1 1 0 1 0 3-3'), P('m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4'), P('m21 3 1 11h-2'), P('M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3'), P('M3 4h8')] },
     { key: 'mil', name: 'MIL Lab', about: 'Media literacy and fact-checking', go: () => F.setTopic('media_literacy'),
       icon: [P('M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20'), P('m9 9.5 2 2 4-4')] },
-    { key: 'mentorship', name: 'Mentorship', about: 'Find a mentor or become one', go: () => F.setTopic('mentorship'),
+    { key: 'mentorship', name: 'Mentorship', about: 'Find a mentor or become one', go: () => { location.hash = '#mentorship'; },
       icon: [P('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'), ['circle', { cx: '9', cy: '7', r: '4' }], P('m16 11 2 2 4-4')] },
     { key: 'impact', name: 'Impact Dashboard', about: 'WHSF results, live', go: () => { window.open('impact-dashboard.html', '_blank', 'noopener'); },
       icon: [P('M3 3v18h18'), P('m19 9-5 5-4-4-3 3')] }
