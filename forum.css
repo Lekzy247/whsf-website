@@ -96,6 +96,8 @@
 .fm-post-tag { display: inline-block; margin-top: 10px; padding: 3px 10px; border-radius: 999px; background: var(--wx-soft); color: var(--wx-wine-deep); font-size: 12px; font-weight: 600; }
 .fm-post-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--wx-line); }
 .fm-report { display: grid; gap: 8px; margin-top: 10px; }
+.fm-post-head + .fm-confirm { margin: 8px 0 12px; padding: 12px 14px; border-radius: 12px; background: var(--wx-soft, #f7f1f3); }
+.fm-confirm .fm-status:empty { display: none; }
 .fm-report textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--wx-line-strong); border-radius: 10px; font: inherit; }
 .fm-more { display: block; margin: 0 auto; padding: 10px 22px; border: 1px solid var(--wx-line-strong); border-radius: 999px; background: #fff; color: var(--wx-wine); font: inherit; font-weight: 600; cursor: pointer; }
 .fm-empty { padding: 26px; text-align: center; color: var(--wx-muted); }
