@@ -1744,3 +1744,7 @@ body.fm-app main.fm .fm-post-title { color: var(--wx-ink); font-size: 17.5px !im
 body.fm-app :focus:not(:focus-visible) { outline: none; }
 body.fm-app main.fm :is(button, a):focus-visible { outline: 2px solid var(--wx-wine); outline-offset: 2px; }
 main.fm .fm-post { text-align: left; }
+/* Member list rows: the photo stays a fixed circle (".fm-person div" was stretching it), the actions keep their size */
+.fm-person > .fm-avatar { flex: 0 0 48px; width: 48px; height: 48px; min-width: 48px; aspect-ratio: 1; border-radius: 50%; }
+.fm-person > .fm-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.fm-person > .fm-person-actions { flex: none; }
