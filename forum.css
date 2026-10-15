@@ -1529,3 +1529,37 @@ a.fm-mention:hover { text-decoration: underline; }
   .fm-org-logo { width: 44px; height: 44px; font-size: 15px; }
   .fm-org-check { grid-template-columns: 1fr; }
 }
+
+/* Mentorship */
+.fm-ment-body > input[type=search] { width: 100%; min-height: 42px; margin-bottom: 12px; padding: 8px 12px; border: 1px solid var(--wx-line-strong); border-radius: 10px; font: inherit; font-size: 15px; box-sizing: border-box; }
+.fm-ment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.fm-ment-card { display: grid; gap: 8px; align-content: start; padding: 16px; border: 1px solid var(--wx-line); border-radius: 14px; background: #fff; }
+.fm-ment-card p { margin: 0; }
+.fm-ment-pitch { font-size: 14.5px; color: #3d2b35; }
+.fm-ment-stats { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 13px; color: #4b3a43; }
+.fm-stars { color: #c98a00; font-weight: 700; letter-spacing: 1px; }
+.fm-ment-card .hp-btn { width: 100%; justify-content: center; }
+.fm-ment-goals summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--wx-wine); }
+.fm-ment-h { margin: 8px 0 4px; font-size: 14px; color: #4b3a43; }
+.fm-ment-sessions { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.fm-ment-session { display: grid; gap: 6px; padding: 12px; border-radius: 12px; background: #faf6f8; }
+.fm-ment-session.is-completed { background: #f4fbf6; }
+.fm-ment-session p { margin: 0; }
+.fm-ment-session textarea, .fm-ment-plan input, .fm-ment-plan select, .fm-ment-rate input, .fm-admin-row input { min-height: 40px; padding: 8px 12px; border: 1px solid var(--wx-line-strong); border-radius: 10px; font: inherit; font-size: 15px; box-sizing: border-box; background: #fff; }
+.fm-ment-session textarea { width: 100%; }
+.fm-ment-session .hp-btn { justify-self: start; }
+.fm-ment-plan { display: grid; grid-template-columns: 1fr 120px 150px; gap: 8px; padding: 12px; border: 1px solid var(--wx-line); border-radius: 12px; background: #fcfafb; }
+.fm-ment-plan input[type=url], .fm-ment-plan input[aria-label="Agenda"] { grid-column: 1 / -1; }
+.fm-ment-plan .hp-btn { grid-column: 1 / -1; justify-self: start; }
+.fm-ment-rate { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fm-ment-rate input { flex: 1 1 180px; }
+.fm-star-pick button { padding: 0 2px; border: 0; background: none; color: #c98a00; font-size: 24px; line-height: 1; cursor: pointer; }
+.fm-ment-end { justify-self: start; color: #8a1b33; }
+.fm-ment-past { opacity: .85; }
+@media (max-width: 760px) {
+  .fm-ment-grid { grid-template-columns: 1fr; }
+  .fm-ment-plan { grid-template-columns: 1fr 1fr; }
+  .fm-ment-plan input[type=datetime-local] { grid-column: 1 / -1; }
+}
+/* Person cards (Network, Mentorship): normal-size photo, no overlap */
+.fm-net-who .fm-avatar-lg { flex: none; width: 52px; height: 52px; margin: 0; border: 0; font-size: 18px; box-shadow: none; }
