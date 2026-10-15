@@ -73,7 +73,7 @@
         queue(s.orgs_pending, 'Organisations to verify', '#admin/orgs')
       ]),
       el('h3', { class: 'fm-admin-h', text: 'Community' }),
-      el('div', { class: 'fm-stats' }, [
+      el('div', { class: 'fm-admin-stats' }, [
         tile(s.members_approved, 'Active members', `${s.members_total} profiles in total`),
         tile(s.members_new_7d, 'New this week', `${s.members_new_30d} in 30 days`),
         tile(s.active_7d, 'Active this week', 'posted, commented or reacted'),
@@ -87,7 +87,7 @@
       el('div', { class: 'fm-admin-cols' }, [
         el('section', { class: 'fm-admin-panel' }, [
           el('h3', { class: 'fm-admin-h', text: 'Posts per day (14 days)' }),
-          el('div', { class: 'fm-bars', role: 'img', 'aria-label': `Posts per day: ${days.map((d) => d.posts).join(', ')}` }, days.map((d) => el('span', { class: 'fm-bar', title: `${new Date(`${d.day}T00:00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}: ${d.posts}` }, [
+          el('div', { class: 'fm-bars', role: 'img', 'aria-label': `Posts per day: ${days.map((d) => d.posts).join(', ')}` }, days.map((d) => el('span', { class: 'fm-daybar', title: `${new Date(`${d.day}T00:00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}: ${d.posts}` }, [
             el('i', { style: `height:${Math.round((d.posts / max) * 100)}%` }),
             el('small', { text: new Date(`${d.day}T00:00:00`).getDate() })
           ])))
