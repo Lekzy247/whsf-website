@@ -13,7 +13,12 @@
     { k: 'celebrate', e: '🎉', t: 'Celebrate' },
     { k: 'support', e: '🤝', t: 'Support' },
     { k: 'insightful', e: '💡', t: 'Insightful' },
-    { k: 'funny', e: '😄', t: 'Funny' }
+    { k: 'funny', e: '😄', t: 'Funny' },
+    { k: 'care', e: '🤗', t: 'Care' },
+    { k: 'wow', e: '😮', t: 'Wow' },
+    { k: 'sad', e: '😢', t: 'Sad' },
+    { k: 'applause', e: '👏', t: 'Applause' },
+    { k: 'thanks', e: '🙏', t: 'Thank you' }
   ];
   const R = Object.fromEntries(REACTIONS.map((r) => [r.k, r]));
   const cards = new Map(); // post id -> { card, post, ui }
@@ -442,7 +447,7 @@
     const row = el('div', { class: 'fm-c-row' }, [bubble, tools.length ? makeMenu('Comment options', tools) : null]);
     const meta = el('div', { class: 'fm-c-meta' }, [
       el('time', { class: 'fm-c-time', datetime: cm.created_at, title: F.fullTime(cm.created_at), text: shortTime(cm.created_at) }),
-      state.me ? el('button', { class: `fm-c-act${isLiked ? ' is-on' : ''}`, type: 'button', 'aria-pressed': String(isLiked), text: 'Like', onclick: () => likeComment(c, cm.id, isLiked) }) : null,
+      state.me ? el('button', { class: `fm-c-act${isLiked ? ' is-on' : ''}`, type: 'button', 'aria-pressed': String(isLiked), text: isLiked ? '👍 Liked' : 'Like', onclick: () => likeComment(c, cm.id, isLiked) }) : null,
       state.me ? el('button', { class: 'fm-c-act', type: 'button', text: 'Reply', onclick: () => openReply(c, li, cm) }) : null,
       cm.edited_at ? el('span', { class: 'fm-edited', title: `Edited ${F.fullTime(cm.edited_at)}`, text: 'Edited' }) : null
     ]);
