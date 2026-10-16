@@ -3,11 +3,13 @@
   "trailingSlash": false,
   "crons": [
     { "path": "/api/jobs-sync", "schedule": "0 5 * * *" },
-    { "path": "/api/opportunities-sync", "schedule": "30 5 * * *" }
+    { "path": "/api/opportunities-sync", "schedule": "30 5 * * *" },
+    { "path": "/api/org-safety-scan", "schedule": "15 6 * * *" }
   ],
   "functions": {
     "api/jobs-sync.js": { "maxDuration": 300 },
-    "api/opportunities-sync.js": { "maxDuration": 180 }
+    "api/opportunities-sync.js": { "maxDuration": 180 },
+    "api/org-safety-scan.js": { "maxDuration": 180 }
   },
   "rewrites": [
     {
