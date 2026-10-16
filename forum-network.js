@@ -103,6 +103,12 @@
         el('button', { type: 'button', class: 'fm-text-btn', text: '🤝 Invite to collaborate', onclick: () => collabInvite(id, p.display_name, head) }),
         msg);
       if (rel.state === 'received' && rel.c.message) actions.append(el('p', { class: 'fm-small fm-muted', text: `Their note: “${rel.c.message}”` }));
+      // Mute / Block (not for official WHSF accounts; the database refuses those too).
+      if (!state.official?.has(id)) {
+        actions.append(
+          el('button', { type: 'button', class: 'fm-text-btn', text: 'Mute', onclick: () => F.muteMember?.(id, p.display_name || 'this member', head) }),
+          el('button', { type: 'button', class: 'fm-text-btn', text: 'Block', onclick: () => F.blockMember?.(id, p.display_name || 'this member', head) }));
+      }
     }
     const head = el('section', { class: 'fm-profile-head' }, [
       el('div', { class: 'fm-profile-cover', 'aria-hidden': 'true' }),

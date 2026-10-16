@@ -116,8 +116,40 @@
           status.textContent = error ? 'Could not sign out other devices. Please try again.' : 'Done. Every other device has been signed out.';
         } })
       ]),
+      await blockedAndMuted(),
       status
     );
+  }
+
+  // Blocked & muted members, with Unblock / Unmute (block and mute are on each post's ⋯ menu and on profiles).
+  async function blockedAndMuted() {
+    const block = el('div', { class: 'fm-sec-block', id: 'blocked' });
+    const draw = async () => {
+      const { data, error } = await db.rpc('forum_my_blocks_and_mutes');
+      const rows = data || [];
+      const item = (r) => {
+        const av = el('span', { class: 'fm-avatar', 'aria-hidden': 'true' }); F.fillAvatar?.(av, r);
+        const undo = el('button', { type: 'button', class: 'fm-text-btn', text: r.kind === 'block' ? 'Unblock' : 'Unmute', onclick: async () => {
+          undo.disabled = true;
+          const q = r.kind === 'block'
+            ? db.from('forum_blocks').delete().eq('blocker_id', state.me.user_id).eq('blocked_id', r.user_id)
+            : db.from('forum_mutes').delete().eq('muter_id', state.me.user_id).eq('muted_id', r.user_id);
+          const { error: e } = await q;
+          if (e) { undo.disabled = false; undo.textContent = 'Try again'; return; }
+          draw();
+          F.loadFeed?.(true);
+        } });
+        return el('li', {}, [av, el('div', {}, [el('strong', { text: r.display_name || 'Member' }), el('small', { class: 'fm-muted', text: r.kind === 'block' ? 'Blocked' : 'Muted' })]), undo]);
+      };
+      block.replaceChildren(
+        el('strong', { text: 'Blocked & muted' }),
+        el('p', { class: 'fm-small fm-muted', text: 'Muted: you don\'t see their posts or comments. Blocked: neither of you sees the other, and you can\'t message each other. They are not told. Use ⋯ on a post, or a profile, to mute or block someone.' }),
+        error ? el('p', { class: 'fm-small', text: 'Could not load the list. Please refresh.' })
+          : rows.length ? el('ul', { class: 'fm-sec-devices' }, rows.map(item)) : el('p', { class: 'fm-small fm-muted', text: 'You have not blocked or muted anyone.' })
+      );
+    };
+    await draw();
+    return block;
   }
 
   F.hooks.view.push((view) => { if (view === 'me') render(); });

@@ -951,6 +951,13 @@
       if (!state.following.has(post.author_id)) {
         actions.append(el('button', { class: 'fm-text-btn', type: 'button', text: `Follow ${author.display_name || ''}`.trim(), onclick: async (e) => { await follow(post.author_id, true); e.target.remove(); } }));
       }
+      // Official WHSF accounts cannot be muted or blocked (the database refuses it too).
+      if (!state.official.has(post.author_id)) {
+        const who = author.display_name || 'this member';
+        actions.append(
+          el('button', { class: 'fm-text-btn', type: 'button', text: `Mute ${who}`, onclick: () => muteMember(post.author_id, who, card) }),
+          el('button', { class: 'fm-text-btn', type: 'button', text: `Block ${who}`, onclick: () => blockMember(post.author_id, who, card) }));
+      }
     }
     if (mine || state.isStaff) {
       actions.append(el('button', { class: 'fm-text-btn', type: 'button', text: 'Delete', onclick: () => confirmInline(card, 'Delete this post?', async () => {
@@ -1184,6 +1191,30 @@
     reason.focus();
   }
 
+  // ---------------------------------------------------------------- mute & block
+  // Mute: you stop seeing their posts and comments (they are not told). Block: works both ways, and no messages.
+  // The database does the hiding (read policies on posts, comments and alerts); the page just asks and reloads.
+  // Undo under Me -> Blocked & muted.
+  function muteMember(userId, name, anchor) {
+    confirmInline(anchor, `Mute ${name}? You will stop seeing their posts and comments. They will not be told. You can unmute under Me → Blocked & muted.`, async () => {
+      const { error } = await db.from('forum_mutes').insert({ muter_id: state.me.user_id, muted_id: userId });
+      if (error && error.code !== '23505') return error.message;
+      setStatus('[data-fm-post-status]', `${name} is muted.`);
+      loadFeed(true);
+      return null;
+    });
+  }
+  function blockMember(userId, name, anchor) {
+    confirmInline(anchor, `Block ${name}? Neither of you will see the other's posts, comments or alerts, and you cannot message each other. They are not told. To report a problem, use Report. You can unblock under Me → Blocked & muted.`, async () => {
+      const { error } = await db.from('forum_blocks').insert({ blocker_id: state.me.user_id, blocked_id: userId });
+      if (error && error.code !== '23505') return error.message;
+      state.following.delete(userId);
+      setStatus('[data-fm-post-status]', `${name} is blocked.`);
+      if ((location.hash || '#feed').startsWith('#profile')) location.hash = '#feed'; else loadFeed(true);
+      return null;
+    });
+  }
+
   // ---------------------------------------------------------------- people
   async function follow(userId, on) {
     if (on) await db.from('forum_follows').insert({ follower_id: state.me.user_id, followee_id: userId });
@@ -1349,7 +1380,7 @@
 
   // Formatting bar under the post box (after the colour and font lists above are defined).
   postForm.querySelector('.fm-composer-row').after(formatBar(postForm.body));
-  window.WHSFForum = { setTopic, encodeTags, decodeTags, plainText, formatBar, postBody, deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
+  window.WHSFForum = { muteMember, blockMember, setTopic, encodeTags, decodeTags, plainText, formatBar, postBody, deviceKey, alertModerators, db, state, hooks, el, $, $$, fillAvatar, timeAgo, fullTime, stamp, richText, renderPost, loadFeed, setSearch, confirmInline, spaceOf, setStatus, refresh, SPACES };
 
   renderAuthMode();
   db.auth.onAuthStateChange((event) => {
