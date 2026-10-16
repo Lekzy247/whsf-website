@@ -1777,3 +1777,59 @@ main.fm .fm-post { text-align: left; }
 .fm-post-head .fm-official { display: inline-flex !important; width: auto; margin: 0 0 0 6px; color: var(--wx-wine) !important; font-size: 11.5px !important; }
 .fm-me-emoji { flex: none; width: 22px; text-align: center; font-size: 18px; }
 .fm-security.is-first { margin-top: 0; padding-top: 0; border-top: 0; margin-bottom: 24px; }
+
+/* ================================================================ Facebook-style typography (owner request 2026-10-16)
+   Same feel as Facebook: the device's own system font (Segoe UI on Windows, San Francisco on iPhone/Mac, Roboto on
+   Android), 15px text with 1.33 line spacing, semi-bold (600) names and titles, 13px grey (#65676B) times and small
+   print, 15px side menus. Sizes stay on the scale above; this layer changes font, weight, spacing and greys only. */
+html:root body.fm-app {
+  --font-ui: "Segoe UI Historic", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: var(--font-ui);
+  --font-display: var(--font-ui);
+  font-family: "Segoe UI Historic", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.3333;
+  color: #050505;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html:root body.fm-app :is(h1, h2, h3, h4, h5, h6, strong, b, em) { font-family: inherit; letter-spacing: normal !important; }
+
+/* Page and card titles: 17px bold (page headings like "Alerts" 20px) */
+html:root body.fm-app main.fm :is(.fm-card h2, .fm-side-title, .fm-ev-section, .fm-sponsored h2, .fm-methods legend, .fm-idcheck h3),
+html:root body.fm-app main.fm .fm-grid h2, html:root body.fm-app .fm-me-menu h2 { font-weight: 700 !important; line-height: 1.2 !important; }
+html:root body.fm-app main.fm :is(.fm-fund-head h2, .fm-alerts-head h2, [data-fm-view] > .fm-card > h2:first-child) { font-size: 20px !important; }
+
+/* Names, item titles, links in lists: 15px semi-bold */
+html:root body.fm-app main.fm h3,
+html:root body.fm-app :is(.fm-post-head strong, .fm-person strong, .fm-opps a, .fm-up-row strong, .fm-ev-body strong, .fm-thread-text strong,
+  .fm-convo-head strong, .fm-me-head strong, .fm-me-menu a[role="menuitem"] strong, .fm-me-out strong, .fm-space-card strong,
+  .fm-method strong, .fm-ad-preview strong, .fm-c-bubble strong, .fm-reactors strong, .fm-strength p, .fm-job-main strong, .fm-opp h3) {
+  font-weight: 600 !important; line-height: 1.3333 !important;
+}
+/* Alert sentences read like Facebook notifications: regular weight, dark text */
+html:root body.fm-app .fm-alert-row strong { font-weight: 500 !important; }
+
+/* Post, comment and message text */
+html:root body.fm-app :is(.fm-post-body, .fm-c-body, .fm-bubble p, .fm-steps, .fm-promo p, .fm-safety p, .fm-sponsored p, .fm-ad-preview p,
+  .fm-features p, .fm-how p, .fm-ticks li, .fm-opp-sum),
+html:root body.fm-app main.fm :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) {
+  font-size: 15px; line-height: 1.3333;
+}
+
+/* Secondary text and meta: Facebook grey */
+html:root body.fm-app :is(.fm-muted, .fm-headline, .fm-auth-sub, .fm-method span, .fm-person span, .fm-thread-text small, .fm-convo-head small,
+  .fm-me-head small, .fm-post-head span, .fm-time, .fm-location, .fm-note, main.fm small, .fm-opps small, .fm-up-row small,
+  .fm-ev-body small, .fm-c-meta, .fm-c-headline, .fm-reactors small, .fm-eng-count, .fm-thread-meta, .fm-alert-row small,
+  .fm-me-menu a[role="menuitem"] small) {
+  color: #65676b !important; line-height: 1.3333;
+}
+
+/* Side menus (Spaces, account menu): 15px medium, like Facebook's left column */
+html:root body.fm-app .fm-spaces-nav a, html:root body.fm-app .fm-me-menu a[role="menuitem"] strong { font-size: 15px !important; font-weight: 500 !important; }
+html:root body.fm-app .fm-spaces-nav a:hover, html:root body.fm-app .fm-spaces-nav a[aria-current="true"] { font-weight: 600 !important; }
+
+/* Like / Comment / Share / Save: 15px semi-bold grey, like Facebook */
+html:root body.fm-app .fm-eng-btn { font-size: 15px !important; font-weight: 600 !important; color: #65676b; }
+html:root body.fm-app :is(.fm-text-btn, .fm-link, main.fm .hp-btn) { font-weight: 600; }
+@media (max-width: 640px) { html:root body.fm-app .fm-eng-btn { font-size: 14px !important; } }
+
