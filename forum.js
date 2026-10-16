@@ -445,7 +445,7 @@
   const MAX_VIDEO_BYTES = 30 * 1024 * 1024;
   // Google Calendar booking page for verification video calls (made in info@'s Google Calendar).
   // Leave empty until it exists: members are then told a moderator will email them a Meet link.
-  const VIDEO_CALL_BOOKING_URL = '';
+  const VIDEO_CALL_BOOKING_URL = 'https://bookings.cloud.microsoft/book/WHSFForumIDverification@worldhsfoundation.onmicrosoft.com/'; // Microsoft Bookings shared page (owner, 2026-10-15)
   const METHODS = { photo_selfie: 'Photo selfie', video_selfie: 'Video selfie', video_call: 'Video call' };
 
   // Self-service vs video call: show the matching steps and fields.
