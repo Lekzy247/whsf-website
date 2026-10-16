@@ -1,4 +1,4 @@
-﻿const WHSF_CACHE_NAME = 'whsf-pwa-v295';
+﻿const WHSF_CACHE_NAME = 'whsf-pwa-v296';
 const WHSF_OFFLINE_URL = '/offline.html';
 
 const WHSF_CORE_ASSETS = [
@@ -122,4 +122,28 @@ self.addEventListener('fetch', (event) => {
         });
     })
   );
+});
+
+// Phone / browser push (Forum -> Me -> Phone notifications). Sent by api/official-post-email.js.
+self.addEventListener('push', (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch { data = { body: event.data && event.data.text() }; }
+  const url = typeof data.url === 'string' && data.url.startsWith('/') ? data.url : '/forum.html#alerts';
+  event.waitUntil(self.registration.showNotification(data.title || 'WHSF Forum', {
+    body: data.body || 'There is a new update on the WHSF Forum.',
+    icon: '/assets/whsf-logo.jpg',
+    badge: '/assets/whsf-logo.jpg',
+    tag: data.tag || 'whsf-forum',
+    data: { url }
+  }));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = new URL(event.notification.data?.url || '/forum.html', self.location.origin).href;
+  event.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+    const open = list.find((c) => c.url.startsWith(self.location.origin) && c.url.includes('/forum.html'));
+    if (open) { open.navigate(url).catch(() => {}); return open.focus(); }
+    return clients.openWindow(url);
+  }));
 });

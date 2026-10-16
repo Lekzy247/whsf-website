@@ -6,6 +6,7 @@
 // Sent with WHSF's own Resend account (never Gelllez's). Every email has a one-click unsubscribe link.
 
 import { createHmac, timingSafeEqual } from 'node:crypto';
+import { sendPush } from './_webpush.js';
 
 const SUPABASE_URL = 'https://ophymlgqnfilgxsuzcuz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_tA1TRg0XkBKKXZ5UwFbu4Q_qGIST2Xh';
@@ -16,6 +17,25 @@ const escapeHtml = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&a
 const plain = (t) => String(t ?? '').replace(/\*\*|__|\{\/?[cf](:[a-z0-9_-]+)?\}/g, '').replace(/[ \t]+/g, ' ').trim();
 const same = (a, b) => { const x = Buffer.from(String(a)); const y = Buffer.from(String(b)); return x.length === y.length && timingSafeEqual(x, y); };
 export const unsubscribeToken = (secret, userId) => createHmac('sha256', `${secret}:unsubscribe`).update(String(userId)).digest('hex').slice(0, 32);
+
+// Phone / browser push to every member who turned notifications on (Me -> Phone notifications). Sent once per post
+// (forum_official_post_push); subscriptions the push service says are gone are deleted.
+async function pushOut(postId, syncSecret) {
+  const keys = { publicKey: process.env.VAPID_PUBLIC_KEY, privateKey: process.env.VAPID_PRIVATE_KEY, subject: 'mailto:info@worldhsfoundation.org' };
+  if (!keys.publicKey || !keys.privateKey) return 0;
+  let subs;
+  try { subs = await rpc('forum_official_post_push', { p_secret: syncSecret, p_post: postId }); } catch (err) { console.error('push', err.message); return 0; }
+  if (!Array.isArray(subs) || !subs.length) return 0;
+  const text = plain(subs[0].body).replace(/\s+/g, ' ');
+  const data = { title: subs[0].title, body: text.length > 140 ? `${text.slice(0, 137)}…` : text, url: `/forum.html#post/${postId}`, tag: `post-${postId}` };
+  let sent = 0; const dead = [];
+  for (let i = 0; i < subs.length; i += 20) {
+    const results = await Promise.all(subs.slice(i, i + 20).map((s) => sendPush(s, data, keys)));
+    results.forEach((r, j) => { if (r.ok) sent += 1; else if (r.gone) dead.push(subs[i + j].endpoint); });
+  }
+  await rpc('forum_push_done', { p_secret: syncSecret, p_post: postId, p_sent: sent, p_dead: dead }).catch(() => {});
+  return sent;
+}
 
 async function rpc(name, args) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, {
@@ -43,7 +63,10 @@ export default async function handler(request, response) {
   let rows;
   try { rows = await rpc('forum_official_post_mail', { p_secret: syncSecret, p_post: postId }); }
   catch (err) { console.error('official-post-email', err.message); return response.status(502).json({ error: 'Could not read the post.' }); }
-  if (!Array.isArray(rows) || !rows.length) return response.status(200).json({ sent: 0 }); // already sent, hidden, or nobody to tell
+  if (!Array.isArray(rows) || !rows.length) { // already emailed, hidden, or nobody to email: pushes may still be due
+    const pushed = await pushOut(postId, syncSecret);
+    return response.status(200).json({ sent: 0, pushed });
+  }
 
   const author = rows[0].author_name || 'WHSF';
   const body = plain(rows[0].body);
@@ -82,5 +105,6 @@ You get this because you are a WHSF Forum member. <a href="${unsub}" style="colo
     else console.error('official-post-email resend', res.status, (await res.text()).slice(0, 300));
   }
   await rpc('forum_official_mail_sent', { p_secret: syncSecret, p_post: postId, p_count: sent }).catch(() => {});
-  return response.status(200).json({ sent });
+  const pushed = await pushOut(postId, syncSecret);
+  return response.status(200).json({ sent, pushed });
 }
