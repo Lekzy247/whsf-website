@@ -139,7 +139,9 @@
       await pushBlock()
     ]);
     const security = host.querySelector(':scope > .fm-security:not(.fm-app-panel)');
-    if (security) security.before(panel); else host.append(panel);
+    // From the menu (#me/app) the panel goes first on the page, so it is seen straight away (the Forum resets scrolling).
+    if (location.hash === '#me/app') { host.prepend(panel); panel.classList.add('is-first'); }
+    else if (security) security.before(panel); else host.append(panel);
   }
 
   // One-time invitation on the feed for members who have neither installed the app nor turned notifications on.

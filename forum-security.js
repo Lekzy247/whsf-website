@@ -14,7 +14,7 @@
     const host = $('[data-fm-view="me"]');
     if (!host || !state.me) return;
     box?.remove();
-    box = el('section', { class: 'fm-security', 'aria-labelledby': 'fm-sec-title' }, [el('p', { class: 'fm-muted', text: 'Loading security settings…' })]);
+    box = el('section', { class: 'fm-security', id: 'security', 'aria-labelledby': 'fm-sec-title' }, [el('p', { class: 'fm-muted', text: 'Loading security settings…' })]);
     host.append(box);
     const status = el('p', { class: 'fm-status', role: 'status', 'aria-live': 'polite' });
     const [{ data: factors }, { data: devices }, myHash] = await Promise.all([
@@ -119,6 +119,11 @@
       await blockedAndMuted(),
       status
     );
+    // Menu links #me/security and #me/blocked put this section first on the page (the Forum resets scrolling).
+    if (location.hash === '#me/security' || location.hash === '#me/blocked') {
+      host.prepend(box); box.classList.add('is-first');
+      if (location.hash === '#me/blocked') box.insertBefore(box.querySelector('#blocked'), box.children[1] || null);
+    }
   }
 
   // Blocked & muted members, with Unblock / Unmute (block and mute are on each post's ⋯ menu and on profiles).
