@@ -1,4 +1,4 @@
-// WHSF Forum add-on: richer posts. Poll, Document (PDF), Video, Event announcement and Collaboration request.
+// WHSF Forum add-on: richer posts. Poll, Document (PDF), Event announcement and Collaboration request.
 // Files go to the private forum-files bucket (members only, signed links that expire). Each file is checked
 // here (type, size, real file signature) and again by the database before the post is accepted.
 (() => {
@@ -27,7 +27,7 @@
   const TOOLS = [
     ['poll', 'Poll', ['M3 3v18h18', 'M7 16v-3', 'M12 16V8', 'M17 16v-6']],
     ['document', 'Document', ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6', 'M9 13h6', 'M9 17h6']],
-    ['video', 'Video', ['M23 7l-7 5 7 5z', 'M14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z']],
+    // Video uploads removed 2026-11-24 to save WHSF storage (share a YouTube link instead). Old video posts still play.
     ['event', 'Event', ['M8 2v4', 'M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z']],
     ['collab', 'Collaborate', ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', 'M19 8v6', 'M22 11h-6']]
   ];
@@ -132,7 +132,7 @@
   // Called by forum.js when Post is pressed.
   F.composeExtra = async ({ body, topic, location }) => {
     if (!mode) return null;
-    if (['poll', 'document', 'video'].includes(mode) && state.file) return { error: 'A post can have one picture, document, video or poll. Remove the picture first.' };
+    if (['poll', 'document', 'video'].includes(mode) && state.file) return { error: 'A post can have one picture, document or poll. Remove the picture first.' };
     if (mode === 'poll') {
       const options = [...panel.querySelectorAll('input[name="poll_option"]')].map((i) => i.value.trim()).filter(Boolean);
       if (options.length < 2) return { error: 'Add at least two choices.' };
