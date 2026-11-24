@@ -168,6 +168,42 @@
     reason.focus();
   }
 
+  // Remove an applicant or member completely (owner request 2026-11-24). A copy is archived first; ID files are deleted.
+  function removeForm(anchor, userId, name, done) {
+    if (anchor.querySelector('.fm-admin-remove')) return;
+    const reason = el('input', { maxlength: '300', placeholder: 'Reason (kept in the audit log and archive)', 'aria-label': 'Reason for removal' });
+    const block = el('label', { class: 'fm-check' }, [el('input', { type: 'checkbox' }), el('span', { text: 'Also block their ID from joining again with a new account' })]);
+    const confirmBox = el('label', { class: 'fm-check' }, [el('input', { type: 'checkbox' }), el('span', { text: 'I understand this deletes their account, posts, messages and comments, and cannot be undone here' })]);
+    const status = el('p', { class: 'fm-status', role: 'status' });
+    const box = el('div', { class: 'fm-admin-suspend fm-admin-remove' }, [
+      el('p', { text: `Remove ${name || 'this person'} from the WHSF Forum? Their sign-in account and everything they posted are deleted. A copy of their profile and ID check history is archived for WHSF records.` }),
+      reason, block, confirmBox,
+      el('div', { class: 'fm-actions' }, [
+        el('button', { type: 'button', class: 'hp-btn hp-btn-primary', text: 'Remove permanently', onclick: async (e) => {
+          if (!confirmBox.querySelector('input').checked) { status.textContent = 'Tick the box to confirm.'; return; }
+          if (reason.value.trim().length < 5) { status.textContent = 'Give a short reason.'; return; }
+          e.currentTarget.disabled = true;
+          status.textContent = 'Deleting their ID files…';
+          // ID photos and videos first (storage is not removed by the database).
+          const { data: files } = await db.storage.from('forum-id-checks').list(userId, { limit: 100 });
+          const paths = (files || []).filter((f) => f.name && f.id).map((f) => `${userId}/${f.name}`);
+          if (paths.length) {
+            const { error: delErr } = await db.storage.from('forum-id-checks').remove(paths);
+            if (delErr) { status.textContent = `Could not delete their ID files: ${delErr.message}`; e.currentTarget.disabled = false; return; }
+          }
+          status.textContent = 'Removing…';
+          const { error } = await db.rpc('forum_admin_remove_member', { p_user: userId, p_reason: reason.value.trim(), p_block_id: block.querySelector('input').checked });
+          if (error) { status.textContent = error.message; e.currentTarget.disabled = false; return; }
+          done();
+        } }),
+        el('button', { type: 'button', class: 'fm-text-btn', text: 'Cancel', onclick: () => box.remove() })
+      ]),
+      status
+    ]);
+    anchor.append(box);
+    reason.focus();
+  }
+
   // ---------------------------------------------------------------- organisations (employer / NGO verification)
   async function orgs(body, filter = 'pending') {
     const KINDS = { employer: 'Employer', ngo: 'NGO / nonprofit', both: 'NGO that also hires' };
@@ -296,7 +332,8 @@
             } })
             : m.user_id === state.me?.user_id ? el('small', { class: 'fm-muted', text: 'This is you' })
               : el('button', { type: 'button', class: 'fm-text-btn', text: 'Suspend…', onclick: () => suspendForm(card, m.user_id, m.display_name, () => members(body, q, filter)) }),
-          el('button', { type: 'button', class: 'fm-text-btn', text: 'Message', onclick: () => F.startMessage?.(m.user_id) })
+          el('button', { type: 'button', class: 'fm-text-btn', text: 'Message', onclick: () => F.startMessage?.(m.user_id) }),
+          m.user_id === state.me?.user_id ? null : el('button', { type: 'button', class: 'fm-text-btn fm-danger', text: 'Remove from Forum…', onclick: () => removeForm(card, m.user_id, m.display_name, () => members(body, q, filter)) })
         ]),
         status
       ].filter(Boolean));

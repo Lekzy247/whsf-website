@@ -1,5 +1,5 @@
-// WHSF Forum age check: take the selfie with the device camera right on the page (computer or phone),
-// or upload a selfie photo/video. The result goes into the form's normal "selfie" file input, so the
+// WHSF Forum ID check: record the video selfie with the device camera right on the page (computer or phone),
+// or with the phone's own camera app. Video only: photos are not accepted. The result goes into the form's normal "selfie" file input, so the
 // existing checks, upload and review work unchanged. Nothing is sent anywhere until the member submits.
 (() => {
   const pick = document.querySelector('[data-fm-self-only]');
@@ -20,11 +20,11 @@
 
   // The plain input becomes the "upload" route (no forced camera, so phones offer camera or gallery).
   input.removeAttribute('capture');
-  input.setAttribute('accept', 'image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime');
+  input.setAttribute('accept', 'video/mp4,video/webm,video/quicktime');
   const oldLabel = input.closest('label');
   if (oldLabel) {
     oldLabel.className = 'vk-secondary vk-file';
-    oldLabel.firstChild.nodeValue = 'Upload a selfie photo or video';
+    oldLabel.firstChild.nodeValue = 'Record with my phone camera instead';
   }
 
   const status = make('p', { class: 'vk-cam-status', role: 'status' });
@@ -32,11 +32,10 @@
   video.muted = true;
   const code = () => { const c = document.querySelector('[data-fm-verify-code]')?.textContent?.trim() || ''; return /^[A-Z0-9-]{3,}$/i.test(c) ? c : ''; };
   const hint = make('p', { class: 'vk-cam-hint' });
-  const btnPhoto = make('button', { type: 'button', class: 'vk-primary', text: '📸 Take photo' });
-  const btnRecord = make('button', { type: 'button', class: 'vk-secondary', text: '🎥 Record 8-second video' });
+    const btnRecord = make('button', { type: 'button', class: 'vk-secondary', text: '🎥 Start 15-second recording' });
   const btnClose = make('button', { type: 'button', class: 'vk-link', text: 'Close camera' });
-  const camBox = make('div', { class: 'vk-cam', hidden: '' }, [video, hint, make('div', { class: 'vk-cam-actions' }, [btnPhoto, recordType() ? btnRecord : null, btnClose]), status]);
-  const btnOpen = make('button', { type: 'button', class: 'vk-primary', text: '📷 Take a selfie with your camera' });
+  const camBox = make('div', { class: 'vk-cam', hidden: '' }, [video, hint, make('div', { class: 'vk-cam-actions' }, [recordType() ? btnRecord : null, btnClose]), status]);
+  const btnOpen = make('button', { type: 'button', class: 'vk-primary', text: '🎥 Record my video selfie' });
   if (canCamera) pick.prepend(btnOpen, camBox);
 
   let stream = null;
@@ -62,33 +61,23 @@
     status.textContent = 'Opening your camera…';
     camBox.hidden = false;
     btnOpen.hidden = true;
-    hint.textContent = `Hold your ID next to your face${code() ? ` and say your code: ${code()}` : ''}. Face a light.`;
+    hint.textContent = `When recording: hold your ID next to your face, say your full name${code() ? ` and your code ${code()}` : ' and your code'}, show the front then the back of the ID, then turn your head left and right.`;
     try {
       stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: Boolean(recordType()) });
     } catch (error) {
-      try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false }); btnRecord.hidden = true; }
+      try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: true }); }
       catch {
         stop();
         status.textContent = '';
         const msg = pick.parentElement.querySelector('[data-vk-error="selfie"]');
         if (msg) msg.textContent = error?.name === 'NotAllowedError'
-          ? 'Camera access was blocked. Allow the camera for worldhsfoundation.org in your browser settings, or use "Upload a selfie photo or video".'
-          : 'No camera was found. Use "Upload a selfie photo or video", or continue on your phone.';
+          ? 'Camera or microphone access was blocked. Allow both for worldhsfoundation.org in your browser settings, or use "Record with my phone camera instead".'
+          : 'No camera or microphone was found. Use "Record with my phone camera instead", or continue on your phone.';
         return;
       }
     }
     video.srcObject = stream;
     status.textContent = '';
-  });
-
-  btnPhoto.addEventListener('click', () => {
-    if (!stream || !video.videoWidth) return;
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
-    canvas.toBlob((blob) => {
-      if (blob) useFile(new File([blob], 'selfie.jpg', { type: 'image/jpeg' }));
-    }, 'image/jpeg', 0.9);
   });
 
   btnRecord.addEventListener('click', () => {
@@ -102,14 +91,15 @@
       if (chunks.length) useFile(new File(chunks, base === 'video/mp4' ? 'selfie.mp4' : 'selfie.webm', { type: base }));
     };
     recorder.start();
-    let left = 8;
-    btnPhoto.disabled = true; btnRecord.disabled = true;
-    status.textContent = `Recording… ${left}s. Say your code now.`;
+    let left = 15;
+    btnRecord.disabled = true;
+    const say = () => (left > 11 ? 'Say your full name and code' : left > 5 ? 'Show the front, then the back of your ID' : 'Turn your head left and right');
+    status.textContent = `Recording… ${left}s. ${say()}.`;
     const tick = setInterval(() => {
       left -= 1;
-      if (left > 0 && recorder.state === 'recording') { status.textContent = `Recording… ${left}s. Say your code now.`; return; }
+      if (left > 0 && recorder.state === 'recording') { status.textContent = `Recording… ${left}s. ${say()}.`; return; }
       clearInterval(tick);
-      btnPhoto.disabled = false; btnRecord.disabled = false;
+      btnRecord.disabled = false;
       if (recorder.state === 'recording') recorder.stop();
     }, 1000);
   });

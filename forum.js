@@ -325,7 +325,12 @@
     const uid = state.session?.user?.id;
     state.me = null;
     if (!uid) return;
-    const { data } = await db.from('forum_profiles').select('user_id,display_name,headline,location,about,avatar_url,is_suspended,verification_status,verification_reason').eq('user_id', uid).maybeSingle();
+    const { data } = await db.from('forum_profiles').select('user_id,display_name,headline,location,about,avatar_url,is_suspended,verification_status').eq('user_id', uid).maybeSingle();
+    // The rejection reason is private: only the member can read their own, through this call.
+    if (data?.verification_status === 'rejected') {
+      const { data: mine } = await db.rpc('forum_my_verification');
+      data.verification_reason = mine?.[0]?.verification_reason || null;
+    }
     state.profile = data || null;
     // Only ID-verified, active profiles are members (the database enforces the same rule).
     state.me = data && !data.is_suspended && data.verification_status === 'approved' ? data : null;
@@ -491,7 +496,7 @@
     const rejected = $('[data-fm-verify-rejected]');
     rejected.hidden = p.verification_status !== 'rejected';
     rejected.textContent = p.verification_status === 'rejected'
-      ? `Your last ID check was not approved: ${p.verification_reason || 'please try again'}. Please submit new photos.` : '';
+      ? `Your last ID check was not approved. Why: ${p.verification_reason || 'it did not meet the ID check rules'}. Read the checklist below, then submit again.` : '';
     if (!pending) {
       const { data, error } = await db.rpc('forum_id_code');
       const code = error ? 'reload the page' : data;
@@ -520,22 +525,23 @@
     const f = event.currentTarget;
     const say = (t) => setStatus('[data-fm-verify-status]', t);
     const call = f.method.value === 'video_call';
-    const front = f.id_front.files[0]; const back = f.id_back.files[0]; const selfie = call ? null : f.selfie.files[0];
+    const front = f.id_front.files[0]; const back = f.id_back.files[0]; const video = f.selfie.files[0];
+    const passport = f.id_type.value === 'passport';
+    const legalName = (f.legal_name?.value || '').trim().replace(/\s+/g, ' ');
+    if (!/^\S{2,}( \S+)+$/.test(legalName)) return say('Enter your full legal name exactly as it is printed on your ID (first name and surname).');
     if (f.country.value.trim().length < 2) return say('Enter the country that issued your ID.');
     if (!f.id_type.value) return say('Choose the type of ID.');
     if (!front) return say('Add a photo of the front of your ID.');
-    if (!call && !selfie) return say('Add your video selfie (or a photo selfie) holding your ID and the code.');
+    if (!back && !passport) return say('Add a photo of the back of your ID. Only passports can skip this.');
+    if (!video) return say('Record your video selfie: hold your ID, say your full name and code, show the front and back, turn your head.');
     for (const file of [front, back].filter(Boolean)) {
-      if (!ID_EXT[file.type]) return say('ID photos must be JPG, PNG or WebP.');
+      if (!ID_EXT[file.type]) return say('ID photos must be JPG, PNG or WebP photos of your physical ID.');
       if (file.size > MAX_ID_BYTES) return say('Each ID photo must be 8 MB or smaller.');
     }
-    const selfieIsVideo = Boolean(selfie && VIDEO_EXT[selfie.type]);
-    if (selfie && !selfieIsVideo && !ID_EXT[selfie.type]) return say('The selfie must be an MP4, WebM or MOV video, or a JPG, PNG or WebP photo.');
-    if (selfie && selfie.size > (selfieIsVideo ? MAX_VIDEO_BYTES : MAX_ID_BYTES)) {
-      return say(selfieIsVideo ? 'The video selfie must be 30 MB or smaller. Keep it to about 10 seconds.' : 'The selfie photo must be 8 MB or smaller.');
-    }
-    if (!f.consent.checked) return say('Please agree to WHSF viewing your ID and selfie for age verification.');
-    const method = call ? 'video_call' : (selfieIsVideo ? 'video_selfie' : 'photo_selfie');
+    if (!VIDEO_EXT[video.type]) return say('The selfie must be a recorded video (MP4, WebM or MOV). Photos are not accepted.');
+    if (video.size > MAX_VIDEO_BYTES) return say('The video selfie must be 30 MB or smaller. Keep it to about 15 seconds.');
+    if (!f.consent.checked) return say('Please agree to WHSF viewing your ID and video for age and identity verification.');
+    const method = call ? 'video_call' : 'video_selfie';
     const button = f.querySelector('button[type="submit"]');
     button.disabled = true;
     const uploaded = [];
@@ -547,14 +553,24 @@
       return path;
     };
     try {
-      say(selfieIsVideo ? 'Uploading securely… (videos can take a minute)' : 'Uploading securely…');
+      say('Uploading securely… (videos can take a minute)');
       const frontPath = await upload(front);
       const backPath = back ? await upload(back) : null;
-      const selfiePath = selfie ? await upload(selfie) : null;
-      const { error } = await db.rpc('forum_id_submit_v2', {
-        p_method: method, p_country: f.country.value.trim(), p_id_type: f.id_type.value, p_front: frontPath, p_back: backPath, p_selfie: selfiePath
+      const videoPath = await upload(video);
+      const { data: result, error } = await db.rpc('forum_id_submit_v3', {
+        p_method: method, p_country: f.country.value.trim(), p_id_type: f.id_type.value, p_legal_name: legalName,
+        p_front: frontPath, p_back: backPath, p_video: videoPath
       });
       if (error) throw error;
+      if (String(result || '').startsWith('rejected')) {
+        // Rejected automatically (the files broke a rule): delete them straight away, then show why and what to do.
+        await db.storage.from('forum-id-checks').remove(uploaded);
+        const { data: last } = await db.from('forum_id_checks').select('id').eq('user_id', state.profile.user_id).order('submitted_at', { ascending: false }).limit(1).maybeSingle();
+        if (last?.id) await db.rpc('forum_id_files_deleted', { p_check_id: last.id });
+        f.reset(); say('');
+        await refresh();
+        return;
+      }
       // Let WHSF moderators know (the server sends at most one email per check).
       const token = state.session?.access_token;
       if (token) fetch('/api/forum-id-alert', { method: 'POST', headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
@@ -583,7 +599,7 @@
     const box = $('[data-fm-idchecks]');
     const cleanup = $('[data-fm-idcleanup]');
     if (!state.isStaff) return;
-    const cols = 'id,user_id,method,country,id_type,challenge_code,id_front_path,id_back_path,selfie_path,status,submitted_at,forum_profiles(display_name)';
+    const cols = 'id,user_id,method,country,id_type,legal_name,challenge_code,id_front_path,id_back_path,selfie_path,status,submitted_at,forum_profiles(display_name)';
     const { data: pending, error } = await db.from('forum_id_checks').select(cols).eq('status', 'pending').order('submitted_at').limit(20);
     if (error) { box.replaceChildren(el('p', { class: 'fm-muted', text: 'Could not load ID checks.' })); return; }
     box.replaceChildren();
@@ -617,7 +633,7 @@
       const isVideo = /\.(mp4|webm|mov)$/i.test(path);
       imgs.append(el('figure', {}, isVideo ? [
         el('video', { src: data.signedUrl, controls: '', playsinline: '', preload: 'metadata', 'aria-label': 'Video selfie submitted for age verification' }),
-        el('figcaption', { text: 'Video selfie (listen for the code)' })
+        el('figcaption', { text: 'Video selfie: watch it all, with sound' })
       ] : [
         el('a', { href: data.signedUrl, target: '_blank', rel: 'noopener noreferrer' }, [el('img', { src: data.signedUrl, alt: `${label} submitted for age verification` })]),
         el('figcaption', { text: `${label} (opens full size)` })
@@ -625,29 +641,74 @@
     }
     const isCall = check.method === 'video_call';
     const box = (name, text) => el('label', { class: 'fm-check' }, [el('input', { type: 'checkbox', name }), el('span', { text })]);
-    const age = box('age', 'The date of birth on the ID shows they are 18 or over');
-    const face = box('face', isCall
-      ? `On the video call I saw this person live; they showed this ID and said the code ${check.challenge_code}`
-      : `The selfie shows the same face, holding the ID and showing or saying the code ${check.challenge_code}`);
-    const genuine = box('genuine', 'The ID is an official government document and looks genuine');
-    const reason = el('input', { type: 'text', maxlength: '300', placeholder: 'e.g. photo blurry, under 18, code missing' });
+    const legal = check.legal_name || 'the legal name (not given: older check)';
+    const items = [
+      ['genuine_original', 'The ID is an original government document: not a screenshot, photocopy, printout or edited image'],
+      ['four_corners', 'All four corners of the ID are visible and the photo, name and date of birth are readable'],
+      ['name_matches', `The name on the ID matches the legal name: ${legal}`],
+      ['face_matches', 'The face in the video is the same person as the photo on the ID'],
+      ['live_video', isCall ? 'I saw this person live on camera (they moved and turned their head)' : 'The video is live and recorded for this check: the person moves and turns their head (not a photo or old clip)'],
+      ['code_spoken', `They clearly said their full name and the code ${check.challenge_code}`],
+      ['same_id_in_video', 'They showed the same ID (front and back) in the video'],
+      ['watched_full', 'I watched the whole video with sound']
+    ];
+    if (isCall) items.push(['call_done', 'The Teams video call with this person has taken place']);
+    const checks = items.map(([key, text]) => [key, box(key, text)]);
+    const dateField = (label, hint) => {
+      const input = el('input', { type: 'date', max: '2100-12-31' });
+      return [input, el('label', {}, [document.createTextNode(label), input, el('small', { class: 'fm-muted', text: hint })])];
+    };
+    const [dob, dobLabel] = dateField('Date of birth on the ID', 'Under 18 is rejected automatically and the account is suspended.');
+    const [expires, expiresLabel] = dateField('Expiry date on the ID', 'An expired ID is rejected automatically.');
+    const noExpiry = box('no_expiry', 'This ID has no expiry date');
+    const docNo = el('input', { type: 'text', maxlength: '40', autocomplete: 'off', spellcheck: 'false', placeholder: 'As printed on the ID' });
+    const docLabel = el('label', {}, [document.createTextNode('ID document number'), docNo,
+      el('small', { class: 'fm-muted', text: 'Only a protected fingerprint and the last 4 characters are kept. The same ID on another account is rejected automatically.' })]);
+    const REASONS = [
+      ['', 'Choose why (shown to the applicant with what to do)…'],
+      ['The ID photo is blurry, cut off or has glare. What to do: photograph the whole ID close up in good light, all four corners visible', 'ID photo unclear or cut off'],
+      ['The ID does not look like an original government document. What to do: photograph your physical ID, not a screenshot, photocopy or edited image', 'Not an original ID'],
+      ['The name on your ID does not match the legal name you entered. What to do: enter your name exactly as printed on your ID', 'Name does not match'],
+      ['We could not match your face to the photo on your ID. What to do: record again facing a light, without hat or sunglasses, holding the ID next to your face', 'Face does not match'],
+      ['Your video did not show a live recording. What to do: record a new video in the app: say your full name and code, show the ID front and back, turn your head', 'Not a live video'],
+      ['Your full name and code were not said clearly in the video. What to do: record again and say your full name and the code shown on screen', 'Name or code not said'],
+      ['The ID shown in the video is not the one you photographed. What to do: use the same physical ID in the photos and the video', 'Different ID in the video'],
+      ['other', 'Other (write it below)']
+    ];
+    const reasonPick = el('select', {}, REASONS.map(([v, t]) => el('option', { value: v, text: t })));
+    const reason = el('input', { type: 'text', maxlength: '300', placeholder: 'Write why, then "What to do: …"', hidden: '' });
+    reasonPick.addEventListener('change', () => { reason.hidden = reasonPick.value !== 'other'; });
     const decide = async (approve) => {
-      status.textContent = approve ? 'Approving…' : 'Rejecting…';
-      const { error } = await db.rpc('forum_id_review', {
-        p_check_id: check.id, p_approve: approve, p_reason: reason.value,
-        p_age_18_plus: age.querySelector('input').checked, p_face_matches: face.querySelector('input').checked, p_genuine_id: genuine.querySelector('input').checked
+      const checklist = Object.fromEntries(checks.map(([key, label]) => [key, label.querySelector('input').checked]));
+      const why = reasonPick.value === 'other' ? reason.value.trim() : reasonPick.value;
+      if (!approve && !why) { status.textContent = 'Choose why you are rejecting, so the applicant knows what to fix.'; return; }
+      status.textContent = approve ? 'Checking and approving…' : 'Rejecting…';
+      const { data, error } = await db.rpc('forum_id_review_v2', {
+        p_check_id: check.id, p_approve: approve, p_reason: why || null, p_dob: dob.value || null, p_expires: expires.value || null,
+        p_no_expiry: noExpiry.querySelector('input').checked, p_doc_number: docNo.value.trim() || null, p_checklist: checklist
       });
       if (error) { status.textContent = error.message; return; }
+      const outcome = String(data || '');
       const delError = await deleteIdFiles(check);
-      if (delError) status.textContent = `Decision saved, but the images could not be deleted: ${delError.message}`;
+      if (approve && outcome.startsWith('rejected')) {
+        status.textContent = `Rejected automatically: ${outcome.slice(10)}`;
+        setTimeout(loadIdChecks, 5000);
+        return;
+      }
+      if (delError) status.textContent = `Decision saved, but the files could not be deleted: ${delError.message}`;
       else loadIdChecks();
     };
     return el('article', { class: 'fm-idcheck' }, [
       el('h3', { text: check.forum_profiles?.display_name || 'Member' }),
       el('p', { class: 'fm-muted', text: `${METHODS[check.method] || 'Photo selfie'} · ${ID_TYPES[check.id_type] || check.id_type} · ${check.country} · code ${check.challenge_code} · submitted ${timeAgo(check.submitted_at)} ago` }),
-      isCall ? el('p', { class: 'fm-alert', text: 'Video call: wait until you have met this person on the video call, then tick the boxes and approve.' }) : null,
-      imgs, age, face, genuine,
-      el('div', { class: 'fm-form' }, [el('label', {}, [document.createTextNode('Reason (shown to the member if rejected)'), reason])]),
+      el('p', { text: `Legal name entered: ${check.legal_name || 'not given (older check)'}` }),
+      isCall ? el('p', { class: 'fm-alert', text: 'Video call: hold the Teams call first, then complete every check and approve.' }) : null,
+      imgs,
+      el('h4', { text: 'Read from the ID' }),
+      el('div', { class: 'fm-form' }, [dobLabel, expiresLabel, noExpiry, docLabel]),
+      el('h4', { text: 'Every check must pass to approve' }),
+      ...checks.map(([, label]) => label),
+      el('div', { class: 'fm-form' }, [el('label', {}, [document.createTextNode('If rejecting: why'), reasonPick]), reason]),
       el('div', { class: 'fm-actions' }, [
         el('button', { class: 'hp-btn hp-btn-primary', type: 'button', text: 'Approve', onclick: () => decide(true) }),
         el('button', { class: 'hp-btn hp-btn-outline', type: 'button', text: 'Reject', onclick: () => decide(false) })

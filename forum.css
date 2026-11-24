@@ -1833,3 +1833,13 @@ html:root body.fm-app .fm-eng-btn { font-size: 15px !important; font-weight: 600
 html:root body.fm-app :is(.fm-text-btn, .fm-link, main.fm .hp-btn) { font-weight: 600; }
 @media (max-width: 640px) { html:root body.fm-app .fm-eng-btn { font-size: 14px !important; } }
 
+
+/* 2026-11-24: ID check rules guide, remove-member button, review form */
+.fm-text-btn.fm-danger { color: #b42318; }
+.vk-guide { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: #faf6f8; border: 1px solid #ecdde4; }
+.vk-guide summary { cursor: pointer; font-weight: 600; color: #7b2142; }
+.vk-guide ul { margin: 10px 0 6px; padding-left: 18px; }
+.vk-guide li { margin: 6px 0; line-height: 1.45; }
+.fm-idcheck h4 { margin: 14px 0 6px; font-size: 15px; }
+.fm-idcheck .fm-form small { display: block; margin-top: 4px; }
+.fm-admin-remove { border-color: #f1c5c0; }
